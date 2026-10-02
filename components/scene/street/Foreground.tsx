@@ -27,12 +27,18 @@ export function Foreground() {
       tyre.cyl(0.19, 0.19, 0.12, 0, 0.19, 0.64, 18, 0, 0, Math.PI / 2)
       chrome.cyl(0.09, 0.09, 0.15, 0, 0.21, -0.58, 12, 0, 0, Math.PI / 2)
       chrome.cyl(0.08, 0.08, 0.14, 0, 0.19, 0.64, 12, 0, 0, Math.PI / 2)
-      body.box(0.44, 0.4, 0.66, 0, 0.5, -0.5)
-      body.box(0.4, 0.07, 0.56, 0, 0.27, 0.02)
-      body.box(0.42, 0.66, 0.07, 0, 0.62, 0.34, -0.28)
-      body.box(0.16, 0.06, 0.38, 0, 0.45, 0.66)
-      body.box(0.33, 0.16, 0.2, 0, 0.98, 0.46)
-      body.box(0.2, 0.16, 0.3, 0.0, 0.34, -0.12)
+      // rounded forms (a scooter is a pressed-steel shell, not a stack of boxes)
+      const shell = (rx: number, ry: number, rz: number, x: number, y: number, z: number, rotX = 0) => {
+        const g = new THREE.SphereGeometry(1, 20, 14)
+        g.scale(rx, ry, rz)
+        body.add(g, x, y, z, rotX)
+      }
+      shell(0.25, 0.22, 0.42, 0, 0.5, -0.46)          // engine cowl
+      shell(0.2, 0.12, 0.34, 0, 0.3, 0.02)             // floor tunnel
+      shell(0.22, 0.34, 0.07, 0, 0.62, 0.36, -0.28)    // leg shield
+      shell(0.09, 0.05, 0.2, 0, 0.45, 0.66)            // front mudguard
+      shell(0.15, 0.1, 0.1, 0, 0.97, 0.46)             // headset cowl
+      body.cyl(0.04, 0.05, 0.22, 0.0, 0.34, -0.12, 10)
       chrome.cyl(0.018, 0.018, 0.56, 0, 0.42, 0.62, 6, 0.22)
       chrome.cyl(0.016, 0.016, 0.74, 0, 1.0, 0.44, 6, 0, 0, Math.PI / 2)
       chrome.cyl(0.01, 0.01, 0.2, 0.32, 1.1, 0.4, 5, 0, 0, 0.3)

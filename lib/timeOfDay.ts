@@ -38,8 +38,8 @@ const KEYS: K[] = [
   // blue hour
   { p: 0.6, skyTop: '#121c52', skyMid: '#3c4682', horizon: '#d86d6a', fog: '#28304f', hemiSky: '#4560a0', hemiGround: '#1a1a2a', sun: '#6a74b4', hemiI: 0.46, sunI: 0.35, fogDensity: 0.0145, lamps: 1, windows: 0.85, stars: 0.1, sunHeight: 0.05, glow: 0.7 },
   { p: 0.76, skyTop: '#0d1a4a', skyMid: '#36489a', horizon: '#ee8660', fog: '#303a6c', hemiSky: '#4a62a8', hemiGround: '#242034', sun: '#ff8a55', hemiI: 0.52, sunI: 1.0, fogDensity: 0.0085, lamps: 1, windows: 0.75, stars: 0.2, sunHeight: 0.2, glow: 1 },
-  { p: 0.9, skyTop: '#060b28', skyMid: '#18265c', horizon: '#8a587f', fog: '#171e44', hemiSky: '#344a8a', hemiGround: '#14141f', sun: '#7a8ad0', hemiI: 0.38, sunI: 0.4, fogDensity: 0.0075, lamps: 1.1, windows: 0.95, stars: 0.6, sunHeight: 0, glow: 0.45 },
-  { p: 1.0, skyTop: '#03061a', skyMid: '#0d1738', horizon: '#6c4570', fog: '#0e1430', hemiSky: '#2a3a78', hemiGround: '#0f0f1c', sun: '#6a7bd0', hemiI: 0.3, sunI: 0.3, fogDensity: 0.0068, lamps: 1.2, windows: 1, stars: 0.95, sunHeight: 0, glow: 0.3 },
+  { p: 0.9, skyTop: '#060b28', skyMid: '#18265c', horizon: '#8a587f', fog: '#1b2142', hemiSky: '#344a8a', hemiGround: '#14141f', sun: '#7a8ad0', hemiI: 0.38, sunI: 0.4, fogDensity: 0.0075, lamps: 1.1, windows: 0.95, stars: 0.6, sunHeight: 0, glow: 0.45 },
+  { p: 1.0, skyTop: '#03061a', skyMid: '#0d1738', horizon: '#6c4570', fog: '#141a30', hemiSky: '#38457a', hemiGround: '#0f0f1c', sun: '#6a7bd0', hemiI: 0.3, sunI: 0.3, fogDensity: 0.0068, lamps: 1.2, windows: 1, stars: 0.95, sunHeight: 0, glow: 0.3 },
 ]
 
 const keys = KEYS.map((k) => ({

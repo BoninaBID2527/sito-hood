@@ -141,7 +141,7 @@ export function RooftopEnvironment() {
     const fr = rng(909)
     const addTower = (x: number, z: number, w: number, d: number, h: number) => {
       const style = fr() < 0.4 ? fr.range(0, 0.3) : fr() < 0.55 ? fr.range(0.35, 0.65) : fr.range(0.7, 1)
-      const g = tagBuilding(new THREE.BoxGeometry(w, h, d), fr(), fr.range(3.0, 4.6), fr.range(2.3, 4.2), style)
+      const g = tagBuilding(new THREE.BoxGeometry(w, h, d), fr(), fr.range(3.0, 4.6), fr.range(1.7, 3.3), style)
       field.add(g, x, h / 2 - 14, z)
       const top = h - 14
       // setbacks, crowns, roof clutter → no two silhouettes alike
@@ -463,7 +463,7 @@ function RoofBillboard() {
     const p = rt.smooth
     const on = Math.max(0, Math.min(1, (p - 0.78) / 0.1))
     kit.coneMat.uniforms.uI.value = on * (0.5 + palette.lamps * 0.6)
-    kit.glowMat.opacity = on * (0.16 + (useStore.getState().visited.length === 7 ? 0.14 : 0))
+    kit.glowMat.opacity = on * (0.3 + (useStore.getState().visited.length === 7 ? 0.14 : 0))
   }, -1)
   useEffect(
     () => () => {

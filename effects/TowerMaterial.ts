@@ -82,8 +82,8 @@ void main() {
     float lv = 0.0;
     if (floorLit > 0.5 && glassWall) { lit = mix(vec3(0.85, 0.92, 1.0), cool, hb); lv = 0.9; }
     else if (deadCol < 0.5) {
-      if (hh > 0.97)      { lit = cool * (0.7 + 0.5 * sin(uTime * (1.3 + hb * 2.0) + hb * 30.0)); lv = 0.8; }       // TV flicker
-      else if (hh > 0.92) { lit = cool; lv = 0.5; }
+      if (hh > 0.985)      { lit = cool * (0.7 + 0.5 * sin(uTime * (1.3 + hb * 2.0) + hb * 30.0)); lv = 0.8; }       // TV flicker
+      else if (hh > 0.96) { lit = cool; lv = 0.5; }
       else if (hh > 0.7)  { lit = warm; lv = 0.5 + 0.25 * hb; }
       else if (hh > 0.6)  { lit = warm * vec3(1.0, 0.85, 0.7); lv = 0.25 + 0.2 * hb; }
     }
@@ -115,6 +115,8 @@ void main() {
 }
 `
 
+const _grey = new THREE.Color('#8a8a92')
+
 export function createTowerMaterial() {
   return new THREE.ShaderMaterial({
     vertexShader: vert,
@@ -135,10 +137,10 @@ export function updateTowerMaterial(m: THREE.ShaderMaterial) {
   const u = m.uniforms
   u.uTime.value = rt.time
   u.uWin.value = 0.12 + palette.windows * 0.95
-  u.uAmb.value.copy(palette.hemiSky).multiplyScalar(0.55 * palette.hemiI + 0.1)
+  u.uAmb.value.copy(palette.hemiSky).lerp(_grey, 0.5).multiplyScalar(0.55 * palette.hemiI + 0.1)
   u.uSunCol.value.copy(palette.sun).multiplyScalar(palette.sunI * 0.9)
-  u.uSkyLow.value.copy(palette.horizon).lerp(palette.skyMid, 0.35)
-  u.uSkyHigh.value.copy(palette.skyTop).lerp(palette.skyMid, 0.5)
+  u.uSkyLow.value.copy(palette.horizon).lerp(palette.skyMid, 0.35).lerp(_grey, 0.35)
+  u.uSkyHigh.value.copy(palette.skyTop).lerp(palette.skyMid, 0.5).lerp(_grey, 0.35)
   u.uContam.value = rt.fx.contam
 }
 
