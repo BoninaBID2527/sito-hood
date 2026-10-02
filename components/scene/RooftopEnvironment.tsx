@@ -388,6 +388,7 @@ export function RooftopWorld() {
       <Backdrop origin={[R, 0, 0]} z={[-250, -340, -440]} blocks={false} />
       <AltercoArtwork mode="final" position={[R + 11.5, 7.2, -42]} size={8.2} />
       <RoofBillboard />
+      <CityGlow />
       <DualGlint />
     </group>
   )
@@ -454,7 +455,7 @@ function RoofBillboard() {
     // the building the billboard stands on
     const bld = tagBuilding(new THREE.BoxGeometry(22, 60, 12), 0.61, 3.5, 3.4, 0.2)
     const bldMat = createTowerMaterial()
-    const glowMat = new THREE.SpriteMaterial({ map: A.glow, color: '#9ab4ff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
+    const glowMat = new THREE.SpriteMaterial({ map: A.glow, color: '#ffa866', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
     return { S, half, cx, cy, cz, yaw, parts, ledGeo, ledMat, lens, lensGeo, coneGeo, coneMat, lamps, bld, bldMat, glowMat }
   }, [])
   useFrame(() => {
@@ -525,4 +526,25 @@ function DualGlint() {
   })
   if (!found) return null
   return <mesh geometry={geo} material={mat} position={[R - 20, 33, -168]} scale={[9, 9, 1]} renderOrder={6} />
+}
+
+/** The city's own light scattered in the haze above the horizon: separates the skyline layers without any extra geometry. */
+function CityGlow() {
+  const mat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+        uniforms: { uA: { value: 0 }, uC: { value: new THREE.Color('#ff9a64') } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+        fragmentShader: 'varying vec2 vUv; uniform float uA; uniform vec3 uC; void main(){ float y = vUv.y; float band = exp(-pow((y - 0.28) * 5.5, 2.0)); float wide = smoothstep(0.0, 0.5, y) * (1.0 - smoothstep(0.5, 1.0, y)) * 0.35; float x = 1.0 - pow(abs(vUv.x - 0.5) * 2.0, 2.0); gl_FragColor = vec4(uC * (band + wide) * x * uA, (band + wide) * x * uA); }',
+      }),
+    [],
+  )
+  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
+  useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
+  useFrame(() => {
+    mat.uniforms.uA.value = 0.1 + palette.windows * 0.16
+    mat.uniforms.uC.value.copy(palette.horizon).lerp(new THREE.Color('#ffa060'), 0.45)
+  })
+  return <mesh geometry={geo} material={mat} position={[R, 40, -330]} scale={[900, 160, 1]} renderOrder={-30} />
 }

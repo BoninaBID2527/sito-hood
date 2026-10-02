@@ -227,6 +227,8 @@ export function TrackOrbit() {
     const offY = aspect > 1.2 ? 0 : 0.7
 
     ph_.selAmt = damp(ph_.selAmt, st.selected !== null ? 1 : 0, 4, dt)
+    rt.orbit.sel = ph_.selAmt
+    rt.orbit.selIdx = st.selected ?? rt.orbit.selIdx
     const C = WORLD.plazaCenter
     const Rx = 6.7 * rs * (1 + expand * 0.6)
     const Rz = 5.1 * rs * (1 + expand * 0.6)
@@ -301,7 +303,8 @@ export function TrackOrbit() {
       u.uTime.value = rt.time
       u.uHover.value = isSel ? 0.9 : h
       u.uFar.value = isSel ? 0 : far * (1 - ph_.selAmt * 0.0) * (1 - e)
-      u.uDim.value = isSel ? 0 : ph_.selAmt * 0.9 + recede * 0.7
+      // hierarchy: the front object owns the frame, everything else stays present but quieter
+      u.uDim.value = isSel ? 0 : ph_.selAmt * 0.9 + recede * 0.7 + (1 - wF) * 0.16 * (1 - ph_.selAmt)
       u.uRgb.value = clamp(Math.abs(ph_.vel) * 0.0012, 0, 0.012) + rt.fx.contam * 0.002 + h * 0.0015
       u.uBend.value = clamp(ph_.vel * 0.12, -1, 1)
       u.uLit.value = sp.lit * (0.45 + palette.lamps * 0.6) * (0.6 + wF * 0.8)

@@ -133,8 +133,8 @@ export function Props() {
     const parts = [
       mk(pipes, { color: '#5a5650', roughness: 0.65, metalness: 0.5 }),
       mk(metal, { color: '#26262a', roughness: 0.55, metalness: 0.7 }),
-      mk(green, { color: '#3f7a56', roughness: 0.55, metalness: 0.15 }),
-      mk(blue, { color: '#3a5a98', roughness: 0.55, metalness: 0.15 }),
+      mk(green, { color: '#3f7a56', roughness: 0.55, metalness: 0.3 }),
+      mk(blue, { color: '#3a5a98', roughness: 0.55, metalness: 0.3 }),
       mk(wood, { color: '#8a6a46', roughness: 0.9 }),
       mk(galv, { color: '#8c9296', roughness: 0.45, metalness: 0.7 }),
       mk(rust, { color: '#9a3a2a', roughness: 0.55, metalness: 0.4 }),

@@ -11,7 +11,19 @@ import { bump, clamp, damp, smoothstep, stepSpring, type Spring } from '@/lib/ma
 
 const _right = new THREE.Vector3()
 const _up = new THREE.Vector3()
+/** per-track "shot": when a track is focused the camera itself re-composes (offset, dolly, target shift, lens), so each state is a new frame */
+const SHOTS = [
+  { dx: -0.9, dy: 0.15, dz: 1.2, lx: -0.5, ly: 0.1, fov: -3 },
+  { dx: 0.8, dy: -0.1, dz: 1.5, lx: 0.5, ly: 0.05, fov: -4 },
+  { dx: -0.5, dy: 0.3, dz: 0.8, lx: -0.3, ly: 0.25, fov: -2 },
+  { dx: 1.0, dy: 0.1, dz: 1.8, lx: 0.6, ly: 0, fov: -4 },
+  { dx: -1.1, dy: -0.1, dz: 1.4, lx: -0.6, ly: -0.05, fov: -3 },
+  { dx: 0.6, dy: 0.25, dz: 1.0, lx: 0.4, ly: 0.15, fov: -2 },
+  { dx: -0.4, dy: 0.1, dz: 2.0, lx: -0.2, ly: 0, fov: -5 },
+]
 const _dir = new THREE.Vector3()
+const _upY = new THREE.Vector3(0, 1, 0)
+const _up2 = new THREE.Vector3()
 
 /**
  * The one place that owns time. Every frame it:
@@ -27,6 +39,7 @@ export function Director() {
   const spring = useRef<Spring>({ x: 0, v: 0 })
   const sample = useRef<CamSample>({ pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: 50, roll: 0, world: 'alley' })
   const lastFov = useRef(0)
+  const shot = useRef({ dx: 0, dy: 0, dz: 0, lx: 0, ly: 0, fov: 0 })
   const look = useRef(new THREE.Vector3())
 
   useEffect(() => {
@@ -86,6 +99,26 @@ export function Director() {
     } else {
       cam.position.copy(cs.pos)
       look.current.copy(cs.look)
+
+      // focused track → the camera re-composes (eased between shots, so moving track-to-track is a camera move, not a cut)
+      {
+        const sh = shot.current
+        const on = rt.world === 'alley' && rt.orbit.sel > 0.002 && store.selected !== null
+        const tgt = on ? SHOTS[((store.selected ?? 0) % SHOTS.length + SHOTS.length) % SHOTS.length] : null
+        const k = 3.2 * (rt.reducedMotion ? 0 : 1)
+        const e = rt.orbit.sel * rt.orbit.sel * (3 - 2 * rt.orbit.sel)
+        for (const key of ['dx', 'dy', 'dz', 'lx', 'ly', 'fov'] as const) sh[key] = damp(sh[key], tgt ? tgt[key] : 0, k || 100, dt)
+        if (Math.abs(sh.dx) + Math.abs(sh.dz) + Math.abs(sh.dy) > 0.001) {
+          const narrow = rt.aspect < 1.2 ? 0.5 : 1
+          _dir.copy(look.current).sub(cam.position).normalize()
+          _right.crossVectors(_dir, _upY).normalize()
+          _up2.crossVectors(_right, _dir)
+          void e
+          cam.position.addScaledVector(_right, sh.dx * narrow).addScaledVector(_up2, sh.dy).addScaledVector(_dir, sh.dz * narrow)
+          look.current.addScaledVector(_right, sh.lx * narrow).addScaledVector(_up2, sh.ly)
+        }
+        fov += sh.fov
+      }
 
       // entry fly-in (first seconds after ENTER)
       const k = 1 - rt.intro.t

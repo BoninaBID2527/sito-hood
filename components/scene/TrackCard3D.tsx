@@ -48,7 +48,7 @@ void main() {
   col *= 0.72 + 0.5 * uHover;
   col *= 1.0 + uLit * 0.45 * (1.0 - 0.5 * length(uv - 0.5));
   col *= mix(1.0, 0.5, uFar) * (1.0 - uDim * 0.62);
-  col = mix(col, uFog * 0.7, uFar * 0.28);
+  col = mix(col, uFog * 0.7, uFar * 0.4);
   // dissolve in when the orbit assembles
   float n = hash(floor(uv * 60.0));
   float a = step(n * 0.9, uAppear * 1.1 - 0.05);

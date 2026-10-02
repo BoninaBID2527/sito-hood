@@ -90,6 +90,31 @@ function Particles() {
   return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
 }
 
+/** Very distant, very slow specks: scale cues far beyond the visible geometry (parallax comes from the camera drift). */
+function FarDust() {
+  const kit = useMemo(() => {
+    const n = Math.round(700 * rt.quality.particleScale)
+    const g = new THREE.BufferGeometry()
+    const pos = new Float32Array(n * 3)
+    const seed = new Float32Array(n)
+    const r = rng(77)
+    for (let i = 0; i < n; i++) {
+      pos.set([D + r.range(-140, 140), r.range(-40, 60), r.range(-30, -300)], i * 3)
+      seed[i] = r()
+    }
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+    g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1))
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: pVert, fragmentShader: pFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D + 9999, 0, 0) }, uSize: { value: 2.2 }, uArrive: { value: 0 } },
+    })
+    return { g, mat }
+  }, [])
+  useFrame(() => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t }, -0.5)
+  useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
+  return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
+}
+
 /* ───────────────────────── tunnel rings ───────────────────────── */
 
 const rVert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }'
@@ -152,6 +177,7 @@ varying vec3 vN;
 varying vec3 vV;
 varying float vH;
 varying float vPh;
+varying float vDist;
 mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 void main() {
   vec3 p = position * aDim;
@@ -166,6 +192,7 @@ void main() {
   vV = -mv.xyz;
   vH = w.y;
   vPh = aPhase;
+  vDist = length(mv.xyz);
   gl_Position = projectionMatrix * mv;
 }
 `
@@ -175,6 +202,7 @@ varying vec3 vN;
 varying vec3 vV;
 varying float vH;
 varying float vPh;
+varying float vDist;
 uniform float uTime;
 uniform float uFade;
 uniform float uOpacity;
@@ -186,7 +214,10 @@ void main() {
   vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + f * 1.3 + vH * 0.035 + vPh + uTime * 0.02));
   float band = 0.5 + 0.5 * sin(vH * 2.2 + uTime * 0.3 + vPh * 20.0);
   vec3 col = film * (0.25 + 1.4 * ff) + vec3(0.04, 0.06, 0.14);
-  float a = (0.05 + 0.6 * ff + 0.06 * band) * uOpacity * uFade;
+  // far structures dissolve into spectral haze: the hall never visibly ends
+  float far = 1.0 - smoothstep(70.0, 260.0, vDist);
+  float a = (0.05 + 0.6 * ff + 0.06 * band) * uOpacity * uFade * (0.25 + 0.75 * far);
+  col = mix(col, vec3(0.2, 0.26, 0.62), (1.0 - far) * 0.55);
   gl_FragColor = vec4(col * a * 1.6, a);
 }
 `
@@ -194,8 +225,8 @@ void main() {
 function GlassHall() {
   const kit = useMemo(() => {
     const t = rt.quality.tier
-    const rows = t === 'high' ? 18 : t === 'medium' ? 14 : 10
-    const crystals = t === 'high' ? 22 : t === 'medium' ? 14 : 8
+    const rows = t === 'high' ? 26 : t === 'medium' ? 18 : 12
+    const crystals = t === 'high' ? 30 : t === 'medium' ? 18 : 10
     const r = rng(1313)
     const mat = new THREE.ShaderMaterial({
       vertexShader: glassVert, fragmentShader: glassFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
@@ -206,9 +237,9 @@ function GlassHall() {
     const dim = new Float32Array(rows * 2 * 3), ph = new Float32Array(rows * 2)
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(1, 1, 1)
     for (let i = 0; i < rows; i++) {
-      const z = 7 - i * 7.2
-      const w = 0.28 + r() * 0.12, h = r.range(8, 15), d = r.range(1.6, 3.0)
-      const x = 6.2 + i * 0.28
+      const z = 7 - i * 7.2 * (1 + 0.03 * i)
+      const w = (0.28 + r() * 0.12) * (1 + i * 0.03), h = r.range(8, 15) + i * 0.7, d = r.range(1.6, 3.0)
+      const x = 6.2 + i * 0.3
       const yaw = r.range(0.12, 0.5)
       const phase = r()
       for (const sgn of [-1, 1]) {
@@ -227,7 +258,7 @@ function GlassHall() {
     const cr = new THREE.InstancedMesh(new THREE.OctahedronGeometry(1, 0), mat, crystals * 2)
     const cd = new Float32Array(crystals * 2 * 3), cp = new Float32Array(crystals * 2)
     for (let i = 0; i < crystals; i++) {
-      const z = r.range(-90, 6), x = r.range(1.8, 10), y = r.range(0.4, 6.5), s = r.range(0.25, 0.9), phase = r()
+      const z = r.range(-220, 6), x = r.range(1.8, 10 + (-z) * 0.08), y = r.range(0.4, 6.5 + (-z) * 0.05), s = r.range(0.25, 0.9) * (1 + (-z) / 55), phase = r()
       for (const sgn of [-1, 1]) {
         const k = i * 2 + (sgn > 0 ? 1 : 0)
         m4.compose(new THREE.Vector3(D + sgn * x, y * sgn, z), q.setFromEuler(e.set(0, 0, 0)), sc)
@@ -281,7 +312,7 @@ function MirrorFloor() {
           c = c * (0.55 + 0.45 * (1.0 - f)) + film * f * 0.12;
           // the floor fades into the haze with distance so the horizon is not a line
           float dist = length(vW.xz - cameraPosition.xz);
-          float fade = 1.0 - smoothstep(30.0, 120.0, dist);
+          float fade = 1.0 - smoothstep(40.0, 260.0, dist);
           gl_FragColor = vec4(c * 0.95, (0.55 + 0.4 * f) * fade * uFade);
         }`,
     }
@@ -355,7 +386,7 @@ function SpectralAir() {
     })
     const geo = new THREE.PlaneGeometry(1, 1)
     const shafts = Array.from({ length: 9 }, (_, i) => ({ x: (i % 2 ? 1 : -1) * (2.2 + (i % 5) * 1.5), z: -4 - i * 9, w: 2.0 + (i % 3), h: 22, hue: i / 9 }))
-    const sheets = Array.from({ length: 7 }, (_, i) => ({ z: 4 - i * 14 - (i % 2) * 3, w: 36, h: 18 }))
+    const sheets = Array.from({ length: 12 }, (_, i) => ({ z: 4 - i * 17 - (i % 2) * 4, w: 40 + i * 6, h: 18 + i * 2 }))
     return { shaft, haze, geo, shafts, sheets }
   }, [])
   useFrame(() => {
@@ -567,6 +598,7 @@ export function DualismoWorld() {
     <group>
       <MirrorFloor />
       <GlassHall />
+      <FarDust />
       <SpectralAir />
       <LensHalo />
       <TunnelRings />

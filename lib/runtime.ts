@@ -64,7 +64,7 @@ export const rt = {
   /** time-of-day mix evaluated from progress (see lib/timeOfDay) */
   night: 0,
   /** orbit state (see TrackOrbit) */
-  orbit: { angle: 0, front: 0, vel: 0, drag: 0, hover: -1, resetDrag: false, err: 0 },
+  orbit: { angle: 0, front: 0, vel: 0, drag: 0, hover: -1, resetDrag: false, err: 0, sel: 0, selIdx: 0 },
   /** 1 while the camera is below the water surface: the alley is rendered as its own reflection (mirrored in y) */
   mirror: 0,
   /** the alley/roof/dualism world currently being rendered */

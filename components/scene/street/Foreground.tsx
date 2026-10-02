@@ -44,7 +44,7 @@ export function Foreground() {
     }
     const mkb = (b: GeoBuilder, p: THREE.MeshStandardMaterialParameters) => ({ geo: b.build(), mat: streetMat({ aoBase: 0.55, ...p }) })
     const scooter = [
-      mkb(body, { color: '#5c9a98', roughness: 0.38, metalness: 0.35 }),
+      mkb(body, { color: '#6e8c88', roughness: 0.45, metalness: 0.3 }),
       mkb(chrome, { color: '#b9bcc0', roughness: 0.25, metalness: 0.9 }),
       mkb(seat, { color: '#251d1a', roughness: 0.7 }),
       mkb(tyre, { color: '#151517', roughness: 0.85 }),

@@ -26,6 +26,10 @@ export function PostFX() {
       depthBuffer: true,
       samples: gl.capabilities.isWebGL2 ? rt.quality.msaa : 0,
       colorSpace: THREE.LinearSRGBColorSpace,
+      // mip chain = smooth, noise-free bloom (the glow of a lamp is a blurred copy, not a dithered ring)
+      generateMipmaps: true,
+      minFilter: THREE.LinearMipmapLinearFilter,
+      magFilter: THREE.LinearFilter,
     })
     const mat = new THREE.ShaderMaterial({
       vertexShader: postVert,
