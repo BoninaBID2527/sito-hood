@@ -83,3 +83,71 @@ export function createArtworkMaterial(map: THREE.Texture) {
     },
   })
 }
+
+/* ─────────────── fragment assembly: the sleeve arrives as an N×N field of tiles ─────────────── */
+const tileVert = /* glsl */ `
+attribute vec3 aRand;
+attribute vec2 aTile;
+uniform float uAsm;
+uniform float uN;
+uniform float uTime;
+varying vec2 vUv;
+varying vec2 vLocal;
+varying float vT;
+varying float vR;
+mat3 rotAxis(vec3 a, float ang){ a = normalize(a); float c = cos(ang), s = sin(ang), t = 1.0 - c;
+  return mat3(t*a.x*a.x+c, t*a.x*a.y+s*a.z, t*a.x*a.z-s*a.y, t*a.x*a.y-s*a.z, t*a.y*a.y+c, t*a.y*a.z+s*a.x, t*a.x*a.z+s*a.y, t*a.y*a.z-s*a.x, t*a.z*a.z+c); }
+void main(){
+  float st = aRand.x * 0.42;
+  float t = clamp((uAsm - st) / 0.58, 0.0, 1.0);
+  t = t * t * (3.0 - 2.0 * t);
+  vec3 c = instanceMatrix[3].xyz;
+  vec3 loc = position;
+  float k = 1.0 - t;
+  vec3 axis = aRand * 2.0 - 1.0 + vec3(0.0, 0.0, 0.3);
+  mat3 R = rotAxis(axis, k * (2.4 + aRand.z * 3.0) + sin(uTime * 0.6 + aRand.x * 9.0) * 0.18 * k);
+  vec3 off = (aRand - 0.5) * vec3(3.2, 2.4, 5.0) * k * k + vec3(sin(uTime * 0.5 + aRand.y * 20.0) * 0.18, cos(uTime * 0.4 + aRand.z * 17.0) * 0.14, 0.0) * k;
+  vec3 p = c + R * loc + off;
+  vUv = (aTile + uv) / uN;
+  vLocal = uv;
+  vT = t;
+  vR = aRand.y;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+}
+`
+const tileFrag = /* glsl */ `
+precision highp float;
+varying vec2 vUv;
+varying vec2 vLocal;
+varying float vT;
+varying float vR;
+uniform sampler2D map;
+uniform float uTime;
+uniform float uSplit;
+uniform float uFlow;
+uniform float uAsm;
+uniform float uGlow;
+float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+void main(){
+  float k = 1.0 - vT;
+  vec2 w = vec2(sin(vUv.y * 40.0 + uTime * 1.3 + vR * 6.0), cos(vUv.x * 36.0 - uTime * 1.1 + vR * 9.0)) * 0.006 * k;
+  float s = uSplit * 0.5 + k * 0.03 * (0.4 + vR);
+  vec2 uv = vUv + w;
+  vec3 col = vec3(texture2D(map, uv + vec2(s, 0.0)).r, texture2D(map, uv).g, texture2D(map, uv - vec2(s, 0.0)).b);
+  float a = smoothstep(0.0, 0.2, uAsm * 1.5 - vR * 0.4);
+  if (a < 0.02) discard;
+  float e = min(min(vLocal.x, 1.0 - vLocal.x), min(vLocal.y, 1.0 - vLocal.y));
+  col *= mix(0.25, 1.0, smoothstep(0.0, 0.85, vT));
+  col += vec3(0.55, 0.75, 1.0) * k * smoothstep(0.08, 0.0, e) * 0.9;
+  col += (hash(vUv * 700.0 + floor(uTime * 24.0)) - 0.5) * 0.05;
+  gl_FragColor = vec4(col * (1.0 + uGlow * 0.15), 1.0);
+}
+`
+export function createTileMaterial(map: THREE.Texture, n: number) {
+  return new THREE.ShaderMaterial({
+    vertexShader: tileVert,
+    fragmentShader: tileFrag,
+    side: THREE.DoubleSide,
+    uniforms: { map: { value: map }, uAsm: { value: 0 }, uN: { value: n }, uTime: { value: 0 }, uSplit: { value: 0.002 }, uFlow: { value: 0 }, uGlow: { value: 0 } },
+  })
+}

@@ -22,6 +22,8 @@ uniform float uFar;
 uniform float uDim;
 uniform float uRgb;
 uniform float uAppear;
+uniform float uNeg;
+uniform float uLit;
 uniform float uTime;
 uniform vec2 uSheen;
 uniform vec3 uFog;
@@ -42,7 +44,9 @@ void main() {
   }
   float sheen = pow(max(0.0, 1.0 - distance(uv, uSheen) * 1.5), 2.5);
   col += sheen * uHover * 0.22 * vec3(1.0, 0.92, 0.8);
+  if (uNeg > 0.5) col = (vec3(1.0) - col) * vec3(0.8, 0.9, 1.0) * 0.8;
   col *= 0.72 + 0.5 * uHover;
+  col *= 1.0 + uLit * 0.45 * (1.0 - 0.5 * length(uv - 0.5));
   col *= mix(1.0, 0.5, uFar) * (1.0 - uDim * 0.62);
   col = mix(col, uFog * 0.7, uFar * 0.28);
   // dissolve in when the orbit assembles
@@ -69,6 +73,8 @@ export function createCardMaterial(map: THREE.Texture) {
       uRgb: { value: 0 },
       uBend: { value: 0 },
       uAppear: { value: 1 },
+      uNeg: { value: 0 },
+      uLit: { value: 0 },
       uTime: { value: 0 },
       uSheen: { value: new THREE.Vector2(0.5, 0.5) },
       uFog: { value: new THREE.Color('#444') },

@@ -153,11 +153,15 @@ void main() {
   // bloom — only genuinely emissive (HDR) pixels
   if (uBloom > 0.01) {
     vec3 b = vec3(0.0);
+    // Vogel-disk taps with a per-pixel rotation: no rosette/flower pattern around hot lights, the residue reads as grain
+    float rot = hash(uv * uRes) * 6.2831853;
     for (int i = 0; i < 8; i++) {
-      float a = float(i) * 0.7853982;
-      vec2 o = vec2(cos(a), sin(a));
-      b += max(texture2D(tScene, uv + o * vec2(0.006 / uAspect, 0.006)).rgb - 0.95, 0.0);
-      b += max(texture2D(tScene, uv + o * vec2(0.018 / uAspect, 0.018)).rgb - 0.95, 0.0) * 0.8;
+      float fi = float(i);
+      float rr = sqrt((fi + 0.5) / 8.0);
+      float a = fi * 2.399963 + rot;
+      vec2 o = vec2(cos(a), sin(a)) * rr;
+      b += max(texture2D(tScene, uv + o * vec2(0.010 / uAspect, 0.010)).rgb - 0.95, 0.0);
+      b += max(texture2D(tScene, uv + o * vec2(0.034 / uAspect, 0.034)).rgb - 0.95, 0.0) * 0.9;
     }
     col += b * uBloom * 0.16;
   }
