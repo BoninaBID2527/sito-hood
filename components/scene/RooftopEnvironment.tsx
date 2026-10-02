@@ -141,7 +141,7 @@ export function RooftopEnvironment() {
     const fr = rng(909)
     const addTower = (x: number, z: number, w: number, d: number, h: number) => {
       const style = fr() < 0.4 ? fr.range(0, 0.3) : fr() < 0.55 ? fr.range(0.35, 0.65) : fr.range(0.7, 1)
-      const g = tagBuilding(new THREE.BoxGeometry(w, h, d), fr(), fr.range(3.0, 4.6), fr.range(1.7, 3.3), style)
+      const g = tagBuilding(new THREE.BoxGeometry(w, h, d), fr(), fr.range(3.0, 4.6), fr.range(2.4, 4.4), style)
       field.add(g, x, h / 2 - 14, z)
       const top = h - 14
       // setbacks, crowns, roof clutter → no two silhouettes alike

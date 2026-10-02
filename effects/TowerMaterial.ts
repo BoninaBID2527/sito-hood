@@ -84,8 +84,8 @@ void main() {
     else if (deadCol < 0.5) {
       if (hh > 0.985)      { lit = cool * (0.7 + 0.5 * sin(uTime * (1.3 + hb * 2.0) + hb * 30.0)); lv = 0.8; }       // TV flicker
       else if (hh > 0.96) { lit = cool; lv = 0.5; }
-      else if (hh > 0.7)  { lit = warm; lv = 0.5 + 0.25 * hb; }
-      else if (hh > 0.6)  { lit = warm * vec3(1.0, 0.85, 0.7); lv = 0.25 + 0.2 * hb; }
+      else if (hh > 0.86) { lit = warm; lv = 0.32 + 0.4 * hb * hb; }
+      else if (hh > 0.78) { lit = warm * vec3(1.0, 0.8, 0.6); lv = 0.12 + 0.2 * hb; }
     }
     // blinds: partial occlusion of lit windows
     float blinds = step(0.55, hb) * step(0.62, hh);
