@@ -324,9 +324,26 @@ export function tagTexture(o: TagOpts) {
     ctx.beginPath(); ctx.arc(x, y0 + len, 4.2, 0, Math.PI * 2); ctx.fill()
   }
   ctx.restore()
-  // spray speckle around edges
-  ctx.globalCompositeOperation = 'source-atop'
-  grain(ctx, W, H, 0, 1)
+  // spray overspray: a soft halo of the same paint around every stroke
+  {
+    const copy = makeCanvas(W, H)
+    copy.ctx.drawImage(canvas, 0, 0)
+    ctx.save()
+    ctx.globalCompositeOperation = 'destination-over'
+    ctx.globalAlpha = 0.4
+    ctx.shadowColor = o.fill
+    ctx.shadowBlur = Math.max(6, H * 0.03)
+    ctx.drawImage(copy.canvas, 0, 0)
+    ctx.restore()
+  }
+  // spray speckle: fine dots beyond the edge
+  ctx.globalCompositeOperation = 'destination-over'
+  for (let i = 0; i < 260; i++) {
+    ctx.fillStyle = o.fill
+    ctx.globalAlpha = r.range(0.1, 0.45)
+    ctx.beginPath(); ctx.arc(W * (0.08 + r() * 0.84), H * (0.2 + r() * 0.6), r.range(0.6, 1.9), 0, Math.PI * 2); ctx.fill()
+  }
+  ctx.globalAlpha = 1
   ctx.globalCompositeOperation = 'source-over'
   return toTexture(canvas, { aniso: 8 })
 }
@@ -539,49 +556,147 @@ export function stencilTexture(text: string, color = '#e6e0cf', w = 256, h = 256
 
 /* ───────────────────────── structure details ───────────────────────── */
 
-export function windowTextures() {
-  const mk = (kind: 'dark' | 'warm' | 'cool' | 'blind', seed: number) => {
+export const WINDOW_VARIANTS = ['dark', 'warm', 'warm2', 'cool', 'tv', 'blind', 'boarded', 'barred', 'sheet', 'shutter', 'broken', 'ac'] as const
+export type WindowVariant = (typeof WINDOW_VARIANTS)[number]
+
+/** Twelve structurally different window states (lit / dark / boarded / barred / covered / shuttered / broken / AC-in-sash). */
+export function windowTextures(): Record<WindowVariant, THREE.Texture> {
+  const mk = (kind: WindowVariant, seed: number) => {
     const W = 128, H = 192
     const r = rng(seed)
     const { canvas, ctx } = makeCanvas(W, H)
     ctx.fillStyle = '#17120f'
     ctx.fillRect(0, 0, W, H)
     const gx = 10, gy = 10, gw = W - 20, gh = H - 20
-    const g = ctx.createLinearGradient(0, gy, 0, gy + gh)
-    if (kind === 'dark') { g.addColorStop(0, '#2a3446'); g.addColorStop(1, '#0c0f16') }
-    if (kind === 'warm') { g.addColorStop(0, '#ffcf8a'); g.addColorStop(1, '#d9803a') }
-    if (kind === 'cool') { g.addColorStop(0, '#9fc8ff'); g.addColorStop(1, '#4a78c8') }
-    if (kind === 'blind') { g.addColorStop(0, '#c9ae7a'); g.addColorStop(1, '#8a6a3c') }
-    ctx.fillStyle = g
-    ctx.fillRect(gx, gy, gw, gh)
-    if (kind === 'warm' || kind === 'cool') {
-      // curtain / silhouette
-      ctx.fillStyle = 'rgba(40,20,10,0.45)'
-      ctx.fillRect(gx, gy, r.range(14, 36), gh)
-      if (r() < 0.5) ctx.fillRect(gx + gw - r.range(10, 28), gy, 30, gh)
+    const glass = (c0: string, c1: string) => {
+      const g = ctx.createLinearGradient(0, gy, 0, gy + gh)
+      g.addColorStop(0, c0); g.addColorStop(1, c1)
+      ctx.fillStyle = g
+      ctx.fillRect(gx, gy, gw, gh)
     }
-    if (kind === 'blind') {
-      ctx.fillStyle = 'rgba(0,0,0,0.28)'
-      for (let y = gy; y < gy + gh; y += 7) ctx.fillRect(gx, y, gw, 3)
+    let mullions = true
+    switch (kind) {
+      case 'dark': {
+        glass('#34425a', '#0b0e15')
+        ctx.fillStyle = 'rgba(255,255,255,0.07)'
+        ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + gw * 0.7, gy); ctx.lineTo(gx, gy + gh * 0.6); ctx.fill()
+        break
+      }
+      case 'warm': {
+        glass('#ffcf8a', '#d9803a')
+        ctx.fillStyle = 'rgba(40,20,10,0.5)'
+        ctx.fillRect(gx, gy, r.range(14, 36), gh)
+        if (r() < 0.6) ctx.fillRect(gx + gw - r.range(10, 28), gy, 30, gh)
+        break
+      }
+      case 'warm2': {
+        glass('#ffe2a8', '#e6893c')
+        // plant + a figure's silhouette lit from behind
+        ctx.fillStyle = 'rgba(30,18,10,0.85)'
+        ctx.beginPath(); ctx.ellipse(gx + 28, gy + gh - 18, 20, 26, 0, 0, Math.PI * 2); ctx.fill()
+        ctx.fillRect(gx + 22, gy + gh - 8, 12, 8)
+        if (r() < 0.55) { ctx.beginPath(); ctx.arc(gx + gw - 30, gy + gh * 0.45, 11, 0, Math.PI * 2); ctx.fill(); ctx.fillRect(gx + gw - 41, gy + gh * 0.45 + 10, 22, gh * 0.55) }
+        break
+      }
+      case 'cool': {
+        glass('#a9d0ff', '#4a78c8')
+        ctx.fillStyle = 'rgba(10,20,40,0.4)'
+        ctx.fillRect(gx + gw - r.range(14, 30), gy, 30, gh)
+        break
+      }
+      case 'tv': {
+        glass('#6fa0ff', '#2c4cae')
+        ctx.fillStyle = 'rgba(255,255,255,0.28)'
+        ctx.fillRect(gx + 18, gy + gh * 0.4, gw - 36, gh * 0.26)
+        ctx.fillStyle = 'rgba(8,10,30,0.7)'
+        ctx.fillRect(gx, gy, 14, gh); ctx.fillRect(gx + gw - 14, gy, 14, gh)
+        break
+      }
+      case 'blind': {
+        glass('#d8bc86', '#8a6a3c')
+        ctx.fillStyle = 'rgba(0,0,0,0.3)'
+        const drop = r.range(0.35, 0.95)
+        for (let y = gy; y < gy + gh * drop; y += 7) ctx.fillRect(gx, y, gw, 3)
+        break
+      }
+      case 'boarded': {
+        glass('#161310', '#0a0908')
+        mullions = false
+        for (let i = 0; i < 4; i++) {
+          const y = gy + 6 + i * (gh / 4)
+          ctx.save(); ctx.translate(W / 2, y + gh / 8); ctx.rotate(r.range(-0.07, 0.07))
+          ctx.fillStyle = `rgb(${96 + r() * 36},${74 + r() * 24},${50 + r() * 16})`
+          ctx.fillRect(-gw / 2 - 6, -gh / 8, gw + 12, gh / 4 - 4)
+          ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(-gw / 2 - 6, gh / 8 - 6, gw + 12, 3)
+          ctx.restore()
+        }
+        break
+      }
+      case 'barred': {
+        glass('#1c2536', '#07090e')
+        ctx.fillStyle = '#0a0a0b'
+        for (let x = gx + 6; x < gx + gw; x += 13) ctx.fillRect(x, gy, 3.5, gh)
+        ctx.fillRect(gx, gy + gh * 0.32, gw, 4); ctx.fillRect(gx, gy + gh * 0.68, gw, 4)
+        break
+      }
+      case 'sheet': {
+        glass('#e9dcc4', '#a89572')
+        mullions = false
+        ctx.strokeStyle = 'rgba(80,60,40,0.3)'; ctx.lineWidth = 3
+        for (let i = 0; i < 6; i++) { ctx.beginPath(); ctx.moveTo(gx + r() * gw, gy); ctx.bezierCurveTo(gx + r() * gw, gy + gh * 0.3, gx + r() * gw, gy + gh * 0.6, gx + r() * gw, gy + gh); ctx.stroke() }
+        ctx.fillStyle = 'rgba(30,20,10,0.35)'; ctx.fillRect(gx, gy, gw, 10)
+        break
+      }
+      case 'shutter': {
+        glass('#0c1018', '#050608')
+        mullions = false
+        const col = ['#3d5b44', '#6a3a2e', '#4a5a6a'][seed % 3]
+        for (const x of [gx - 6, gx + gw / 2]) {
+          ctx.fillStyle = col; ctx.fillRect(x + 2, gy - 2, gw / 2 + 4, gh + 4)
+          ctx.fillStyle = 'rgba(0,0,0,0.38)'
+          for (let y = gy + 4; y < gy + gh; y += 8) ctx.fillRect(x + 6, y, gw / 2 - 4, 3)
+          ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(x + 2, gy - 2, 3, gh + 4)
+        }
+        break
+      }
+      case 'broken': {
+        glass('#2a3647', '#080b11')
+        ctx.strokeStyle = 'rgba(210,225,255,0.55)'; ctx.lineWidth = 1.4
+        const cx = gx + gw * 0.55, cy = gy + gh * 0.35
+        for (let i = 0; i < 9; i++) { const a = r() * Math.PI * 2, l = r.range(22, 80); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * l, cy + Math.sin(a) * l); ctx.stroke() }
+        ctx.fillStyle = 'rgba(14,12,10,0.9)'
+        ctx.beginPath(); ctx.moveTo(cx - 10, cy - 14); ctx.lineTo(cx + 28, cy - 4); ctx.lineTo(cx + 10, cy + 26); ctx.lineTo(cx - 20, cy + 14); ctx.fill()
+        ctx.strokeStyle = 'rgba(205,190,150,0.55)'; ctx.lineWidth = 5
+        ctx.beginPath(); ctx.moveTo(gx + 6, gy + gh * 0.9); ctx.lineTo(gx + gw - 10, gy + gh * 0.5); ctx.stroke()
+        break
+      }
+      case 'ac': {
+        glass('#232e40', '#07090d')
+        ctx.fillStyle = '#b8bbb6'; ctx.fillRect(gx + 4, gy + gh * 0.36, gw - 8, gh * 0.5)
+        ctx.fillStyle = '#6c6f6c'; ctx.fillRect(gx + 4, gy + gh * 0.36 + 4, gw - 8, 6)
+        ctx.strokeStyle = '#3a3c3b'; ctx.lineWidth = 2
+        for (let y = gy + gh * 0.5; y < gy + gh * 0.84; y += 7) { ctx.beginPath(); ctx.moveTo(gx + 12, y); ctx.lineTo(gx + gw - 12, y); ctx.stroke() }
+        break
+      }
     }
-    if (kind === 'dark') {
-      ctx.fillStyle = 'rgba(255,255,255,0.05)'
-      ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + gw * 0.7, gy); ctx.lineTo(gx, gy + gh * 0.6); ctx.fill()
+    if (mullions) {
+      ctx.fillStyle = '#0d0a08'
+      if (kind !== 'ac' && kind !== 'broken') ctx.fillRect(W / 2 - 3, gy, 6, gh)
+      ctx.fillRect(gx, H * 0.4, gw, 6)
     }
-    // frame + mullions
-    ctx.fillStyle = '#0d0a08'
-    ctx.fillRect(W / 2 - 3, gy, 6, gh)
-    ctx.fillRect(gx, H * 0.4, gw, 6)
     ctx.strokeStyle = '#2a211b'
     ctx.lineWidth = 8
     ctx.strokeRect(gx - 2, gy - 2, gw + 4, gh + 4)
-    // sill
     ctx.fillStyle = '#4a4036'
     ctx.fillRect(2, H - 10, W - 4, 8)
+    // dirt running down from the sill above
+    for (let i = 0; i < 5; i++) { ctx.fillStyle = `rgba(10,8,6,${r.range(0.05, 0.2)})`; ctx.fillRect(r() * W, 0, r.range(2, 8), r.range(40, H)) }
     grain(ctx, W, H, 14, seed)
     return toTexture(canvas, { aniso: 4 })
   }
-  return { dark: mk('dark', 1), warm: mk('warm', 2), cool: mk('cool', 3), blind: mk('blind', 4) }
+  const out = {} as Record<WindowVariant, THREE.Texture>
+  WINDOW_VARIANTS.forEach((k, i) => (out[k] = mk(k, 1 + i)))
+  return out
 }
 
 export function gratingTexture() {
@@ -959,4 +1074,92 @@ export function towerTextures() {
     map: toTexture(base.canvas, { wrap: true, aniso: 4 }),
     emissive: toTexture(lit.canvas, { wrap: true, aniso: 4 }),
   }
+}
+
+/* ───────────────────────── foreground dressing ───────────────────────── */
+
+/** Hanging laundry silhouette (alpha-cut) — worn cotton in muted colours, with a wooden peg strip on top. */
+export function garmentTexture(kind: 'tee' | 'trousers' | 'towel' | 'hoodie', color: string, seed = 3) {
+  const W = 256, H = 384
+  const r = rng(seed)
+  const { canvas, ctx } = makeCanvas(W, H)
+  ctx.clearRect(0, 0, W, H)
+  ctx.fillStyle = color
+  ctx.beginPath()
+  if (kind === 'tee') {
+    ctx.moveTo(70, 10); ctx.lineTo(186, 10); ctx.lineTo(252, 80); ctx.lineTo(214, 128); ctx.lineTo(178, 96); ctx.lineTo(182, 330)
+    ctx.quadraticCurveTo(128, 346, 74, 330); ctx.lineTo(78, 96); ctx.lineTo(42, 128); ctx.lineTo(4, 80)
+  } else if (kind === 'trousers') {
+    ctx.moveTo(60, 8); ctx.lineTo(196, 8); ctx.lineTo(206, 372); ctx.lineTo(136, 376); ctx.lineTo(128, 130); ctx.lineTo(120, 376); ctx.lineTo(50, 372)
+  } else if (kind === 'towel') {
+    ctx.moveTo(40, 8); ctx.lineTo(216, 8); ctx.lineTo(220, 280); ctx.lineTo(36, 284)
+  } else {
+    ctx.moveTo(62, 10); ctx.lineTo(194, 10); ctx.lineTo(250, 90); ctx.lineTo(236, 260); ctx.lineTo(196, 250); ctx.lineTo(196, 340)
+    ctx.quadraticCurveTo(128, 356, 60, 340); ctx.lineTo(60, 250); ctx.lineTo(20, 260); ctx.lineTo(6, 90)
+  }
+  ctx.closePath()
+  ctx.fill()
+  ctx.globalCompositeOperation = 'source-atop'
+  // folds, damp patches, stripes on towels
+  for (let i = 0; i < 9; i++) {
+    ctx.strokeStyle = `rgba(0,0,0,${r.range(0.06, 0.2)})`
+    ctx.lineWidth = r.range(2, 8)
+    ctx.beginPath(); ctx.moveTo(r() * W, 0); ctx.bezierCurveTo(r() * W, H * 0.3, r() * W, H * 0.6, r() * W, H); ctx.stroke()
+  }
+  if (kind === 'towel') { ctx.fillStyle = 'rgba(240,235,220,0.55)'; ctx.fillRect(0, 230, W, 14); ctx.fillRect(0, 252, W, 8) }
+  blotches(ctx, W, H, 10, seed + 4, [30, 28, 30], 0.08, 0.3, 20, 90)
+  grain(ctx, W, H, 20, seed + 6)
+  ctx.globalCompositeOperation = 'source-over'
+  ctx.fillStyle = '#6a4d33'
+  ctx.fillRect(r.range(46, 60), 0, 14, 22)
+  ctx.fillRect(r.range(180, 196), 0, 14, 22)
+  return toTexture(canvas, { aniso: 4 })
+}
+
+/** Striped canvas shop awning (top-down faded, stained). */
+export function awningTexture(a: string, b: string, seed = 6) {
+  const W = 512, H = 256
+  const { canvas, ctx } = makeCanvas(W, H)
+  const n = 8
+  for (let i = 0; i < n; i++) { ctx.fillStyle = i % 2 ? b : a; ctx.fillRect((i * W) / n, 0, W / n + 1, H) }
+  const g = ctx.createLinearGradient(0, 0, 0, H)
+  g.addColorStop(0, 'rgba(0,0,0,0.0)'); g.addColorStop(1, 'rgba(0,0,0,0.38)')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, W, H)
+  blotches(ctx, W, H, 26, seed, [20, 14, 8], 0.08, 0.35, 20, 90)
+  grain(ctx, W, H, 18, seed + 1)
+  // scalloped valance
+  ctx.globalCompositeOperation = 'destination-out'
+  const sc = W / n
+  for (let i = 0; i < n; i++) { ctx.beginPath(); ctx.arc(i * sc + sc / 2, H, sc / 2.4, 0, Math.PI * 2); ctx.fill() }
+  return toTexture(canvas, { aniso: 4 })
+}
+
+/** Neon tube lettering on a dark acrylic plate (transparent glow, intended for additive emissive use). */
+export function neonTexture(text: string, color: string, w = 512, h = 192, script = false) {
+  const { canvas, ctx } = makeCanvas(w, h)
+  ctx.fillStyle = '#0a0a0c'
+  roundRect(ctx, 0, 0, w, h, 16)
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'
+  ctx.lineWidth = 3
+  roundRect(ctx, 6, 6, w - 12, h - 12, 12)
+  ctx.stroke()
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  const font = script ? (p: number) => `italic 700 ${p}px "Space Mono", monospace` : (p: number) => `${p}px ${DISPLAY_FONT}`
+  const px = fitText(ctx, text, w - 70, font, h * 0.62)
+  void px
+  ctx.lineJoin = 'round'
+  for (const [blur, lw, a] of [[26, 9, 0.55], [12, 6, 0.8], [4, 3.2, 1]] as const) {
+    ctx.shadowColor = color
+    ctx.shadowBlur = blur
+    ctx.strokeStyle = a === 1 ? '#fff6ee' : color
+    ctx.lineWidth = lw
+    ctx.globalAlpha = a
+    ctx.strokeText(text, w / 2, h / 2)
+  }
+  ctx.globalAlpha = 1
+  ctx.shadowBlur = 0
+  return toTexture(canvas, { aniso: 4 })
 }

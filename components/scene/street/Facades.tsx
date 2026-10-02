@@ -10,7 +10,8 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { streetMat } from './materials'
-import { PLAZA, SEGS, segAt, windowsFor, type BrickKind, type WinInst } from './layout'
+import { PLAZA, SEGS, segAt, windowsFor, pickWindow, type BrickKind, type WinInst } from './layout'
+import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
 
@@ -117,6 +118,13 @@ export function Walls() {
   )
 }
 
+const tmpC = new THREE.Color()
+/** emissive = base + windowsGlow × gain (null = never emits) */
+const EMIT: Record<WindowVariant, [number, number] | null> = {
+  dark: null, warm: [0.12, 2.1], warm2: [0.14, 2.2], cool: [0.1, 1.5], tv: [0.2, 1.7], blind: [0.05, 0.55], boarded: null,
+  barred: [0.0, 0.18], sheet: [0.04, 0.85], shutter: null, broken: null, ac: null,
+}
+
 /** Windows, sills and lintels — instanced. */
 export function Windows({ skip = {} as Record<string, number[]> }) {
   const data = useMemo(() => {
@@ -128,15 +136,14 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       for (let z = PLAZA.z0 - 2; z > PLAZA.z1 + 1; z -= 3.4) for (let k = 0; k < 5; k++) {
         const y = 4.6 + k * 3.4
         if (r() < 0.1) continue
-        const roll = r()
-        all.push({ side, x: side * PLAZA.hw, y, z, variant: roll < 0.2 ? 'warm' : roll < 0.27 ? 'cool' : roll < 0.6 ? 'blind' : 'dark', w: 1, h: 1.55 })
+        all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.55 + r() * 0.75 })
       }
     }
     return all
   }, [skip])
 
   const built = useMemo(() => {
-    const variants = ['dark', 'warm', 'cool', 'blind'] as const
+    const variants = WINDOW_VARIANTS
     const plane = new THREE.PlaneGeometry(1.0, 1.55)
     const sillGeo = new THREE.BoxGeometry(1.35, 0.12, 0.3)
     const lintelGeo = new THREE.BoxGeometry(1.25, 0.16, 0.22)
@@ -152,24 +159,33 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       const list = data.filter((d) => d.variant === v)
       if (!list.length) continue
       const tex = A.windows[v]
-      const lit = v !== 'dark'
+      const lit = EMIT[v] !== null
       const mat = new THREE.MeshStandardMaterial({
-        map: tex, roughness: v === 'dark' ? 0.25 : 0.7, metalness: v === 'dark' ? 0.3 : 0,
+        map: tex, roughness: lit ? 0.7 : 0.25, metalness: lit ? 0 : 0.3,
         emissive: lit ? new THREE.Color('#ffffff') : new THREE.Color('#000000'), emissiveMap: lit ? tex : null, emissiveIntensity: 0.4,
       })
       mat.userData.variant = v
+      // per-instance tone also drives the glow (instanceColor only multiplies the diffuse term by default)
+      mat.onBeforeCompile = (sh) => {
+        sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif')
+      }
+      mat.customProgramCacheKey = () => 'win-emit'
       const im = new THREE.InstancedMesh(plane, mat, list.length)
       list.forEach((d, i) => {
         const inward = -d.side
         p.set(d.x + inward * 0.05, d.y, d.z)
         q.setFromEuler(eu.set(0, rotFor(d.side), 0))
+        s.set(d.w, d.h, 1)
         m4.compose(p, q, s)
         im.setMatrixAt(i, m4)
+        const t = d.tone ?? 1
+        im.setColorAt(i, tmpC.setRGB(t, t * (0.94 + 0.1 * Math.sin(i * 12.9)), t * (0.9 + 0.12 * Math.sin(i * 7.3))))
+        s.set(1, 1, 1)
         // sill + lintel (shared across variants)
         p.set(d.x + inward * 0.14, d.y - 0.86, d.z)
-        sills.push(new THREE.Matrix4().compose(p.clone(), q.clone(), s.clone().setScalar(1)))
+        sills.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(d.w, 1, 1)))
         p.set(d.x + inward * 0.1, d.y + 0.88, d.z)
-        lintels.push(new THREE.Matrix4().compose(p.clone(), q.clone(), s.clone()))
+        lintels.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(d.w, 1, 1)))
       })
       im.instanceMatrix.needsUpdate = true
       im.frustumCulled = false
@@ -192,7 +208,8 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
     const w = palette.windows
     for (const m of built.mats) {
       const v = m.userData.variant as string
-      m.emissiveIntensity = v === 'warm' ? 0.12 + w * 2.1 : v === 'cool' ? 0.1 + w * 1.5 : v === 'blind' ? 0.05 + w * 0.55 : 0
+      const e = EMIT[v as WindowVariant]
+      m.emissiveIntensity = e ? e[0] + w * e[1] : 0
     }
   })
 

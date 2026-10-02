@@ -1,4 +1,5 @@
 import { rng } from '@/lib/math'
+import type { WindowVariant } from '@/lib/textures'
 
 export type BrickKind = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
 
@@ -53,9 +54,22 @@ export interface WinInst {
   x: number
   y: number
   z: number
-  variant: 'dark' | 'warm' | 'cool' | 'blind'
+  variant: WindowVariant
   w: number
   h: number
+  /** per-instance brightness (lit windows vary a lot) */
+  tone?: number
+}
+
+/** Weighted table: most windows are dead or covered; a few are alive. */
+const TABLE: [WindowVariant, number][] = [
+  ['dark', 0.2], ['warm', 0.08], ['warm2', 0.06], ['cool', 0.025], ['tv', 0.03], ['blind', 0.12], ['boarded', 0.07],
+  ['barred', 0.08], ['sheet', 0.06], ['shutter', 0.1], ['broken', 0.04], ['ac', 0.075],
+]
+export function pickWindow(r: () => number): WindowVariant {
+  let x = r()
+  for (const [v, w] of TABLE) { if ((x -= w) < 0) return v }
+  return 'dark'
 }
 
 export function windowsFor(seg: Seg, seed: number, skipZ: number[] = []): WinInst[] {
@@ -64,14 +78,18 @@ export function windowsFor(seg: Seg, seed: number, skipZ: number[] = []): WinIns
   const pitch = 3.0
   for (let z = seg.z0 - 1.4; z > seg.z1 + 1.0; z -= pitch) {
     if (skipZ.some((s) => Math.abs(s - z) < 1.8)) continue
+    // each column has its own character: some stacks are mostly alive, some mostly dead, a few are bricked up
+    const colMood = r()
+    const bricked = r() < 0.07
     for (let k = 0; k < 6; k++) {
-      const y = 5.3 + k * 3.35
+      const y = 5.3 + k * 3.35 + (r() - 0.5) * 0.16
       if (y > seg.h - 2) break
-      if (r() < 0.07) continue
-      const roll = r()
-      const lit = 0.2 + 0.0
-      const variant: WinInst['variant'] = roll < lit ? 'warm' : roll < lit + 0.07 ? 'cool' : roll < lit + 0.4 ? 'blind' : 'dark'
-      out.push({ side: seg.side, x: seg.side * seg.hw, y, z, variant, w: 1.0, h: 1.55 })
+      if (bricked && k > 0) continue
+      if (r() < 0.06) continue
+      let variant = pickWindow(r)
+      if (colMood > 0.78 && r() < 0.5) variant = r() < 0.6 ? 'warm' : 'warm2'
+      if (colMood < 0.2 && (variant === 'warm' || variant === 'warm2')) variant = 'blind'
+      out.push({ side: seg.side, x: seg.side * seg.hw, y, z: z + (r() - 0.5) * 0.5, variant, w: 0.88 + r() * 0.3, h: 0.92 + r() * 0.34, tone: 0.55 + r() * 0.75 })
     }
   }
   return out

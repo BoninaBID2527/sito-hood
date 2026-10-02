@@ -36,7 +36,7 @@ function useDecalMats() {
     const get = (tex: THREE.Texture) => {
       let m = cache.get(tex)
       if (!m) {
-        m = streetMat({ map: tex, transparent: true, depthWrite: false, roughness: 0.92, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1, aoBase: 0.55 })
+        m = streetMat({ map: tex, transparent: true, depthWrite: false, roughness: 0.92, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1, aoBase: 0.55, decal: true, macro: 0.85 })
         cache.set(tex, m)
       }
       return m

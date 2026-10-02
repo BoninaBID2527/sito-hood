@@ -45,6 +45,10 @@ export interface StreetOpts {
   /** 0..1 strength of macro tint / grime / drips (default 1) */
   macro?: number
   seed?: number
+  /** painted-on-wall decal: edge chipping, per-brick opacity breakup so it reads as paint/paper on masonry */
+  decal?: boolean
+  /** cloth flutter amplitude (metres) — hangs from uv.y = 1 */
+  flutter?: number
   /** wetness field texture (R depth, G damp, B oil) in street world space — asphalt only */
   wet?: THREE.Texture
 }
@@ -56,6 +60,8 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const brick = !!(opts.brick && m.map)
   const bump = !!(opts.bump && m.map)
   const wet = !!opts.wet
+  const decal = !!opts.decal
+  const flut = (opts.flutter ?? 0).toFixed(3)
   const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
   const bblur = (opts.bumpBlur ?? 1).toFixed(2)
   m.onBeforeCompile = (sh) => {
@@ -75,7 +81,14 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   float wv_ = sin(wp_.y * 0.9 + wp_.z * 0.45 + uTime * 1.1) * sin(wp_.x * 1.3 + uTime * 0.7);
   transformed += normal * wv_ * 0.07 * uContam * uContam;
   transformed += normal * sin(wp_.y * 0.55 + wp_.z * 0.31 + uTime * 0.4) * 0.35 * uDissolve * uDissolve;
-  vWPos = wp_.xyz;`,
+  vWPos = wp_.xyz;
+${
+  opts.flutter
+    ? `  float fl_ = (1.0 - uv.y);
+  transformed.x += sin(uTime * 1.3 + wp_.z * 0.8 + wp_.x * 0.5) * ${flut} * fl_ * fl_;
+  transformed.z += sin(uTime * 0.9 + wp_.x * 1.1) * ${flut} * 0.7 * fl_;`
+    : ''
+}`,
       )
     sh.fragmentShader = sh.fragmentShader
       .replace(
@@ -167,6 +180,17 @@ ${
   }`
     : ''
 }
+${
+  decal
+    ? `  {
+    float row_ = floor(h_ / 0.075);
+    float bn_ = h21_(vec2(floor(tang_ / 0.218 + 0.5 * mod(row_, 2.0)), row_));
+    float edge_ = (nS_ - 0.5) * 0.5 + (vn3_(vWPos * 9.0) - 0.5) * 0.3;
+    diffuseColor.a *= smoothstep(0.32 + edge_, 0.62 + edge_, diffuseColor.a) * (0.84 + 0.16 * bn_);
+    diffuseColor.rgb *= 0.86 + 0.2 * bn_;
+  }`
+    : ''
+}
   float wallAO_ = mix(${ao}, 1.0, smoothstep(0.0, 3.2, h_));
   diffuseColor.rgb *= wallAO_;
   vec3 irid_ = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + h_ * 0.06 + vWPos.z * 0.025 + uTime * 0.025));
@@ -201,13 +225,13 @@ ${
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}`
   return m
 }
 
 export function streetMat(params: THREE.MeshStandardMaterialParameters & StreetOpts) {
-  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, ...rest } = params
-  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet })
+  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, flutter, decal, ...rest } = params
+  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, flutter, decal })
 }
 
 /** Gentle sway for cables / hanging objects. Amplitude fades toward the fixed ends (uv.x 0..1). */

@@ -117,10 +117,10 @@ export async function loadCore(onProgress: (p: number) => void) {
         A.projection = T.projectionTexture('ALTERCO')
         A.pieces = [
           T.pieceTexture('HOOD', { a: '#27b7b0', b: '#a6f0e0', c: '#2a3a8c' }, 31),
-          T.pieceTexture('KOLD', { a: '#ff5d8f', b: '#ffc0cf', c: '#5a2a7a' }, 32),
-          T.pieceTexture('VERT', { a: '#f2c230', b: '#fff0a0', c: '#b3261e' }, 33),
-          T.pieceTexture('NYX', { a: '#ffffff', b: '#bfd8ff', c: '#1a1a22' }, 34),
-          T.pieceTexture('ECHO', { a: '#7be05a', b: '#d8ffb0', c: '#143a2a' }, 35),
+          T.pieceTexture('ALTERCO', { a: '#ff5d8f', b: '#ffc0cf', c: '#5a2a7a' }, 32),
+          T.pieceTexture('DINO', { a: '#f2c230', b: '#fff0a0', c: '#b3261e' }, 33),
+          T.pieceTexture('POTREI', { a: '#ffffff', b: '#bfd8ff', c: '#1a1a22' }, 34),
+          T.pieceTexture('STARE BENE', { a: '#7be05a', b: '#d8ffb0', c: '#143a2a' }, 35),
         ]
         // seven hidden letters — the scavenger hunt that spells ALTERCO
         const cols = ['#ff5d8f', '#27b7b0', '#f2c230', '#ffffff', '#ff7a3a', '#7aa8ff', '#e03030']
@@ -147,6 +147,11 @@ export async function loadCore(onProgress: (p: number) => void) {
           tracks: T.signTexture({ text: '01 — 07', small: 'TRACKS →', bg: '#1a1a1a', fg: '#f4ead2', border: '#f4ead2', seed: 9 }),
           oneWay: T.signTexture({ text: 'ONE WAY', arrow: 'right', bg: '#111', fg: '#f2f2f2', border: '#f2f2f2', seed: 10, w: 512, h: 160 }),
           roof: T.signTexture({ text: 'ROOF ACCESS', arrow: 'up', bg: '#8c2a22', fg: '#f4ead2', border: '#f4ead2', seed: 11, w: 512, h: 192 }),
+          osteria: T.signTexture({ text: 'OSTERIA', small: 'CUCINA · VINO', bg: '#6d1d19', fg: '#efdfbf', border: '#d8b46a', seed: 13, w: 512, h: 384 }),
+          farmacia: T.signTexture({ text: 'FARMACIA', small: 'NOTTE', bg: '#173f31', fg: '#e6f1e0', border: '#9fd6b4', seed: 14, w: 512, h: 384 }),
+          neonPizza: T.neonTexture('PIZZA', '#ff9a3c'),
+          neonOpen: T.neonTexture('OPEN', '#ff3b52', 384, 160),
+          neonNotte: T.neonTexture('NOTTE', '#5ab8ff', 512, 192),
           listen: T.signTexture({ text: 'LISTEN', small: 'ROOFTOP', bg: '#101a2c', fg: '#f4ead2', border: '#9ab6ff', seed: 12 }),
         }
         A.stencils = {

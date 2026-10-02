@@ -25,7 +25,7 @@ export function Director() {
   const size = useThree((s) => s.size)
   const tl = useMemo(() => buildParamTimeline(), [])
   const spring = useRef<Spring>({ x: 0, v: 0 })
-  const sample = useRef<CamSample>({ pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: 50, world: 'alley' })
+  const sample = useRef<CamSample>({ pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: 50, roll: 0, world: 'alley' })
   const lastFov = useRef(0)
   const look = useRef(new THREE.Vector3())
 
@@ -123,6 +123,8 @@ export function Director() {
       cam.lookAt(look.current)
       cam.rotateY(-rt.px * 0.028 * S * sel)
       cam.rotateX(rt.py * 0.02 * S * sel)
+      // handheld-cinema roll: authored per shot + a little bank with scroll speed and pointer
+      cam.rotateZ((cs.roll + clamp(rt.velocity * 0.05, -0.01, 0.01) - rt.px * 0.004) * S)
 
       // breathing, only where it belongs (no breathing while the orbit is the subject)
       const breathe = (1 - orbitW) * S

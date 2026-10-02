@@ -11,6 +11,8 @@ import { Lamps } from './street/Lamps'
 import { Props } from './street/Props'
 import { Decals } from './street/Decals'
 import { Steam, Cables, AirLayers } from './street/Atmos'
+import { Foreground } from './street/Foreground'
+import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
@@ -44,6 +46,8 @@ export function StreetEnvironment() {
       <Decals />
       <Steam />
       <Cables />
+      <Foreground />
+      <WallDetail />
       <AirLayers />
       <Backdrop />
       <AltercoArtwork mode="plaza" />

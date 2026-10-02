@@ -51,12 +51,14 @@ interface Key {
    a centripetal Catmull-Rom spline (position and look-at target separately). */
 const R = WORLD.roofX
 export const ALLEY_KEYS: Key[] = [
-  { p: 0.0, pos: [0.7, 1.62, 17], look: [0, 2.9, -30], fov: 50 },
-  { p: 0.05, pos: [0.45, 1.66, 10], look: [-0.2, 3.0, -30], fov: 50 },
-  { p: 0.12, pos: [-0.35, 1.72, -1.5], look: [0.3, 4.2, -30], fov: 50 },
-  { p: 0.2, pos: [0.3, 1.78, -17], look: [0.0, 8.2, -30], fov: 54 },
-  { p: 0.27, pos: [0.25, 1.7, -37], look: [-1.6, 2.7, -58], fov: 50 },
-  { p: 0.32, pos: [0.0, 1.85, -56], look: [0, 2.7, -88], fov: 50 },
+  { p: 0.0, pos: [1.05, 1.3, 17.5], look: [-0.5, 3.6, -30], fov: 47, roll: -0.022 },
+  { p: 0.04, pos: [0.25, 1.44, 12.5], look: [-0.9, 3.5, -30], fov: 48, roll: -0.008 },
+  { p: 0.08, pos: [-0.8, 1.62, 6.5], look: [0.2, 3.7, -28], fov: 49, roll: 0.012 },
+  { p: 0.125, pos: [-0.25, 1.88, -1.5], look: [0.9, 4.6, -30], fov: 50, roll: 0.004 },
+  { p: 0.165, pos: [0.85, 1.56, -9.5], look: [-0.3, 5.2, -30], fov: 51, roll: -0.014 },
+  { p: 0.2, pos: [0.4, 1.78, -17], look: [0.0, 8.2, -30], fov: 54, roll: 0 },
+  { p: 0.27, pos: [-0.3, 1.7, -37], look: [-1.6, 2.7, -58], fov: 50, roll: 0.01 },
+  { p: 0.32, pos: [0.4, 1.85, -56], look: [0, 2.7, -88], fov: 50, roll: -0.006 },
   { p: 0.36, pos: [0.0, 2.45, -73], look: [0, 2.6, -102], fov: 50 },
   { p: 0.41, pos: [0.0, 2.75, -85.8], look: [0, 2.55, -102], fov: 50 },
   { p: 0.58, pos: [0.0, 2.75, -86.4], look: [0, 2.55, -102], fov: 50 },
@@ -107,7 +109,8 @@ function makePath(keys: Key[]) {
   const warp = makeWarp(keys.map((k) => k.p))
   const last = keys.length - 1
   const fovs = keys.map((k) => k.fov ?? 50)
-  return { posC, lookC, warp, last, fovs, keys }
+  const rolls = keys.map((k) => k.roll ?? 0)
+  return { posC, lookC, warp, last, fovs, rolls, keys }
 }
 const alleyPath = makePath(ALLEY_KEYS)
 const roofPath = makePath(ROOF_KEYS)
@@ -116,6 +119,7 @@ export interface CamSample {
   pos: THREE.Vector3
   look: THREE.Vector3
   fov: number
+  roll: number
   world: 'alley' | 'roof'
 }
 
@@ -129,6 +133,8 @@ export function sampleCamera(p: number, out: CamSample) {
   const i = Math.min(path.last - 1, Math.floor(k))
   const f = k - i
   out.fov = path.fovs[i] + (path.fovs[i + 1] - path.fovs[i]) * f
+  const fs = f * f * (3 - 2 * f)
+  out.roll = path.rolls[i] + (path.rolls[i + 1] - path.rolls[i]) * fs
   return out
 }
 

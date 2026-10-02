@@ -19,7 +19,7 @@ const GROUND_CZ = -56
 export function Ground() {
   const mats = useMemo(() => {
     A.asphalt.repeat.set(1, 1)
-    const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: 1.1, bumpBlur: 3.5, wet: A.puddle, macro: 0.7 })
+    const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: 0.8, bumpBlur: 6, wet: A.puddle, macro: 0.7 })
     A.sidewalk.repeat.set(1, 1)
     const walk = streetMat({ map: A.sidewalk, color: '#6f6a62', roughness: 0.9, aoBase: 0.6 })
     return { asphalt, walk }
