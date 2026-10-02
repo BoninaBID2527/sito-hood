@@ -73,7 +73,7 @@ void main() {
     float roofCut = step(y, floorH * 40.0 + 40.0);
     // dark reflective glass
     vec3 sky = mix(uSkyLow, uSkyHigh, clamp(f.y * 0.9 + 0.1 * nz, 0.0, 1.0));
-    vec3 glassCol = mix(vec3(dot(sky, vec3(0.33))), sky, 0.55) * (glassWall ? 0.3 : 0.15) + vec3(0.008, 0.01, 0.016);
+    vec3 glassCol = mix(vec3(dot(sky, vec3(0.33))), sky, 0.35) * (glassWall ? 0.22 : 0.1) + vec3(0.008, 0.01, 0.016);
     if (glassWall) glassCol *= 0.8 + 0.4 * smoothstep(0.3, 0.7, nz);
     // lit state
     vec3 warm = mix(vec3(1.0, 0.58, 0.26), vec3(1.0, 0.8, 0.52), hb);
@@ -82,10 +82,10 @@ void main() {
     float lv = 0.0;
     if (floorLit > 0.5 && glassWall) { lit = mix(vec3(0.85, 0.92, 1.0), cool, hb); lv = 0.9; }
     else if (deadCol < 0.5) {
-      if (hh > 0.9)       { lit = cool * (0.7 + 0.5 * sin(uTime * (1.3 + hb * 2.0) + hb * 30.0)); lv = 0.8; }       // TV flicker
-      else if (hh > 0.82) { lit = warm; lv = 0.55; }
-      else if (hh > 0.72) { lit = cool; lv = 0.5; }
-      else if (hh > 0.62) { lit = warm * vec3(1.0, 0.85, 0.7); lv = 0.28 + 0.2 * hb; }
+      if (hh > 0.97)      { lit = cool * (0.7 + 0.5 * sin(uTime * (1.3 + hb * 2.0) + hb * 30.0)); lv = 0.8; }       // TV flicker
+      else if (hh > 0.92) { lit = cool; lv = 0.5; }
+      else if (hh > 0.7)  { lit = warm; lv = 0.5 + 0.25 * hb; }
+      else if (hh > 0.6)  { lit = warm * vec3(1.0, 0.85, 0.7); lv = 0.25 + 0.2 * hb; }
     }
     // blinds: partial occlusion of lit windows
     float blinds = step(0.55, hb) * step(0.62, hh);

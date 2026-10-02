@@ -10,6 +10,13 @@ npm run dev          # http://localhost:3000
 npm run build && npm start
 ```
 
+> **V2 — second-pass visual overhaul.** Same architecture and interaction model as V1, rebuilt look: shader-level material
+> variation + relief on every wall, a wetness *field* (asphalt / damp / standing water that grows along the journey),
+> motivated cool-vs-warm light with haze and shafts, authored foreground layers and wall furniture, a camera that weaves and rolls
+> past them, seven physical track objects hung from a truss ring, a fragment-assembly reveal of the official artwork inside a
+> real frame, a liquid transition where the camera breaks the pool and falls through the mirrored alley, a procedural-facade
+> skyline and wet rooftop with the artwork as a bolted billboard, and DUALISMO as a mirrored black-glass hall. See "V2 notes" below.
+
 Stack: Next.js 16 (App Router) · React 19 · TypeScript · Three.js · React Three Fiber · Motion · GSAP + ScrollTrigger · Lenis · zustand.
 All environment art is generated **procedurally** (canvas textures + code-built geometry). The only external imagery are the two
 official covers, used exactly as supplied (resized/re-encoded to WebP/AVIF, never redrawn).
@@ -68,6 +75,23 @@ One custom pass (`effects/postfx.glsl.ts`) on a half-float MSAA target: chromati
 liquid pass-through (domain-warped, uses the artwork as "water"), Dualismo radial tunnel, glitch, grain, vignette, ACES, sRGB.
 Everything is uniform-gated; at rest the pass costs three taps.
 
+## V2 notes
+
+| area | what changed |
+|---|---|
+| Materials (`components/scene/street/materials.ts`) | One patched `MeshStandardMaterial` chunk set: per-cell brick-bond offsets (kills the tile repeat), screen-space relief from the height maps (`textureGrad`, seam-safe), macro warm/cool brick lots, soot, rising damp, drip streaks, patched/painted-over panels, decal chipping, wetness-field asphalt, cloth flutter, DUALISMO dissolve. |
+| Wet ground | `puddleMask` is now a *field* (R depth, G damp, B oil). The puddle threshold falls with progress, so puddles widen from ordinary wet street to the pool; reflection strength, blur and thin-film oil tint are driven by the same field. |
+| Light | `lib/timeOfDay.ts` re-keyed: cool sky fill vs warm sun/lamps/windows (no blanket orange); `AirLayers` adds drifting haze sheets and low-sun shafts; bloom uses a rotated Vogel disk (no rosettes). |
+| Layers | `Foreground.tsx` (scooter, blade signs, awnings, laundry, bags), `WallDetail.tsx` (meters, conduit, wall lamps with spill, CCTV, vents, dishes, neon), irregular windows (12 states, per-instance tone), authored graffiti words. |
+| Camera | Longer key set with lateral weave, rise and per-shot roll + speed bank (`lib/timeline.ts`, `Director.tsx`). |
+| Tracks | `TrackObjects.tsx`: seven different objects (paste-up slab, lightbox, steel plaque, weighted banner, glass pane, positive/negative twin, lit billboard) on one orbit — different depths, heights, sizes; the front one steps forward; truss ring + wires + light cones. Orbit physics untouched. |
+| Artwork | `AltercoArtwork.tsx`: 8×8 fragment assembly (scatter → RGB artifacts → lock) → the sleeve itself, inside a steel frame on legs with four uplights. The artwork is never edited. |
+| Liquid | Camera leans over the pool, breaks the surface (shock ring, refraction, caustics, selective RGB), then falls through the alley rendered as its own reflection (`rt.mirror`) before emerging on the roof. |
+| Rooftop | `effects/TowerMaterial.ts` procedural facades (per-building floor height / bay width / material; dark, warm, TV-flicker, blinds, lit office floors, dead columns), layered skyline with setbacks and crowns, wet roof with real reflections, artwork as a monumental billboard (`RoofBillboard`). |
+| DUALISMO | Black-glass mirror floor, symmetric glass monoliths, mirrored crystals, spectral shafts + haze, lens halo around the official artwork; Chirone / Messaggio as point-symmetric opposing poles. Entering first dissolves the street (spectral highlights, swelling walls). |
+| Opening | The alley is alive (dimmed, not black) behind the ENTER screen; cursor shows `EXPLORE` until the first scroll. |
+| Performance | Reflection camera renders layer 0 only (`NoReflect`); laundry atlas, merged bags / wall lamps / haze / shafts. `node scripts/perf.mjs high` prints draw-call census. |
+
 ## Configure content
 
 * **Streaming links** → `data/streaming.ts`. No URLs were supplied, so none are invented; services left `''` are never rendered
@@ -95,6 +119,8 @@ Everything is uniform-gated; at rest the pass costs three taps.
 8. Open all seven tracks → the rooftop warning lights turn white and chase.
 9. Rarely, an RGB glitch flashes a line of hidden text.
 10. Click the HOODDINO wordmark seven times.
+11. A painted glyph on the left wall (~⅓ down the alley) only exists at a grazing angle — look back along the wall from afar; it vanishes when you walk up to it.
+12. If DUALISMO has been found, a faint iridescent glint stays on a distant tower on the rooftop.
 </details>
 
 ## Performance & quality tiers

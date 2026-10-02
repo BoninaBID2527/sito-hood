@@ -38,21 +38,30 @@ export function CustomCursor() {
     }
   }, [x, y])
 
+  // the ENTER button unmounts under the pointer: never leave its label behind
+  useEffect(() => {
+    if (phase === 'entered') useStore.getState().setCursor('default')
+  }, [phase])
+
   // DOM controls report their own hover state through data-cursor
   useEffect(() => {
     if (!enabled) return
     const over = (e: PointerEvent) => {
       const el = (e.target as HTMLElement | null)?.closest?.('[data-cursor]') as HTMLElement | null
       const st = useStore.getState()
+      const onCanvas = !!(e.target as HTMLElement | null)?.closest?.('canvas')
       if (el) st.setCursor((el.dataset.cursor as any) ?? 'link', el.dataset.cursorLabel)
-      else if (['link', 'text'].includes(st.cursor.kind) && !(e.target as HTMLElement | null)?.closest?.('canvas')) st.setCursor('default')
+      else if (['link', 'text'].includes(st.cursor.kind) && !onCanvas) st.setCursor('default')
+      // first-visit hint: until the first scroll the cursor invites you to explore the world
+      if (!el && onCanvas && st.phase === 'entered' && st.mode === 'alterco' && rt.progress < 0.02 && st.cursor.kind === 'default') st.setCursor('explore', 'EXPLORE')
+      else if (st.cursor.kind === 'explore' && (!onCanvas || rt.progress >= 0.02)) st.setCursor('default')
     }
     window.addEventListener('pointerover', over, { passive: true })
     return () => window.removeEventListener('pointerover', over)
   }, [enabled])
 
   if (!enabled) return null
-  const size = kind === 'default' ? 10 : kind === 'link' || kind === 'lamp' ? 42 : kind === 'track' || kind === 'drag' ? 92 : 70
+  const size = kind === 'default' ? 10 : kind === 'explore' ? 64 : kind === 'link' || kind === 'lamp' ? 42 : kind === 'track' || kind === 'drag' ? 92 : 70
   return (
     <motion.div className={`cursor cursor-${kind}`} style={{ x: sx, y: sy, opacity: visible && phase !== 'loading' ? 1 : 0 }} aria-hidden>
       <motion.div

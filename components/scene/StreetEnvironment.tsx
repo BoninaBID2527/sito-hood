@@ -14,6 +14,7 @@ import { Props } from './street/Props'
 import { Decals } from './street/Decals'
 import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
+import { NoReflect } from './street/NoReflect'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
@@ -49,11 +50,11 @@ export function StreetEnvironment() {
       <Props />
       <Lamps />
       <Decals />
-      <Steam />
+      <NoReflect><Steam /></NoReflect>
       <Cables />
-      <Foreground />
-      <WallDetail />
-      <AirLayers />
+      <NoReflect><Foreground /></NoReflect>
+      <NoReflect><WallDetail /></NoReflect>
+      <NoReflect><AirLayers /></NoReflect>
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />

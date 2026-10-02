@@ -282,11 +282,29 @@ export function AirLayers() {
       vertexShader: airVert, fragmentShader: shaftFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#ffb36a') }, uA: { value: 0.3 }, uSeed: { value: 3 } },
     })
-    const planes: { z: number; w: number; seed: number }[] = []
-    for (let i = 0; i < nHaze; i++) planes.push({ z: 6 - i * (74 / nHaze) - (i % 2) * 2, w: 7 + (i % 3), seed: i * 1.7 })
-    const hazeGeo = new THREE.PlaneGeometry(1, 1)
-    const shaftGeo = new THREE.PlaneGeometry(1, 1)
-    return { haze, shaft, planes, shafts: SHAFTS.slice(0, nShaft), hazeGeo, shaftGeo }
+    // all haze sheets → one merged geometry; all shafts (two crossed quads each) → another
+    const hazeParts: THREE.BufferGeometry[] = []
+    for (let i = 0; i < nHaze; i++) {
+      const z = 6 - i * (74 / nHaze) - (i % 2) * 2
+      const g = new THREE.PlaneGeometry(wallX(1, z) * 2 - 0.4, 14)
+      g.translate(0, 7, z)
+      hazeParts.push(g)
+    }
+    const shaftList = SHAFTS.slice(0, nShaft)
+    const shaftParts: THREE.BufferGeometry[] = []
+    const m4 = new THREE.Matrix4(), q4 = new THREE.Quaternion(), e4 = new THREE.Euler()
+    for (const s of shaftList) {
+      for (const ry of [0, Math.PI / 2]) {
+        const g = new THREE.PlaneGeometry(s.w, s.len)
+        g.applyMatrix4(m4.compose(new THREE.Vector3(0, 0, 0), q4.setFromEuler(e4.set(0, ry, 0)), new THREE.Vector3(1, 1, 1)))
+        g.applyMatrix4(m4.compose(new THREE.Vector3(s.x, 8, s.z), q4.setFromEuler(e4.set(0, 0, s.rz)), new THREE.Vector3(1, 1, 1)))
+        shaftParts.push(g)
+      }
+    }
+    const hazeGeo = mergeGeometries(hazeParts, false)!
+    const shaftGeo = mergeGeometries(shaftParts, false)!
+    hazeParts.forEach((g) => g.dispose()); shaftParts.forEach((g) => g.dispose())
+    return { haze, shaft, hazeGeo, shaftGeo }
   }, [])
 
   useFrame(() => {
@@ -305,17 +323,8 @@ export function AirLayers() {
 
   return (
     <group>
-      {kit.planes.map((p, i) => (
-        <mesh key={'h' + i} geometry={kit.hazeGeo} position={[0, 7, p.z]} scale={[wallX(1, p.z) * 2 - 0.4, 14, 1]} renderOrder={5}>
-          <primitive object={kit.haze} attach="material" />
-        </mesh>
-      ))}
-      {kit.shafts.map((s, i) => (
-        <group key={'s' + i} position={[s.x, 8, s.z]} rotation={[0, 0, s.rz]}>
-          <mesh geometry={kit.shaftGeo} scale={[s.w, s.len, 1]} renderOrder={6}><primitive object={kit.shaft} attach="material" /></mesh>
-          <mesh geometry={kit.shaftGeo} scale={[s.w, s.len, 1]} rotation={[0, Math.PI / 2, 0]} renderOrder={6}><primitive object={kit.shaft} attach="material" /></mesh>
-        </group>
-      ))}
+      <mesh geometry={kit.hazeGeo} material={kit.haze} renderOrder={5} frustumCulled={false} />
+      <mesh geometry={kit.shaftGeo} material={kit.shaft} renderOrder={6} frustumCulled={false} />
     </group>
   )
 }

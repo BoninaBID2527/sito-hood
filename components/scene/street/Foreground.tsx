@@ -5,9 +5,10 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { rng } from '@/lib/math'
 import { palette } from '@/lib/timeOfDay'
-import { garmentTexture, awningTexture } from '@/lib/textures'
+import { garmentAtlas, awningTexture } from '@/lib/textures'
 import { streetMat } from './materials'
 import { wallX } from './layout'
 
@@ -67,16 +68,14 @@ export function Foreground() {
     const awnGeo = new THREE.PlaneGeometry(1, 1)
     awnGeo.translate(0, -0.5, 0)
 
-    // ── laundry lines
-    const garments = (['tee', 'trousers', 'towel', 'hoodie'] as const).flatMap((k, i) => [
-      { k, tex: garmentTexture(k, ['#6c7d86', '#7d6b5a', '#9a8a74', '#53606c'][i], 30 + i) },
-      { k, tex: garmentTexture(k, ['#a9a29a', '#4d5a4a', '#8a5a4d', '#3f4a5e'][i], 40 + i) },
-    ])
-    const clothGeo = new THREE.PlaneGeometry(1, 1, 1, 5)
-    const clothMats = garments.map((g) => { const m = streetMat({ map: g.tex, alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.96, aoBase: 0.95, flutter: 0.1, macro: 0.15 }); m.emissive = new THREE.Color('#ffffff'); m.emissiveMap = g.tex; m.emissiveIntensity = 0.28; return m })
+    // ── laundry lines: one atlas, one merged mesh
+    const atlas = garmentAtlas()
+    const clothMat = streetMat({ map: atlas, alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.96, aoBase: 0.95, flutter: 0.1, macro: 0.15 })
+    clothMat.emissive = new THREE.Color('#ffffff'); clothMat.emissiveMap = atlas; clothMat.emissiveIntensity = 0.28
     const ropeMat = new THREE.MeshBasicMaterial({ color: '#15130f' })
     const ropes: THREE.BufferGeometry[] = []
-    const cloth: { m: number; pos: [number, number, number]; rot: number; s: [number, number] }[] = []
+    const clothParts: THREE.BufferGeometry[] = []
+    const m4 = new THREE.Matrix4(), q4 = new THREE.Quaternion(), e4 = new THREE.Euler()
     const lines: [number, number, number, number][] = [
       // z, yLeft, yRight, sag
       [10.5, 4.55, 4.25, 0.35], [-12.5, 4.35, 4.6, 0.4], [-33.5, 4.6, 4.3, 0.34],
@@ -90,13 +89,27 @@ export function Foreground() {
       for (let i = 0; i < n; i++) {
         const t = 0.14 + (i + r() * 0.5) / (n + 0.3) * 0.74
         const y = yl + (yr - yl) * t - Math.sin(t * Math.PI) * sag
-        const w = r.range(0.42, 0.62)
-        cloth.push({ m: r.int(0, clothMats.length - 1), pos: [xl + (xr - xl) * t, y - 0.3 * w * 1.35, z + r.range(-0.05, 0.05)], rot: r.range(-0.2, 0.2), s: [w, w * 1.45] })
+        const w = r.range(0.42, 0.62), h = w * 1.45
+        const cell = r.int(0, 7)
+        const g = new THREE.PlaneGeometry(1, 1, 1, 5)
+        const uv = g.attributes.uv as THREE.BufferAttribute
+        const hang = new Float32Array(uv.count)
+        for (let k = 0; k < uv.count; k++) {
+          hang[k] = 1 - uv.getY(k)
+          uv.setXY(k, ((cell % 4) + uv.getX(k)) / 4, (Math.floor(cell / 4) + uv.getY(k)) / 2)
+        }
+        g.setAttribute('aHang', new THREE.BufferAttribute(hang, 1))
+        g.scale(w, h, 1)
+        m4.compose(new THREE.Vector3(xl + (xr - xl) * t, y - 0.3 * h, z + r.range(-0.05, 0.05)), q4.setFromEuler(e4.set(0, r.range(-0.2, 0.2), 0)), new THREE.Vector3(1, 1, 1))
+        g.applyMatrix4(m4)
+        clothParts.push(g)
       }
     }
-    const ropeGeo = ropes.length ? (new GeoBuilder()) : null
-    ropes.forEach((g) => ropeGeo!.add(g))
-    const ropesMerged = ropeGeo!.build()
+    const ropeGeo = new GeoBuilder()
+    ropes.forEach((g) => ropeGeo.add(g))
+    const ropesMerged = ropeGeo.build()
+    const clothGeo = mergeGeometries(clothParts, false)!
+    clothParts.forEach((g) => g.dispose())
 
     // ── trash bags (lumpy spheres)
     const bagGeo = new THREE.IcosahedronGeometry(0.28, 1)
@@ -107,11 +120,20 @@ export function Foreground() {
     }
     bagGeo.computeVertexNormals()
     const bagMat = new THREE.MeshStandardMaterial({ color: '#15171a', roughness: 0.28, metalness: 0.1 })
-    const bags: [number, number, number, number][] = [
+    const bagList: [number, number, number, number][] = [
       [-1, 5.2, 0.62, 1.0], [-1, 4.7, 0.9, 0.82], [-1, 5.7, 0.8, 0.9], [1, 2.2, 0.7, 1.05], [1, 1.5, 1.0, 0.8],
       [1, -17.6, 0.8, 1.0], [-1, -36, 0.8, 0.9],
     ]
-    return { scooter, lampMat, lampGeo, plane, sMats, bracketGeo, bracketMat, awnTex, awnMats, awnGeo, garments, clothGeo, clothMats, cloth, ropeMat, ropesMerged, bagGeo, bagMat, bags }
+    const bagParts = bagList.map(([side, z, off, sc], i) => {
+      const g = bagGeo.clone()
+      g.scale(sc, sc, sc)
+      g.rotateY(i * 1.7)
+      g.translate(wallX(side as -1 | 1, z) - side * off, 0.2 * sc, z)
+      return g
+    })
+    const bagsMerged = mergeGeometries(bagParts, false)!
+    bagParts.forEach((g) => g.dispose())
+    return { scooter, lampMat, lampGeo, plane, sMats, bracketGeo, bracketMat, awnTex, awnMats, awnGeo, atlas, clothGeo, clothMat, ropeMat, ropesMerged, bagGeo, bagMat, bagsMerged }
   }, [])
 
   useFrame(() => {
@@ -125,7 +147,7 @@ export function Foreground() {
       kit.scooter.forEach((p) => { p.geo.dispose(); p.mat.dispose() })
       kit.lampMat.dispose(); kit.lampGeo.dispose(); kit.plane.dispose(); kit.sMats.forEach((m) => m.dispose())
       kit.bracketGeo.dispose(); kit.bracketMat.dispose(); kit.awnTex.forEach((t) => t.dispose()); kit.awnMats.forEach((m) => m.dispose()); kit.awnGeo.dispose()
-      kit.garments.forEach((g) => g.tex.dispose()); kit.clothGeo.dispose(); kit.clothMats.forEach((m) => m.dispose())
+      kit.atlas.dispose(); kit.clothGeo.dispose(); kit.clothMat.dispose(); kit.bagsMerged.dispose()
       kit.ropeMat.dispose(); kit.ropesMerged.dispose(); kit.bagGeo.dispose(); kit.bagMat.dispose()
     },
     [kit],
@@ -158,13 +180,9 @@ export function Foreground() {
       </group>
       {/* laundry */}
       <mesh geometry={kit.ropesMerged} material={kit.ropeMat} />
-      {kit.cloth.map((c, i) => (
-        <mesh key={i} geometry={kit.clothGeo} material={kit.clothMats[c.m]} position={c.pos} rotation={[0, c.rot, 0]} scale={[c.s[0], c.s[1], 1]} />
-      ))}
+      <mesh geometry={kit.clothGeo} material={kit.clothMat} />
       {/* bags */}
-      {kit.bags.map(([side, z, off, s], i) => (
-        <mesh key={i} geometry={kit.bagGeo} material={kit.bagMat} position={[sx(side as -1 | 1, z) - side * off, 0.2 * s, z]} scale={s} rotation={[0, i * 1.7, 0]} />
-      ))}
+      <mesh geometry={kit.bagsMerged} material={kit.bagMat} />
     </group>
   )
 }

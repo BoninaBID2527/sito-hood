@@ -48,16 +48,34 @@ export function Props() {
 
     // ── dumpsters / bins / crates (kept clear of the camera lane x∈[-0.9, 0.9])
     const dumpsters: [number, number, number][] = [[-1, -9, 0.4], [1, -31, -0.3], [-1, -45, 0.2], [1, 9, 0.1], [-1, -57, 0]]
+    // a dumpster is a tapered body with ribs, two sloped lids, wheels and a handle bar — not a box
+    const dumpster = (x: number, z: number, rot: number, body: GeoBuilder, scale = 1) => {
+      const g = new THREE.BoxGeometry(0.95 * scale, 1.1, 1.8 * scale)
+      const pa = g.attributes.position as THREE.BufferAttribute
+      for (let i = 0; i < pa.count; i++) { const k = pa.getY(i) > 0 ? 1 : 0.88; pa.setX(i, pa.getX(i) * k); pa.setZ(i, pa.getZ(i) * (pa.getY(i) > 0 ? 1 : 0.94)) }
+      g.rotateY(rot)
+      body.add(g, x, 0.72, z)
+      const place = (geo: THREE.BufferGeometry, b: GeoBuilder, ox: number, oy: number, oz: number) => {
+        geo.rotateY(rot)
+        const c = Math.cos(rot), sn = Math.sin(rot)
+        b.add(geo, x + ox * c + oz * sn, oy, z - ox * sn + oz * c)
+      }
+      for (const y of [0.4, 0.72, 1.0]) for (const sx of [-1, 1]) place(new THREE.BoxGeometry(0.03, 0.06, 1.7 * scale), metal, sx * 0.49 * scale * (y > 0.9 ? 1 : 0.94), y + 0.12, 0)
+      for (const sx of [-1, 1]) {
+        const lid = new THREE.BoxGeometry(0.52 * scale, 0.06, 1.86 * scale)
+        lid.rotateZ(sx * 0.16)
+        place(lid, rubber, sx * 0.25 * scale, 1.33, 0)
+      }
+      place(new THREE.BoxGeometry(0.1, 0.05, 1.7 * scale), rubber, 0, 1.42, 0)
+      for (const [wx, wz] of [[-0.38, -0.7], [0.38, -0.7], [-0.38, 0.7], [0.38, 0.7]] as const) {
+        const w = new THREE.CylinderGeometry(0.1, 0.1, 0.07, 10)
+        w.rotateZ(Math.PI / 2)
+        place(w, rubber, wx * scale, 0.1, wz * scale)
+      }
+    }
     for (const [side, z, rot] of dumpsters) {
       const x = wallX(side as -1 | 1, z) - side * 0.95
-      const b = (z % 2 ? green : blue)
-      const g = new THREE.BoxGeometry(0.95, 1.1, 1.8)
-      g.rotateY(rot * 0.3)
-      b.add(g, x, 0.7, z)
-      const lid = new THREE.BoxGeometry(1.0, 0.07, 1.85)
-      lid.rotateY(rot * 0.3)
-      rubber.add(lid, x, 1.3, z)
-      metal.cyl(0.05, 0.05, 0.95, x - side * 0.5, 0.1, z - 0.6, 6, 0, 0, Math.PI / 2)
+      dumpster(x, z, rot * 0.3, z % 2 ? green : blue)
     }
     const bins: [number, number][] = [[-1, -3], [1, -19], [-1, -22], [1, -41], [-1, -53], [1, -62], [-1, 4]]
     for (const [side, z] of bins) {
@@ -90,18 +108,11 @@ export function Props() {
     hydrant(-7.5, -88)
     for (let i = 0; i < 7; i++) metal.cyl(0.09, 0.09, 0.9, -5 + i * 1.6, 0.45, -76.6, 8)
     // plaza clutter near the walls
-    const plazaDump = (x: number, z: number, rot: number, b: GeoBuilder) => {
-      const g = new THREE.BoxGeometry(2.4, 1.3, 1.2)
-      g.rotateY(rot)
-      b.add(g, x, 0.75, z)
-      const lid = new THREE.BoxGeometry(2.5, 0.08, 1.3)
-      lid.rotateY(rot)
-      rubber.add(lid, x, 1.43, z)
-    }
+    const plazaDump = (x: number, z: number, rot: number, b: GeoBuilder) => dumpster(x, z, rot, b, 1.35)
     plazaDump(-10.2, -80, 0.1, green)
     plazaDump(-10.4, -83, -0.15, blue)
-    plazaDump(10.1, -97.5, 0.2, green)
-    plazaDump(10.5, -100.4, -0.1, blue)
+    plazaDump(10.1, -106.2, 0.2, green)
+    plazaDump(10.5, -113.6, -0.1, blue)
     for (let i = 0; i < 3; i++) galv.cyl(0.3, 0.27, 0.8, 10.4 + i * 0.1, 0.5, -91 - i * 0.7, 14)
 
     // ── bicycle leaning on the right wall

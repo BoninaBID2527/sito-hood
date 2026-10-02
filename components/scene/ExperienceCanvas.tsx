@@ -42,6 +42,7 @@ export default function ExperienceCanvas() {
       }}
       onCreated={({ gl, camera, scene, raycaster }) => {
         gl.setClearColor('#000000', 1)
+        camera.layers.enable(1) // layer 1 = main camera only (skipped by planar reflections)
         rt.quality = q
         if (process.env.NODE_ENV !== 'production' || window.location.search.includes('debug')) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

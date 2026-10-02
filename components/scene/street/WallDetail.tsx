@@ -106,11 +106,18 @@ export function WallDetail() {
     const cableMat = new THREE.MeshBasicMaterial({ color: '#0a0a0b' })
 
     // lamp bulbs + light spill on the wall (additive), CCTV LEDs
-    const bulbGeo = new THREE.SphereGeometry(0.07, 8, 6)
+    const bulbB = new GeoBuilder(), spillB = new GeoBuilder(), ledB = new GeoBuilder()
+    for (const l of lamps) {
+      bulbB.add(new THREE.SphereGeometry(0.07, 8, 6), wallX(l.side, l.z) - l.side * 0.3, l.y, l.z)
+      const sp = new THREE.PlaneGeometry(4.2, 3.6)
+      spillB.add(sp, wallX(l.side, l.z) - l.side * 0.05, l.y - 0.4, l.z, 0, rotFor(l.side), 0)
+    }
+    for (const c of cctv) ledB.add(new THREE.SphereGeometry(0.018, 6, 4), wallX(c.side, c.z) - c.side * 0.6, c.y - 0.05, c.z)
+    const bulbGeo = bulbB.build()
     const bulbMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 3, 1.8) })
     const spillMat = new THREE.MeshBasicMaterial({ map: A.glow, color: new THREE.Color('#ffb868'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.0, fog: false })
-    const spillGeo = new THREE.PlaneGeometry(1, 1)
-    const ledGeo = new THREE.SphereGeometry(0.018, 6, 4)
+    const spillGeo = spillB.build()
+    const ledGeo = ledB.build()
     const ledMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(5, 0.2, 0.1) })
 
     // neon
@@ -148,16 +155,9 @@ export function WallDetail() {
     <group>
       {kit.parts.map((p, i) => <mesh key={i} geometry={p.geo} material={p.mat} />)}
       {kit.cableGeo && <mesh geometry={kit.cableGeo} material={kit.cableMat} />}
-      {kit.lamps.map((l, i) => {
-        const x = wallX(l.side, l.z) - l.side * 0.3
-        return (
-          <group key={'l' + i}>
-            <mesh geometry={kit.bulbGeo} material={kit.bulbMat} position={[x, l.y, l.z]} />
-            <mesh geometry={kit.spillGeo} material={kit.spillMat} position={[wallX(l.side, l.z) - l.side * 0.05, l.y - 0.4, l.z]} rotation={[0, rotFor(l.side), 0]} scale={[4.2, 3.6, 1]} renderOrder={3} />
-          </group>
-        )
-      })}
-      {kit.cctv.map((c, i) => <mesh key={'c' + i} geometry={kit.ledGeo} material={kit.ledMat} position={[wallX(c.side, c.z) - c.side * 0.6, c.y - 0.05, c.z]} />)}
+      <mesh geometry={kit.bulbGeo} material={kit.bulbMat} />
+      <mesh geometry={kit.spillGeo} material={kit.spillMat} renderOrder={3} />
+      <mesh geometry={kit.ledGeo} material={kit.ledMat} />
       {kit.neons.map((n, i) => (
         <mesh key={'n' + i} geometry={kit.neonGeo} material={n.m} position={[wallX(n.side, n.z) - n.side * 0.08, n.y, n.z]} rotation={[0, rotFor(n.side), 0]} scale={[n.w, n.h, 1]} />
       ))}

@@ -1,5 +1,6 @@
 'use client'
 
+import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { ScrollRig } from './ScrollRig'
@@ -54,6 +55,8 @@ export default function App() {
       await buildCards()
       if (cancelled) return
       useStore.getState().set({ loadProgress: 1, phase: 'ready' })
+      // the world is already breathing behind the ENTER screen (dimmed, not black)
+      if (!rt.reducedMotion) gsap.to(rt.fx, { fade: 0.58, duration: 3, ease: 'power2.out', delay: 0.9 })
     })()
     return () => {
       cancelled = true

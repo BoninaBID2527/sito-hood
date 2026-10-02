@@ -18,6 +18,7 @@ page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.
 page.on('pageerror', (e) => errors.push('[pageerror] ' + e.message))
 await page.goto(`http://localhost:3000/?debug=1&quality=${quality}${extra}`, { waitUntil: 'load' })
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 120000 })
+if (process.env.READY_WAIT) await page.waitForTimeout(Number(process.env.READY_WAIT))
 await page.screenshot({ path: `${out}/00-loader-ready.png` })
 await page.click('button:has-text("ENTER")')
 await page.waitForTimeout(Number(wait) + 3000)

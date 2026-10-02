@@ -388,6 +388,7 @@ export function RooftopWorld() {
       <Backdrop origin={[R, 0, 0]} z={[-250, -340, -440]} blocks={false} />
       <AltercoArtwork mode="final" position={[R + 11.5, 7.2, -42]} size={8.2} />
       <RoofBillboard />
+      <DualGlint />
     </group>
   )
 }
@@ -400,7 +401,7 @@ export function RooftopWorld() {
  */
 function RoofBillboard() {
   const kit = useMemo(() => {
-    const S = 8.2, half = S / 2, cx = 11.5, cy = 7.2, cz = -42
+    const S = 8.2, half = S / 2, cx = R + 11.5, cy = 7.2, cz = -42
     const steel = new GeoBuilder(), plate = new GeoBuilder(), rail = new GeoBuilder()
     const yaw = -0.14
     // everything below is built in the billboard's local frame (x right, y up, z toward the camera) and yawed together
@@ -488,4 +489,40 @@ function RoofBillboard() {
       </group>
     </group>
   )
+}
+
+/**
+ * If the player has found DUALISMO, the rooftop keeps a quiet, unexplained consequence: a far-off iridescent glint
+ * high on a distant tower, mirrored in the wet roof. No label, no prompt.
+ */
+function DualGlint() {
+  const found = useStore((s) => s.dualismoFound)
+  const mat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+        uniforms: { uTime: { value: 0 }, uA: { value: 0 } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+        fragmentShader: `
+          varying vec2 vUv; uniform float uTime, uA;
+          void main(){
+            vec2 p = (vUv - 0.5) * 2.0;
+            float core = smoothstep(0.16, 0.0, length(p));
+            float vert = smoothstep(0.05, 0.0, abs(p.x)) * smoothstep(1.0, 0.0, abs(p.y));
+            float hor = smoothstep(0.03, 0.0, abs(p.y)) * smoothstep(1.0, 0.0, abs(p.x)) * 0.6;
+            vec3 irid = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + length(p) * 0.8 + uTime * 0.04));
+            float a = (core + vert * 0.7 + hor) * uA * (0.7 + 0.3 * sin(uTime * 0.9));
+            gl_FragColor = vec4(irid * a, a);
+          }`,
+      }),
+    [],
+  )
+  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
+  useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
+  useFrame(() => {
+    mat.uniforms.uTime.value = rt.time
+    mat.uniforms.uA.value = found ? Math.max(0, Math.min(1, (rt.smooth - 0.8) / 0.12)) * 0.9 : 0
+  })
+  if (!found) return null
+  return <mesh geometry={geo} material={mat} position={[R - 20, 33, -168]} scale={[9, 9, 1]} renderOrder={6} />
 }

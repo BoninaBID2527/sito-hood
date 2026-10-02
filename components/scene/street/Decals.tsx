@@ -13,6 +13,7 @@ import { streetMat } from './materials'
 import { wallX } from './layout'
 import { FIRE_ESCAPES, Y0 } from './FireEscapes'
 import { PortalPoster } from '../PortalPoster'
+import { GrazingSymbol } from './GrazingSymbol'
 import { alterco, pad } from '@/data/project'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
@@ -119,6 +120,7 @@ export function Decals() {
       <Signs />
       <WorldTitles />
       <EasterEggs />
+      <GrazingSymbol />
     </group>
   )
 }
@@ -305,7 +307,7 @@ function EasterEggs() {
       <mesh
         geometry={geo}
         material={creditsMat}
-        position={[11.93, 1.75, -102.3]}
+        position={[11.93, 1.75, -110.4]}
         rotation={[0, -Math.PI / 2, 0.02]}
         scale={[1.0, 1.35, 1]}
         renderOrder={4}

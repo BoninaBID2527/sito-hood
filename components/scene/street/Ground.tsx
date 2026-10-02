@@ -153,6 +153,7 @@ function PuddleLayer() {
 export function WaterSheet({ mask, size, position, interactive = false }: { mask: THREE.Texture; size: [number, number]; position: [number, number, number]; interactive?: boolean }) {
   const tier = useStore((s) => s.tier)
   const scene = useThree((s) => s.scene)
+  const camera = useThree((s) => s.camera)
   const q = rt.quality
   const real = q.reflector && tier !== 'low'
   const group = useRef<THREE.Group>(null)
@@ -213,13 +214,15 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
   }, [real, q, mask, size, position])
 
   useEffect(() => {
+    // the reflection camera only draws layer 0 (see NoReflect)
+    ;(obj as any).getReflectionCamera?.(camera)?.layers.set(0)
     uni.current = mat.uniforms
     return () => {
       ;(obj as any).dispose?.()
       obj.geometry.dispose()
       mat.dispose()
     }
-  }, [obj, mat])
+  }, [obj, mat, camera])
 
   useFrame((_, dt) => {
     obj.visible = !rt.mirror

@@ -78,10 +78,18 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 
 /* ═══════════════════ loader ═══════════════════ */
 .loader {
-  position: fixed; inset: 0; z-index: 100; background: #000; pointer-events: auto;
+  position: fixed; inset: 0; z-index: 100; background: transparent; pointer-events: auto;
   display: flex; flex-direction: column; justify-content: space-between;
   padding: calc(var(--gutter) * 0.9) var(--gutter) calc(var(--gutter) * 0.9 + var(--safe-b));
 }
+.loader::before { content: ''; position: absolute; inset: 0; z-index: -2; background: #000; transition: opacity 1.8s ease; }
+.loader.is-ready::before { opacity: 0; }
+/* once everything is loaded the alley is already alive behind the type: a veil, not a black page */
+.loader::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity 1.8s ease;
+  background: linear-gradient(96deg, rgba(0,0,0,.93) 0%, rgba(0,0,0,.62) 42%, rgba(0,0,0,.12) 100%), linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 38%);
+}
+.loader.is-ready::after { opacity: 1; }
 .ld-word { margin-top: 7vh; font-size: clamp(64px, 18.5vw, 340px); line-height: 0.82; }
 .ld-line { display: block; white-space: nowrap; }
 .ld-letter { display: inline-block; will-change: transform, filter; }
@@ -233,6 +241,8 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .cursor { position: fixed; left: 0; top: 0; z-index: 200; pointer-events: none; mix-blend-mode: difference; transition: opacity 0.3s; }
 .cursor-ring { transform: translate(-50%, -50%); border: 1px solid #fff; display: grid; place-items: center; }
 .cursor-default .cursor-ring { background: #fff; }
+.cursor-explore .cursor-ring { border-color: rgba(255,255,255,.55); }
+.cursor-explore .cursor-label { font-size: 8px; letter-spacing: .22em; opacity: .85; }
 .cursor-portal .cursor-ring { border-width: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.5); }
 .cursor-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: #fff; white-space: nowrap; }
 

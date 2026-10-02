@@ -49,7 +49,7 @@ check('graffiti letters: hovering a hidden tag registers it', (await state(() =>
 
 // 5. credits poster
 await jump(0.5)
-s = await screen(11.9, 1.75, -102.3)
+s = await screen(11.9, 1.75, -110.4)
 await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
 check('credits poster: cursor is READ on hover', (await state(() => window.__hd.store.getState().cursor.label)) === 'READ', JSON.stringify(s))
 await page.mouse.click(s.sx, s.sy); await page.waitForTimeout(1500)
@@ -60,6 +60,15 @@ await page.keyboard.press('Escape'); await page.waitForTimeout(800)
 for (let i = 0; i < 7; i++) await page.click('.wordmark')
 await page.waitForTimeout(800)
 check('HOODDINO wordmark ×7 triggers the surprise', await state(() => window.__hd.store.getState().eggs.includes('hood')))
+
+// 6b. grazing-angle glyph: invisible up close, readable from afar
+await jump(0.15)
+s = await screen(-2.95, 1.2, -33.4)
+await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
+check('grazing glyph: PORTAL cursor from far down the wall', (await state(() => window.__hd.store.getState().cursor.kind)) === 'portal', JSON.stringify(s))
+await page.mouse.click(s.sx, s.sy); await page.waitForTimeout(1000)
+check('grazing glyph: click registers the egg', await state(() => window.__hd.store.getState().eggs.includes('symbol')))
+await page.mouse.move(5, 5)
 
 // 7. portal poster → dualismo
 await jump(0.27)

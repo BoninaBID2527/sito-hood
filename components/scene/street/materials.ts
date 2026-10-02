@@ -74,7 +74,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
       sh.uniforms.uWetBox = { value: new THREE.Vector4(...(opts.wetBox ?? [0, 14, 20, -122])) }
     }
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vWPos;\nuniform float uTime;\nuniform float uContam;\nuniform float uDissolve;')
+      .replace('#include <common>', `#include <common>\nvarying vec3 vWPos;\nuniform float uTime;\nuniform float uContam;\nuniform float uDissolve;${opts.flutter ? '\nattribute float aHang;' : ''}`)
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
@@ -89,7 +89,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   vWPos = wp_.xyz;
 ${
   opts.flutter
-    ? `  float fl_ = (1.0 - uv.y);
+    ? `  float fl_ = aHang;
   transformed.x += sin(uTime * 1.3 + wp_.z * 0.8 + wp_.x * 0.5) * ${flut} * fl_ * fl_;
   transformed.z += sin(uTime * 0.9 + wp_.x * 1.1) * ${flut} * 0.7 * fl_;`
     : ''

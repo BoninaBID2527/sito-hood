@@ -162,13 +162,13 @@ void main() {
     vec3 b = vec3(0.0);
     // Vogel-disk taps with a per-pixel rotation: no rosette/flower pattern around hot lights, the residue reads as grain
     float rot = hash(uv * uRes) * 6.2831853;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 10; i++) {
       float fi = float(i);
-      float rr = sqrt((fi + 0.5) / 8.0);
+      float rr = sqrt((fi + 0.5) / 10.0);
       float a = fi * 2.399963 + rot;
       vec2 o = vec2(cos(a), sin(a)) * rr;
       b += max(texture2D(tScene, uv + o * vec2(0.010 / uAspect, 0.010)).rgb - 0.95, 0.0);
-      b += max(texture2D(tScene, uv + o * vec2(0.034 / uAspect, 0.034)).rgb - 0.95, 0.0) * 0.9;
+      b += max(texture2D(tScene, uv + o * vec2(0.026 / uAspect, 0.026)).rgb - 0.95, 0.0) * 0.9;
     }
     col += b * uBloom * 0.16;
   }

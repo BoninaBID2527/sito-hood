@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { alterco } from '@/data/project'
 import { detectTier, type Tier } from './quality'
 
-export type CursorKind = 'default' | 'link' | 'track' | 'portal' | 'lamp' | 'drag' | 'text'
+export type CursorKind = 'default' | 'link' | 'track' | 'portal' | 'lamp' | 'drag' | 'text' | 'explore'
 export type Mode = 'alterco' | 'dualism-in' | 'dualism' | 'dualism-out'
 
 interface Toast {

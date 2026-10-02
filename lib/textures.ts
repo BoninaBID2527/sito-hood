@@ -1192,3 +1192,16 @@ export function neonTexture(text: string, color: string, w = 512, h = 192, scrip
   ctx.shadowBlur = 0
   return toTexture(canvas, { aniso: 4 })
 }
+
+/** All eight laundry garments in one atlas (4 × 2 cells of 256 × 384) → the whole clothesline is one draw call. */
+export function garmentAtlas() {
+  const kinds = ['tee', 'trousers', 'towel', 'hoodie'] as const
+  const { canvas, ctx } = makeCanvas(1024, 768)
+  const cols = [['#6c7d86', '#7d6b5a', '#9a8a74', '#53606c'], ['#a9a29a', '#4d5a4a', '#8a5a4d', '#3f4a5e']]
+  cols.forEach((row, r) => row.forEach((c, i) => {
+    const t = garmentTexture(kinds[i], c, 30 + r * 10 + i)
+    ctx.drawImage(t.image as HTMLCanvasElement, i * 256, r * 384)
+    t.dispose()
+  }))
+  return toTexture(canvas, { aniso: 4 })
+}

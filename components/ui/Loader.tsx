@@ -72,7 +72,7 @@ export function Loader() {
     <AnimatePresence>
       {!leaving && (
         <motion.div
-          className="loader"
+          className={`loader${ready ? ' is-ready' : ''}`}
           role="status"
           aria-live="polite"
           aria-label={`Loading ${pct}%`}
@@ -97,12 +97,12 @@ export function Loader() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ type: 'spring', stiffness: 120, damping: 18 }}
                 >
-                  <button className="ld-enter hit" onClick={() => enterExperience(true)} autoFocus>
+                  <button className="ld-enter hit" data-cursor="portal" data-cursor-label="ENTER" onClick={() => enterExperience(true)} autoFocus>
                     <span className="ld-enter-line" />
                     ENTER ALTERCO
                     <span className="ld-arrow">→</span>
                   </button>
-                  <button className="ld-silent hit label" onClick={() => enterExperience(false)}>
+                  <button className="ld-silent hit label" data-cursor="link" data-cursor-label="ENTER" onClick={() => enterExperience(false)}>
                     ENTER WITHOUT SOUND
                   </button>
                 </motion.div>
