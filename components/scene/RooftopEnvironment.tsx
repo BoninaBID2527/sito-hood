@@ -14,6 +14,8 @@ import { enterDualism } from '@/lib/actions'
 import { streetMat } from './street/materials'
 import { Backdrop } from './street/Backdrop'
 import { Steam } from './street/Atmos'
+import { WaterSheet } from './street/Ground'
+import { createTowerMaterial, updateTowerMaterial, tagBuilding } from '@/effects/TowerMaterial'
 import { AltercoArtwork } from './AltercoArtwork'
 import { alterco, pad } from '@/data/project'
 
@@ -33,7 +35,7 @@ export function RooftopEnvironment() {
     // deck
     const deckGeo = keep(new THREE.PlaneGeometry(44, 64))
     tileUV(deckGeo, 44, 64, 3.4)
-    const deckMat = keep(streetMat({ map: A.roofDeck, color: '#d6d9e0', roughness: 0.82, aoBase: 0.7 }))
+    const deckMat = keep(streetMat({ map: A.roofDeck, color: '#d6d9e0', roughness: 0.82, aoBase: 0.7, bump: A.roofDeck, bumpAmt: 0.9, bumpBlur: 4, wet: A.roofWet, wetBox: [R + 3, 13, 12, -24], macro: 0.8 }))
 
     // parapets
     const concrete = keep(brickMat('concrete', '#cfcac2'))
@@ -130,32 +132,49 @@ export function RooftopEnvironment() {
     const nbMat = keep(streetMat({ map: A.brick.weathered.map, color: '#8d7f78', roughness: 1, aoBase: 0.7 }))
     const nbDecGeo = keep(nbDecor.build())
     const nbDecMat = keep(streetMat({ color: '#3c3b3f', roughness: 0.8 }))
-    const tallGeo = keep(new THREE.BoxGeometry(14, 30, 46))
-    worldUV(tallGeo, 13.6, -17.2, 5, -8)
-    A.tower.map.repeat.set(1, 1)
-    const tallMat = keep(new THREE.MeshStandardMaterial({ map: A.tower.map, emissiveMap: A.tower.emissive, emissive: new THREE.Color('#ffffff'), emissiveIntensity: 0.5, roughness: 0.8 }))
+    const tallGeo = keep(tagBuilding(new THREE.BoxGeometry(14, 30, 46), 0.137, 3.4, 3.2, 0.12))
+    const towerMat = keep(createTowerMaterial())
 
-    // tower field — one merged mesh with world-scaled UVs so windows keep their size
+    // two skyline depths: a near/mid band that gives real parallax and silhouettes, and the far field
     const field = new GeoBuilder()
+    const crown = new GeoBuilder()
     const fr = rng(909)
-    for (let i = 0; i < 52; i++) {
-      const dz = fr.range(120, 340)
-      const w = fr.range(16, 34), d = fr.range(16, 28)
-      const h = fr.range(22, 52) + (dz - 120) * fr.range(0.12, 0.3)
-      const x = fr.range(-dz * 0.9, dz * 0.9)
-      const z = -dz
-      if (Math.abs(x) < 20 && dz < 190) continue
-      const g = new THREE.BoxGeometry(w, h, d)
-      worldUV(g, 13.6, x, h / 2 - 14, z)
+    const addTower = (x: number, z: number, w: number, d: number, h: number) => {
+      const style = fr() < 0.4 ? fr.range(0, 0.3) : fr() < 0.55 ? fr.range(0.35, 0.65) : fr.range(0.7, 1)
+      const g = tagBuilding(new THREE.BoxGeometry(w, h, d), fr(), fr.range(3.0, 4.6), fr.range(2.3, 4.2), style)
       field.add(g, x, h / 2 - 14, z)
-      if (h > 55 && fr() < 0.6) {
-        const t = new THREE.BoxGeometry(w * 0.5, 14, d * 0.5)
-        worldUV(t, 13.6, x, h - 14 + 7, z)
-        field.add(t, x, h - 14 + 7, z)
+      const top = h - 14
+      // setbacks, crowns, roof clutter → no two silhouettes alike
+      let tw = w, td = d, ty = top
+      const steps = fr() < 0.5 ? (fr() < 0.5 ? 1 : 2) : 0
+      for (let k = 0; k < steps; k++) {
+        tw *= fr.range(0.55, 0.8); td *= fr.range(0.55, 0.8)
+        const th = fr.range(5, 12)
+        field.add(tagBuilding(new THREE.BoxGeometry(tw, th, td), fr(), fr.range(3.0, 4.6), fr.range(2.3, 4.2), style), x + fr.range(-w * 0.1, w * 0.1), ty + th / 2, z + fr.range(-d * 0.1, d * 0.1))
+        ty += th
       }
+      const kind = fr()
+      if (kind < 0.3) { crown.cyl(0.25, 0.25, fr.range(14, 40), x + fr.range(-tw / 3, tw / 3), ty + 10, z, 5) }
+      else if (kind < 0.55) { crown.cyl(tw * 0.18, tw * 0.2, 4.5, x + tw * 0.2, ty + 2.2, z, 10); crown.add(new THREE.ConeGeometry(tw * 0.22, 2.2, 10), x + tw * 0.2, ty + 5.6, z) }
+      else if (kind < 0.7) { crown.box(tw * 0.35, 3.0, td * 0.35, x, ty + 1.5, z) }
+      return ty
+    }
+    const crownTops: [number, number, number][] = []
+    for (let i = 0; i < 78; i++) {
+      const far = i >= 30
+      const dz = far ? fr.range(120, 340) : fr.range(46, 112)
+      const w = far ? fr.range(16, 34) : fr.range(9, 22), d = far ? fr.range(16, 28) : fr.range(9, 18)
+      const h = far ? fr.range(22, 52) + (dz - 120) * fr.range(0.12, 0.3) : fr.range(12, 36) + (dz - 46) * 0.1
+      const x = fr.range(-dz * 0.9, dz * 0.9)
+      if (Math.abs(x) < (far ? 20 : 15) && dz < (far ? 190 : 78)) continue
+      if (!far && x > 2 && x < 22 && dz < 62) continue // keep the billboard clear
+      const ty = addTower(x, -dz, w, d, h)
+      if (far && fr() < 0.25) crownTops.push([x, ty + 12, -dz])
     }
     const fieldGeo = keep(field.build())
-    const fieldMat = keep(new THREE.MeshStandardMaterial({ map: A.tower.map, emissiveMap: A.tower.emissive, emissive: new THREE.Color('#ffffff'), emissiveIntensity: 0.5, roughness: 0.85 }))
+    const crownGeo = keep(crown.build())
+    const crownMat = keep(new THREE.MeshBasicMaterial({ color: '#05060a', fog: true }))
+    const beaconMat = keep(new THREE.SpriteMaterial({ map: A.glow, color: '#ff3a2a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 }))
 
     // front parapet graffiti
     const decal = keep(new THREE.PlaneGeometry(1, 1))
@@ -174,13 +193,13 @@ export function RooftopEnvironment() {
     const lampBulb = keep(new THREE.MeshBasicMaterial({ color: new THREE.Color(6, 4.4, 2.4) }))
     const bulbGeo = keep(new THREE.SphereGeometry(0.08, 8, 6))
 
-    return { disposables, deckGeo, deckMat, concrete, brick, parGeo, capGeo, capMat, bulk, woodGeo, ironGeo, tankWood, tankIron, parts, glassGeo, glassMat, nbGeo, nbMat, nbDecGeo, nbDecMat, tallGeo, tallMat, fieldGeo, fieldMat, decal, decals, doorMat, doorGeo, lampGlow, lampBulb, bulbGeo, boxes }
+    return { disposables, deckGeo, deckMat, concrete, brick, parGeo, capGeo, capMat, bulk, woodGeo, ironGeo, tankWood, tankIron, parts, glassGeo, glassMat, nbGeo, nbMat, nbDecGeo, nbDecMat, tallGeo, towerMat, fieldGeo, crownGeo, crownMat, beaconMat, crownTops, decal, decals, doorMat, doorGeo, lampGlow, lampBulb, bulbGeo, boxes }
   }, [])
 
   useFrame(() => {
     const w = palette.windows
-    kit.tallMat.emissiveIntensity = 0.1 + w * 0.95
-    kit.fieldMat.emissiveIntensity = 0.08 + w * 1.0
+    updateTowerMaterial(kit.towerMat)
+    kit.beaconMat.opacity = Math.sin(rt.time * 1.7) > 0.5 ? 0.9 : 0.15
     kit.glassMat.emissiveIntensity = 0.02 + w * 0.12
     const k = 0.4 + palette.lamps * 0.7
     kit.lampGlow.opacity = Math.min(1, k * 0.8)
@@ -215,8 +234,11 @@ export function RooftopEnvironment() {
       {/* world around */}
       <mesh geometry={kit.nbGeo} material={kit.nbMat} />
       <mesh geometry={kit.nbDecGeo} material={kit.nbDecMat} />
-      <mesh geometry={kit.tallGeo} material={kit.tallMat} position={[-17.2, 5, -8]} />
-      <mesh geometry={kit.fieldGeo} material={kit.fieldMat} />
+      <mesh geometry={kit.tallGeo} material={kit.towerMat} position={[-17.2, 5, -8]} />
+      <mesh geometry={kit.fieldGeo} material={kit.towerMat} />
+      <mesh geometry={kit.crownGeo} material={kit.crownMat} />
+      {kit.crownTops.map((p, i) => <sprite key={i} material={kit.beaconMat} position={p} scale={[5, 5, 1]} />)}
+      <WaterSheet mask={A.roofWet} size={[26, 36]} position={[3, 0.02, -6]} />
       <Festoon />
       <pointLight position={[6, 2.6, -21]} color="#8aa0ff" intensity={22} distance={16} decay={2} />
       <AntennaLights />
@@ -364,8 +386,106 @@ export function RooftopWorld() {
     <group>
       <RooftopEnvironment />
       <Backdrop origin={[R, 0, 0]} z={[-250, -340, -440]} blocks={false} />
-      <AltercoArtwork mode="final" position={[R + 11.5, 5.4, -42]} size={8.2} />
+      <AltercoArtwork mode="final" position={[R + 11.5, 7.2, -42]} size={8.2} />
+      <RoofBillboard />
     </group>
   )
 }
 
+
+/**
+ * The giant ALTERCO artwork as a monumental urban installation: a bolted billboard on the neighbouring roof —
+ * steel frame, truss legs, service catwalk, floodlight bar throwing cones of light across the haze.
+ * The artwork itself is untouched; this is only the structure around it.
+ */
+function RoofBillboard() {
+  const kit = useMemo(() => {
+    const S = 8.2, half = S / 2, cx = 11.5, cy = 7.2, cz = -42
+    const steel = new GeoBuilder(), plate = new GeoBuilder(), rail = new GeoBuilder()
+    const yaw = -0.14
+    // everything below is built in the billboard's local frame (x right, y up, z toward the camera) and yawed together
+    steel.box(S + 0.7, 0.34, 0.5, 0, half + 0.17, -0.2).box(S + 0.7, 0.34, 0.5, 0, -half - 0.17, -0.2)
+    steel.box(0.34, S, 0.5, -half - 0.17, 0, -0.2).box(0.34, S, 0.5, half + 0.17, 0, -0.2)
+    plate.box(S + 0.3, S + 0.3, 0.18, 0, 0, -0.42)
+    for (let i = 0; i < 5; i++) { const x = -half + (i / 4) * S; steel.box(0.12, S, 0.1, x, 0, -0.55) }
+    for (let i = 0; i < 4; i++) steel.box(S * 1.08, 0.12, 0.1, 0, -half + (i + 0.5) * (S / 4), -0.55, 0, 0, i % 2 ? 0.07 : -0.07)
+    // legs to the roof below + diagonals
+    const legH = cy - half - 1.0
+    for (const sx of [-1, 1]) {
+      steel.box(0.4, legH + 0.6, 0.4, sx * 2.9, -half - legH / 2 + 0.3, -0.45)
+      steel.box(0.12, legH * 1.2, 0.12, sx * 1.45, -half - legH / 2, -0.45, 0, 0, sx * 0.9)
+    }
+    plate.box(1.2, 0.2, 1.2, -2.9, -half - legH, -0.45).box(1.2, 0.2, 1.2, 2.9, -half - legH, -0.45)
+    // service catwalk in front of the lower edge + railing
+    plate.box(S + 0.7, 0.1, 1.0, 0, -half - 0.42, 0.55)
+    rail.box(S + 0.7, 0.05, 0.05, 0, -half + 0.58, 1.02)
+    for (let i = 0; i <= 12; i++) rail.box(0.04, 1.0, 0.04, -S / 2 - 0.3 + (i / 12) * (S + 0.6), -half + 0.05, 1.02)
+    // floodlight bar along the top, lamps aimed down across the face
+    const lamps: THREE.Vector3[] = []
+    steel.box(S + 0.3, 0.08, 0.08, 0, half + 0.62, 0.95)
+    for (let i = 0; i < 6; i++) {
+      const x = -half + 0.7 + (i / 5) * (S - 1.4)
+      steel.box(0.06, 0.06, 1.0, x, half + 0.52, 0.45)
+      plate.box(0.34, 0.2, 0.3, x, half + 0.62, 1.0)
+      lamps.push(new THREE.Vector3(x, half + 0.52, 1.02))
+    }
+    const led = new GeoBuilder()
+    led.box(S + 0.34, 0.05, 0.04, 0, half + 0.02, 0.06).box(S + 0.34, 0.05, 0.04, 0, -half - 0.02, 0.06)
+    led.box(0.05, S, 0.04, -half - 0.02, 0, 0.06).box(0.05, S, 0.04, half + 0.02, 0, 0.06)
+    const mk = (b: GeoBuilder, p: THREE.MeshStandardMaterialParameters) => ({ geo: b.build(), mat: streetMat({ aoBase: 0.9, macro: 0.5, ...p }) })
+    const ledGeo = led.build()
+    const ledMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.8, 1.0, 1.6) })
+    const parts = [
+      mk(steel, { color: '#25272b', roughness: 0.45, metalness: 0.85 }),
+      mk(plate, { color: '#141518', roughness: 0.7, metalness: 0.4 }),
+      mk(rail, { color: '#2c2e32', roughness: 0.5, metalness: 0.8 }),
+    ]
+    const lens = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.6, 2.2, 1.6) })
+    const lensGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.04, 14)
+    const coneGeo = new THREE.ConeGeometry(1, 1, 20, 1, true)
+    coneGeo.translate(0, -0.5, 0)
+    const coneMat = new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false,
+      uniforms: { uI: { value: 0 }, uC: { value: new THREE.Color('#ffe2b8') } },
+      vertexShader: 'varying float vY; varying vec3 vN; varying vec3 vV; void main(){ vY = position.y; vN = normalMatrix*normal; vec4 mv = modelViewMatrix*vec4(position,1.0); vV = -mv.xyz; gl_Position = projectionMatrix*mv; }',
+      fragmentShader: 'uniform float uI; uniform vec3 uC; varying float vY; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(abs(dot(normalize(vN), normalize(vV))), 1.7); float h = smoothstep(-1.0, -0.02, vY); gl_FragColor = vec4(uC, uI * f * (0.05 + 0.95 * h) * 0.13); }',
+    })
+    // the building the billboard stands on
+    const bld = tagBuilding(new THREE.BoxGeometry(22, 60, 12), 0.61, 3.5, 3.4, 0.2)
+    const bldMat = createTowerMaterial()
+    const glowMat = new THREE.SpriteMaterial({ map: A.glow, color: '#9ab4ff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
+    return { S, half, cx, cy, cz, yaw, parts, ledGeo, ledMat, lens, lensGeo, coneGeo, coneMat, lamps, bld, bldMat, glowMat }
+  }, [])
+  useFrame(() => {
+    updateTowerMaterial(kit.bldMat)
+    const p = rt.smooth
+    const on = Math.max(0, Math.min(1, (p - 0.78) / 0.1))
+    kit.coneMat.uniforms.uI.value = on * (0.5 + palette.lamps * 0.6)
+    kit.glowMat.opacity = on * (0.16 + (useStore.getState().visited.length === 7 ? 0.14 : 0))
+  }, -1)
+  useEffect(
+    () => () => {
+      kit.parts.forEach((p) => { p.geo.dispose(); p.mat.dispose() })
+      kit.ledGeo.dispose(); kit.ledMat.dispose(); kit.lens.dispose(); kit.lensGeo.dispose(); kit.coneGeo.dispose(); kit.coneMat.dispose(); kit.bld.dispose(); kit.bldMat.dispose(); kit.glowMat.dispose()
+    },
+    [kit],
+  )
+  return (
+    <group>
+      <mesh geometry={kit.bld} material={kit.bldMat} position={[kit.cx, 1.0 - 30, kit.cz - 1.4]} />
+      <group position={[kit.cx, kit.cy, kit.cz]} rotation={[0, kit.yaw, 0]}>
+        {kit.parts.map((p, i) => <mesh key={i} geometry={p.geo} material={p.mat} />)}
+        {kit.lamps.map((l, i) => (
+          <group key={i}>
+            <mesh geometry={kit.lensGeo} material={kit.lens} position={[l.x, l.y + 0.1, l.z + 0.12]} rotation={[0.9, 0, 0]} />
+            <mesh geometry={kit.coneGeo} material={kit.coneMat} position={[l.x, l.y + 0.1, l.z + 0.12]} scale={[1.7, kit.S * 0.8, 1.7]} rotation={[-0.14, 0, 0]} frustumCulled={false} renderOrder={4} />
+          </group>
+        ))}
+        <mesh geometry={kit.ledGeo} material={kit.ledMat} />
+        <sprite material={kit.glowMat} position={[0, 0, -0.9]} scale={[kit.S * 2.0, kit.S * 2.0, 1]} />
+        <pointLight position={[0, kit.half + 1.0, 4]} color="#ffe2b8" intensity={60} distance={26} decay={2} />
+        <pointLight position={[0, -kit.half - 2.5, 6]} color="#9ab4ff" intensity={26} distance={22} decay={2} />
+      </group>
+    </group>
+  )
+}

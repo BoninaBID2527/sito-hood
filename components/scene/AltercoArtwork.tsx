@@ -176,8 +176,9 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
       u.uBulge.value = 1
       g.scale.set(size, size, 1)
       const [x, y, z] = position!
-      g.position.set(x, y + Math.sin(rt.time * 0.5) * 0.12 * S, z)
-      g.rotation.set(-tilt.current.y * 0.05 * S, -0.12 + tilt.current.x * 0.1 * S + Math.sin(rt.time * 0.25) * 0.04 * S, 0)
+      // bolted to its frame: no float, only a breath of parallax
+      g.position.set(x, y, z)
+      g.rotation.set(0, -0.14, 0)
       halo.opacity = smoothstep(0.8, 0.95, p) * (0.2 + (sel ? 0.25 : 0))
       g.visible = rt.world === 'roof'
     }

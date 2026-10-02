@@ -51,6 +51,8 @@ export interface StreetOpts {
   flutter?: number
   /** wetness field texture (R depth, G damp, B oil) in street world space — asphalt only */
   wet?: THREE.Texture
+  /** world-space window the wet texture covers: [centreX, halfWidth, zNear, zFar] (default = the street) */
+  wetBox?: [number, number, number, number]
 }
 
 export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}) {
@@ -67,7 +69,10 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   m.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, streetU)
     if (bump) sh.uniforms.uBumpTex = { value: opts.bump }
-    if (wet) sh.uniforms.uWetTex = { value: opts.wet }
+    if (wet) {
+      sh.uniforms.uWetTex = { value: opts.wet }
+      sh.uniforms.uWetBox = { value: new THREE.Vector4(...(opts.wetBox ?? [0, 14, 20, -122])) }
+    }
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vWPos;\nuniform float uTime;\nuniform float uContam;\nuniform float uDissolve;')
       .replace(
@@ -103,7 +108,7 @@ uniform float uWet;
 uniform float uDissolve;
 uniform float uPud;
 uniform vec3 uSunCol;
-${wet ? 'uniform sampler2D uWetTex;' : ''}
+${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
 ${GLSL_UTIL}`,
       )
@@ -168,7 +173,7 @@ ${
 ${
   wet
     ? `  {
-    vec2 wuv_ = vec2((vWPos.x + 14.0) / 28.0, (20.0 - vWPos.z) / 142.0);
+    vec2 wuv_ = vec2((vWPos.x - uWetBox.x) / (uWetBox.y * 2.0) + 0.5, (uWetBox.z - vWPos.z) / (uWetBox.z - uWetBox.w));
     float inside_ = step(0.0, wuv_.x) * step(wuv_.x, 1.0) * step(0.0, wuv_.y) * step(wuv_.y, 1.0);
     vec3 wf_ = texture2D(uWetTex, wuv_).rgb;
     float pn_ = vn2_(vWPos.xz * 6.0) * 0.6 + vn2_(vWPos.xz * 19.0) * 0.4;
@@ -230,8 +235,8 @@ ${
 }
 
 export function streetMat(params: THREE.MeshStandardMaterialParameters & StreetOpts) {
-  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, flutter, decal, ...rest } = params
-  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, flutter, decal })
+  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, ...rest } = params
+  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal })
 }
 
 /** Gentle sway for cables / hanging objects. Amplitude fades toward the fixed ends (uv.x 0..1). */

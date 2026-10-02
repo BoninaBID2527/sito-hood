@@ -66,7 +66,7 @@ export function Ground() {
 
 /* ───────────────────────── wet-ground reflections ───────────────────────── */
 
-const puddleVert = /* glsl */ `
+export const puddleVert = /* glsl */ `
 uniform mat4 textureMatrix;
 varying vec4 vUv;
 varying vec2 vMask;
@@ -79,7 +79,7 @@ void main() {
 }
 `
 
-const puddleFrag = (real: boolean) => /* glsl */ `
+export const puddleFrag = (real: boolean) => /* glsl */ `
 uniform vec3 color;
 uniform sampler2D tDiffuse;
 uniform sampler2D tMask;
@@ -146,6 +146,11 @@ void main() {
 `
 
 function PuddleLayer() {
+  return <WaterSheet mask={A.puddle} size={[28, 142]} position={[0, 0.02, -51]} interactive />
+}
+
+/** Planar reflection + wetness-field water over a world-aligned mask (street puddles, rooftop ponds). */
+export function WaterSheet({ mask, size, position, interactive = false }: { mask: THREE.Texture; size: [number, number]; position: [number, number, number]; interactive?: boolean }) {
   const tier = useStore((s) => s.tier)
   const scene = useThree((s) => s.scene)
   const q = rt.quality
@@ -156,14 +161,14 @@ function PuddleLayer() {
   const lastEgg = useRef(-100)
 
   const { obj, mat } = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(28, 142)
+    const geo = new THREE.PlaneGeometry(size[0], size[1])
     const shader = {
       name: 'PuddleReflector',
       uniforms: {
         color: { value: null },
         tDiffuse: { value: null },
         textureMatrix: { value: null },
-        tMask: { value: A.puddle },
+        tMask: { value: mask },
         uTime: { value: 0 },
         uContam: { value: 0 },
         uWet: { value: 1 },
@@ -202,10 +207,10 @@ function PuddleLayer() {
     material.polygonOffsetFactor = -2
     material.polygonOffsetUnits = -2
     object.rotation.x = -Math.PI / 2
-    object.position.set(0, 0.02, -51)
+    object.position.set(...position)
     object.renderOrder = 2
     return { obj: object, mat: material }
-  }, [real, q])
+  }, [real, q, mask, size, position])
 
   useEffect(() => {
     uni.current = mat.uniforms
@@ -217,6 +222,7 @@ function PuddleLayer() {
   }, [obj, mat])
 
   useFrame((_, dt) => {
+    obj.visible = !rt.mirror
     const u = mat.uniforms
     u.uTime.value = rt.time
     u.uContam.value = rt.fx.contam
@@ -229,7 +235,7 @@ function PuddleLayer() {
   })
 
   const sample = (uvx: number, uvy: number) => {
-    const c = A.puddle.image as HTMLCanvasElement
+    const c = mask.image as HTMLCanvasElement
     const ctx = c.getContext('2d')!
     const d = ctx.getImageData(Math.min(c.width - 1, Math.max(0, Math.floor(uvx * c.width))), Math.min(c.height - 1, Math.max(0, Math.floor(uvy * c.height))), 1, 1).data
     return d[0] / 255
@@ -239,7 +245,7 @@ function PuddleLayer() {
     <group ref={group}>
       <primitive
         object={obj}
-        onPointerMove={(e: any) => {
+        onPointerMove={interactive ? (e: any) => {
           if (rt.touch || !e.uv) return
           const wet = sample(e.uv.x, e.uv.y)
           if (wet < 0.42) return
@@ -257,7 +263,7 @@ function PuddleLayer() {
             useStore.getState().say('THE WATER REMEMBERS', 'It looked back at you.')
             useStore.getState().markEgg('puddle')
           }
-        }}
+        } : undefined}
       />
     </group>
   )

@@ -6,7 +6,7 @@ import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { palette } from '@/lib/timeOfDay'
 import { streetMat } from './materials'
-import { worldUV } from '@/lib/geo'
+import { createTowerMaterial, updateTowerMaterial, tagBuilding } from '@/effects/TowerMaterial'
 
 /** Distant skyline layers (2.5D) + a few big blocks so the plaza reads as part of a city. */
 export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [-240, -330, -430], blocks: withBlocks = true }) {
@@ -27,16 +27,13 @@ export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [
       { p: [-74, 33, -210], s: [40, 66, 30] },
       { p: [78, 30, -216], s: [44, 60, 30] },
     ]
-    const bMat = new THREE.MeshStandardMaterial({ map: A.brick.dark.map, color: '#5c5260', roughness: 1 })
-    const bGeos = blocks.map((b) => {
-      const g = new THREE.BoxGeometry(...b.s)
-      worldUV(g, 2.4, ...b.p)
-      return g
-    })
+    const bMat = createTowerMaterial()
+    const bGeos = blocks.map((b, i) => tagBuilding(new THREE.BoxGeometry(...b.s), 0.17 + i * 0.13, 3.3 + (i % 3) * 0.5, 2.6 + (i % 4) * 0.4, [0.1, 0.5, 0.8, 0.3, 0.9, 0.6][i % 6]))
     return { layers, blocks, bMat, bGeos }
   }, [])
 
   useFrame(() => {
+    updateTowerMaterial(kit.bMat)
     kit.layers.forEach((l, i) => {
       l.sil.color.copy(palette.skyMid).lerp(palette.fog, 0.6).multiplyScalar(0.34 - i * 0.03)
       l.sil.color.lerp(palette.horizon, 0.07 + i * 0.1)

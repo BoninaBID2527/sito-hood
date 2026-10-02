@@ -179,8 +179,8 @@ export function sidewalkTexture(seed = 5) {
  *  B = oil / contamination noise (thin-film tint inside puddles)
  * The large pool lives in front of the track orbit (the portal).
  */
-export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; pool: { x: number; z: number; r: number } }) {
-  const W = 512, H = 2048
+export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; pool: { x: number; z: number; r: number }; layout?: 'street' | 'roof' }) {
+  const W = 512, H = opts.layout === 'roof' ? 724 : 2048
   const r = rng(77)
   const { canvas, ctx } = makeCanvas(W, H)
   ctx.fillStyle = '#000'
@@ -204,21 +204,29 @@ export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; p
     ctx.beginPath(); ctx.arc(cx, cz, 1, 0, Math.PI * 2); ctx.fill()
     ctx.restore()
   }
-  // alley runs: elongated puddles along the centre line (late ones are shallower → only appear as the water grows)
-  for (let z = 14; z > -70; z -= r.range(6, 13)) {
-    const x = r.range(-1.5, 1.5)
-    const n = r.int(1, 3)
-    for (let k = 0; k < n; k++) blob(x + r.range(-0.4, 0.4), z + r.range(-0.8, 0.8), r.range(0.3, 1.0), r.range(0.6, 2.0), r.range(0.5, 0.95))
+  if (opts.layout === 'roof') {
+    // rain-pooled roof: broad shallow lakes between the vents, a few long ones along the drainage falls, many small ponds
+    const rr = rng(131)
+    blob(opts.pool.x, opts.pool.z, opts.pool.r, opts.pool.r * 0.8, 1)
+    for (let i = 0; i < 9; i++) blob(rr.range(-opts.halfW * 0.8, opts.halfW * 0.8), rr.range(opts.zNear - 3, opts.zFar + 3), rr.range(1.0, 3.2), rr.range(0.9, 2.6), rr.range(0.55, 0.95))
+    for (let i = 0; i < 14; i++) blob(rr.range(-opts.halfW * 0.9, opts.halfW * 0.9), rr.range(opts.zNear - 1, opts.zFar + 1), rr.range(0.3, 0.9), rr.range(0.3, 0.9), rr.range(0.5, 0.85))
+  } else {
+    // alley runs: elongated puddles along the centre line (late ones are shallower → only appear as the water grows)
+    for (let z = 14; z > -70; z -= r.range(6, 13)) {
+      const x = r.range(-1.5, 1.5)
+      const n = r.int(1, 3)
+      for (let k = 0; k < n; k++) blob(x + r.range(-0.4, 0.4), z + r.range(-0.8, 0.8), r.range(0.3, 1.0), r.range(0.6, 2.0), r.range(0.5, 0.95))
+    }
+    // gutters near the kerbs, tyre-rut lines
+    for (let z = 14; z > -70; z -= r.range(7, 14)) blob(r.sign() * r.range(2.3, 2.7), z, r.range(0.12, 0.3), r.range(1.2, 3), 0.62)
+    for (let z = 16; z > -74; z -= r.range(10, 18)) { blob(-0.9, z, 0.16, r.range(2.5, 5), 0.58); blob(0.95, z + 1, 0.16, r.range(2.5, 5), 0.56) }
+    // plaza: scattered pools
+    for (let i = 0; i < 12; i++) blob(r.range(-9, 9), r.range(-76, -112), r.range(0.5, 1.7), r.range(0.5, 1.5), r.range(0.45, 0.9))
+    // the "wrong" puddle (hovering it distorts reality) — guaranteed to exist
+    blob(0.2, -41, 0.95, 1.9, 1)
+    blob(opts.pool.x, opts.pool.z, opts.pool.r, opts.pool.r * 0.9, 1)
+    blob(opts.pool.x + 1.3, opts.pool.z + 0.8, opts.pool.r * 0.55, opts.pool.r * 0.5, 0.9)
   }
-  // gutters near the kerbs, tyre-rut lines
-  for (let z = 14; z > -70; z -= r.range(7, 14)) blob(r.sign() * r.range(2.3, 2.7), z, r.range(0.12, 0.3), r.range(1.2, 3), 0.62)
-  for (let z = 16; z > -74; z -= r.range(10, 18)) { blob(-0.9, z, 0.16, r.range(2.5, 5), 0.58); blob(0.95, z + 1, 0.16, r.range(2.5, 5), 0.56) }
-  // plaza: scattered pools
-  for (let i = 0; i < 12; i++) blob(r.range(-9, 9), r.range(-76, -112), r.range(0.5, 1.7), r.range(0.5, 1.5), r.range(0.45, 0.9))
-  // the "wrong" puddle (hovering it distorts reality) — guaranteed to exist
-  blob(0.2, -41, 0.95, 1.9, 1)
-  blob(opts.pool.x, opts.pool.z, opts.pool.r, opts.pool.r * 0.9, 1)
-  blob(opts.pool.x + 1.3, opts.pool.z + 0.8, opts.pool.r * 0.55, opts.pool.r * 0.5, 0.9)
   ctx.globalCompositeOperation = 'source-over'
 
   // smooth value noise sampled bilinearly (no blocky edges)
@@ -242,7 +250,7 @@ export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; p
     // depth: soft blob + ragged noise only where there is already water (edges become fractal, interiors stay flat)
     const depth = Math.max(0, Math.min(1, v0 + (q - 0.5) * 0.34 * Math.min(1, v0 * 3)))
     const wx = (x / W) * 2 - 1 // −1..1 across the street
-    const lane = Math.exp(-wx * wx * 14) // wetter along the centre of the alley
+    const lane = opts.layout === 'roof' ? 0.25 : Math.exp(-wx * wx * 14) // wetter along the centre of the alley
     const damp = Math.max(0, Math.min(1, 0.22 + (n2(x, y) - 0.4) * 1.9 + lane * 0.3 + depth * 1.4))
     img.data[i] = depth * 255
     img.data[i + 1] = damp * 255
@@ -775,27 +783,48 @@ export function skylineTextures(seed: number, density = 1, maxH = 0.8): SkylineL
   const lit = makeCanvas(W, H)
   let x = -20
   while (x < W + 20) {
-    const bw = r.range(46, 150) * density
-    const bh = r.range(0.28, maxH) * H
-    const top = H - bh
+    const bw = r.range(40, 170) * density
+    // a few landmark-height buildings, many mid-rise, some low blocks: height is not uniformly random
+    const roll = r()
+    const bh = (roll < 0.12 ? r.range(0.7, 1) : roll < 0.55 ? r.range(0.4, 0.7) : r.range(0.2, 0.42)) * maxH * H * 1.15
+    const top = H - Math.min(bh, H * 0.94)
     const g = sil.ctx.createLinearGradient(0, top, 0, H)
     g.addColorStop(0, 'rgba(255,255,255,1)')
-    g.addColorStop(1, 'rgba(210,210,220,1)')
+    g.addColorStop(1, 'rgba(205,205,218,1)')
     sil.ctx.fillStyle = g
-    sil.ctx.fillRect(x, top, bw, bh)
-    // setbacks, tanks, antenna
-    if (r() < 0.5) sil.ctx.fillRect(x + bw * 0.2, top - r.range(10, 40), bw * 0.6, 40)
-    if (r() < 0.25) { sil.ctx.fillRect(x + bw * 0.45, top - r.range(30, 90), 3, 100) }
-    if (r() < 0.2) { sil.ctx.beginPath(); sil.ctx.moveTo(x + bw * 0.5 - 14, top); sil.ctx.lineTo(x + bw * 0.5, top - 34); sil.ctx.lineTo(x + bw * 0.5 + 14, top); sil.ctx.fill() }
-    // windows (light layer)
-    const cols = Math.floor(bw / 9), rows = Math.floor(bh / 12)
-    for (let cx = 0; cx < cols; cx++) for (let ry = 1; ry < rows; ry++) {
-      if (r() < 0.42) {
-        lit.ctx.fillStyle = r() < 0.8 ? `rgba(255,${r.range(180, 220)},${r.range(110, 160)},${r.range(0.5, 1)})` : `rgba(170,210,255,${r.range(0.4, 0.9)})`
-        lit.ctx.fillRect(x + 4 + cx * 9, top + ry * 12, 4, 6)
+    sil.ctx.fillRect(x, top, bw, H - top)
+    // setbacks (stepped crowns)
+    let tw = bw, tx = x, ty = top
+    const steps = r() < 0.55 ? r.int(1, 3) : 0
+    for (let k = 0; k < steps; k++) {
+      const nw = tw * r.range(0.5, 0.8), nh = r.range(14, 46)
+      tx += (tw - nw) * r.range(0.2, 0.8); tw = nw; ty -= nh
+      sil.ctx.fillStyle = 'rgba(240,240,250,1)'
+      sil.ctx.fillRect(tx, ty, tw, nh + 2)
+    }
+    // crowns: spire, mast, water tank, gabled top, cooling units
+    const k = r()
+    sil.ctx.fillStyle = 'rgba(235,235,245,1)'
+    if (k < 0.2) sil.ctx.fillRect(tx + tw * 0.5 - 1.5, ty - r.range(40, 120), 3, 130)
+    else if (k < 0.34) { sil.ctx.beginPath(); sil.ctx.moveTo(tx + tw * 0.5 - 16, ty); sil.ctx.lineTo(tx + tw * 0.5, ty - r.range(26, 60)); sil.ctx.lineTo(tx + tw * 0.5 + 16, ty); sil.ctx.fill() }
+    else if (k < 0.5) { sil.ctx.fillRect(tx + tw * 0.2, ty - 22, 20, 22); sil.ctx.beginPath(); sil.ctx.moveTo(tx + tw * 0.2 - 3, ty - 22); sil.ctx.lineTo(tx + tw * 0.2 + 10, ty - 34); sil.ctx.lineTo(tx + tw * 0.2 + 23, ty - 22); sil.ctx.fill(); sil.ctx.fillRect(tx + tw * 0.2 + 2, ty - 4, 2, 6); sil.ctx.fillRect(tx + tw * 0.2 + 16, ty - 4, 2, 6) }
+    else if (k < 0.62) { for (let q = 0; q < 3; q++) sil.ctx.fillRect(tx + 6 + q * (tw / 3), ty - r.range(6, 14), tw / 4, 14) }
+    // windows: this building's own grid, own mood (dead block / lively block / office with lit floors)
+    const cw = r.range(5, 9), ch = r.range(8, 14)
+    const mood = r()
+    const prob = mood < 0.25 ? r.range(0.02, 0.1) : mood < 0.8 ? r.range(0.15, 0.4) : r.range(0.45, 0.7)
+    const cols = Math.floor((bw - 8) / cw), rows = Math.floor((H - top) / ch)
+    const office = r() < 0.3
+    for (let ry = 1; ry < rows; ry++) {
+      const fullFloor = office && r() < 0.1
+      for (let cx = 0; cx < cols; cx++) {
+        if (!fullFloor && r() > prob) continue
+        const cold = fullFloor || r() < 0.2
+        lit.ctx.fillStyle = cold ? `rgba(${170 + r() * 40 | 0},${205 + r() * 30 | 0},255,${r.range(0.45, 0.95)})` : `rgba(255,${r.range(150, 215) | 0},${r.range(80, 150) | 0},${r.range(0.45, 1)})`
+        lit.ctx.fillRect(x + 4 + cx * cw, top + ry * ch, cw * 0.55, ch * 0.5)
       }
     }
-    x += bw + r.range(-6, 14)
+    x += bw + r.range(-8, 12)
   }
   for (const c of [sil.ctx, lit.ctx]) {
     c.globalCompositeOperation = 'destination-out'

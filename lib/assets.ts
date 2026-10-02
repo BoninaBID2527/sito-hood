@@ -17,6 +17,7 @@ export interface Assets {
   asphalt: THREE.Texture
   sidewalk: THREE.Texture
   puddle: THREE.Texture
+  roofWet: THREE.Texture
   windows: ReturnType<typeof T.windowTextures>
   grating: THREE.Texture
   shutters: THREE.Texture[]
@@ -36,7 +37,6 @@ export interface Assets {
   cards: THREE.Texture[]
   skyline: T.SkylineLayer[]
   roofDeck: THREE.Texture
-  tower: { map: THREE.Texture; emissive: THREE.Texture }
   roofPieces: THREE.Texture[]
   dualLabels: THREE.Texture[]
   returnLabel: THREE.Texture
@@ -180,14 +180,13 @@ export async function buildCards() {
 export async function loadRoof() {
   if (A.roofReady) return
   A.roofDeck = T.roofDeckTexture(14)
-  await nextFrame()
-  A.tower = T.towerTextures()
+  A.roofWet = T.puddleMask({ halfW: 13, zNear: 12, zFar: -24, pool: { x: 2, z: -12, r: 3.0 }, layout: 'roof' })
   await nextFrame()
   A.roofPieces = [
-    T.pieceTexture('SKRT', { a: '#ff7a3a', b: '#ffd0a0', c: '#2a2a8c' }, 71, 1024, 512),
-    T.pieceTexture('RAW', { a: '#4ac8ff', b: '#d0f0ff', c: '#6a1a5a' }, 72, 1024, 512),
-    T.pieceTexture('JADE', { a: '#4be0a0', b: '#d0ffe8', c: '#1a2a4a' }, 73, 1024, 512),
-    T.pieceTexture('MOSS', { a: '#f4efe6', b: '#ffffff', c: '#22222c' }, 74, 1024, 512),
+    T.pieceTexture('STARE BENE', { a: '#ff7a3a', b: '#ffd0a0', c: '#2a2a8c' }, 71, 1024, 512),
+    T.pieceTexture('ALTERCO', { a: '#4ac8ff', b: '#d0f0ff', c: '#6a1a5a' }, 72, 1024, 512),
+    T.pieceTexture('DINO', { a: '#4be0a0', b: '#d0ffe8', c: '#1a2a4a' }, 73, 1024, 512),
+    T.pieceTexture('HOOD', { a: '#f4efe6', b: '#ffffff', c: '#22222c' }, 74, 1024, 512),
   ]
   A.roofReady = true
 }
