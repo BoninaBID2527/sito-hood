@@ -186,7 +186,7 @@ void main() {
   // Dualismo grade: iridescent lift
   if (uDual > 0.001) {
     vec3 irid = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + r * 1.4 + uTime * 0.03 + lum));
-    col = mix(col, col * 0.7 + irid * 0.28 * (0.3 + lum), uDual * 0.55);
+    col = mix(col, col * 0.78 + irid * 0.17 * (0.3 + lum), uDual * 0.55);
   }
 
   // dim while a track is focused

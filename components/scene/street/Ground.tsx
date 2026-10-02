@@ -225,7 +225,7 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
     obj.visible = !rt.mirror
     const u = mat.uniforms
     u.uTime.value = rt.time
-    u.uContam.value = rt.fx.contam
+    u.uContam.value = Math.max(rt.fx.contam, rt.fx.dissolve)
     u.uPud.value = streetU.uPud.value
     u.uWet.value = streetU.uWet.value
     u.uHor.value.copy(palette.horizon).multiplyScalar(0.8)

@@ -37,6 +37,7 @@ export const rt = {
     rgb: 0, // chromatic aberration
     liquid: 0, // water pass-through
     cross: 0, // 0..1 pulse while the camera breaks the water surface
+    dissolve: 0, // 0..1 street loses material solidity on the way into DUALISMO
     tunnel: 0, // dualismo tunnel
     contam: 0, // ALTERCO contamination of the physical world
     fade: 1, // 1 = fully visible, 0 = black

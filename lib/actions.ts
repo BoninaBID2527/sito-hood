@@ -57,7 +57,9 @@ export function enterDualism() {
   lockScroll()
   audio.whoosh()
   const tl = gsap.timeline()
-  tl.to(rt.fx, { tunnel: 1, glitch: 0, duration: rt.reducedMotion ? 0.5 : 2.3, ease: 'power3.in' })
+  // the street first stops being solid (material bleeds into spectral bands, walls swell), then the tunnel takes over
+  tl.to(rt.fx, { dissolve: 1, duration: rt.reducedMotion ? 0.3 : 1.7, ease: 'sine.in' })
+  tl.to(rt.fx, { tunnel: 1, glitch: 0, duration: rt.reducedMotion ? 0.5 : 2.3, ease: 'power3.in' }, rt.reducedMotion ? 0 : 0.5)
   tl.add(() => {
     useStore.getState().set({ mode: 'dualism' })
     rt.world = 'dualism'
@@ -79,6 +81,7 @@ export function exitDualism() {
   tl.add(() => {
     useStore.getState().set({ mode: 'alterco' })
     rt.fx.dualism = 0
+    rt.fx.dissolve = 0
   })
   tl.to(rt.fx, { tunnel: 0, duration: rt.reducedMotion ? 0.4 : 1.9, ease: 'power3.out' })
   tl.add(() => unlockScroll())

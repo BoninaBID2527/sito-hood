@@ -30,6 +30,7 @@ export function StreetEnvironment() {
     if (root.current) root.current.scale.y = rt.mirror ? -1 : 1
     streetU.uTime.value = rt.time
     streetU.uContam.value = rt.fx.contam
+    streetU.uDissolve.value = rt.fx.dissolve
     // standing water gathers along the journey: ordinary wet street → puddles that keep growing → the pool
     const g = Math.min(1, Math.max(0, rt.smooth / 0.5))
     streetU.uPud.value = g * g * (3 - 2 * g)
