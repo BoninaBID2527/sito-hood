@@ -130,8 +130,8 @@ export function useObjectMats() {
     () => ({
       metal: streetMat({ color: '#1d1e22', roughness: 0.42, metalness: 0.85, aoBase: 0.9, macro: 0.4 }),
       body: streetMat({ color: '#15161a', roughness: 0.6, metalness: 0.4, aoBase: 0.9, macro: 0.4 }),
-      paper: new THREE.MeshStandardMaterial({ color: '#cfc6b1', roughness: 0.95 }),
-      tape: new THREE.MeshStandardMaterial({ color: '#c8b78b', roughness: 0.8, transparent: true, opacity: 0.85 }),
+      paper: streetMat({ color: '#4f493f', roughness: 0.96, aoBase: 0.9, macro: 0.9 }),
+      tape: new THREE.MeshStandardMaterial({ color: '#8f8467', roughness: 0.85, transparent: true, opacity: 0.8 }),
       lightbox: new THREE.MeshStandardMaterial({ color: '#0e0f12', roughness: 0.5, metalness: 0.5, emissive: new THREE.Color('#ffd9a0'), emissiveIntensity: 0.0 }),
       lamp: new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 3.2, 2.2) }),
       plane: new THREE.PlaneGeometry(1, 1),
