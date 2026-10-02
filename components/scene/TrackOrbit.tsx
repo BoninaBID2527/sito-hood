@@ -308,7 +308,7 @@ export function TrackOrbit() {
       u.uRgb.value = clamp(Math.abs(ph_.vel) * 0.0012, 0, 0.012) + rt.fx.contam * 0.002 + h * 0.0015
       u.uBend.value = clamp(ph_.vel * 0.12, -1, 1)
       u.uLit.value = sp.lit * (0.45 + palette.lamps * 0.6) * (0.6 + wF * 0.8)
-      if (i === 1) objMats.lightbox.emissiveIntensity = 0.22 * (0.4 + palette.lamps) * (0.5 + wF)
+      if (i === 1) objMats.lightbox.emissiveIntensity = 0.035 * (0.4 + palette.lamps) * (0.5 + wF)
       if (sp.twin) {
         const tu = twinMat.uniforms
         tu.uTime.value = rt.time; tu.uHover.value = u.uHover.value; tu.uFar.value = u.uFar.value; tu.uDim.value = u.uDim.value + 0.25; tu.uBend.value = u.uBend.value
