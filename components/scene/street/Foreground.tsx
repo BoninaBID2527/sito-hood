@@ -54,7 +54,7 @@ export function Foreground() {
 
     // ── blade signs, awnings
     const plane = new THREE.PlaneGeometry(1, 1)
-    const signMat = (tex: THREE.Texture) => new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.2, side: THREE.DoubleSide, emissive: new THREE.Color('#ffffff'), emissiveMap: tex, emissiveIntensity: 0.1 })
+    const signMat = (tex: THREE.Texture) => streetMat({ map: tex, roughness: 0.62, metalness: 0.15, side: THREE.DoubleSide, emissive: new THREE.Color('#ffffff'), emissiveMap: tex, emissiveIntensity: 0.1, aoBase: 0.9, macro: 0.9, decal: true })
     const sMats = [signMat(A.signs.osteria), signMat(A.signs.farmacia)]
     const bracket = new GeoBuilder()
     bracket.box(1.4, 0.05, 0.05, 0, 0.55, 0)

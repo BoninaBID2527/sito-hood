@@ -38,6 +38,15 @@ export function CustomCursor() {
     }
   }, [x, y])
 
+  // once the journey has started the first-visit hint must never linger
+  useEffect(() => {
+    const id = setInterval(() => {
+      const st = useStore.getState()
+      if (st.cursor.kind === 'explore' && rt.progress >= 0.02) st.setCursor('default')
+    }, 400)
+    return () => clearInterval(id)
+  }, [])
+
   // the ENTER button unmounts under the pointer: never leave its label behind
   useEffect(() => {
     if (phase === 'entered') useStore.getState().setCursor('default')

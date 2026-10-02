@@ -63,6 +63,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const bump = !!(opts.bump && m.map)
   const wet = !!opts.wet
   const decal = !!opts.decal
+  const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
   const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
   const bblur = (opts.bumpBlur ?? 1).toFixed(2)
@@ -154,6 +155,9 @@ ${
   diffuseColor.rgb *= 1.0 - 0.38 * st_ * mac_;
   float pt_ = 0.0;
   float puddle_ = 0.0, dampG_ = 0.0;
+  float brickRough_ = 1.0;
+  float asphaltPolish_ = 0.0, asphaltCrack_ = 0.0;
+  float rustM_ = 0.0;
   float grime_ = smoothstep(0.45, 0.85, vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)) * smoothstep(1.5, 12.0, h_);
   diffuseColor.rgb *= 1.0 - 0.28 * grime_ * mac_;
 ${
@@ -167,7 +171,25 @@ ${
   pt_ = step(ph_, 0.10) * pm_;
   vec3 paint_ = mix(vec3(0.34, 0.30, 0.27), vec3(0.22, 0.27, 0.27), h21_(pi_ + 3.1));
   if (h21_(pi_ + 9.7) > 0.7) paint_ = vec3(0.45, 0.40, 0.30);
-  diffuseColor.rgb = mix(diffuseColor.rgb, paint_ * (0.8 + nS_ * 0.4), pt_ * 0.92 * mac_);`
+  diffuseColor.rgb = mix(diffuseColor.rgb, paint_ * (0.8 + nS_ * 0.4), pt_ * 0.92 * mac_);
+  // each brick has its own life: kiln tone, a few burnt, a few pale, slightly different roughness
+  {
+    float row2_ = floor(tuv_.y * 32.0);
+    float col2_ = floor(tuv_.x * 11.0 + 0.5 * mod(row2_, 2.0));
+    vec2 bid_ = vec2(col2_, row2_) + floor(vMapUv) * 17.0 + ${seed};
+    float b1_ = h21_(bid_), b2_ = h21_(bid_ + 7.7), b3_ = h21_(bid_ + 3.1);
+    vec3 bt_ = mix(vec3(0.80, 0.76, 0.78), vec3(1.16, 1.0, 0.88), b1_) * (0.78 + 0.44 * b2_);
+    diffuseColor.rgb *= mix(vec3(1.0), bt_, 0.8 * mac_ * (1.0 - pt_));
+    diffuseColor.rgb *= mix(1.0, 0.5, step(0.94, b3_) * mac_);
+    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.25, 1.18, 1.05), step(b3_, 0.04) * mac_ * 0.7);
+    brickRough_ = 0.82 + 0.3 * b2_;
+    // efflorescence / salt bloom low on the wall, pale mineral stains
+    float salt_ = smoothstep(0.55, 0.82, vn3_(vWPos * vec3(1.6, 0.7, 1.6) + 9.0)) * (1.0 - smoothstep(0.3, 2.6, h_));
+    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.62, 0.6, 0.55) * (0.7 + 0.5 * nS_), salt_ * 0.28 * mac_ * (1.0 - pt_));
+    // dirt gathers in the mortar-scale noise: darker, rougher pockets
+    float pocket_ = smoothstep(0.6, 0.9, vn3_(vWPos * vec3(7.0, 5.0, 7.0) + 3.0));
+    diffuseColor.rgb *= 1.0 - 0.18 * pocket_ * mac_;
+  }`
     : ''
 }
 ${
@@ -181,7 +203,24 @@ ${
     puddle_ = smoothstep(thr_ - 0.06, thr_ + 0.03, wf_.r + (pn_ - 0.5) * 0.16) * inside_;
     dampG_ = clamp(wf_.g + (pn_ - 0.5) * 0.4 - 0.12 + uPud * 0.18, 0.0, 1.0) * inside_ + (1.0 - inside_) * 0.35;
     dampG_ = max(dampG_, puddle_) * (0.55 + 0.45 * uWet);
-    diffuseColor.rgb *= mix(1.0, 0.6, dampG_) * mix(1.0, 0.5, puddle_);
+    // repair patches (tar, sharper edges), fine ridged cracks, polished tyre lanes
+    vec2 ap_ = vWPos.xz / vec2(3.4, 4.8);
+    vec2 ai_ = floor(ap_);
+    float ah_ = h21_(ai_ + 3.3);
+    vec2 af_ = fract(ap_) - 0.5;
+    float patch_ = step(ah_, 0.14) * smoothstep(0.5, 0.45, max(abs(af_.x) * 0.95, abs(af_.y)) + (vn2_(ap_ * 9.0) - 0.5) * 0.07) * inside_;
+    diffuseColor.rgb *= 1.0 - 0.3 * patch_;
+    float cr_ = 1.0 - abs(vn2_(vWPos.xz * vec2(1.3, 0.9) + 7.0) * 2.0 - 1.0);
+    float cr2_ = 1.0 - abs(vn2_(vWPos.xz * vec2(3.1, 2.3) + 21.0) * 2.0 - 1.0);
+    float crack_ = max(smoothstep(0.972, 0.992, cr_), smoothstep(0.985, 0.996, cr2_) * 0.7) * inside_;
+    diffuseColor.rgb *= 1.0 - 0.6 * crack_ * (1.0 - puddle_);
+    float lane_ = exp(-pow((abs(vWPos.x - 0.1) - 0.95 + (vn2_(vWPos.zz * 0.4) - 0.5) * 0.3) * 3.2, 2.0)) * smoothstep(-70.0, 16.0, vWPos.z) * step(vWPos.z, 20.0);
+    diffuseColor.rgb *= 1.0 - 0.14 * lane_;
+    // the walls shade the road: a soft gradient toward both kerbs (street only, not the roof deck)
+    float kerb_ = smoothstep(0.9, 2.9, abs(vWPos.x)) * smoothstep(-76.0, -68.0, vWPos.z) * step(13.5, uWetBox.y);
+    diffuseColor.rgb *= 1.0 - 0.38 * kerb_;
+    asphaltPolish_ = lane_ * 0.5 + patch_ * 0.3;
+    asphaltCrack_ = crack_;
   }`
     : ''
 }
@@ -193,6 +232,29 @@ ${
     float edge_ = (nS_ - 0.5) * 0.5 + (vn3_(vWPos * 9.0) - 0.5) * 0.3;
     diffuseColor.a *= smoothstep(0.32 + edge_, 0.62 + edge_, diffuseColor.a) * (0.84 + 0.16 * bn_);
     diffuseColor.rgb *= 0.86 + 0.2 * bn_;
+    // paper / paint ageing: torn irregular edges, sun-bleach + grey, dirt gathering low, a lifted lip at the border
+    vec2 du_ = vMapUv;
+    float eg_ = min(min(du_.x, 1.0 - du_.x), min(du_.y, 1.0 - du_.y));
+    float tn_ = vn2_(du_ * vec2(11.0, 14.0) + vWPos.zx * 0.9);
+    diffuseColor.a *= smoothstep(0.0, 0.035 + 0.07 * tn_, eg_ - 0.006 * h21_(floor(vWPos.xz * 12.0 + vWPos.y * 3.0)));
+    float age_ = vn2_(du_ * 3.0 + 5.0 + ${seed});
+    vec3 gry_ = vec3(dot(diffuseColor.rgb, vec3(0.33)));
+    diffuseColor.rgb = mix(diffuseColor.rgb, mix(gry_, vec3(0.52, 0.48, 0.42), 0.35), 0.18 + 0.3 * age_);
+    diffuseColor.rgb *= 0.74 + 0.26 * smoothstep(0.0, 0.55, du_.y + 0.35 * tn_);
+    diffuseColor.rgb *= 0.8 + 0.2 * smoothstep(0.0, 0.045, eg_);
+  }`
+    : ''
+}
+${
+  metal
+    ? `  {
+    float rn_ = vn3_(vWPos * 1.7 + 41.0) * 0.6 + vn3_(vWPos * 7.0 + 3.0) * 0.4;
+    rustM_ = smoothstep(0.56, 0.8, rn_) * (0.45 + 0.55 * (1.0 - smoothstep(0.0, 5.0, h_))) * mac_;
+    vec3 rustC_ = mix(vec3(0.36, 0.16, 0.07), vec3(0.2, 0.11, 0.08), vn3_(vWPos * 13.0));
+    diffuseColor.rgb = mix(diffuseColor.rgb, rustC_, rustM_ * 0.8);
+    diffuseColor.rgb *= 0.78 + 0.44 * vn3_(vWPos * 23.0);
+    // dust / dried water marks on horizontal-ish runs
+    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.3, 0.29, 0.27), smoothstep(0.6, 0.85, vn3_(vWPos * vec3(3.0, 0.8, 3.0))) * 0.3 * mac_);
   }`
     : ''
 }
@@ -208,8 +270,12 @@ ${
         '#include <roughnessmap_fragment>',
         `#include <roughnessmap_fragment>
   roughnessFactor = clamp(roughnessFactor * (0.88 + (nM_ - 0.5) * 0.5 * mac_ + st_ * 0.15) - damp_ * 0.38 * mac_ - uWet * 0.06 * (1.0 - smoothstep(0.0, 6.0, h_)), 0.3, 1.0);
-  roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2, 0.04, puddle_), dampG_ * 0.9);`,
+  roughnessFactor *= brickRough_;
+  roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
+  roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, 0.04, puddle_), dampG_ * 0.9);
+  roughnessFactor = max(0.12, roughnessFactor - asphaltPolish_ * 0.14);`,
       )
+      .replace('#include <metalnessmap_fragment>', '#include <metalnessmap_fragment>\n  metalnessFactor *= 1.0 - rustM_ * 0.85;')
       .replace(
         '#include <normal_fragment_maps>',
         bump
@@ -230,7 +296,7 @@ ${
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${metal ? 'm' : ''}3`
   return m
 }
 

@@ -103,8 +103,12 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
   font-family: var(--display); text-transform: uppercase; font-size: clamp(30px, 4.6vw, 72px); line-height: 1;
   display: inline-flex; align-items: center; gap: 0.5em; position: relative; padding: 0.2em 0; color: var(--paper);
 }
+.ld-enter:focus, .ld-enter:focus-visible { outline: none; }
+.ld-enter { letter-spacing: 0.02em; }
 .ld-enter-line { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--paper); transform-origin: left; transform: scaleX(0.18); transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1); }
 .ld-enter:hover .ld-enter-line, .ld-enter:focus-visible .ld-enter-line { transform: scaleX(1); }
+@media (prefers-reduced-motion: no-preference) { .ld-enter-line { animation: ldBreath 3.4s ease-in-out infinite; } }
+@keyframes ldBreath { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 .ld-arrow { transition: transform 0.4s; }
 .ld-enter:hover .ld-arrow { transform: translateX(10px); }
 .ld-silent { color: var(--dim); }

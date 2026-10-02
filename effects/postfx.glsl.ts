@@ -167,10 +167,10 @@ void main() {
       float rr = sqrt((fi + 0.5) / 10.0);
       float a = fi * 2.399963 + rot;
       vec2 o = vec2(cos(a), sin(a)) * rr;
-      b += max(texture2D(tScene, uv + o * vec2(0.010 / uAspect, 0.010)).rgb - 0.95, 0.0);
-      b += max(texture2D(tScene, uv + o * vec2(0.026 / uAspect, 0.026)).rgb - 0.95, 0.0) * 0.9;
+      b += max(texture2D(tScene, uv + o * vec2(0.010 / uAspect, 0.010)).rgb - 1.25, 0.0);
+      b += max(texture2D(tScene, uv + o * vec2(0.026 / uAspect, 0.026)).rgb - 1.25, 0.0) * 0.8;
     }
-    col += b * uBloom * 0.16;
+    col += b * uBloom * 0.11;
   }
 
   col *= uExposure;
@@ -182,6 +182,8 @@ void main() {
   col = mix(col, col * vec3(1.05, 1.0, 0.94), lum * 0.3);
 
   col = pow(col, vec3(1.0 / 2.2));
+  // readable blacks: a very gentle toe so shadows keep information (digital cinema, not crushed)
+  col = col + (1.0 - col) * 0.012 * (1.0 - smoothstep(0.0, 0.25, dot(col, vec3(0.333))));
 
   // Dualismo grade: iridescent lift
   if (uDual > 0.001) {
@@ -194,11 +196,11 @@ void main() {
 
   // vignette
   float vg = smoothstep(0.35, 0.95, r * (1.0 + uVig * 0.55));
-  col *= 1.0 - vg * uVig * 0.8;
+  col *= 1.0 - vg * uVig * 0.62;
 
   // analogue grain (24fps stepping)
   float g = hash(uv * uRes + floor(uTime * 24.0) * 7.31) - 0.5;
-  col += g * uGrain * 0.085 * (1.0 - lum * 0.5);
+  col += g * uGrain * 0.07 * (1.0 - lum * 0.6);
 
   col = mix(col, 1.0 - col, uNeg);
   col *= uFade;

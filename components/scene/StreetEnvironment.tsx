@@ -14,6 +14,7 @@ import { Props } from './street/Props'
 import { Decals } from './street/Decals'
 import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
+import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
@@ -46,6 +47,7 @@ export function StreetEnvironment() {
       <Windows />
       <StreetLevel skip={SKIP} />
       <GroundGate />
+      <ContactShadows />
       <FireEscapes />
       <Props />
       <Lamps />

@@ -172,11 +172,12 @@ export function buildParamTimeline() {
   }
   // street → ALTERCO: reality slowly picks up the album's visual language
   track('contam', [[0, 0], [0.18, 0.02], [0.34, 0.1], [0.5, 0.22], [0.62, 0.55, 'power2.in'], [0.71, 1], [0.78, 0.32, 'power2.out'], [0.9, 0.06], [1, 0.1]])
-  track('rgb', [[0, 0], [0.12, 0.0006], [0.2, 0.0016], [0.34, 0.0022], [0.55, 0.0038], [0.64, 0.008, 'power2.in'], [0.7, 0.02], [0.78, 0.007, 'power2.out'], [0.9, 0.0018], [1, 0.0014]])
+  // narrative chromatic aberration: nothing at the start, hints in the street, remembered-then-broken near ALTERCO, strong in the collapse, calmer after
+  track('rgb', [[0, 0], [0.16, 0], [0.3, 0.0005], [0.46, 0.001], [0.58, 0.0022], [0.64, 0.006, 'power2.in'], [0.7, 0.02], [0.78, 0.004, 'power2.out'], [0.9, 0.0007], [1, 0.0006]])
   // wet pavement expands → camera passes through the reflective surface → emerges on the roof
   track('liquid', [[0, 0], [0.625, 0], [0.72, 1, 'power2.in'], [0.795, 0, 'power3.out'], [1, 0]])
-  track('grain', [[0, 0.5], [0.6, 0.55], [1, 0.7]])
-  track('vignette', [[0, 0.62], [0.35, 0.55], [0.72, 0.6], [0.8, 0.42], [1, 0.45]])
+  track('grain', [[0, 0.38], [0.6, 0.42], [1, 0.5]])
+  track('vignette', [[0, 0.46], [0.35, 0.42], [0.72, 0.46], [0.8, 0.34], [1, 0.36]])
   track('exposure', [[0, 0.9], [0.1, 1], [0.6, 1.02], [0.72, 1.1], [0.8, 1], [1, 1.05]])
   track('blur', [[0, 0], [1, 0]])
   // the instant the camera breaks the surface of the pool

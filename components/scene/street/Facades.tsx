@@ -136,7 +136,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       for (let z = PLAZA.z0 - 2; z > PLAZA.z1 + 1; z -= 3.4) for (let k = 0; k < 5; k++) {
         const y = 4.6 + k * 3.4
         if (r() < 0.1) continue
-        all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.55 + r() * 0.75 })
+        all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
       }
     }
     return all
@@ -179,7 +179,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
         m4.compose(p, q, s)
         im.setMatrixAt(i, m4)
         const t = d.tone ?? 1
-        im.setColorAt(i, tmpC.setRGB(t, t * (0.94 + 0.1 * Math.sin(i * 12.9)), t * (0.9 + 0.12 * Math.sin(i * 7.3))))
+        im.setColorAt(i, tmpC.setRGB(t * (0.92 + 0.16 * Math.sin(i * 3.1)), t * (0.86 + 0.18 * Math.sin(i * 12.9)), t * (0.74 + 0.3 * Math.sin(i * 7.3))))
         s.set(1, 1, 1)
         // sill + lintel (shared across variants)
         p.set(d.x + inward * 0.14, d.y - 0.86, d.z)

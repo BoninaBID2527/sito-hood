@@ -89,7 +89,7 @@ export function windowsFor(seg: Seg, seed: number, skipZ: number[] = []): WinIns
       let variant = pickWindow(r)
       if (colMood > 0.78 && r() < 0.5) variant = r() < 0.6 ? 'warm' : 'warm2'
       if (colMood < 0.2 && (variant === 'warm' || variant === 'warm2')) variant = 'blind'
-      out.push({ side: seg.side, x: seg.side * seg.hw, y, z: z + (r() - 0.5) * 0.5, variant, w: 0.88 + r() * 0.3, h: 0.92 + r() * 0.34, tone: 0.55 + r() * 0.75 })
+      out.push({ side: seg.side, x: seg.side * seg.hw, y, z: z + (r() - 0.5) * 0.5, variant, w: 0.88 + r() * 0.3, h: 0.92 + r() * 0.34, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
     }
   }
   return out
