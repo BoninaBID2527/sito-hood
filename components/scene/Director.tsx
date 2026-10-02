@@ -133,6 +133,9 @@ export function Director() {
       cam.rotateZ(Math.sin(rt.time * 0.42) * 0.0012 * breathe)
     }
 
+    // below the pool surface the alley is rendered as its own reflection
+    rt.mirror = rt.world === 'alley' && cam.position.y < 0.02 && p > 0.6 ? 1 : 0
+
     // velocity kick: stretch fov a little when moving fast
     fov += clamp(Math.abs(rt.velocity) * 55, 0, 3.2) * S
     if (Math.abs(fov - lastFov.current) > 0.01) {

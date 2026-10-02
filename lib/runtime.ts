@@ -36,6 +36,7 @@ export const rt = {
   fx: {
     rgb: 0, // chromatic aberration
     liquid: 0, // water pass-through
+    cross: 0, // 0..1 pulse while the camera breaks the water surface
     tunnel: 0, // dualismo tunnel
     contam: 0, // ALTERCO contamination of the physical world
     fade: 1, // 1 = fully visible, 0 = black
@@ -63,6 +64,8 @@ export const rt = {
   night: 0,
   /** orbit state (see TrackOrbit) */
   orbit: { angle: 0, front: 0, vel: 0, drag: 0, hover: -1, resetDrag: false, err: 0 },
+  /** 1 while the camera is below the water surface: the alley is rendered as its own reflection (mirrored in y) */
+  mirror: 0,
   /** the alley/roof/dualism world currently being rendered */
   world: 'alley' as 'alley' | 'roof' | 'dualism',
   /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */

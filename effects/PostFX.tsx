@@ -42,6 +42,7 @@ export function PostFX() {
         uTime: { value: 0 },
         uRgb: { value: 0 },
         uLiquid: { value: 0 },
+        uCross: { value: 0 },
         uTunnel: { value: 0 },
         uContam: { value: 0 },
         uFade: { value: 0 },
@@ -95,6 +96,7 @@ export function PostFX() {
     u.uRgb.value = (f.rgb + rt.impulse.rgb) * (rt.reducedMotion ? 0.3 : 1)
     const red = rt.reducedMotion
     u.uLiquid.value = red ? 0 : f.liquid
+    u.uCross.value = red ? 0 : f.cross
     u.uTunnel.value = red ? 0 : f.tunnel
     u.uContam.value = f.contam
     u.uFade.value = f.fade * (red ? 1 - Math.max(f.tunnel, Math.max(0, (f.liquid - 0.55) / 0.45)) : 1)

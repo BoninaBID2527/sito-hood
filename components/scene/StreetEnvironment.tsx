@@ -1,5 +1,7 @@
 'use client'
 
+import { useRef } from 'react'
+import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { streetU } from './street/materials'
 import { palette } from '@/lib/timeOfDay'
@@ -23,7 +25,9 @@ const SKIP = [
 ]
 
 export function StreetEnvironment() {
+  const root = useRef<THREE.Group>(null)
   useFrame(() => {
+    if (root.current) root.current.scale.y = rt.mirror ? -1 : 1
     streetU.uTime.value = rt.time
     streetU.uContam.value = rt.fx.contam
     // standing water gathers along the journey: ordinary wet street → puddles that keep growing → the pool
@@ -35,11 +39,11 @@ export function StreetEnvironment() {
     streetU.uSunCol.value.copy(palette.sun)
   }, -1)
   return (
-    <group>
+    <group ref={root}>
       <Walls />
       <Windows />
       <StreetLevel skip={SKIP} />
-      <Ground />
+      <GroundGate />
       <FireEscapes />
       <Props />
       <Lamps />
@@ -54,4 +58,11 @@ export function StreetEnvironment() {
       <TrackOrbit />
     </group>
   )
+}
+
+/** The ground (and its water layer) vanishes once we are inside the reflection. */
+function GroundGate() {
+  const g = useRef<THREE.Group>(null)
+  useFrame(() => { if (g.current) g.current.visible = !rt.mirror }, -1)
+  return <group ref={g}><Ground /></group>
 }

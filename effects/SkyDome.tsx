@@ -19,7 +19,7 @@ const frag = /* glsl */ `
 precision highp float;
 varying vec3 vDir;
 uniform vec3 uTop, uMid, uHor, uSun;
-uniform float uStars, uGlow, uTime, uContam;
+uniform float uStars, uGlow, uTime, uContam, uMirror;
 uniform vec3 uSunDir;
 float hash(vec3 p){ p = fract(p*0.3183099+.1); p*=17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
 float hash2(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p,p+45.32); return fract(p.x*p.y); }
@@ -27,7 +27,7 @@ float vn(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h
 float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<4;i++){ s+=a*vn(p); p=p*2.02+7.1; a*=.5; } return s; }
 void main() {
   vec3 d = normalize(vDir);
-  float h = d.y;
+  float h = d.y * (1.0 - 2.0 * uMirror);
   float t = smoothstep(-0.05, 0.75, h);
   vec3 col = mix(uHor, uMid, smoothstep(0.0, 0.28, h));
   col = mix(col, uTop, smoothstep(0.2, 0.9, h));
@@ -67,7 +67,7 @@ export function SkyDome() {
         uniforms: {
           uTop: { value: new THREE.Color() }, uMid: { value: new THREE.Color() }, uHor: { value: new THREE.Color() },
           uSun: { value: new THREE.Color() }, uStars: { value: 0 }, uGlow: { value: 1 }, uTime: { value: 0 },
-          uContam: { value: 0 }, uSunDir: { value: new THREE.Vector3(0.18, 0.06, -1).normalize() },
+          uContam: { value: 0 }, uMirror: { value: 0 }, uSunDir: { value: new THREE.Vector3(0.18, 0.06, -1).normalize() },
         },
       }),
     [],
@@ -91,6 +91,7 @@ export function SkyDome() {
     }
     u.uTime.value = rt.time
     u.uContam.value = rt.fx.contam
+    u.uMirror.value = rt.mirror
     if (mesh.current) mesh.current.position.copy(camera.position)
   }, -1)
   return (

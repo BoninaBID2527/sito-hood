@@ -22,6 +22,7 @@ uniform float uAspect;
 uniform float uTime;
 uniform float uRgb;
 uniform float uLiquid;
+uniform float uCross;
 uniform float uTunnel;
 uniform float uContam;
 uniform float uFade;
@@ -98,20 +99,25 @@ void main() {
     uv.y += sin(uv.x * 14.0 + uTime * 0.8) * 0.0009 * k;
   }
 
-  // liquid pass-through
+  // liquid pass-through: we look THROUGH a refractive surface (water normals, radial lens, shock ring at the break)
+  float ringAmt = 0.0;
   if (L > 0.001) {
     vec2 q = vec2(uv.x * uAspect, uv.y);
     float t = uTime * 0.3;
     vec2 w = vec2(fbm(q * 2.6 + t), fbm(q * 2.6 + vec2(5.2, 1.3) - t));
-    vec2 pc = vec2(0.5, 0.32);
+    vec2 pc = vec2(0.5, 0.42);
     vec2 d = (uv - pc) * vec2(uAspect, 1.0);
     float rr = length(d);
-    float rip = sin(rr * 34.0 - uTime * 5.5) * smoothstep(1.3, 0.0, rr);
-    uv += (w - 0.5) * 0.2 * L * L + normalize(d + 1e-4) * rip * 0.022 * L;
+    float rip = sin(rr * 38.0 - uTime * 5.5) * smoothstep(1.3, 0.0, rr);
+    float lens = (1.0 - smoothstep(0.0, 1.1, rr)) * L * 0.2;
+    uv += (w - 0.5) * 0.15 * L * L + normalize(d + 1e-4) * rip * 0.02 * L - (uv - pc) * lens;
+    float ringR = (1.0 - uCross) * 1.5;
+    ringAmt = exp(-pow((rr - ringR) * 7.0, 2.0)) * uCross;
+    uv += normalize(d + 1e-4) * ringAmt * 0.06;
   }
 
   // chromatic aberration — radial, grows toward the edges
-  float amt = uRgb * (0.35 + r * 1.6) + L * 0.018 + T * 0.03;
+  float amt = uRgb * (0.35 + r * 1.6) + L * 0.012 + ringAmt * 0.032 + T * 0.03;
   vec2 dir = normalize(c + 1e-5) * amt;
   dir.x /= uAspect;
 
@@ -134,20 +140,21 @@ void main() {
     col = scene(uv, dir);
   }
 
-  // liquid abstract: the ALTERCO artwork becomes the water we pass through
-  if (L > 0.45) {
-    float m = smoothstep(0.45, 0.96, L);
-    vec2 q = vec2(uv.x * uAspect, uv.y) * 0.9;
-    float t = uTime * 0.18;
-    vec2 w = vec2(fbm(q * 2.0 + t) - 0.5, fbm(q * 2.0 + 7.3 - t) - 0.5);
-    vec2 au = 0.5 + (uv - 0.5) * vec2(min(1.0, uAspect * 0.9), 1.0) * (1.0 - 0.15 * L) + w * 0.18 * L;
-    float split = 0.012 * L;
-    vec3 art = vec3(
-      texture2D(tArt, au + vec2(split, 0.0)).r,
-      texture2D(tArt, au).g,
-      texture2D(tArt, au - vec2(split, 0.0)).b
-    );
-    col = mix(col, art * 1.15 + col * 0.12, m * 0.96);
+  // water body: colour absorption, caustics, and the album bleeding into the water as a faint spectral ghost
+  if (L > 0.25) {
+    float k = smoothstep(0.25, 1.0, L);
+    vec2 q = vec2(uv.x * uAspect, uv.y);
+    float t = uTime * 0.25;
+    float cau = pow(max(0.0, 1.0 - abs(fbm(q * 5.0 + t * 2.0) - fbm(q * 5.0 - t * 1.5 + 3.0)) * 6.0), 3.0);
+    col = mix(col, col * vec3(0.68, 0.9, 1.12) + vec3(0.0, 0.015, 0.03), k * 0.6);
+    col += vec3(0.25, 0.5, 0.7) * cau * 0.2 * k * (0.35 + 0.65 * (1.0 - smoothstep(0.0, 0.9, r)));
+    vec2 w2 = vec2(fbm(q * 2.0 + t) - 0.5, fbm(q * 2.0 + 7.3 - t) - 0.5);
+    vec2 au = 0.5 + (uv - 0.5) * vec2(min(1.0, uAspect * 0.9), 1.0) * 0.9 + w2 * 0.14 * L;
+    float split = 0.014 * L;
+    vec3 art = vec3(texture2D(tArt, au + vec2(split, 0.0)).r, texture2D(tArt, au).g, texture2D(tArt, au - vec2(split, 0.0)).b);
+    float m = smoothstep(0.7, 1.0, L) * (0.14 + 0.2 * smoothstep(0.0, 0.7, r));
+    col = mix(col, col + art * 0.5, m);
+    col += ringAmt * vec3(0.55, 0.8, 1.0) * 0.2;
   }
 
   // bloom — only genuinely emissive (HDR) pixels

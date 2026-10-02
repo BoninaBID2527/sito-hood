@@ -63,8 +63,12 @@ export const ALLEY_KEYS: Key[] = [
   { p: 0.41, pos: [0.0, 2.75, -88.6], look: [0, 2.55, -102], fov: 50 },
   { p: 0.58, pos: [0.0, 2.75, -89.0], look: [0, 2.55, -102], fov: 50 },
   { p: 0.645, pos: [0.0, 2.35, -86.6], look: [0, 2.5, -102], fov: 48 },
-  { p: 0.69, pos: [0.0, 1.0, -90.2], look: [0, 0.1, -95.8], fov: 56 },
-  { p: 0.72, pos: [0.0, 0.14, -94.2], look: [0, -2.4, -95.2], fov: 70 },
+  // lean over the pool: the reflection fills the frame …
+  { p: 0.672, pos: [0.0, 1.55, -89.4], look: [0, 0.3, -95.8], fov: 54, roll: 0.01 },
+  // … break the surface …
+  { p: 0.698, pos: [0.0, 0.34, -93.4], look: [0, -1.0, -96.6], fov: 62, roll: -0.03 },
+  // … and keep falling through the reflected alley (the world is now mirrored in y)
+  { p: 0.72, pos: [0.0, -3.4, -95.4], look: [0, -8.0, -97.5], fov: 74, roll: 0.06 },
 ]
 export const ROOF_KEYS: Key[] = [
   { p: 0.72, pos: [R, 0.3, 9], look: [R, 7, -18], fov: 72 },
@@ -154,6 +158,7 @@ export const scrub = {
   exposure: 1,
   ripple: 0,
   blur: 0,
+  cross: 0,
 }
 
 export function buildParamTimeline() {
@@ -174,6 +179,8 @@ export function buildParamTimeline() {
   track('vignette', [[0, 0.62], [0.35, 0.55], [0.72, 0.6], [0.8, 0.42], [1, 0.45]])
   track('exposure', [[0, 0.9], [0.1, 1], [0.6, 1.02], [0.72, 1.1], [0.8, 1], [1, 1.05]])
   track('blur', [[0, 0], [1, 0]])
+  // the instant the camera breaks the surface of the pool
+  track('cross', [[0, 0], [0.682, 0], [0.7, 1, 'power2.out'], [0.73, 0, 'sine.out'], [1, 0]])
   tl.set({}, {}, 1)
   return tl
 }
@@ -187,6 +194,7 @@ export function applyScrub(tl: gsap.core.Timeline, p: number) {
   f.grain = scrub.grain
   f.vignette = scrub.vignette
   f.exposure = scrub.exposure
+  f.cross = scrub.cross
 }
 
 /** Which track slot index is at the front for a given progress inside the orbit zone. */
