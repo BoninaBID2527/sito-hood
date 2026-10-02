@@ -137,7 +137,7 @@ function PuddleLayer() {
   const group = useRef<THREE.Group>(null)
   const uni = useRef<Record<string, THREE.IUniform> | null>(null)
   const rip = useRef({ x: 0, z: 0, s: 0 })
-  const lastEgg = useRef(0)
+  const lastEgg = useRef(-100)
 
   const { obj, mat } = useMemo(() => {
     const geo = new THREE.PlaneGeometry(28, 142)
@@ -236,6 +236,7 @@ function PuddleLayer() {
             rt.fx.rippleY = e.pointer ? e.pointer.y * 0.5 + 0.5 : 0.5
             rt.impulse.rgb = 0.025
             useStore.getState().say('THE WATER REMEMBERS', 'It looked back at you.')
+            useStore.getState().markEgg('puddle')
           }
         }}
       />

@@ -12,25 +12,28 @@ const browser = await chromium.launch({
 })
 const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, hasTouch: touch, isMobile: touch })
 const page = await ctx.newPage()
+await page.addInitScript(() => { window.__ac = 0; const AC = window.AudioContext; if (AC) window.AudioContext = class extends AC { constructor(...a) { super(...a); window.__ac++ } } })
 const errors = []
 page.on('console', (m) => { if (m.type() === 'error' || (m.type() === 'warning' && !/THREE\.Clock|metadataBase/.test(m.text()))) errors.push(`[${m.type()}] ${m.text()}`) })
 page.on('pageerror', (e) => errors.push('[pageerror] ' + e.message))
 
 let pass = 0, fail = 0
 const check = (name, ok, extra = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${name} ${extra}`) }
-const settle = (t = 90000) => page.waitForFunction(() => { const r = window.__hd?.rt; return r && Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 && Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.1 }, null, { timeout: t }).catch(() => console.log('  (settle timeout)'))
+const settle = (t = 90000) => page.waitForFunction(() => { const r = window.__hd?.rt; return r && Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 && (r.world !== 'alley' || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.1)) }, null, { timeout: t }).catch(() => console.log('  (settle timeout)'))
 const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); await settle() }
 const st = (fn) => page.evaluate(fn)
 
-await page.goto('http://localhost:3000/?quality=low', { waitUntil: 'load' })
+await page.goto('http://localhost:3000/?debug=1&quality=low', { waitUntil: 'load' })
 await page.waitForSelector('button:has-text("ENTER ALTERCO")', { timeout: 120000 })
 check('loader reaches 100% and shows ENTER', true)
 const webgl = await page.evaluate(() => !!document.querySelector('canvas'))
 check('WebGL canvas mounted', webgl)
+check('no AudioContext exists before the user clicks ENTER', (await st(() => window.__ac)) === 0)
 await page.click('button:has-text("ENTER ALTERCO")')
 await page.waitForTimeout(6000)
+check('audio engine starts only after the explicit ENTER click', (await st(() => window.__ac)) === 1)
 check('phase = entered', await st(() => window.__hd.store.getState().phase === 'entered'))
-check('audio does not autoplay before click (sound flag only set by ENTER)', true)
+
 
 // ── pointer parallax moves the camera
 const cam0 = await st(() => window.__camera.position.x)
@@ -79,6 +82,21 @@ if (hit) {
   check('Escape closes focus', (await st(() => window.__hd.store.getState().selected)) === null)
 }
 
+// ── touch / pointer drag rotates the orbit (swipe)
+const d0 = await st(() => window.__hd.rt.orbit.drag)
+await st(() => {
+  const c = document.querySelector('canvas')
+  const mk = (t, x) => new PointerEvent(t, { pointerId: 7, pointerType: 'touch', clientX: x, clientY: 400, bubbles: true, isPrimary: true })
+  c.dispatchEvent(mk('pointerdown', 300))
+  for (let i = 1; i <= 8; i++) window.dispatchEvent(mk('pointermove', 300 + i * 40))
+  window.dispatchEvent(mk('pointerup', 620))
+})
+await page.waitForTimeout(2500)
+const d1 = await st(() => window.__hd.rt.orbit.drag)
+check('horizontal swipe/drag adds orbit momentum', Math.abs(d1 - d0) > 0.3, `Δdrag=${(d1 - d0).toFixed(2)}`)
+const stats = await st(() => { const i = window.__gl.info.render; return { calls: i.calls, tris: i.triangles } })
+console.log('orbit-zone frame stats (last pass)', stats)
+
 // ── lamp egg (act hook) + letters
 await st(() => window.__hd.store.getState().set({ lamp: false }))
 await page.waitForTimeout(500)
@@ -106,6 +124,17 @@ await page.screenshot({ path: `${out}/dualismo.png` })
 await st(() => window.__hd.act('exitDualism'))
 await page.waitForFunction(() => window.__hd.store.getState().mode === 'alterco' && window.__hd.rt.fx.tunnel < 0.05, null, { timeout: 120000 }).catch(() => {})
 check('return to ALTERCO works', (await st(() => window.__hd.store.getState().mode)) === 'alterco')
+
+// ── leak check: re-enter / leave the secret world a few times — GPU memory must not grow
+const m0 = await st(() => ({ g: window.__gl.info.memory.geometries, t: window.__gl.info.memory.textures }))
+for (let i = 0; i < 2; i++) {
+  await st(() => window.__hd.act('enterDualism'))
+  await page.waitForFunction(() => window.__hd.rt.world === 'dualism' && window.__hd.rt.dual.t > 0.9, null, { timeout: 120000 }).catch(() => {})
+  await st(() => window.__hd.act('exitDualism'))
+  await page.waitForFunction(() => window.__hd.store.getState().mode === 'alterco' && window.__hd.rt.fx.tunnel < 0.05, null, { timeout: 120000 }).catch(() => {})
+}
+const m1 = await st(() => ({ g: window.__gl.info.memory.geometries, t: window.__gl.info.memory.textures }))
+check('no GPU geometry/texture growth across world switches', m1.g <= m0.g + 2 && m1.t <= m0.t + 2, `${JSON.stringify(m0)} → ${JSON.stringify(m1)}`)
 
 // ── resize doesn't break
 await page.setViewportSize({ width: 800, height: 900 })

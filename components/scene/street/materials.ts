@@ -64,8 +64,9 @@ export function patchSway(m: THREE.Material, amp = 0.05) {
         '#include <begin_vertex>',
         `#include <begin_vertex>
   float sw_ = sin(uv.x * 3.14159);
-  transformed.y += sin(uTimeS * 1.3 + modelMatrix[3].z * 0.7) * ${amp.toFixed(3)} * sw_;
-  transformed.x += sin(uTimeS * 0.9 + modelMatrix[3].z) * ${(amp * 0.6).toFixed(3)} * sw_;`,
+  float ph_ = (modelMatrix * vec4(position, 1.0)).z;
+  transformed.y += sin(uTimeS * 1.3 + ph_ * 0.9) * ${amp.toFixed(3)} * sw_;
+  transformed.x += sin(uTimeS * 0.9 + ph_ * 0.6) * ${(amp * 0.6).toFixed(3)} * sw_;`,
       )
   }
   m.customProgramCacheKey = () => 'sway'

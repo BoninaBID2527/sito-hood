@@ -8,7 +8,7 @@ import { GeoBuilder, tileUV, worldUV } from '@/lib/geo'
 import { rng } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { palette } from '@/lib/timeOfDay'
-import { WORLD, CP } from '@/lib/timeline'
+import { WORLD } from '@/lib/timeline'
 import { useStore } from '@/lib/store'
 import { enterDualism } from '@/lib/actions'
 import { streetMat } from './street/materials'
@@ -364,9 +364,8 @@ export function RooftopWorld() {
     <group>
       <RooftopEnvironment />
       <Backdrop origin={[R, 0, 0]} z={[-250, -340, -440]} blocks={false} />
-      <AltercoArtwork mode="final" position={[R + 5.2, 5.2, -42]} size={7.2} />
+      <AltercoArtwork mode="final" position={[R + 11.5, 5.4, -42]} size={8.2} />
     </group>
   )
 }
 
-export { CP }

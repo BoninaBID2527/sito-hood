@@ -16,7 +16,7 @@ const page = await ctx.newPage()
 const errors = []
 page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(`[${m.type()}] ${m.text()}`) })
 page.on('pageerror', (e) => errors.push('[pageerror] ' + e.message))
-await page.goto(`http://localhost:3000/?quality=${quality}${extra}`, { waitUntil: 'load' })
+await page.goto(`http://localhost:3000/?debug=1&quality=${quality}${extra}`, { waitUntil: 'load' })
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 120000 })
 await page.screenshot({ path: `${out}/00-loader-ready.png` })
 await page.click('button:has-text("ENTER")')
@@ -33,7 +33,7 @@ if (process.env.ACTION) {
 }
 for (const p of (plist === 'none' ? [] : plist.split(','))) {
   await page.evaluate((p) => window.__hd?.jump(Number(p)), p)
-  await page.waitForFunction(() => { const r = window.__hd?.rt; return r && Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 && Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.1 }, null, { timeout: 90000 }).catch(() => console.log('settle timeout'))
+  await page.waitForFunction(() => { const r = window.__hd?.rt; return r && Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 && (r.world !== 'alley' || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.1)) }, null, { timeout: 90000 }).catch(() => console.log('settle timeout'))
   await page.waitForTimeout(Number(wait))
   const name = `${out}/${String(i++).padStart(2, '0')}-p${p}.png`
   await page.screenshot({ path: name })

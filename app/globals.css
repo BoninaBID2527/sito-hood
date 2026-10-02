@@ -202,14 +202,14 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .final { position: absolute; inset: 0; }
 .final-block { position: absolute; left: var(--gutter); bottom: calc(var(--gutter) * 2.4 + var(--safe-b)); }
 .final-kicker { color: var(--dim); display: block; margin-bottom: 8px; }
-.final-title { font-size: clamp(70px, 17vw, 300px); line-height: 0.84; text-shadow: 0 6px 50px rgba(0, 0, 0, 0.6); }
+.final-title { font-size: clamp(64px, 12.5vw, 230px); line-height: 0.84; text-shadow: 0 6px 50px rgba(0, 0, 0, 0.6); }
 .final-listen { margin-top: 26px; display: grid; gap: 14px; }
 .final-now { color: var(--amber); }
 .final-links { display: flex; flex-wrap: wrap; gap: 10px; }
 .final-meta { color: var(--dim); }
-.final-foot { position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(var(--gutter) * 0.6 + var(--safe-b)); display: flex; justify-content: space-between; align-items: center; padding-left: 0; }
+.final-foot { position: absolute; left: 0; right: 0; bottom: calc(var(--gutter) * 0.6 + var(--safe-b)); display: flex; justify-content: center; align-items: center; gap: 44px; }
 .replay { color: var(--dim); padding: 8px 0; } .replay:hover { color: var(--paper); }
-.whisper-hint { display: inline-flex; align-items: center; gap: 10px; color: var(--paper); margin-right: 130px; }
+.whisper-hint { display: inline-flex; align-items: center; gap: 10px; color: var(--paper); }
 .glyph { width: 10px; height: 14px; display: inline-block; background: conic-gradient(from 0deg, var(--cyan), var(--violet), var(--amber), var(--cyan)); clip-path: polygon(0 0, 100% 0, 50% 50%, 100% 100%, 0 100%, 50% 50%); animation: glyph 3s linear infinite; }
 @keyframes glyph { to { filter: hue-rotate(360deg); } }
 
@@ -269,8 +269,7 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
   .focus-cta { margin-top: 18px; }
   .final-title { font-size: clamp(56px, 22vw, 130px); }
   .final-block { bottom: calc(var(--gutter) * 3.6 + var(--safe-b)); }
-  .final-foot { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .whisper-hint { margin-right: 0; }
+  .final-foot { flex-direction: column; gap: 2px; bottom: calc(var(--gutter) * 2.4 + var(--safe-b)); left: auto; right: var(--gutter); align-items: flex-end; }
   .hud-bottom .scene-index em { display: none; }
   .dual-tracks { top: 36%; }
   .dual-detail { top: calc(36% + 110px); }
@@ -284,3 +283,13 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 @media (prefers-reduced-motion: reduce) {
   .eq.on b, .hint-line, .glyph { animation: none; }
 }
+
+/* ═══════════════════ no-WebGL fallback ═══════════════════ */
+.fallback { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6vw; align-items: center; padding: var(--gutter); max-width: 1200px; margin: 0 auto; }
+.fallback img { width: 100%; height: auto; display: block; }
+.fallback h1 { font-size: clamp(64px, 12vw, 180px); margin: 8px 0 24px; }
+.fallback ol { list-style: none; display: grid; gap: 8px; margin-bottom: 24px; font-size: 18px; }
+.fallback ol i { font-style: normal; color: var(--amber); margin-right: 10px; }
+.fallback .dim { color: var(--dim); margin-top: 14px; }
+.fb-links { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+@media (max-width: 760px) { .fallback { grid-template-columns: 1fr; } }

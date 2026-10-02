@@ -6,7 +6,7 @@ import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
 import { rng } from '@/lib/math'
 import { streetMat } from './materials'
-import { SEGS, segAt, wallX } from './layout'
+import { SEGS, wallX } from './layout'
 
 /** Pipes, ACs, dumpsters, bins, crates, bike, hydrant, bollards — merged per material (a handful of draw calls). */
 export function Props() {
@@ -100,9 +100,9 @@ export function Props() {
     }
     plazaDump(-10.2, -80, 0.1, green)
     plazaDump(-10.4, -83, -0.15, blue)
-    plazaDump(10.1, -96, 0.2, green)
-    plazaDump(10.3, -99, 0, blue)
-    for (let i = 0; i < 3; i++) galv.cyl(0.3, 0.27, 0.8, 9.6 + i * 0.1, 0.5, -90 - i * 0.7, 14)
+    plazaDump(10.1, -97.5, 0.2, green)
+    plazaDump(10.5, -100.4, -0.1, blue)
+    for (let i = 0; i < 3; i++) galv.cyl(0.3, 0.27, 0.8, 10.4 + i * 0.1, 0.5, -91 - i * 0.7, 14)
 
     // ── bicycle leaning on the right wall
     {
@@ -165,4 +165,3 @@ export function Props() {
   )
 }
 
-export { segAt }

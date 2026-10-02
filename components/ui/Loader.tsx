@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { AnimatePresence, animate, motion, useMotionValue, useMotionValueEvent, useSpring } from 'motion/react'
+import { AnimatePresence, motion, useMotionValue, useMotionValueEvent, useSpring } from 'motion/react'
 import { useStore } from '@/lib/store'
 import { enterExperience } from '@/lib/actions'
 import { rng } from '@/lib/math'
@@ -119,4 +119,3 @@ export function Loader() {
   )
 }
 
-export { animate }

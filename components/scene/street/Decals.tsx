@@ -85,24 +85,37 @@ export function Decals() {
     return d
   }, [])
 
-  useEffect(() => () => { mats.dispose(); geo.dispose() }, [mats, geo])
+  // one InstancedMesh per (texture, layer) → ~15 draw calls instead of ~70
+  const batches = useMemo(() => {
+    const groups = new Map<string, DecalDef[]>()
+    for (const d of defs) {
+      const k = `${d.tex.uuid}|${d.order ?? 0}`
+      if (!groups.has(k)) groups.set(k, [])
+      groups.get(k)!.push(d)
+    }
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), sc = new THREE.Vector3(), eu = new THREE.Euler()
+    return [...groups.values()].map((list) => {
+      const im = new THREE.InstancedMesh(geo, mats.get(list[0].tex), list.length)
+      list.forEach((d, i) => {
+        p.set(wallX(d.side, d.z) - d.side * (d.off ?? OFF), d.y, d.z)
+        q.setFromEuler(eu.set(0, rotFor(d.side), d.rot ?? 0))
+        sc.set(d.w, d.h, 1)
+        im.setMatrixAt(i, m4.compose(p, q, sc))
+      })
+      im.instanceMatrix.needsUpdate = true
+      im.frustumCulled = false
+      im.renderOrder = list[0].order ?? 0
+      return im
+    })
+  }, [defs, geo, mats])
+
+  useEffect(() => () => { mats.dispose(); geo.dispose(); batches.forEach((b) => b.dispose()) }, [mats, geo, batches])
 
   return (
     <group>
-      {defs.map((d, i) => {
-        const x = wallX(d.side, d.z) - d.side * (d.off ?? OFF)
-        return (
-          <mesh
-            key={i}
-            geometry={geo}
-            material={mats.get(d.tex)}
-            position={[x, d.y, d.z]}
-            rotation={[0, rotFor(d.side), d.rot ?? 0]}
-            scale={[d.w, d.h, 1]}
-            renderOrder={d.order ?? 0}
-          />
-        )
-      })}
+      {batches.map((b, i) => (
+        <primitive key={i} object={b} />
+      ))}
       <Signs />
       <WorldTitles />
       <EasterEggs />
@@ -253,18 +266,20 @@ function EasterEggs() {
   return (
     <group>
       {LETTER_SPOTS.map((l, i) => (
-        <mesh
-          key={i}
-          geometry={geo}
-          material={letterMats[i]}
-          position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]}
-          rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}
-          scale={[l.s, l.s, 1]}
-          renderOrder={4}
-          onPointerOver={(e) => { e.stopPropagation(); hov.current.letter = i; if (!rt.touch) foundLetter(i); set('link', 'TAG') }}
-          onPointerOut={() => { hov.current.letter = -1; set('default') }}
-          onClick={(e) => { e.stopPropagation(); foundLetter(i) }}
-        />
+        <group key={i} position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
+          <mesh geometry={geo} material={letterMats[i]} scale={[l.s, l.s, 1]} renderOrder={4} />
+          {/* generous invisible hit area — the glyphs are small and far away */}
+          <mesh
+            geometry={geo}
+            scale={[l.s * 2.4, l.s * 2.4, 1]}
+            position={[0, 0, 0.02]}
+            onPointerOver={(e) => { e.stopPropagation(); hov.current.letter = i; if (!rt.touch) foundLetter(i); set('link', 'TAG') }}
+            onPointerOut={() => { hov.current.letter = -1; set('default') }}
+            onClick={(e) => { e.stopPropagation(); foundLetter(i) }}
+          >
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+        </group>
       ))}
 
       {/* a number someone stencilled on the fire escape */}
@@ -281,6 +296,7 @@ function EasterEggs() {
           set('link', '05')
           const t = alterco.tracks[4]
           useStore.getState().say(`${pad(t.n)} — ${t.title.toUpperCase()}`, 'Someone stencilled this on the fire escape.')
+          useStore.getState().markEgg('stencil')
         }}
         onPointerOut={() => { hov.current.stencil = false; set('default') }}
       />
@@ -289,7 +305,7 @@ function EasterEggs() {
       <mesh
         geometry={geo}
         material={creditsMat}
-        position={[11.93, 1.75, -93.1]}
+        position={[11.93, 1.75, -102.3]}
         rotation={[0, -Math.PI / 2, 0.02]}
         scale={[1.0, 1.35, 1]}
         renderOrder={4}

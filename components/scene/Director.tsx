@@ -5,7 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { rt } from '@/lib/runtime'
 import { useStore } from '@/lib/store'
-import { applyScrub, buildParamTimeline, CP, sampleCamera, WORLD, type CamSample } from '@/lib/timeline'
+import { applyScrub, buildParamTimeline, sampleCamera, WORLD, type CamSample } from '@/lib/timeline'
 import { evalTimeOfDay } from '@/lib/timeOfDay'
 import { bump, clamp, damp, smoothstep, stepSpring, type Spring } from '@/lib/math'
 
@@ -100,7 +100,7 @@ export function Director() {
       const orbitW = bump(0.33, 0.4, 0.62, 0.69, p)
       if (orbitW > 0.001 && rt.aspect < 1.2) {
         _dir.copy(cam.position).sub(look.current).normalize()
-        cam.position.addScaledVector(_dir, orbitW * Math.max(0, 1 / rt.aspect - 0.78) * 6.0)
+        cam.position.addScaledVector(_dir, orbitW * Math.max(0, 1 / rt.aspect - 0.78) * 2.6)
       }
 
       // transition push (dualism tunnel pulls the camera forward)
@@ -154,4 +154,3 @@ export function WorldGate({ world, children, extra }: { world: 'alley' | 'roof' 
   return <group ref={ref}>{children}</group>
 }
 
-export { CP }

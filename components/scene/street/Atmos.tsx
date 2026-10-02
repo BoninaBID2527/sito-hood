@@ -7,6 +7,7 @@ import { rng } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { palette } from '@/lib/timeOfDay'
 import { patchSway } from './materials'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { wallX } from './layout'
 
 /* ───────────────────────── steam ───────────────────────── */
@@ -200,7 +201,9 @@ export function Cables() {
       }
       geos.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, 0.013, 4, false))
     }
-    return { mat, geos }
+    const merged = mergeGeometries(geos, false)!
+    geos.forEach((g) => g.dispose())
+    return { mat, geos: [merged] }
   }, [])
   useFrame(() => {
     const u = (kit.mat.userData as any).sw as THREE.IUniform | undefined

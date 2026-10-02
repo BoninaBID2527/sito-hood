@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { ScrollRig } from './ScrollRig'
 import { Loader } from './ui/Loader'
+import { Fallback } from './ui/Fallback'
 import { HUD } from './ui/HUD'
 import { WorldTitles } from './ui/WorldTitles'
 import { TrackUI, TrackFocus } from './ui/TrackUI'
@@ -31,6 +32,14 @@ export default function App() {
   useEffect(() => startMotionBridge(), [])
 
   useEffect(() => {
+    // no WebGL → a static, fully readable fallback (the semantic DOM is always present as well)
+    try {
+      const c = document.createElement('canvas')
+      if (!(c.getContext('webgl2') || c.getContext('webgl'))) throw new Error('no webgl')
+    } catch {
+      useStore.getState().set({ phase: 'nogl' })
+      return
+    }
     const q = new URLSearchParams(window.location.search).get('quality') as Tier | null
     const tier = q && SETTINGS[q] ? q : detectTier()
     rt.quality = SETTINGS[tier]
@@ -51,8 +60,9 @@ export default function App() {
     }
   }, [])
 
-  // dev/test hook: instantly jump the journey (bypasses Lenis easing)
+  // dev/test hook (only in dev or with ?debug): instantly jump the journey (bypasses Lenis easing)
   useEffect(() => {
+    if (process.env.NODE_ENV === 'production' && !window.location.search.includes('debug')) return
     ;(window as any).__hd = {
       jump: (p: number) => {
         const y = p * Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
@@ -64,7 +74,9 @@ export default function App() {
     }
   }, [])
 
-  const ready = useStore((s) => s.phase !== 'loading')
+  const ready = useStore((s) => s.phase === 'ready' || s.phase === 'entered')
+  const nogl = useStore((s) => s.phase === 'nogl')
+  if (nogl) return <Fallback />
 
   return (
     <>

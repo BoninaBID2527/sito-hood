@@ -108,10 +108,14 @@ export function PostFX() {
     u.uDim.value = f.focusDim
     u.uRipple.value.set(f.rippleX, f.rippleY, f.ripple)
 
+    gl.info.autoReset = false
+    gl.info.reset()
     gl.setRenderTarget(kit.target)
     gl.clear()
     gl.render(scene, camera)
     gl.setRenderTarget(null)
+    rt.stats.calls = gl.info.render.calls
+    rt.stats.tris = gl.info.render.triangles
     gl.render(kit.sc, kit.cam)
   }, 1)
 

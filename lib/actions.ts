@@ -43,6 +43,7 @@ export function selectTrack(i: number | null) {
   audio.thud()
   const v = useStore.getState().visited
   if (v.length === TRACK_COUNT) {
+    useStore.getState().markEgg('tracks')
     queueMicrotask(() => useStore.getState().say('SEVEN OF SEVEN', 'Something changed on the rooftop.'))
   }
 }
@@ -51,6 +52,7 @@ export function enterDualism() {
   const s = useStore.getState()
   if (s.mode !== 'alterco') return
   s.set({ mode: 'dualism-in', selected: null, dualismoFound: true })
+  s.markEgg('portal')
   try { localStorage.setItem('hd:dualismo', '1') } catch {}
   lockScroll()
   audio.whoosh()
@@ -84,6 +86,7 @@ export function exitDualism() {
 
 export function openCredits() {
   useStore.getState().set({ creditsOpen: true })
+  useStore.getState().markEgg('credits')
   lockScroll()
 }
 export function closeCredits() {
@@ -101,6 +104,7 @@ export function foundLetter(i: number) {
   if (letters.every(Boolean)) {
     rt.impulse.glitch = 1
     s.say('A L T E R C O', 'The walls were spelling it all along.')
+    s.markEgg('letters')
   } else {
     s.say(`${letters.filter(Boolean).length} / 7`, 'Some of these tags are not just tags.')
   }
@@ -115,6 +119,7 @@ export function hoodClick() {
     rt.impulse.glitch = 1
     rt.impulse.rgb = 0.03
     gsap.fromTo(rt.fx, { negative: 1 }, { negative: 0, duration: 0.6, ease: 'steps(5)' })
+    s.markEgg('hood')
     s.say('H O O D D I N O', `${alterco.title} · ${dualismo.title} · ${pad(7)}`)
   }
 }
@@ -128,5 +133,6 @@ export function whisper(text?: string) {
   rt.impulse.glitch = 1
   rt.impulse.rgb = 0.02
   s.set({ whisper: t })
+  s.markEgg('glitch')
   setTimeout(() => useStore.getState().set({ whisper: null }), 620)
 }

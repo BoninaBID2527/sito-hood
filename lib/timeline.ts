@@ -69,8 +69,8 @@ export const ROOF_KEYS: Key[] = [
   { p: 0.76, pos: [R, 1.2, 6], look: [R + 0.6, 4.2, -24], fov: 60 },
   { p: 0.8, pos: [R + 0.2, 1.6, 3], look: [R + 1.4, 3.0, -30], fov: 52 },
   { p: 0.87, pos: [R + 1.8, 1.9, -5], look: [R + 5.5, 3.5, -44], fov: 50 },
-  { p: 0.94, pos: [R + 3.6, 2.1, -13], look: [R + 6.2, 3.7, -58], fov: 50 },
-  { p: 1.0, pos: [R + 4.4, 2.35, -17.5], look: [R + 5.4, 4.2, -62], fov: 50 },
+  { p: 0.94, pos: [R + 3.6, 2.1, -13], look: [R + 3.4, 3.7, -58], fov: 50 },
+  { p: 1.0, pos: [R + 4.4, 2.35, -17.5], look: [R + 1.2, 4.0, -62], fov: 50 },
 ]
 
 /* monotone cubic (Fritsch–Carlson) mapping progress → knot index (so speed is C1) */

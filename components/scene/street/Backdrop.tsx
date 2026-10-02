@@ -27,7 +27,7 @@ export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [
       { p: [-74, 33, -210], s: [40, 66, 30] },
       { p: [78, 30, -216], s: [44, 60, 30] },
     ]
-    const bMat = streetMat({ map: A.brick.dark.map, color: '#8a7b78', roughness: 1, aoBase: 0.7 })
+    const bMat = new THREE.MeshStandardMaterial({ map: A.brick.dark.map, color: '#5c5260', roughness: 1 })
     const bGeos = blocks.map((b) => {
       const g = new THREE.BoxGeometry(...b.s)
       worldUV(g, 2.4, ...b.p)

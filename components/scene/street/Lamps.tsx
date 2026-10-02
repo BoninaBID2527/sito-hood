@@ -151,6 +151,7 @@ export function Lamps() {
                 e.stopPropagation()
                 const s = useStore.getState()
                 s.set({ lamp: !s.lamp })
+                s.markEgg('lamp')
                 rt.impulse.glitch = 0.4
                 if (s.lamp) s.say('LIGHTS OUT', 'Click again.')
               }}

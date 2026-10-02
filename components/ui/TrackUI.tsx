@@ -36,7 +36,7 @@ export function TrackUI() {
                 initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -24, filter: 'blur(10px)' }}
-                transition={{ type: 'spring', stiffness: 140, damping: 20 }}
+                transition={{ type: 'spring', stiffness: 140, damping: 20, filter: { duration: 0.45, ease: 'easeOut' } }}
               >
                 <span className="tu-n label">TRACK {pad(tr.n)} / {pad(alterco.tracks.length)}</span>
                 <span className="tu-title display">{tr.title}</span>

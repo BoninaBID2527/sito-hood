@@ -210,6 +210,8 @@ export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; p
   for (let z = 14; z > -70; z -= r.range(7, 14)) blob(r.sign() * r.range(2.3, 2.7), z, r.range(0.12, 0.3), r.range(1.2, 3), 0.6)
   // plaza: scattered pools + the big one
   for (let i = 0; i < 9; i++) blob(r.range(-9, 9), r.range(-76, -112), r.range(0.5, 1.4), r.range(0.5, 1.3), r.range(0.5, 0.9))
+  // the "wrong" puddle (hovering it distorts reality) — guaranteed to exist
+  blob(0.2, -41, 0.95, 1.9, 1)
   blob(opts.pool.x, opts.pool.z, opts.pool.r, opts.pool.r * 0.9, 1)
   blob(opts.pool.x + 1.3, opts.pool.z + 0.8, opts.pool.r * 0.55, opts.pool.r * 0.5, 0.9)
   // noisy edge so puddles feel organic

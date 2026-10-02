@@ -58,6 +58,7 @@ export function TrackOrbit() {
     focus: new Array(TRACK_COUNT).fill(0),
     selAmt: 0,
     sheen: new THREE.Vector2(0.5, 0.5),
+    snapIdx: 0,
   })
 
   // drag / swipe on the canvas
@@ -121,7 +122,8 @@ export function TrackOrbit() {
     [mats, geo, pool, poolGeo],
   )
 
-  useFrame((_, dt) => {
+  useFrame((_, dtRaw) => {
+    const dt = Math.min(dtRaw, 0.05) // never integrate a long hitch
     const g = root.current
     if (!g) return
     const p = rt.smooth
@@ -136,7 +138,7 @@ export function TrackOrbit() {
       rt.orbit.resetDrag = false
     }
     const aspect = rt.aspect
-    const rs = 0.62 + 0.38 * smoothstep(0.5, 1.4, aspect)
+    const rs = 0.5 + 0.5 * smoothstep(0.5, 1.4, aspect)
 
     // ── angular physics
     const zt = zoneT(p)
@@ -148,7 +150,10 @@ export function TrackOrbit() {
     const total = scrollAngle + ph_.drag
     const idle = Math.min(rt.idle, rt.time - ph_.lastDrag)
     const snapW = ph_.dragging ? 0 : smoothstep(0.1, 0.55, idle) * (1 - smoothstep(0.5, 2.5, Math.abs(ph_.dragVel)))
-    const snapped = Math.round(total / SLOT) * SLOT
+    // hysteresis: only re-pick the nearest slot once we are clearly closer to another one
+    const tIdx = total / SLOT
+    if (Math.abs(tIdx - ph_.snapIdx) > 0.62) ph_.snapIdx = Math.round(tIdx)
+    const snapped = ph_.snapIdx * SLOT
     let target = total + (snapped - total) * snapW
     if (st.selected !== null) {
       // park the ring with the selected card nearest the front (shortest way round)
@@ -158,10 +163,15 @@ export function TrackOrbit() {
     }
     const err = target - ph_.angle
     rt.orbit.err = err
-    ph_.vel += (err * 58 - ph_.vel * 11) * dt
-    ph_.vel = clamp(ph_.vel, -6.5, 6.5) // never uncontrolled spinning
-    ph_.angle += ph_.vel * dt
+    const steps = Math.max(1, Math.ceil(dt / 0.008))
+    for (let k = 0; k < steps; k++) {
+      const h = dt / steps
+      ph_.vel += ((target - ph_.angle) * 58 - ph_.vel * 11) * h
+      ph_.vel = clamp(ph_.vel, -6.5, 6.5) // never uncontrolled spinning
+      ph_.angle += ph_.vel * h
+    }
     rt.orbit.angle = ph_.angle
+    rt.orbit.drag = ph_.drag
     rt.orbit.vel = ph_.vel
 
     const front = ((Math.round(-ph_.angle / SLOT) % TRACK_COUNT) + TRACK_COUNT) % TRACK_COUNT
@@ -186,7 +196,7 @@ export function TrackOrbit() {
     const C = WORLD.plazaCenter
     const Rx = 5.9 * rs * (1 + expand * 0.6)
     const Rz = 4.5 * rs * (1 + expand * 0.6)
-    const cs = (0.62 + 0.38 * rs) // card scale on small screens
+    const cs = aspect < 1 ? 1.2 - 0.2 * smoothstep(0.5, 1, aspect) : 1 // bigger cards on portrait screens
     const hovered = ph_.hover
 
     for (let i = 0; i < TRACK_COUNT; i++) {

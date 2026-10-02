@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rng } from '@/lib/math'
 import { tileUV } from '@/lib/geo'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { streetMat } from './materials'
@@ -84,18 +85,33 @@ export function Walls() {
     return { mats, items }
   }, [])
 
+  // merge every wall piece that shares a material into one geometry (≈50 draw calls → ≈10)
+  const merged = useMemo(() => {
+    const by = new Map<THREE.Material, THREE.BufferGeometry[]>()
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), one = new THREE.Vector3(1, 1, 1)
+    for (const it of items) {
+      const g = it.geo.clone()
+      m.compose(new THREE.Vector3(...it.pos), q.setFromEuler(e.set(...it.rot)), one)
+      g.applyMatrix4(m)
+      if (!by.has(it.mat)) by.set(it.mat, [])
+      by.get(it.mat)!.push(g)
+    }
+    return [...by.entries()].map(([mat, list]) => ({ mat, geo: mergeGeometries(list, false)! }))
+  }, [items])
+
   useEffect(
     () => () => {
       items.forEach((i) => i.geo.dispose())
+      merged.forEach((m) => m.geo.dispose())
       Object.values(mats).forEach((m) => m.dispose())
     },
-    [items, mats],
+    [items, mats, merged],
   )
 
   return (
     <group>
-      {items.map((it, i) => (
-        <mesh key={i} geometry={it.geo} material={it.mat} position={it.pos} rotation={it.rot} />
+      {merged.map((m, i) => (
+        <mesh key={i} geometry={m.geo} material={m.mat} />
       ))}
     </group>
   )

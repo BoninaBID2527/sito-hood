@@ -1,13 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { WorldGate } from './Director'
 import { StreetEnvironment } from './StreetEnvironment'
-import { RooftopWorld } from './RooftopEnvironment'
 import { Dust } from './street/Atmos'
 import { A, loadRoof, loadDualism } from '@/lib/assets'
-import { DualismoWorld } from './DualismoWorld'
 import { useStore } from '@/lib/store'
+
+// Code-split: the rooftop and the secret universe are separate chunks, fetched only after the user has entered.
+const RooftopWorld = dynamic(() => import('./RooftopEnvironment').then((m) => m.RooftopWorld), { ssr: false })
+const DualismoWorld = dynamic(() => import('./DualismoWorld').then((m) => m.DualismoWorld), { ssr: false })
 
 export function World() {
   const phase = useStore((s) => s.phase)

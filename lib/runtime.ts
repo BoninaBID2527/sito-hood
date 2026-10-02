@@ -65,6 +65,8 @@ export const rt = {
   orbit: { angle: 0, front: 0, vel: 0, drag: 0, hover: -1, resetDrag: false, err: 0 },
   /** the alley/roof/dualism world currently being rendered */
   world: 'alley' as 'alley' | 'roof' | 'dualism',
+  /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */
+  stats: { calls: 0, tris: 0 },
   quality: SETTINGS.medium as QualitySettings,
 }
 

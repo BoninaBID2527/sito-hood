@@ -12,6 +12,16 @@ import { useStore } from '@/lib/store'
 import { SETTINGS } from '@/lib/quality'
 import { selectTrack } from '@/lib/actions'
 
+// @react-three/fiber still instantiates the (deprecated) THREE.Clock internally; hide only that one library notice.
+if (typeof window !== 'undefined' && !(window as any).__clockWarnPatched) {
+  ;(window as any).__clockWarnPatched = true
+  const warn = console.warn.bind(console)
+  console.warn = (...a: unknown[]) => {
+    if (typeof a[0] === 'string' && a[0].includes('THREE.Clock')) return
+    warn(...a)
+  }
+}
+
 export default function ExperienceCanvas() {
   const tier = useStore((s) => s.tier)
   const q = SETTINGS[tier]
@@ -30,13 +40,16 @@ export default function ExperienceCanvas() {
       onPointerMissed={() => {
         if (useStore.getState().selected !== null) selectTrack(null)
       }}
-      onCreated={({ gl, camera }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ;(window as any).__camera = camera
+      onCreated={({ gl, camera, scene, raycaster }) => {
         gl.setClearColor('#000000', 1)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ;(window as any).__gl = gl
         rt.quality = q
+        if (process.env.NODE_ENV !== 'production' || window.location.search.includes('debug')) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          Object.assign(window as any, { __gl: gl, __rc: raycaster, __scene: scene, __camera: camera })
+        }
+        // a lost context cannot be resumed mid-journey: recover by reloading
+        gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault())
+        gl.domElement.addEventListener('webglcontextrestored', () => window.location.reload())
       }}
     >
       <Director />

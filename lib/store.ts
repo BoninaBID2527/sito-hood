@@ -12,7 +12,7 @@ interface Toast {
 }
 
 interface State {
-  phase: 'loading' | 'ready' | 'entered'
+  phase: 'loading' | 'ready' | 'entered' | 'nogl'
   loadProgress: number
   sound: boolean
   tier: Tier
@@ -32,11 +32,14 @@ interface State {
   whisper: string | null
   hoodClicks: number
   menu: boolean
+  /** ids of discovered Easter eggs (lamp, puddle, stencil, letters, credits, portal, hood, glitch, tracks) */
+  eggs: string[]
 
   set: (p: Partial<State>) => void
   setCursor: (kind: CursorKind, label?: string) => void
   say: (text: string, sub?: string) => void
   visit: (i: number) => void
+  markEgg: (id: string) => void
 }
 
 let toastId = 0
@@ -61,6 +64,7 @@ export const useStore = create<State>((set, get) => ({
   whisper: null,
   hoodClicks: 0,
   menu: false,
+  eggs: [],
 
   set: (p) => set(p),
   setCursor: (kind, label) => {
@@ -73,6 +77,10 @@ export const useStore = create<State>((set, get) => ({
     setTimeout(() => {
       if (get().toast?.id === id) set({ toast: null })
     }, 4200)
+  },
+  markEgg: (id) => {
+    const e = get().eggs
+    if (!e.includes(id)) set({ eggs: [...e, id] })
   },
   visit: (i) => {
     const v = get().visited
