@@ -52,8 +52,8 @@ export function Atmosphere() {
     // soft bounce light from the opposite wall (no shadows → keeps both walls readable)
     for (const b of [bounceL.current, bounceR.current]) {
       if (!b) continue
-      b.color.copy(palette.horizon).lerp(palette.hemiSky, 0.5)
-      b.intensity = dual ? 0 : 0.55 + palette.sunHeight * 0.25
+      b.color.copy(palette.horizon).lerp(palette.hemiSky, 0.78)
+      b.intensity = dual ? 0 : 0.5 + palette.sunHeight * 0.2
     }
   }, -1)
 

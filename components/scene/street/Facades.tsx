@@ -21,14 +21,14 @@ export function Walls() {
     const kinds: BrickKind[] = ['red', 'dark', 'weathered', 'plaster', 'concrete']
     for (const k of kinds) {
       const set = A.brick[k]
-      mats[k] = streetMat({ map: set.map, roughness: 0.92, color: '#ffffff', side: THREE.FrontSide, aoBase: 0.4 })
+      mats[k] = streetMat({ map: set.map, roughness: 0.92, color: '#ffffff', side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: set.bump, bumpAmt: k === 'concrete' ? 0.4 : 1.4, seed: kinds.indexOf(k) * 3.7 })
     }
     const tintMat = (k: BrickKind, tint: string) => {
       const key = `${k}-${tint}`
       if (!mats[key]) {
         const m = mats[k].clone()
         m.color = new THREE.Color(tint)
-        mats[key] = streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, aoBase: 0.4 })
+        mats[key] = streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: k === 'concrete' ? 0.4 : 1.4, seed: kinds.indexOf(k) * 3.7 + (tint.charCodeAt(2) % 7) })
         void m
       }
       return mats[key]

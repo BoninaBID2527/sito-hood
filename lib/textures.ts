@@ -173,8 +173,11 @@ export function sidewalkTexture(seed = 5) {
 }
 
 /**
- * World-aligned puddle mask. x ∈ [-halfW, halfW], z ∈ [zNear, zFar] mapped to the canvas.
- * White = standing water. Large pool lives in front of the track orbit (the portal).
+ * World-aligned wetness FIELD (not a hard mask). x ∈ [-halfW, halfW], z ∈ [zNear, zFar] mapped to the canvas.
+ *  R = puddle depth field (thresholded in the shader; the threshold falls along the journey so puddles grow)
+ *  G = damp film (asphalt that is wet but holds no standing water)
+ *  B = oil / contamination noise (thin-film tint inside puddles)
+ * The large pool lives in front of the track orbit (the portal).
  */
 export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; pool: { x: number; z: number; r: number } }) {
   const W = 512, H = 2048
@@ -184,13 +187,14 @@ export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; p
   ctx.fillRect(0, 0, W, H)
   const px = (x: number) => ((x + opts.halfW) / (opts.halfW * 2)) * W
   const pz = (z: number) => ((opts.zNear - z) / (opts.zNear - opts.zFar)) * H
-  const ppm = W / (opts.halfW * 2) // pixels per metre (x)
+  const ppm = W / (opts.halfW * 2)
   const ppz = H / (opts.zNear - opts.zFar)
+  ctx.globalCompositeOperation = 'lighten'
   const blob = (x: number, z: number, rx: number, rz: number, a: number) => {
     const cx = px(x), cz = pz(z)
     const g = ctx.createRadialGradient(cx, cz, 0, cx, cz, 1)
     g.addColorStop(0, `rgba(255,255,255,${a})`)
-    g.addColorStop(0.7, `rgba(255,255,255,${a * 0.9})`)
+    g.addColorStop(0.55, `rgba(255,255,255,${a * 0.78})`)
     g.addColorStop(1, 'rgba(255,255,255,0)')
     ctx.save()
     ctx.translate(cx, cz)
@@ -200,29 +204,50 @@ export function puddleMask(opts: { halfW: number; zNear: number; zFar: number; p
     ctx.beginPath(); ctx.arc(cx, cz, 1, 0, Math.PI * 2); ctx.fill()
     ctx.restore()
   }
-  // alley runs: elongated puddles along the centre line
+  // alley runs: elongated puddles along the centre line (late ones are shallower → only appear as the water grows)
   for (let z = 14; z > -70; z -= r.range(6, 13)) {
     const x = r.range(-1.5, 1.5)
     const n = r.int(1, 3)
-    for (let k = 0; k < n; k++) blob(x + r.range(-0.4, 0.4), z + r.range(-0.8, 0.8), r.range(0.3, 0.9), r.range(0.6, 1.8), r.range(0.55, 0.95))
+    for (let k = 0; k < n; k++) blob(x + r.range(-0.4, 0.4), z + r.range(-0.8, 0.8), r.range(0.3, 1.0), r.range(0.6, 2.0), r.range(0.5, 0.95))
   }
-  // gutters near the kerbs
-  for (let z = 14; z > -70; z -= r.range(7, 14)) blob(r.sign() * r.range(2.3, 2.7), z, r.range(0.12, 0.3), r.range(1.2, 3), 0.6)
-  // plaza: scattered pools + the big one
-  for (let i = 0; i < 9; i++) blob(r.range(-9, 9), r.range(-76, -112), r.range(0.5, 1.4), r.range(0.5, 1.3), r.range(0.5, 0.9))
+  // gutters near the kerbs, tyre-rut lines
+  for (let z = 14; z > -70; z -= r.range(7, 14)) blob(r.sign() * r.range(2.3, 2.7), z, r.range(0.12, 0.3), r.range(1.2, 3), 0.62)
+  for (let z = 16; z > -74; z -= r.range(10, 18)) { blob(-0.9, z, 0.16, r.range(2.5, 5), 0.58); blob(0.95, z + 1, 0.16, r.range(2.5, 5), 0.56) }
+  // plaza: scattered pools
+  for (let i = 0; i < 12; i++) blob(r.range(-9, 9), r.range(-76, -112), r.range(0.5, 1.7), r.range(0.5, 1.5), r.range(0.45, 0.9))
   // the "wrong" puddle (hovering it distorts reality) — guaranteed to exist
   blob(0.2, -41, 0.95, 1.9, 1)
   blob(opts.pool.x, opts.pool.z, opts.pool.r, opts.pool.r * 0.9, 1)
   blob(opts.pool.x + 1.3, opts.pool.z + 0.8, opts.pool.r * 0.55, opts.pool.r * 0.5, 0.9)
-  // noisy edge so puddles feel organic
-  const f = noiseField(128, 512, 2.5, 3, 91)
+  ctx.globalCompositeOperation = 'source-over'
+
+  // smooth value noise sampled bilinearly (no blocky edges)
+  const nf = (w: number, h: number, scale: number, oct: number, seed: number) => {
+    const f = noiseField(w, h, scale, oct, seed)
+    return (x: number, y: number) => {
+      const fx = Math.max(0, Math.min(w - 1.001, (x / W) * w)), fy = Math.max(0, Math.min(h - 1.001, (y / H) * h))
+      const x0 = fx | 0, y0 = fy | 0, tx = fx - x0, ty = fy - y0
+      const a = f[y0 * w + x0], b = f[y0 * w + x0 + 1], c = f[(y0 + 1) * w + x0], d = f[(y0 + 1) * w + x0 + 1]
+      return (a * (1 - tx) + b * tx) * (1 - ty) + (c * (1 - tx) + d * tx) * ty
+    }
+  }
+  const n1 = nf(128, 512, 3.2, 4, 91)
+  const n2 = nf(64, 256, 1.4, 3, 93)
+  const n3 = nf(128, 512, 5.5, 3, 95)
   const img = ctx.getImageData(0, 0, W, H)
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const i = (y * W + x) * 4
-    const n = f[(y >> 2) * 128 + (x >> 2)]
-    let v = img.data[i] / 255
-    v = Math.max(0, Math.min(1, (v - 0.35 + (n - 0.5) * 0.5) * 3.2))
-    img.data[i] = img.data[i + 1] = img.data[i + 2] = v * 255
+    const v0 = img.data[i] / 255
+    const q = n1(x, y)
+    // depth: soft blob + ragged noise only where there is already water (edges become fractal, interiors stay flat)
+    const depth = Math.max(0, Math.min(1, v0 + (q - 0.5) * 0.34 * Math.min(1, v0 * 3)))
+    const wx = (x / W) * 2 - 1 // −1..1 across the street
+    const lane = Math.exp(-wx * wx * 14) // wetter along the centre of the alley
+    const damp = Math.max(0, Math.min(1, 0.22 + (n2(x, y) - 0.4) * 1.9 + lane * 0.3 + depth * 1.4))
+    img.data[i] = depth * 255
+    img.data[i + 1] = damp * 255
+    img.data[i + 2] = n3(x, y) * 255
+    img.data[i + 3] = 255
   }
   ctx.putImageData(img, 0, 0)
   const tex = toTexture(canvas, { srgb: false, aniso: 2, mipmaps: true })

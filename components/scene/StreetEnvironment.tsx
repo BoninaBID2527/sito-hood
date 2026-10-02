@@ -10,7 +10,7 @@ import { FireEscapes } from './street/FireEscapes'
 import { Lamps } from './street/Lamps'
 import { Props } from './street/Props'
 import { Decals } from './street/Decals'
-import { Steam, Cables } from './street/Atmos'
+import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
@@ -24,6 +24,10 @@ export function StreetEnvironment() {
   useFrame(() => {
     streetU.uTime.value = rt.time
     streetU.uContam.value = rt.fx.contam
+    // standing water gathers along the journey: ordinary wet street → puddles that keep growing → the pool
+    const g = Math.min(1, Math.max(0, rt.smooth / 0.5))
+    streetU.uPud.value = g * g * (3 - 2 * g)
+    streetU.uWet.value = 0.3 + 0.7 * g
     streetU.uSunY.value = 24 - palette.sunHeight * 14
     streetU.uSunAmt.value = Math.min(1, palette.sunHeight * 1.4) * (palette.sunI > 0.6 ? 1 : 0.3)
     streetU.uSunCol.value.copy(palette.sun)
@@ -40,6 +44,7 @@ export function StreetEnvironment() {
       <Decals />
       <Steam />
       <Cables />
+      <AirLayers />
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />

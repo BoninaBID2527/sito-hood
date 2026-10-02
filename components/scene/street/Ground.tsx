@@ -8,7 +8,7 @@ import { A } from '@/lib/assets'
 import { rt } from '@/lib/runtime'
 import { tileUV } from '@/lib/geo'
 import { palette } from '@/lib/timeOfDay'
-import { streetMat } from './materials'
+import { streetMat, streetU } from './materials'
 import { SEGS } from './layout'
 import { useStore } from '@/lib/store'
 
@@ -19,7 +19,7 @@ const GROUND_CZ = -56
 export function Ground() {
   const mats = useMemo(() => {
     A.asphalt.repeat.set(1, 1)
-    const asphalt = streetMat({ map: A.asphalt, color: '#5f5f69', roughness: 0.8, metalness: 0, aoBase: 0.7 })
+    const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: 1.1, bumpBlur: 3.5, wet: A.puddle, macro: 0.7 })
     A.sidewalk.repeat.set(1, 1)
     const walk = streetMat({ map: A.sidewalk, color: '#6f6a62', roughness: 0.9, aoBase: 0.6 })
     return { asphalt, walk }
@@ -86,19 +86,30 @@ uniform sampler2D tMask;
 uniform float uTime;
 uniform float uContam;
 uniform float uWet;
+uniform float uPud;
 uniform vec3 uRip;
 uniform vec3 uHor;
 uniform vec3 uSky;
 varying vec4 vUv;
 varying vec2 vMask;
 varying vec3 vWorld;
+float h21(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f); return mix(mix(h21(i), h21(i+vec2(1,0)), f.x), mix(h21(i+vec2(0,1)), h21(i+vec2(1,1)), f.x), f.y); }
 void main() {
-  float m = texture2D(tMask, vMask).r;
+  vec3 wf = texture2D(tMask, vMask).rgb;
+  vec2 pw = vWorld.xz;
+  float pn = vn(pw * 6.0) * 0.6 + vn(pw * 19.0) * 0.4;
+  float thr = mix(0.66, 0.2, uPud);
+  float m = smoothstep(thr - 0.06, thr + 0.03, wf.r + (pn - 0.5) * 0.16);
+  float damp = clamp(wf.g + (pn - 0.5) * 0.4 - 0.12 + uPud * 0.18, 0.0, 1.0) * (0.55 + 0.45 * uWet);
+  damp = max(damp, m);
   vec3 V = normalize(cameraPosition - vWorld);
   float ndv = clamp(V.y, 0.0, 1.0);
   float fres = 0.05 + 0.95 * pow(1.0 - ndv, 4.0);
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
+  // damp asphalt: reflection is broken up by micro-relief instead of mirror-clean
+  dist += (vec2(vn(p * 23.0), vn(p * 23.0 + 9.0)) - 0.5) * 0.02 * (1.0 - m) * damp;
   dist += vec2(sin(p.y * 3.0 + uTime * 1.2), cos(p.x * 3.0 - uTime)) * 0.012 * uContam;
   vec2 rp = p - uRip.xy;
   float rd = length(rp);
@@ -106,7 +117,7 @@ void main() {
   vec3 c;
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
-  float blur = mix(0.012, 0.0012, m);
+  float blur = mix(0.02, 0.0012, m);
   c = texture2D(tDiffuse, uv).rgb * 0.36;
   c += texture2D(tDiffuse, uv + vec2(blur, 0.0)).rgb * 0.16;
   c += texture2D(tDiffuse, uv - vec2(blur, 0.0)).rgb * 0.16;
@@ -122,9 +133,14 @@ void main() {
   c = mix(uHor, uSky, g) * (0.8 + 0.2 * sin(p.x * 6.0 + dist.x * 400.0));
   c += uHor * pow(max(0.0, 1.0 - abs(p.x) * 0.5), 2.0) * 0.35;
   `}
-  float a = clamp(m * 0.96 + 0.045 * uWet * (1.0 - m), 0.0, 1.0) * mix(0.42, 1.0, clamp(fres * 3.5, 0.0, 1.0));
+  // thin-film oil sheen inside standing water; grows with contamination
+  float oil = smoothstep(0.35, 0.8, wf.b + (pn - 0.5) * 0.4) * m;
+  vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + wf.b * 1.6 + pw.y * 0.02 + uTime * 0.03));
+  c = mix(c, c * (0.55 + film * 1.0), oil * (0.07 + 0.6 * uContam + 0.06 * uPud));
+  float damped = (1.0 - m) * damp;
+  float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * mix(0.35, 1.0, clamp(fres * 3.5, 0.0, 1.0));
   // puddle darkening so the water reads as depth, not paint
-  c *= color * mix(0.55, 0.95, m);
+  c *= color * mix(0.62, 0.95, m);
   gl_FragColor = vec4(c, a);
 }
 `
@@ -151,6 +167,7 @@ function PuddleLayer() {
         uTime: { value: 0 },
         uContam: { value: 0 },
         uWet: { value: 1 },
+        uPud: { value: 0 },
         uRip: { value: new THREE.Vector3() },
         uHor: { value: new THREE.Color() },
         uSky: { value: new THREE.Color() },
@@ -203,6 +220,8 @@ function PuddleLayer() {
     const u = mat.uniforms
     u.uTime.value = rt.time
     u.uContam.value = rt.fx.contam
+    u.uPud.value = streetU.uPud.value
+    u.uWet.value = streetU.uWet.value
     u.uHor.value.copy(palette.horizon).multiplyScalar(0.8)
     u.uSky.value.copy(palette.skyMid).multiplyScalar(0.7)
     rip.current.s *= Math.exp(-dt * 1.4)
@@ -223,7 +242,7 @@ function PuddleLayer() {
         onPointerMove={(e: any) => {
           if (rt.touch || !e.uv) return
           const wet = sample(e.uv.x, e.uv.y)
-          if (wet < 0.5) return
+          if (wet < 0.42) return
           rip.current.x = e.point.x
           rip.current.z = e.point.z
           rip.current.s = Math.min(1.4, rip.current.s + 0.12)

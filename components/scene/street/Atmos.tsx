@@ -218,3 +218,104 @@ export function Cables() {
     </group>
   )
 }
+
+/* ───────────────────────── haze sheets + light shafts ───────────────────────── */
+
+const airVert = /* glsl */ `
+varying vec2 vUv;
+varying vec3 vW;
+void main(){
+  vUv = uv;
+  vec4 w = modelMatrix * vec4(position, 1.0);
+  vW = w.xyz;
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`
+const hazeFrag = /* glsl */ `
+precision highp float;
+varying vec2 vUv; varying vec3 vW;
+uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
+float fbm(vec2 p){ return n(p)*.55 + n(p*2.1+7.)*.3 + n(p*4.3+3.)*.15; }
+void main(){
+  vec2 p = vUv * vec2(3.0, 2.0) + vec2(uTime * 0.012 + vW.z * 0.37, vW.z * 1.1);
+  float d = fbm(p) * fbm(p * 0.6 + 11.0 + uTime * 0.008);
+  float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x) * smoothstep(0.0, 0.1, vUv.y) * smoothstep(1.0, 0.55, vUv.y);
+  float near = smoothstep(2.5, 9.0, distance(cameraPosition, vW));
+  float a = smoothstep(0.12, 0.75, d * 1.9) * edge * near * uA;
+  gl_FragColor = vec4(uCol, a);
+}`
+const shaftFrag = /* glsl */ `
+precision highp float;
+varying vec2 vUv; varying vec3 vW;
+uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
+void main(){
+  float across = 1.0 - abs(vUv.x - 0.5) * 2.0;
+  float along = smoothstep(0.0, 0.25, vUv.y) * smoothstep(1.0, 0.45, vUv.y);
+  float streak = 0.55 + 0.45 * n(vec2(vUv.x * 9.0 + uSeed, vUv.y * 1.2 - uTime * 0.03));
+  float near = smoothstep(2.0, 8.0, distance(cameraPosition, vW));
+  float a = pow(across, 1.6) * along * streak * near * uA;
+  gl_FragColor = vec4(uCol * a, a);
+}`
+
+const SHAFTS: { x: number; z: number; w: number; len: number; rz: number }[] = [
+  { x: 1.4, z: 3, w: 2.6, len: 15, rz: 0.5 },
+  { x: -1.2, z: -9, w: 3.2, len: 17, rz: -0.42 },
+  { x: 1.8, z: -21, w: 2.4, len: 15, rz: 0.55 },
+  { x: -0.6, z: -33, w: 3.4, len: 18, rz: -0.35 },
+  { x: 1.0, z: -46, w: 3, len: 16, rz: 0.4 },
+]
+
+/** Depth cues for the alley: drifting haze sheets in the air + low-sun light shafts through gaps in the buildings. */
+export function AirLayers() {
+  const kit = useMemo(() => {
+    const t = rt.quality.tier
+    const nHaze = t === 'high' ? 8 : t === 'medium' ? 5 : 3
+    const nShaft = t === 'high' ? 5 : t === 'medium' ? 3 : 2
+    const haze = new THREE.ShaderMaterial({
+      vertexShader: airVert, fragmentShader: hazeFrag, transparent: true, depthWrite: false,
+      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#8a8ea0') }, uA: { value: 0.12 }, uSeed: { value: 0 } },
+    })
+    const shaft = new THREE.ShaderMaterial({
+      vertexShader: airVert, fragmentShader: shaftFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#ffb36a') }, uA: { value: 0.3 }, uSeed: { value: 3 } },
+    })
+    const planes: { z: number; w: number; seed: number }[] = []
+    for (let i = 0; i < nHaze; i++) planes.push({ z: 6 - i * (74 / nHaze) - (i % 2) * 2, w: 7 + (i % 3), seed: i * 1.7 })
+    const hazeGeo = new THREE.PlaneGeometry(1, 1)
+    const shaftGeo = new THREE.PlaneGeometry(1, 1)
+    return { haze, shaft, planes, shafts: SHAFTS.slice(0, nShaft), hazeGeo, shaftGeo }
+  }, [])
+
+  useFrame(() => {
+    const day = Math.max(0, Math.min(1, palette.sunHeight * 1.25))
+    const hu = kit.haze.uniforms
+    hu.uTime.value = rt.time
+    hu.uCol.value.copy(palette.fog).lerp(palette.horizon, 0.38 * palette.glow).multiplyScalar(1.5)
+    hu.uA.value = 0.1 + palette.glow * 0.05
+    const su = kit.shaft.uniforms
+    su.uTime.value = rt.time
+    su.uCol.value.copy(palette.sun).lerp(palette.horizon, 0.25)
+    su.uA.value = 0.34 * day * (1 - rt.fx.contam * 0.7)
+  }, -1)
+
+  useEffect(() => () => { kit.haze.dispose(); kit.shaft.dispose(); kit.hazeGeo.dispose(); kit.shaftGeo.dispose() }, [kit])
+
+  return (
+    <group>
+      {kit.planes.map((p, i) => (
+        <mesh key={'h' + i} geometry={kit.hazeGeo} position={[0, 7, p.z]} scale={[wallX(1, p.z) * 2 - 0.4, 14, 1]} renderOrder={5}>
+          <primitive object={kit.haze} attach="material" />
+        </mesh>
+      ))}
+      {kit.shafts.map((s, i) => (
+        <group key={'s' + i} position={[s.x, 8, s.z]} rotation={[0, 0, s.rz]}>
+          <mesh geometry={kit.shaftGeo} scale={[s.w, s.len, 1]} renderOrder={6}><primitive object={kit.shaft} attach="material" /></mesh>
+          <mesh geometry={kit.shaftGeo} scale={[s.w, s.len, 1]} rotation={[0, Math.PI / 2, 0]} renderOrder={6}><primitive object={kit.shaft} attach="material" /></mesh>
+        </group>
+      ))}
+    </group>
+  )
+}
