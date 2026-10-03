@@ -49,7 +49,7 @@ check('graffiti letters: hovering a hidden tag registers it', (await state(() =>
 
 // 4b. the rest of the 01–07 trail, each on its own physical object (hover = rest the pointer, touch = tap)
 const trail = [
-  [0, 0.04, 2.896, 1.5, 2.6, '01 stencil on the utility box'],
+  [0, 0.04, 3.096, 1.5, 2.6, '01 stencil on the utility box'],
   [1, 0.0, -2.762, 1.42, 11.3, '02 sticker on the drainpipe'],
   [2, 0.12, 2.735, 1.62, -12.5, '03 number painted on the door'],
   [3, 0.2, -2.9245, 1.6, -24.6, '04 torn poster fragment'],
