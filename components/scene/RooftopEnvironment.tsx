@@ -495,7 +495,7 @@ function HiddenSign() {
     const map = new THREE.CanvasTexture(c)
     map.colorSpace = THREE.SRGBColorSpace
     map.anisotropy = 4
-    const W = 15, H = W * 400 / 2048
+    const W = 20, H = W * 400 / 2048
     const letters = new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false, color: new THREE.Color(0.03, 0.03, 0.035) })
     const frame = new GeoBuilder()
     frame.box(W + 1.2, H + 1.0, 0.3, 0, 0, -0.3)
@@ -504,11 +504,15 @@ function HiddenSign() {
     const frameGeo = frame.build()
     const frameMat = streetMat({ color: '#15161a', roughness: 0.6, metalness: 0.7, aoBase: 0.9, macro: 0.4 })
     const glow = new THREE.SpriteMaterial({ map: A.glow, color: '#ff9a50', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
-    return { W, H, letters, frameGeo, frameMat, glow, plane: new THREE.PlaneGeometry(W, H), map }
+    // the sign's own tower: a dark slab rising out of the haze, far behind the nearer blocks
+    const tower = tagBuilding(new THREE.BoxGeometry(13, 90, 9), 0.37, 3.6, 3.2, 0.1)
+    const towerMat = createTowerMaterial()
+    return { W, H, letters, frameGeo, frameMat, glow, plane: new THREE.PlaneGeometry(W, H), map, tower, towerMat }
   }, [])
   const lit = useRef(0)
   const neon = useMemo(() => new THREE.Color(), [])
   useFrame((_, dt) => {
+    updateTowerMaterial(kit.towerMat)
     const all = useStore.getState().nums.every(Boolean)
     if (all && rt.world === 'roof' && rt.smooth > 0.86) lit.current = Math.min(1, lit.current + dt / 18)
     const l = lit.current
@@ -519,9 +523,10 @@ function HiddenSign() {
     kit.letters.color.copy(neon)
     kit.glow.opacity = k * 0.42
   })
-  useEffect(() => () => { kit.letters.dispose(); kit.frameGeo.dispose(); kit.frameMat.dispose(); kit.glow.dispose(); kit.plane.dispose(); kit.map.dispose() }, [kit])
+  useEffect(() => () => { kit.letters.dispose(); kit.frameGeo.dispose(); kit.frameMat.dispose(); kit.glow.dispose(); kit.plane.dispose(); kit.map.dispose(); kit.tower.dispose(); kit.towerMat.dispose() }, [kit])
   return (
-    <group position={[R - 9, 13, -96]} rotation={[0, 0.12, 0]}>
+    <group position={[R - 8, 24, -112]} rotation={[0, 0.1, 0]}>
+      <mesh geometry={kit.tower} material={kit.towerMat} position={[0, -9, -5.2]} />
       <mesh geometry={kit.frameGeo} material={kit.frameMat} />
       <mesh geometry={kit.plane} material={kit.letters} position={[0, 0, 0.02]} renderOrder={4} />
       <sprite material={kit.glow} position={[0, 0, 0.3]} scale={[kit.W * 1.9, kit.W * 0.8, 1]} />
