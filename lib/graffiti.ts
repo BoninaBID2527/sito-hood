@@ -139,6 +139,15 @@ function fitPx(ctx: Ctx, text: string, font: (px: number) => string, maxW: numbe
   return Math.min(maxPx, (100 * maxW) / Math.max(1, w100))
 }
 
+/** largest px (≤ maxPx) at which every line fits maxW in the given font */
+function fitLines(ctx: Ctx, lines: string[], font: (px: number) => string, maxW: number, maxPx: number) {
+  ctx.save()
+  ctx.font = font(100)
+  const w100 = Math.max(...lines.map((l) => ctx.measureText(l).width))
+  ctx.restore()
+  return Math.min(maxPx, (100 * maxW) / Math.max(1, w100))
+}
+
 function speckle(ctx: Ctx, r: Rng, x: number, y: number, w: number, h: number, n: number, color: string, rmax = 1.6, a = 0.5) {
   ctx.fillStyle = color
   for (let i = 0; i < n; i++) {
@@ -545,18 +554,18 @@ export function drawStencil(ctx: Ctx, w: number, h: number, o: StencilOpts) {
   ctx.font = f(fam, px)
   ctx.textAlign = 'center'
   // leakage: the stencil lifted a little, so a soft halo
-  ctx.fillStyle = rgba(o.color, 0.35)
-  ctx.shadowColor = rgba(o.color, 0.8)
-  ctx.shadowBlur = px * 0.09
-  ctx.fillText(o.text, px * 0.012, px * 0.01)
+  ctx.fillStyle = rgba(o.color, 0.22)
+  ctx.shadowColor = rgba(o.color, 0.5)
+  ctx.shadowBlur = Math.max(1.5, px * 0.025)
+  ctx.fillText(o.text, px * 0.008, px * 0.006)
   ctx.shadowBlur = 0
   ctx.fillStyle = o.color
   ctx.fillText(o.text, 0, 0)
   // incomplete paint: voids and a missing band
   ctx.globalCompositeOperation = 'destination-out'
   const holes = o.holes ?? 40
-  speckle(ctx, r, -w / 2, -px, w, px * 1.3, holes, 'rgba(0,0,0,1)', 2.4, 0.9)
-  for (let i = 0; i < 3; i++) ctx.fillRect(-w / 2 + r() * w, -px * 0.9 + r() * px, 6 + r() * 26, 1 + r() * 2.4)
+  speckle(ctx, r, -w / 2, -px, w, px * 1.3, Math.round(holes * 0.6), 'rgba(0,0,0,1)', 1.3, 0.9)
+  for (let i = 0; i < 3; i++) ctx.fillRect(-w / 2 + r() * w, -px * 0.9 + r() * px, 6 + r() * 20, 1 + r() * 1.6)
   ctx.globalCompositeOperation = 'source-over'
   // runs
   drips(ctx, r, [-w * 0.35, w * 0.35], px * 0.0, o.color, 2, px * 0.22, px * 0.03)
@@ -570,7 +579,7 @@ export function drawStencil(ctx: Ctx, w: number, h: number, o: StencilOpts) {
     ctx.fillText(o.sub, w / 2, h - 6)
     ctx.restore()
   }
-  speckle(ctx, r, 0, 0, w, h, 70, o.color, 1.1, 0.35)
+  speckle(ctx, r, 0, 0, w, h, 36, o.color, 0.9, 0.3)
 }
 
 export function drawSymbol(ctx: Ctx, w: number, h: number, kind: 'crosshair' | 'hourglass' | 'arrow' | 'barcode' | 'hd' | 'eye', color: string, seed: number) {
@@ -730,7 +739,7 @@ export function drawTrackPoster(ctx: Ctx, w: number, h: number, o: PosterOpts) {
       ctx.fillText(`ALTERCO — TRACCIA ${num}`, w * 0.07, h * 0.075)
       ctx.fillStyle = p.ink
       let y = h * 0.62
-      const px = Math.min(w * 0.19, (w * 0.86) / Math.max(...o.title.map((t) => t.length * 0.58)))
+      const px = fitLines(ctx, o.title, (p) => f(FONT.serif, p, 'italic 900'), w * 0.86, w * 0.19)
       for (const line of o.title) { ctx.font = f(FONT.serif, px, 'italic 900'); ctx.fillText(line, w * 0.07, y); y += px * 0.98 }
       ctx.font = f(FONT.bungee, w * 0.5)
       ctx.strokeStyle = rgba(p.ink, 0.22)
@@ -747,7 +756,7 @@ export function drawTrackPoster(ctx: Ctx, w: number, h: number, o: PosterOpts) {
       ctx.fillText(num, w * 0.05, h * 0.42)
       ctx.fillStyle = p.ink
       let y = h * 0.62
-      const px = Math.min(w * 0.22, (w * 0.88) / Math.max(...o.title.map((t) => t.length * 0.5)))
+      const px = fitLines(ctx, o.title, (p) => f(FONT.anton, p), w * 0.88, w * 0.22)
       for (const line of o.title) { ctx.font = f(FONT.anton, px); ctx.fillText(line, w * 0.06, y); y += px * 1.02 }
       ctx.font = f(FONT.mono, w * 0.036)
       ctx.fillStyle = p.acc
@@ -771,7 +780,7 @@ export function drawTrackPoster(ctx: Ctx, w: number, h: number, o: PosterOpts) {
       for (const [dx, col] of [[3, rgba(p.acc, 0.8)], [0, p.ink]] as const) {
         ctx.fillStyle = col
         let y = h * 0.28
-        const px = Math.min(w * 0.2, (w * 0.84) / Math.max(...o.title.map((t) => t.length * 0.62)))
+        const px = fitLines(ctx, o.title, (p) => f(FONT.stencil, p), w * 0.84, w * 0.2)
         for (const line of o.title) { ctx.font = f(FONT.stencil, px); ctx.fillText(line, w * 0.08 + dx, y + dx); y += px * 1.04 }
         ctx.font = f(FONT.stencil, w * 0.4)
         ctx.fillText(num, w * 0.08 + dx, h * 0.86 + dx)
