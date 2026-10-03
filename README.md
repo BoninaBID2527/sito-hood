@@ -163,6 +163,12 @@ No other external fonts, images or audio were added in V3.1. The ALTERCO / DUALI
 13. If DUALISMO has been found, a faint iridescent glint stays on a distant tower on the rooftop; after you come back from DUALISMO the street is slightly wrong in a few places.
 </details>
 
+## Temporary public preview (static export)
+
+`STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
+`.github/workflows/preview.yml` publishes it to GitHub Pages. One-time: **Settings → Pages → Source: GitHub Actions**, make sure the workflow file is on the default branch, then **Actions → Preview (GitHub Pages) → Run workflow**.
+The preview URL is then `https://<owner>.github.io/<repo>/`. Delete the Pages site (Settings → Pages) to take it down. Normal `npm run build && npm start` is unchanged.
+
 ## Performance & quality tiers
 * Renderer DPR clamped (`≤1.5` high / `1.25` medium / `1` low), MSAA on the HDR target only, adaptive tier drop (`PerfGovernor`) if frame time stays > ~26 ms.
 * Tiers also switch: planar reflections (real ↔ fake), reflection resolution, particles, steam, bloom, grain.
