@@ -1,5 +1,6 @@
 'use client'
 
+import { A } from '@/lib/assets'
 import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
@@ -72,6 +73,7 @@ export default function App() {
         scroll.lenis ? scroll.lenis.scrollTo(y, { immediate: true, force: true }) : window.scrollTo(0, y)
       },
       rt,
+      A,
       store: useStore,
       act: (name: string, ...a: unknown[]) => (actions as any)[name]?.(...a),
     }

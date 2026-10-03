@@ -3,6 +3,15 @@ import '@fontsource/anton/latin-400.css'
 import '@fontsource/anton/latin-ext-400.css'
 import '@fontsource/space-mono/latin-400.css'
 import '@fontsource/space-mono/latin-700.css'
+// street-typography families (canvas only — never used for UI text). Latin subset, single weight each; see README → Fonts & licences.
+import '@fontsource/permanent-marker/latin-400.css'
+import '@fontsource/reenie-beanie/latin-400.css'
+import '@fontsource/rock-salt/latin-400.css'
+import '@fontsource/titan-one/latin-400.css'
+import '@fontsource/bungee/latin-400.css'
+import '@fontsource/saira-stencil-one/latin-400.css'
+import '@fontsource/playfair-display/latin-900-italic.css'
+import '@fontsource/nanum-pen-script/latin-400.css'
 import './globals.css'
 
 export const metadata: Metadata = {

@@ -1,6 +1,9 @@
 import * as THREE from 'three'
 import { alterco, dualismo, pad, trackLabel } from '@/data/project'
-import { nextFrame, track } from './paint'
+import { makeCanvas, nextFrame, toTexture, track } from './paint'
+import { rt } from './runtime'
+import { applyAge, drawBigPoster, drawHand } from './graffiti'
+import { buildGraffiti } from './graffitiSheet'
 import * as T from './textures'
 
 /**
@@ -28,6 +31,8 @@ export interface Assets {
   banner: THREE.Texture
   projection: THREE.Texture
   posters: THREE.Texture[]
+  /** atlases for all street typography (spray + paper) */
+  graf: import('./graffitiSheet').Graffiti
   creditsPoster: THREE.Texture
   portalPaper: THREE.Texture
   pieces: THREE.Texture[]
@@ -79,6 +84,9 @@ const fontsReady = async () => {
     f.load('400 120px Anton'),
     f.load('400 20px "Space Mono"'),
     f.load('700 20px "Space Mono"'),
+    // street typography families (see lib/graffiti.ts)
+    ...['"Permanent Marker"', '"Reenie Beanie"', '"Rock Salt"', '"Titan One"', '"Bungee"', '"Saira Stencil One"', '"Nanum Pen Script"'].map((n) => f.load(`400 64px ${n}`)),
+    f.load('italic 900 64px "Playfair Display"'),
   ]).catch(() => undefined)
   await f.ready
 }
@@ -115,32 +123,29 @@ export async function loadCore(onProgress: (p: number) => void) {
       ['graffiti', 14, () => {
         A.banner = T.bannerTexture('HOODDINO')
         A.projection = T.projectionTexture('ALTERCO')
-        A.pieces = [
-          T.pieceTexture('HOOD', { a: '#27b7b0', b: '#a6f0e0', c: '#2a3a8c' }, 31),
-          T.pieceTexture('ALTERCO', { a: '#ff5d8f', b: '#ffc0cf', c: '#5a2a7a' }, 32),
-          T.pieceTexture('DINO', { a: '#f2c230', b: '#fff0a0', c: '#b3261e' }, 33),
-          T.pieceTexture('POTREI', { a: '#ffffff', b: '#bfd8ff', c: '#1a1a22' }, 34),
-          T.pieceTexture('STARE BENE', { a: '#7be05a', b: '#d8ffb0', c: '#143a2a' }, 35),
-        ]
-        // seven hidden letters — the scavenger hunt that spells ALTERCO
-        const cols = ['#ff5d8f', '#27b7b0', '#f2c230', '#ffffff', '#ff7a3a', '#7aa8ff', '#e03030']
-        A.letters = 'ALTERCO'.split('').map((ch, i) =>
-          T.tagTexture({ text: ch, w: 256, h: 256, fill: cols[i], outline: '#f2eee6', shadow: '#0c0c10', skew: -0.12, rot: (i % 2 ? 4 : -5), seed: 60 + i, drips: 2 }),
-        )
+        // every wall piece, poster and sticker lives in two atlases (lib/graffitiSheet.ts)
+        const tier = rt.quality.tier
+        A.graf = buildGraffiti(tier === 'high' ? 0.9 : tier === 'medium' ? 0.75 : 0.6)
+        A.pieces = []
+        // seven hidden letters — the scavenger hunt that spells ALTERCO, each by a different hand
+        const hands = [
+          { face: 'marker', color: '#ff5d8f' }, { face: 'beanie', color: '#27b7b0' }, { face: 'salt', color: '#f2c230' }, { face: 'marker', color: '#f4efe6' },
+          { face: 'beanie', color: '#ff7a3a' }, { face: 'salt', color: '#7aa8ff' }, { face: 'marker', color: '#e03030' },
+        ] as const
+        A.letters = 'ALTERCO'.split('').map((ch, i) => {
+          const { canvas, ctx } = makeCanvas(256, 256)
+          drawHand(ctx, 256, 256, { text: ch, face: hands[i].face, color: hands[i].color, outline: i % 2 ? '#111114' : undefined, seed: 60 + i, slant: 0.2 + 0.05 * i, drips: 2, underline: false, rot: (i % 2 ? 0.07 : -0.09) })
+          applyAge(ctx, 256, 256, { fade: 0.06 + 0.05 * i * 0.3, erase: i === 3 ? 0.3 : 0.08, seed: 300 + i })
+          return toTexture(canvas, { aniso: 4 })
+        })
       }],
       ['posters', 9, () => {
-        const looks = [
-          { bg: '#d8d1c0', fg: '#121212', accent: '#c8362a' },
-          { bg: '#121214', fg: '#ece6d8', accent: '#e8c548' },
-          { bg: '#c8362a', fg: '#14100e', accent: '#f2e8d0' },
-          { bg: '#e2dccb', fg: '#14161c', accent: '#2a5ac8' },
-        ]
-        A.posters = alterco.tracks.map((tr, i) => {
-          const lines = split(tr.title.replace(/è/gi, 'È'))
-          return T.posterTexture({ lines, sub: `TRACK ${pad(tr.n)} / ALTERCO${tr.tag ? ' · ' + tr.tag.toUpperCase() : ''}`, seed: 40 + i, halftone: i % 2 === 0, ...looks[i % looks.length] })
-        })
-        A.posters.push(T.posterTexture({ lines: ['HOOD', 'DINO'], sub: 'ALTERCO — 7 TRACKS', seed: 55, halftone: true, bg: '#d8d1c0', fg: '#121212', accent: '#c8362a' }))
-        A.creditsPoster = T.posterTexture({ lines: ['READ', 'THE', 'SMALL', 'PRINT'], sub: 'WHO MADE THE SOUND', seed: 57, bg: '#1a1a1c', fg: '#e8e0cc', accent: '#9a9a9a', w: 384, h: 512 })
+        A.posters = []
+        A.creditsPoster = (() => {
+          const { canvas, ctx } = makeCanvas(384, 512)
+          drawBigPoster(ctx, 384, 512, { lines: ['READ', 'THE', 'SMALL', 'PRINT'], sub: 'WHO MADE THE SOUND', seed: 57, pal: 1 })
+          return toTexture(canvas, { aniso: 4 })
+        })()
         A.portalPaper = T.portalPaperTexture()
         A.signs = {
           alterco: T.signTexture({ text: 'ALTERCO', small: 'HOODDINO · 7 TRACKS', bg: '#151e33', fg: '#f4ead2', border: '#e9a15a', seed: 8, w: 512, h: 256 }),
@@ -154,9 +159,7 @@ export async function loadCore(onProgress: (p: number) => void) {
           neonNotte: T.neonTexture('NOTTE', '#5ab8ff', 512, 192),
           listen: T.signTexture({ text: 'LISTEN', small: 'ROOFTOP', bg: '#101a2c', fg: '#f4ead2', border: '#9ab6ff', seed: 12 }),
         }
-        A.stencils = {
-          five: T.stencilTexture('05'), seven: T.stencilTexture('07'),
-        }
+        A.stencils = {}
       }],
     ],
     onProgress,
@@ -182,12 +185,7 @@ export async function loadRoof() {
   A.roofDeck = T.roofDeckTexture(14)
   A.roofWet = T.puddleMask({ halfW: 13, zNear: 12, zFar: -24, pool: { x: 2, z: -12, r: 3.0 }, layout: 'roof' })
   await nextFrame()
-  A.roofPieces = [
-    T.pieceTexture('STARE BENE', { a: '#ff7a3a', b: '#ffd0a0', c: '#2a2a8c' }, 71, 1024, 512),
-    T.pieceTexture('ALTERCO', { a: '#4ac8ff', b: '#d0f0ff', c: '#6a1a5a' }, 72, 1024, 512),
-    T.pieceTexture('DINO', { a: '#4be0a0', b: '#d0ffe8', c: '#1a2a4a' }, 73, 1024, 512),
-    T.pieceTexture('HOOD', { a: '#f4efe6', b: '#ffffff', c: '#22222c' }, 74, 1024, 512),
-  ]
+  A.roofPieces = []
   A.roofReady = true
 }
 
