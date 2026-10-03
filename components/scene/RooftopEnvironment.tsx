@@ -12,6 +12,8 @@ import { WORLD } from '@/lib/timeline'
 import { useStore } from '@/lib/store'
 import { enterDualism } from '@/lib/actions'
 import { streetMat } from './street/materials'
+import { NumberMark } from './street/NumberTrail'
+import { atlasMaterial, buildAtlasMesh, type Placement } from './street/atlasDecals'
 import { Backdrop } from './street/Backdrop'
 import { Steam } from './street/Atmos'
 import { WaterSheet } from './street/Ground'
@@ -176,16 +178,19 @@ export function RooftopEnvironment() {
     const crownMat = keep(new THREE.MeshBasicMaterial({ color: '#05060a', fog: true }))
     const beaconMat = keep(new THREE.SpriteMaterial({ map: A.glow, color: '#ff3a2a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 }))
 
-    // front parapet graffiti
-    const decal = keep(new THREE.PlaneGeometry(1, 1))
-    const dm = (t: THREE.Texture) => keep(streetMat({ map: t, transparent: true, depthWrite: false, roughness: 0.9, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }))
-    const decals = [
-      { m: dm(A.roofPieces[1]), p: [-1.5, 0.55, ROOF.z1 + 0.01] as [number, number, number], s: [3.2, 1.0], ry: 0 },
-      { m: dm(A.roofPieces[2]), p: [5.5, 0.55, ROOF.z1 + 0.01] as [number, number, number], s: [3.4, 1.0], ry: 0 },
-      { m: dm(A.roofPieces[3]), p: [12.2, 0.55, ROOF.z1 + 0.01] as [number, number, number], s: [2.8, 0.9], ry: 0 },
-      { m: dm(A.roofPieces[0]), p: [-6, 2.0, ROOF.z0 - 7.98 + 4.0 + 0.02] as [number, number, number], s: [4.4, 2.3], ry: 0 },
-      { m: dm(A.pieces[0]), p: [ROOF.x1 - 0.01, 0.55, -8] as [number, number, number], s: [3.6, 1.0], ry: -Math.PI / 2 },
+    // parapet / bulkhead graffiti: the same families, from the shared spray atlas
+    const G = A.graf
+    const sprayMat = keep(atlasMaterial(G.sprayTex, { seed: 5 }))
+    const roofPlacements: Placement[] = [
+      { cell: G.spr.roof_throw, pos: [-1.5, 0.56, ROOF.z1 + 0.012], ry: 0, w: 2.4, tint: 0.95, seed: 1 },
+      { cell: G.spr.roof_block, pos: [5.5, 0.56, ROOF.z1 + 0.012], ry: 0, w: 3.4, tint: 0.9, seed: 2 },
+      { cell: G.spr.roof_wild, pos: [12.2, 0.55, ROOF.z1 + 0.012], ry: 0, w: 1.55, tint: 0.92, seed: 3 },
+      { cell: G.spr.roof_hand, pos: [-6, 2.0, 4.02], ry: 0, w: 2.6, tint: 0.95, seed: 4 },
+      { cell: G.spr.hand_oka, pos: [ROOF.x1 - 0.012, 0.58, -8], ry: -Math.PI / 2, w: 1.6, tint: 0.9, seed: 5 },
+      { cell: G.spr.st_hood_row, pos: [-3.2, 0.5, 3.995], ry: 0, w: 2.2, rz: -0.01, tint: 0.85, seed: 6 },
     ]
+    const roofDecals = buildAtlasMesh(roofPlacements, sprayMat, { order: 2 })
+    disposables.push({ dispose: () => { roofDecals.geo.dispose(); roofDecals.mesh.dispose() } })
 
     const doorMat = keep(new THREE.MeshStandardMaterial({ map: A.doors[1], roughness: 0.6, metalness: 0.5 }))
     const doorGeo = keep(new THREE.PlaneGeometry(1.15, 2.3))
@@ -193,7 +198,7 @@ export function RooftopEnvironment() {
     const lampBulb = keep(new THREE.MeshBasicMaterial({ color: new THREE.Color(6, 4.4, 2.4) }))
     const bulbGeo = keep(new THREE.SphereGeometry(0.08, 8, 6))
 
-    return { disposables, deckGeo, deckMat, concrete, brick, parGeo, capGeo, capMat, bulk, woodGeo, ironGeo, tankWood, tankIron, parts, glassGeo, glassMat, nbGeo, nbMat, nbDecGeo, nbDecMat, tallGeo, towerMat, fieldGeo, crownGeo, crownMat, beaconMat, crownTops, decal, decals, doorMat, doorGeo, lampGlow, lampBulb, bulbGeo, boxes }
+    return { disposables, deckGeo, deckMat, concrete, brick, parGeo, capGeo, capMat, bulk, woodGeo, ironGeo, tankWood, tankIron, parts, glassGeo, glassMat, nbGeo, nbMat, nbDecGeo, nbDecMat, tallGeo, towerMat, fieldGeo, crownGeo, crownMat, beaconMat, crownTops, roofDecals, doorMat, doorGeo, lampGlow, lampBulb, bulbGeo, boxes }
   }, [])
 
   useFrame(() => {
@@ -208,7 +213,6 @@ export function RooftopEnvironment() {
 
   useEffect(() => () => kit.disposables.forEach((d) => d.dispose()), [kit])
 
-  const stencilTank = A.stencils.seven
   return (
     <group position={[R, 0, 0]}>
       <mesh geometry={kit.deckGeo} material={kit.deckMat} rotation={[-Math.PI / 2, 0, 0]} position={[3, 0, -6]} />
@@ -223,14 +227,12 @@ export function RooftopEnvironment() {
       {/* tank */}
       <mesh geometry={kit.woodGeo} material={kit.tankWood} />
       <mesh geometry={kit.ironGeo} material={kit.tankIron} />
-      <TankStencil tex={stencilTank} />
+      <NumberMark index={5} cell={A.graf.spr.n06} atlas="spray" position={[10, 3.9, -6 + 1.72]} rotation={[0, 0, 0]} w={0.8} />
       {kit.parts.map((p, i) => (
         <mesh key={i} geometry={p.geo} material={p.mat} />
       ))}
       <mesh geometry={kit.glassGeo} material={kit.glassMat} />
-      {kit.decals.map((d, i) => (
-        <mesh key={i} geometry={kit.decal} material={d.m} position={d.p} rotation={[0, d.ry + Math.PI * (d.ry === 0 ? 0 : 0), 0]} scale={[d.s[0], d.s[1], 1]} renderOrder={2} />
-      ))}
+      <primitive object={kit.roofDecals.mesh} />
       {/* world around */}
       <mesh geometry={kit.nbGeo} material={kit.nbMat} />
       <mesh geometry={kit.nbDecGeo} material={kit.nbDecMat} />
@@ -292,26 +294,6 @@ function RoofGlyph() {
       onPointerOver={(e) => { e.stopPropagation(); flag.current = true; useStore.getState().setCursor('portal', '?') }}
       onPointerOut={() => { flag.current = false; useStore.getState().setCursor('default') }}
       onClick={(e) => { e.stopPropagation(); enterDualism() }}
-    />
-  )
-}
-
-/** Stencilled "07" on the water tank (Easter egg). */
-function TankStencil({ tex }: { tex: THREE.Texture }) {
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({ map: tex, transparent: true, depthWrite: false, emissive: new THREE.Color('#ffe2b4'), emissiveMap: tex, emissiveIntensity: 0.05, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), [tex])
-  const geo = useMemo(() => new THREE.PlaneGeometry(0.8, 0.8), [])
-  const h = useRef(false)
-  useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  useFrame((_, dt) => { mat.emissiveIntensity += ((h.current ? 0.9 : 0.05) - mat.emissiveIntensity) * Math.min(1, dt * 8) })
-  const t = alterco.tracks[6]
-  return (
-    <mesh
-      geometry={geo}
-      material={mat}
-      position={[10, 3.9, -6 + 1.7]}
-      renderOrder={3}
-      onPointerOver={(e) => { e.stopPropagation(); h.current = true; useStore.getState().setCursor('link', '07'); useStore.getState().say(`${pad(t.n)} — ${t.title.toUpperCase()}`, 'The outro was waiting up here.') }}
-      onPointerOut={() => { h.current = false; useStore.getState().setCursor('default') }}
     />
   )
 }

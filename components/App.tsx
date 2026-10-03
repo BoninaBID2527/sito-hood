@@ -1,6 +1,7 @@
 'use client'
 
 import { A } from '@/lib/assets'
+import { loadSecrets, resetSecrets } from '@/lib/secrets'
 import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
@@ -47,9 +48,7 @@ export default function App() {
     rt.quality = SETTINGS[tier]
     useStore.getState().set({ tier })
     rt.fx.fade = 0
-    try {
-      if (localStorage.getItem('hd:dualismo')) useStore.getState().set({ dualismoFound: true })
-    } catch {}
+    loadSecrets()
     let cancelled = false
     ;(async () => {
       await loadCore((p) => !cancelled && useStore.getState().set({ loadProgress: p * 0.92 }))
@@ -75,6 +74,7 @@ export default function App() {
       rt,
       A,
       store: useStore,
+      reset: () => resetSecrets(),
       act: (name: string, ...a: unknown[]) => (actions as any)[name]?.(...a),
     }
   }, [])

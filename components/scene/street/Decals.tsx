@@ -14,6 +14,8 @@ import { wallX } from './layout'
 import { FIRE_ESCAPES, Y0 } from './FireEscapes'
 import { PortalPoster } from '../PortalPoster'
 import { GrazingSymbol } from './GrazingSymbol'
+import { StreetGraffiti } from './StreetGraffiti'
+import { NumberTrail } from './NumberTrail'
 import { alterco, pad } from '@/data/project'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
@@ -47,80 +49,14 @@ function useDecalMats() {
 }
 
 export function Decals() {
-  const mats = useDecalMats()
-  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
-
-  const defs = useMemo(() => {
-    const r = rng(77)
-    const d: DecalDef[] = []
-    // large graffiti pieces — the walls' main voice
-    const pieces: [-1 | 1, number, number, number, number, number][] = [
-      [-1, 7, 3.2, 5.2, 3.25, 0],
-      [1, -15, 3.0, 5.4, 3.4, 1],
-      [-1, -29, 2.8, 4.8, 3.0, 2],
-      [1, -49, 3.1, 5.0, 3.1, 3],
-      [-1, -62, 2.9, 4.6, 2.9, 4],
-      [-1, -90, 3.6, 8.5, 5.3, 4],
-      [1, -86, 3.4, 7.5, 4.7, 0],
-      [-1, -104, 3.4, 8, 5, 1],
-      [1, -108, 3.4, 7.5, 4.7, 2],
-    ]
-    pieces.forEach(([side, z, y, w, h, t], i) => d.push({ side, z, y, w, h, tex: A.pieces[t], off: OFF + i * 0.0004, rot: r.range(-0.03, 0.03) }))
-    // small tags
-    for (let i = 0; i < 26; i++) {
-      const side = (r() < 0.5 ? -1 : 1) as -1 | 1
-      const z = r.range(20, -72)
-      const upper = r() < 0.35
-      const w = r.range(0.9, 1.7)
-      d.push({ side, z, y: upper ? r.range(4.6, 9) : r.range(0.55, 1.4), w, h: w * 0.6, tex: A.pieces[r.int(0, 4)], off: OFF + 0.001 * i, rot: r.range(-0.2, 0.2), order: 1 })
-    }
-    // paste-up posters (track lyrics-style typography)
-    const clusters: [-1 | 1, number][] = [[-1, 15], [1, 3], [-1, -9], [1, -24], [-1, -20], [1, -41], [-1, -45], [1, -55], [-1, -56], [-1, -70], [1, -70]]
-    clusters.forEach(([side, zc], ci) => {
-      const n = r.int(2, 4)
-      for (let i = 0; i < n; i++) {
-        const w = r.range(0.75, 1.0)
-        d.push({ side, z: zc + (i - n / 2) * 0.82 + r.range(-0.2, 0.2), y: r.range(1.55, 2.55), w, h: w * 1.5, tex: A.posters[(ci + i) % A.posters.length], rot: r.range(-0.07, 0.07), off: OFF + 0.002 * (ci * 4 + i), order: 2 })
-      }
-    })
-    return d
-  }, [])
-
-  // one InstancedMesh per (texture, layer) → ~15 draw calls instead of ~70
-  const batches = useMemo(() => {
-    const groups = new Map<string, DecalDef[]>()
-    for (const d of defs) {
-      const k = `${d.tex.uuid}|${d.order ?? 0}`
-      if (!groups.has(k)) groups.set(k, [])
-      groups.get(k)!.push(d)
-    }
-    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), sc = new THREE.Vector3(), eu = new THREE.Euler()
-    return [...groups.values()].map((list) => {
-      const im = new THREE.InstancedMesh(geo, mats.get(list[0].tex), list.length)
-      list.forEach((d, i) => {
-        p.set(wallX(d.side, d.z) - d.side * (d.off ?? OFF), d.y, d.z)
-        q.setFromEuler(eu.set(0, rotFor(d.side), d.rot ?? 0))
-        sc.set(d.w, d.h, 1)
-        im.setMatrixAt(i, m4.compose(p, q, sc))
-      })
-      im.instanceMatrix.needsUpdate = true
-      im.frustumCulled = false
-      im.renderOrder = list[0].order ?? 0
-      return im
-    })
-  }, [defs, geo, mats])
-
-  useEffect(() => () => { mats.dispose(); geo.dispose(); batches.forEach((b) => b.dispose()) }, [mats, geo, batches])
-
   return (
     <group>
-      {batches.map((b, i) => (
-        <primitive key={i} object={b} />
-      ))}
+      <StreetGraffiti />
       <Signs />
       <WorldTitles />
       <EasterEggs />
       <GrazingSymbol />
+      <NumberTrail />
     </group>
   )
 }
@@ -247,22 +183,18 @@ function EasterEggs() {
     () => A.letters.map((t) => new THREE.MeshStandardMaterial({ map: t, transparent: true, depthWrite: false, roughness: 0.9, emissive: new THREE.Color('#ffffff'), emissiveMap: t, emissiveIntensity: 0, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 })),
     [],
   )
-  const stencilMat = useMemo(() => new THREE.MeshStandardMaterial({ map: A.stencils.five, transparent: true, depthWrite: false, roughness: 0.9, emissive: new THREE.Color('#ffd9a0'), emissiveMap: A.stencils.five, emissiveIntensity: 0.05, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), [])
   const creditsMat = useMemo(() => new THREE.MeshStandardMaterial({ map: A.creditsPoster, transparent: true, roughness: 0.9, emissive: new THREE.Color('#fff'), emissiveMap: A.creditsPoster, emissiveIntensity: 0.0, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }), [])
-  const hov = useRef({ letter: -1, stencil: false, credits: false })
-  useEffect(() => () => { geo.dispose(); letterMats.forEach((m) => m.dispose()); stencilMat.dispose(); creditsMat.dispose() }, [geo, letterMats, stencilMat, creditsMat])
+  const hov = useRef({ letter: -1, credits: false })
+  useEffect(() => () => { geo.dispose(); letterMats.forEach((m) => m.dispose()); creditsMat.dispose() }, [geo, letterMats, creditsMat])
 
   useFrame((_, dt) => {
     letterMats.forEach((m, i) => {
       const target = letters[i] ? 1.1 : hov.current.letter === i ? 0.7 : 0
       m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 8)
     })
-    stencilMat.emissiveIntensity += ((hov.current.stencil ? 1 : 0.05) - stencilMat.emissiveIntensity) * Math.min(1, dt * 8)
     creditsMat.emissiveIntensity += ((hov.current.credits ? 0.35 : 0) - creditsMat.emissiveIntensity) * Math.min(1, dt * 8)
   })
 
-  const fe = FIRE_ESCAPES.find((f) => f.side === 1 && f.z === -37)!
-  const fx = wallX(1, fe.z)
   const set = useStore.getState().setCursor
 
   return (
@@ -283,25 +215,6 @@ function EasterEggs() {
           </mesh>
         </group>
       ))}
-
-      {/* a number someone stencilled on the fire escape */}
-      <mesh
-        geometry={geo}
-        material={stencilMat}
-        position={[fx - 0.09, Y0 + 1.5, fe.z + 0.55]}
-        rotation={[0, -Math.PI / 2, 0]}
-        scale={[0.55, 0.55, 1]}
-        renderOrder={4}
-        onPointerOver={(e) => {
-          e.stopPropagation()
-          hov.current.stencil = true
-          set('link', '05')
-          const t = alterco.tracks[4]
-          useStore.getState().say(`${pad(t.n)} — ${t.title.toUpperCase()}`, 'Someone stencilled this on the fire escape.')
-          useStore.getState().markEgg('stencil')
-        }}
-        onPointerOut={() => { hov.current.stencil = false; set('default') }}
-      />
 
       {/* credits wheat-paste, half hidden behind a dumpster in the plaza */}
       <mesh

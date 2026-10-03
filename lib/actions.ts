@@ -1,3 +1,4 @@
+import { saveNums, saveFound, saveReturned } from './secrets'
 import gsap from 'gsap'
 import { rt } from './runtime'
 import { useStore, TRACK_COUNT } from './store'
@@ -53,7 +54,7 @@ export function enterDualism() {
   if (s.mode !== 'alterco') return
   s.set({ mode: 'dualism-in', selected: null, dualismoFound: true })
   s.markEgg('portal')
-  try { localStorage.setItem('hd:dualismo', '1') } catch {}
+  saveFound()
   lockScroll()
   audio.whoosh()
   const tl = gsap.timeline()
@@ -79,7 +80,8 @@ export function exitDualism() {
   const tl = gsap.timeline()
   tl.to(rt.fx, { tunnel: 1, duration: rt.reducedMotion ? 0.4 : 1.7, ease: 'power3.in' })
   tl.add(() => {
-    useStore.getState().set({ mode: 'alterco' })
+    useStore.getState().set({ mode: 'alterco', dualReturned: true })
+    saveReturned()
     rt.fx.dualism = 0
     rt.fx.dissolve = 0
   })
@@ -109,7 +111,7 @@ export function foundLetter(i: number) {
     s.say('A L T E R C O', 'The walls were spelling it all along.')
     s.markEgg('letters')
   } else {
-    s.say(`${letters.filter(Boolean).length} / 7`, 'Some of these tags are not just tags.')
+    s.say('…', 'Some of these tags are not just tags.')
   }
 }
 
@@ -138,4 +140,29 @@ export function whisper(text?: string) {
   s.set({ whisper: t })
   s.markEgg('glitch')
   setTimeout(() => useStore.getState().set({ whisper: null }), 620)
+}
+
+const NUM_LINES = [
+  'Stencilled on a box nobody opens.',
+  'Peeling off a drainpipe.',
+  'Someone painted the door number.',
+  'Half a poster is still a poster.',
+  'A tag hidden inside a tag.',
+  'Up on the roof, where the wind is.',
+  'Look at the water.',
+]
+/** One of the seven numbers, found on a physical object. No counter, no achievement — just a quiet acknowledgement. */
+export function foundNumber(i: number) {
+  const s = useStore.getState()
+  if (s.nums[i]) return
+  const nums = s.nums.slice()
+  nums[i] = true
+  s.set({ nums })
+  saveNums(nums)
+  s.markEgg(`n${i + 1}`)
+  if (i === 4) s.markEgg('stencil')
+  rt.impulse.rgb = Math.max(rt.impulse.rgb, 0.006)
+  audio.tick()
+  const t = alterco.tracks[i]
+  s.say(`${pad(t.n)} \u2014 ${t.title.toUpperCase()}`, NUM_LINES[i])
 }

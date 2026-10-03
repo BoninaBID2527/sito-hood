@@ -28,6 +28,10 @@ interface State {
   toast: Toast | null
   creditsOpen: boolean
   letters: boolean[]
+  /** the 01–07 trail on physical objects (never shown as a counter) */
+  nums: boolean[]
+  /** DUALISMO visited and returned from → the street remembers */
+  dualReturned: boolean
   lamp: boolean
   whisper: string | null
   hoodClicks: number
@@ -60,6 +64,8 @@ export const useStore = create<State>((set, get) => ({
   toast: null,
   creditsOpen: false,
   letters: new Array(7).fill(false),
+  nums: new Array(7).fill(false),
+  dualReturned: false,
   lamp: true,
   whisper: null,
   hoodClicks: 0,

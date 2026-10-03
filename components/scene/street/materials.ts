@@ -45,6 +45,8 @@ export interface StreetOpts {
   /** 0..1 strength of macro tint / grime / drips (default 1) */
   macro?: number
   seed?: number
+  /** instanced atlas decal: per-instance uv rect (aRect) + bend/curl/rand (aMeta); local uv in vLoc */
+  atlas?: boolean
   /** painted-on-wall decal: edge chipping, per-brick opacity breakup so it reads as paint/paper on masonry */
   decal?: boolean
   /** cloth flutter amplitude (metres) — hangs from uv.y = 1 */
@@ -63,6 +65,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const bump = !!(opts.bump && m.map)
   const wet = !!opts.wet
   const decal = !!opts.decal
+  const atlas = !!opts.atlas
   const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
   const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
@@ -75,10 +78,21 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
       sh.uniforms.uWetBox = { value: new THREE.Vector4(...(opts.wetBox ?? [0, 14, 20, -122])) }
     }
     sh.vertexShader = sh.vertexShader
-      .replace('#include <common>', `#include <common>\nvarying vec3 vWPos;\nuniform float uTime;\nuniform float uContam;\nuniform float uDissolve;${opts.flutter ? '\nattribute float aHang;' : ''}`)
+      .replace('#include <common>', `#include <common>\nvarying vec3 vWPos;\nuniform float uTime;\nuniform float uContam;\nuniform float uDissolve;${opts.flutter ? '\nattribute float aHang;' : ''}${atlas ? '\nattribute vec4 aRect;\nattribute vec3 aMeta;\nvarying vec2 vLoc;' : ''}`)
+      .replace('#include <uv_vertex>', atlas ? '#include <uv_vertex>\n  vLoc = vMapUv;\n  vMapUv = aRect.xy + vMapUv * aRect.zw;' : '#include <uv_vertex>')
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
+${
+  atlas
+    ? `  {
+    // paper is never flat: it bows between its glue lines and a corner lifts
+    float bw_ = aMeta.x * sin(uv.x * 3.14159) * (0.4 + 0.6 * sin(uv.y * 3.14159));
+    float cu_ = smoothstep(0.62, 1.0, dot(uv, vec2(0.62, 0.78)));
+    transformed.z += bw_ + aMeta.z * cu_ * cu_ + aMeta.x * 0.18 * sin(uv.y * 11.0 + aMeta.y * 40.0);
+  }`
+    : ''
+}
 #ifdef USE_INSTANCING
   vec4 wp_ = modelMatrix * instanceMatrix * vec4(transformed, 1.0);
 #else
@@ -101,6 +115,7 @@ ${
         '#include <common>',
         `#include <common>
 varying vec3 vWPos;
+${atlas ? 'varying vec2 vLoc;' : ''}
 uniform float uTime;
 uniform float uContam;
 uniform float uSunY;
@@ -123,6 +138,7 @@ ${
     ? `  vec2 cell_ = floor(tuv_);
   vec2 hh_ = h22_(cell_ + vec2(${seed}, ${seed} * 1.7));
   tuv_.x += floor(hh_.x * 11.0) / 11.0;
+  if (hh_.y > 0.5) tuv_.x = -tuv_.x; // mirrored tile: bond stays aligned, the pattern does not repeat
   tuv_.y += floor(hh_.y * 16.0) * 2.0 / 32.0;`
     : ''
 }
@@ -233,7 +249,7 @@ ${
     diffuseColor.a *= smoothstep(0.32 + edge_, 0.62 + edge_, diffuseColor.a) * (0.84 + 0.16 * bn_);
     diffuseColor.rgb *= 0.86 + 0.2 * bn_;
     // paper / paint ageing: torn irregular edges, sun-bleach + grey, dirt gathering low, a lifted lip at the border
-    vec2 du_ = vMapUv;
+    vec2 du_ = ${atlas ? 'vLoc' : 'vMapUv'};
     float eg_ = min(min(du_.x, 1.0 - du_.x), min(du_.y, 1.0 - du_.y));
     float tn_ = vn2_(du_ * vec2(11.0, 14.0) + vWPos.zx * 0.9);
     diffuseColor.a *= smoothstep(0.0, 0.035 + 0.07 * tn_, eg_ - 0.006 * h21_(floor(vWPos.xz * 12.0 + vWPos.y * 3.0)));
@@ -296,13 +312,13 @@ ${
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${metal ? 'm' : ''}3`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}4`
   return m
 }
 
 export function streetMat(params: THREE.MeshStandardMaterialParameters & StreetOpts) {
-  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, ...rest } = params
-  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal })
+  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas, ...rest } = params
+  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas })
 }
 
 /** Gentle sway for cables / hanging objects. Amplitude fades toward the fixed ends (uv.x 0..1). */
