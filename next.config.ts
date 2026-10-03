@@ -2,7 +2,7 @@ import type { NextConfig } from 'next'
 
 /**
  * Normal builds (`npm run build` / `next start`) are untouched.
- * Static preview build (GitHub Pages etc.): `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/repo-name npm run build` → ./out
+ * Static preview build (GitHub Pages etc.): `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/repo-name npm run build` → ./.next-export
  */
 const exp = process.env.STATIC_EXPORT === '1'
 const base = process.env.NEXT_PUBLIC_BASE_PATH || ''
