@@ -1,3 +1,4 @@
+import { withBase } from '@/lib/base'
 /**
  * Single source of truth for all artist / project / track content.
  * Nothing in the scene or UI hardcodes track names — everything reads from here.
@@ -48,10 +49,10 @@ export const alterco: Project = {
   id: 'alterco',
   title: 'ALTERCO',
   artwork: {
-    webp: '/covers/alterco.webp',
-    avif: '/covers/alterco.avif',
-    original: '/covers/alterco-official.jpeg',
-    thumb: '/covers/alterco-256.webp',
+    webp: withBase('/covers/alterco.webp'),
+    avif: withBase('/covers/alterco.avif'),
+    original: withBase('/covers/alterco-official.jpeg'),
+    thumb: withBase('/covers/alterco-256.webp'),
     width: 1144,
     height: 1141,
   },
@@ -71,10 +72,10 @@ export const dualismo: Project = {
   id: 'dualismo',
   title: 'DUALISMO',
   artwork: {
-    webp: '/covers/dualismo.webp',
-    avif: '/covers/dualismo.avif',
-    original: '/covers/dualismo-official.jpeg',
-    thumb: '/covers/dualismo-256.webp',
+    webp: withBase('/covers/dualismo.webp'),
+    avif: withBase('/covers/dualismo.avif'),
+    original: withBase('/covers/dualismo-official.jpeg'),
+    thumb: withBase('/covers/dualismo-256.webp'),
     width: 493,
     height: 490,
   },

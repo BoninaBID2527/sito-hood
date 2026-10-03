@@ -1,3 +1,4 @@
+import { withBase } from '@/lib/base'
 import type { Metadata, Viewport } from 'next'
 import '@fontsource/anton/latin-400.css'
 import '@fontsource/anton/latin-ext-400.css'
@@ -21,10 +22,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'HOODDINO — ALTERCO',
     description: 'Walk through the world of ALTERCO.',
-    images: [{ url: '/covers/alterco.webp', width: 1144, height: 1141 }],
+    images: [{ url: withBase('/covers/alterco.webp'), width: 1144, height: 1141 }],
     type: 'music.album',
   },
-  icons: { icon: '/covers/alterco-256.webp' },
+  icons: { icon: withBase('/covers/alterco-256.webp') },
 }
 
 export const viewport: Viewport = {
