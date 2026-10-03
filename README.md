@@ -106,21 +106,61 @@ Everything is uniform-gated; at rest the pass costs three taps.
 * Streaming URLs, credits, ambient audio loop — see above.
 * `public/models`, `public/audio`, `public/environment` exist for future assets; the world is fully procedural today.
 
+## V3.1 notes — street authenticity & the quiet secrets
+
+| area | what changed |
+|---|---|
+| Graffiti | `lib/graffiti.ts` + `lib/graffitiSheet.ts`: seven families drawn by different "hands" (hand tags, throw-ups, wildstyle, blockbusters, stencils, wheatpaste/poster typography, handwritten notes). Each piece has its own scale / rotation / baseline / kerning / stroke / spray softness / drips / fading / erosion / cross-outs / paint-overs. Everything lives in **two texture atlases** (spray, paper) and is placed in one authored `LAYOUT` (`street/StreetGraffiti.tsx`) as instanced decals — 3 draw calls for the whole street's writing. Decals are patched into the street shader so paint breaks up on brick/mortar, and paper bows, curls and tears with contact shadows. |
+| Numbers 01–07 | One per physical object (utility-box stencil, drainpipe sticker, door number, torn poster, fire-escape tag, rooftop tank marking, painted mark beside the water). Hover/rest (desktop) or tap (touch). No counter, no toast. |
+| Anamorphic ALTERCO | `street/Anamorph.tsx`: painted on the road so it reads as a word **only** from the scroll camera's pose at progress 0.165. Near alignment: a hair of colour separation, a slight glow, a faint glass tone (only if sound is on). Silent. |
+| Impossible puddle | The mid-alley puddle reflects a tall iridescent doorway that does not exist above it (analytic, works on every quality tier). Touch/hover: ripple + a flash in the pane + a far-off tone (sound on). |
+| 7 / 7 | Seven numbers found → a dead sign (`HiddenSign` in `RooftopEnvironment.tsx`) on a far tower slowly lights, stuttering first. Nobody is told; without it the roof is complete. |
+| After DUALISMO | `street/StreetMemory.tsx`, `Lamps.tsx`, puddle shader: a UV scrawl that never fully goes dark, a tiny glyph low on a wall, one lamp that occasionally splits into red/blue halves, one distant lamp whose colour depends on where you look, the egg puddle gains an iridescent edge. |
+| Time | Windows each have their own hour (`aWin` instance attribute) and a few go dark late; steam thickens at dusk; the UV scrawl rises with the dark. |
+| Track focus | The front track tints the light it stands in. |
+| Ambience (optional) | `lib/audio.ts`: positioned (`PannerNode`, listener = camera) synthesised beds — alley traffic, lamp hum, ventilation, drips; rooftop wind/traffic/structural hum; a low abstract DUALISMO drone. **Only after the visitor enables sound**; nothing autoplays; no music is synthesised or previewed; the site works muted. |
+| UI | `--ui-secondary` steps secondary chrome back during the liquid / dissolve / tunnel moments (never below 45 %; navigation stays). |
+| DUALISMO | Centre line kept clear of haze, a soft dark pool of air behind the official artwork. The artwork is untouched. |
+
+### Persistence & reset
+Only three local keys are stored (`hd:nums`, `hd:dualismo`, `hd:dualret`) — no personal data, no accounts, no analytics.
+Reset: open the site with `?reset=1`, or in a `?debug=1` session call `window.__hd.reset()`.
+
+## Fonts & licences
+
+Graffiti/poster lettering is drawn into canvas textures with a small, curated set of **self-hosted** families from [Fontsource](https://fontsource.org)
+(npm packages; **latin subset, one weight each**; nothing is fetched from a third party at runtime). All are open-licensed for web use:
+
+| family | used for | licence | source |
+|---|---|---|---|
+| Permanent Marker | hand tags, markers | Apache-2.0 | `@fontsource/permanent-marker` (Google Fonts) |
+| Reenie Beanie | handwritten notes | OFL-1.1 | `@fontsource/reenie-beanie` |
+| Rock Salt | scrawled tags | Apache-2.0 | `@fontsource/rock-salt` |
+| Nanum Pen Script | handwritten notes | OFL-1.1 | `@fontsource/nanum-pen-script` |
+| Titan One | throw-ups | OFL-1.1 | `@fontsource/titan-one` |
+| Bungee | blockbusters, road paint | OFL-1.1 | `@fontsource/bungee` |
+| Saira Stencil One | stencils | OFL-1.1 | `@fontsource/saira-stencil-one` |
+| Playfair Display (900 italic) | poster typography | OFL-1.1 | `@fontsource/playfair-display` |
+| Anton, Space Mono | site UI / posters (since V1) | OFL-1.1 | `@fontsource/anton`, `@fontsource/space-mono` |
+
+No other external fonts, images or audio were added in V3.1. The ALTERCO / DUALISMO artworks are the supplied files, used unmodified.
+
 ## Easter eggs (spoilers)
 <details><summary>Show</summary>
 
 1. The nearest street lamp (left, start of the alley) switches off/on when clicked.
 2. The torn poster on the left wall (~⅔ down the alley) hums with the DUALISMO artwork as the pointer nears — click it.
 3. Seven small graffiti letters hide along the walls — find all and the word is revealed.
-4. A "wrong" puddle mid-alley distorts reality when hovered.
-5. A stencilled number on a fire escape names a track. Another is on the rooftop water tank.
-6. A half-hidden wheat-paste in the plaza reveals the credits.
-7. A glyph on the rooftop parapet is a second way into DUALISMO.
-8. Open all seven tracks → the rooftop warning lights turn white and chase.
-9. Rarely, an RGB glitch flashes a line of hidden text.
-10. Click the HOODDINO wordmark seven times.
-11. A painted glyph on the left wall (~⅓ down the alley) only exists at a grazing angle — look back along the wall from afar; it vanishes when you walk up to it.
-12. If DUALISMO has been found, a faint iridescent glint stays on a distant tower on the rooftop.
+4. The seven numbers (01–07) are on seven objects: utility box, drainpipe, a door, a torn poster, the fire escape, the rooftop tank, the plaza beside the water. Find all seven and a dead sign on the rooftop comes alive.
+5. The mid-alley puddle shows something that is not there. Touch it.
+6. Stop the camera where the road paint says ALTERCO (about a sixth of the way in).
+7. A half-hidden wheat-paste in the plaza reveals the credits.
+8. A glyph on the rooftop parapet is a second way into DUALISMO.
+9. Open all seven tracks → the rooftop warning lights turn white and chase.
+10. Rarely, an RGB glitch flashes a line of hidden text.
+11. Click the HOODDINO wordmark seven times.
+12. A painted glyph on the left wall (~⅓ down the alley) only exists at a grazing angle.
+13. If DUALISMO has been found, a faint iridescent glint stays on a distant tower on the rooftop; after you come back from DUALISMO the street is slightly wrong in a few places.
 </details>
 
 ## Performance & quality tiers
