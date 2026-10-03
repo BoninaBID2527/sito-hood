@@ -6,7 +6,7 @@ const check = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PA
 const errors = []
 const TRAIL = [
   [0, 0.04, 3.096, 1.5, 2.6, '01 utility box'],
-  [1, 0.0, -2.762, 1.42, 11.3, '02 drainpipe'],
+  [1, 0.08, -3.212, 1.42, -6.7, '02 drainpipe'],
   [2, 0.12, 2.735, 1.62, -12.5, '03 door'],
   [3, 0.165, -2.9245, 1.6, -24.6, '04 torn poster'],
   [4, 0.24, 3.1, 5.9, -36.45, '05 fire escape'],

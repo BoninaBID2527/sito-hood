@@ -96,7 +96,7 @@ export function NumberTrail() {
         <NumberMark index={0} cell={G.spr.n01} atlas="spray" position={[Rx(2.6) - 0.204, 1.5, 2.6]} rotation={[0, -Math.PI / 2, 0]} w={0.4} />
       </group>
       {/* 02 — sticker on the drainpipe */}
-      <NumberMark index={1} cell={G.pap.stk_02} atlas="paper" position={[Lx(11.3) + 0.11 + 0.078, 1.42, 11.3]} rotation={[0, Math.PI / 2, 0.12]} w={0.17} hit={3.2} />
+      <NumberMark index={1} cell={G.pap.stk_02} atlas="paper" position={[Lx(-6.7) + 0.11 + 0.078, 1.42, -6.7]} rotation={[0, Math.PI / 2, 0.12]} w={0.17} hit={3.2} />
       {/* 03 — a number painted on a door */}
       <group>
         <mesh geometry={kit.frameGeo} material={kit.frameMat} position={[Rx(-12.5) - 0.07, 1.25, -12.5]} />
