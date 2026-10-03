@@ -25,17 +25,27 @@ async function open(touch) {
 }
 const tools = (page) => ({
   settle: () => page.waitForFunction(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 }, null, { timeout: 90000 }).catch(() => {}),
-  screen: (x, y, z) => page.evaluate(([x, y, z]) => { const c = window.__camera; c.updateMatrixWorld(); const v = new c.position.constructor(x, y, z).project(c); return { sx: (v.x * 0.5 + 0.5) * innerWidth, sy: (-v.y * 0.5 + 0.5) * innerHeight } }, [x, y, z]),
+  screen: (x, y, z) => page.evaluate(([x, y, z]) => { const c = window.__camera; c.updateMatrixWorld(); const v = new c.position.constructor(x, y, z).project(c); return { sx: (v.x * 0.5 + 0.5) * innerWidth, sy: (-v.y * 0.5 + 0.5) * innerHeight, behind: v.z > 1 } }, [x, y, z]),
 })
 
 for (const touch of [false, true]) {
   const { ctx, page } = await open(touch)
+  const innerW = touch ? 820 : 1280, innerH = touch ? 1180 : 720
   const T = tools(page)
   const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); await T.settle(); await page.waitForTimeout(2200) }
   const tag = touch ? 'touch' : 'mouse'
   for (const [i, p, x, y, z, name] of TRAIL) {
     await jump(p)
     let s = await T.screen(x, y, z)
+    const inView = (s) => !s.behind && s.sx > 20 && s.sx < innerW - 20 && s.sy > 20 && s.sy < innerH - 20
+    if (touch && !inView(s)) {
+      // narrow portrait view: walk the scroll a little until the object passes through the frame (that is what a thumb does)
+      for (const d of [0.006, 0.012, 0.018, -0.006, -0.012, 0.024, 0.03]) {
+        await jump(Math.max(0, p + d))
+        s = await T.screen(x, y, z)
+        if (inView(s)) break
+      }
+    }
     if (touch) await page.touchscreen.tap(s.sx, s.sy)
     else {
       // the camera parallaxes with the pointer, so aim, let it settle, re-aim, then click (what a person does)
