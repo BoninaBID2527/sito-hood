@@ -17,7 +17,7 @@ const out = await page.evaluate(([x, y, z]) => {
   const dir = V.clone().sub(c.position).normalize()
   const rc = new window.__rc.constructor(c.position.clone(), dir, 0.1, 200)
   rc.layers.enableAll(); rc.camera = c
-  const hits = rc.intersectObjects(scene.children, true).slice(0, 6)
+  const hits = rc.intersectObjects(scene.children, true).filter((h) => h.object.type !== 'Points' && (h.object.__r3f?.handlers && Object.keys(h.object.__r3f.handlers).length || Math.abs(h.distance - V.distanceTo(c.position)) < 1.2)).slice(0, 8)
   return { cam: c.position.toArray(), dist: V.distanceTo(c.position), hits: hits.map((h) => ({ d: +h.distance.toFixed(2), type: h.object.type, name: h.object.name, geo: h.object.geometry?.type, mat: h.object.material?.type, op: h.object.material?.opacity, hasHandler: !!(h.object.__r3f?.handlers && Object.keys(h.object.__r3f.handlers).length) })) }
 }, [x, y, z])
 console.log(JSON.stringify(out, null, 1))
