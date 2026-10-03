@@ -35,9 +35,16 @@ for (const touch of [false, true]) {
   const tag = touch ? 'touch' : 'mouse'
   for (const [i, p, x, y, z, name] of TRAIL) {
     await jump(p)
-    const s = await T.screen(x, y, z)
+    let s = await T.screen(x, y, z)
     if (touch) await page.touchscreen.tap(s.sx, s.sy)
-    else { await page.mouse.move(5, 5); await page.mouse.move(s.sx, s.sy, { steps: 4 }); await page.waitForTimeout(500); await page.mouse.click(s.sx, s.sy) }
+    else {
+      // the camera parallaxes with the pointer, so aim, let it settle, re-aim, then click (what a person does)
+      await page.mouse.move(s.sx, s.sy, { steps: 4 }); await page.waitForTimeout(1200)
+      s = await T.screen(x, y, z)
+      await page.mouse.move(s.sx, s.sy, { steps: 2 }); await page.waitForTimeout(900)
+      s = await T.screen(x, y, z)
+      await page.mouse.click(s.sx, s.sy)
+    }
     await page.waitForTimeout(900)
     check(`[${tag}] number ${name}`, await page.evaluate((i) => window.__hd.store.getState().nums[i], i), JSON.stringify(s))
   }
