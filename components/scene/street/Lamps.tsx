@@ -78,6 +78,10 @@ export function Lamps() {
   const bulbMats = useMemo(() => LAMPS.map(() => new THREE.MeshBasicMaterial({ color: new THREE.Color(6, 4.6, 2.6) })), [])
   const glowMats = useMemo(() => LAMPS.map(() => kit.glowMat('#ffb868')), [kit])
   const coneMats = useMemo(() => LAMPS.map(() => kit.coneMat.clone()), [kit])
+  // after DUALISMO: lamp 3 occasionally splits into two spectral halves; lamp 7 answers the pointer with the wrong colour
+  const splitMats = useMemo(() => ['#ff2a40', '#2a8aff'].map((c) => kit.glowMat(c)), [kit])
+  const splitRefs = useRef<(THREE.Sprite | null)[]>([])
+  const baseCol = useMemo(() => new THREE.Color('#ffb868'), [])
 
   useEffect(() => {
     const unsub = useStore.subscribe((s, p) => {
@@ -89,9 +93,9 @@ export function Lamps() {
     return () => {
       unsub()
       kit.geo.dispose(); kit.metal.dispose(); kit.bulbGeo.dispose(); kit.hitGeo.dispose(); kit.coneGeo.dispose(); kit.coneMat.dispose()
-      bulbMats.forEach((m) => m.dispose()); glowMats.forEach((m) => m.dispose()); coneMats.forEach((m) => m.dispose())
+      bulbMats.forEach((m) => m.dispose()); glowMats.forEach((m) => m.dispose()); coneMats.forEach((m) => m.dispose()); splitMats.forEach((m) => m.dispose())
     }
-  }, [kit, bulbMats, glowMats, coneMats])
+  }, [kit, bulbMats, glowMats, coneMats, splitMats])
 
   const tmp = useMemo(() => new THREE.Vector3(), [])
   useFrame(({ camera }, dt) => {
@@ -117,6 +121,22 @@ export function Lamps() {
       coneMats[i].uniforms.uI.value = vis * (1 - rt.fx.dualism)
       ;(l as any)._v = vis
     })
+    const mem = useStore.getState().dualReturned
+    {
+      const t = rt.time
+      const sp = mem ? Math.max(0, Math.sin(t * 0.41) * Math.sin(t * 0.13 + 1) - 0.7) * 3.2 : 0
+      const base = glowMats[3].opacity
+      splitMats[0].opacity = Math.min(1, sp) * 0.6 * base
+      splitMats[1].opacity = Math.min(1, sp) * 0.6 * base
+      const off = 0.22 + sp * 0.5
+      if (splitRefs.current[0]) splitRefs.current[0]!.position.x = 0.98 - off
+      if (splitRefs.current[1]) splitRefs.current[1]!.position.x = 0.98 + off
+      if (mem) {
+        // a distant lamp whose colour depends on where you are looking — warm when you are not
+        const k = smoothstep(0.12, 0.7, Math.abs(rt.px)) * 0.8
+        glowMats[7].color.copy(baseCol).lerp(_cool, k)
+      } else glowMats[7].color.copy(baseCol)
+    }
     // pool: three real lights hop to the nearest lamps (intensity depends only on distance → no popping)
     order.current = LAMPS.map((_, i) => i).sort((a, b) => dist(camera.position, a) - dist(camera.position, b))
     for (let k = 0; k < lights.current.length; k++) {
@@ -143,6 +163,9 @@ export function Lamps() {
           <mesh ref={(r) => { bulbs.current[i] = r }} geometry={kit.bulbGeo} material={bulbMats[i]} position={[0.98, HEIGHT + 0.42, 0]} />
           <sprite ref={(r) => { glows.current[i] = r }} material={glowMats[i]} position={[0.98, HEIGHT + 0.42, 0]} scale={[3.2, 3.2, 1]} />
           <mesh ref={(r) => { cones.current[i] = r }} geometry={kit.coneGeo} material={coneMats[i]} position={[0.98, HEIGHT + 0.4, 0]} renderOrder={3} />
+          {l.id === 3 && [0, 1].map((k) => (
+            <sprite key={k} ref={(r) => { splitRefs.current[k] = r }} material={splitMats[k]} position={[0.98, HEIGHT + 0.42, 0]} scale={[2.4, 2.4, 1]} />
+          ))}
           {l.id === 0 && (
             <mesh
               position={[0.5, (HEIGHT + 1) / 2, 0]}
@@ -166,6 +189,8 @@ export function Lamps() {
     </group>
   )
 }
+
+const _cool = new THREE.Color('#78a8ff')
 
 function dist(p: THREE.Vector3, i: number) {
   const l = LAMPS[i]

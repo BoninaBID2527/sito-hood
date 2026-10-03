@@ -901,6 +901,23 @@ export function drawUV(ctx: Ctx, w: number, h: number, seed: number) {
   ctx.restore()
 }
 
+/** A tiny sign that belongs to the other place: two halves of a ring that do not quite meet. Drawn in UV paint. */
+export function drawGlyph(ctx: Ctx, w: number, h: number) {
+  ctx.save()
+  ctx.translate(w / 2, h / 2)
+  ctx.strokeStyle = '#a8d4ff'
+  ctx.lineCap = 'round'
+  ctx.shadowColor = '#5aa8ff'
+  ctx.shadowBlur = 5
+  ctx.lineWidth = w * 0.07
+  const R = w * 0.3
+  ctx.beginPath(); ctx.arc(-w * 0.03, 0, R, Math.PI * 0.62, Math.PI * 1.38); ctx.stroke()
+  ctx.beginPath(); ctx.arc(w * 0.05, 0, R, -Math.PI * 0.38, Math.PI * 0.38); ctx.stroke()
+  ctx.lineWidth = w * 0.045
+  ctx.beginPath(); ctx.moveTo(w * 0.01, -R * 1.25); ctx.lineTo(-w * 0.01, R * 1.25); ctx.stroke()
+  ctx.restore()
+}
+
 /** The anamorphic ALTERCO mask: letters laid along an arc in *view space* (see AnamorphicWord). */
 export function anamorphMask(): HTMLCanvasElement {
   const W = 1536, H = 768

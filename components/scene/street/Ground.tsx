@@ -11,6 +11,7 @@ import { palette } from '@/lib/timeOfDay'
 import { streetMat, streetU } from './materials'
 import { SEGS } from './layout'
 import { useStore } from '@/lib/store'
+import { audio } from '@/lib/audio'
 
 const GROUND_W = 44
 const GROUND_L = 176
@@ -88,6 +89,8 @@ uniform float uContam;
 uniform float uWet;
 uniform float uPud;
 uniform vec3 uRip;
+uniform float uEgg;
+uniform float uMem;
 uniform vec3 uHor;
 uniform vec3 uSky;
 varying vec4 vUv;
@@ -114,6 +117,33 @@ void main() {
   vec2 rp = p - uRip.xy;
   float rd = length(rp);
   dist += normalize(rp + 1e-4) * sin(rd * 24.0 - uTime * 7.0) * exp(-rd * 1.5) * uRip.z * 0.025;
+  // the impossible reflection: one puddle shows a tall iridescent doorway that is not standing above it.
+  // analytic (works on the real and the cheap reflection tier alike); nothing exists in the street at that spot.
+  float eggM = 0.0;
+  vec3 eggC = vec3(0.0);
+  {
+    vec2 ep = vWorld.xz - vec2(0.2, -41.0);
+    float er = length(ep);
+    float ew = (1.0 - smoothstep(1.35, 2.35, er + (pn - 0.5) * 0.7)) * m;
+    if (ew > 0.002) {
+      vec3 Rf = vec3(-V.x, V.y, -V.z);
+      float t = (-49.4 - vWorld.z) / min(Rf.z, -0.02);
+      vec3 hp = vWorld + Rf * t;
+      float sway = sin(uTime * 0.35) * 0.03 + uMem * sin(uTime * 0.9 + hp.y) * 0.04;
+      float hx = (hp.x - 0.2 - sway) * (1.0 + uMem * 0.06 * sin(hp.y * 2.0));
+      float hy = hp.y;
+      // arch: tall frame with a pointed head, a vertical slit of light inside
+      float half_ = 0.95 - max(0.0, hy - 5.2) * 0.2;
+      float inside = step(abs(hx), half_) * step(0.0, hy) * step(hy, 8.2);
+      float frame = inside * smoothstep(0.16, 0.0, half_ - abs(hx)) ;
+      float slit = inside * smoothstep(0.2, 0.0, abs(hx)) * smoothstep(0.0, 1.0, hy) * smoothstep(8.2, 5.0, hy);
+      vec3 spec = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + hy * 0.07 + hx * 0.2 + uTime * 0.025));
+      eggC = (spec * (frame * 1.1 + 0.18 * inside) + vec3(0.55, 0.7, 1.25) * slit * 0.9) * (0.5 + uEgg * 2.4);
+      eggM = ew * clamp(inside * 0.9, 0.0, 1.0);
+      // a hard flash on touch/hover: the pane answers for a moment
+      dist += normalize(ep + 1e-4) * sin(er * 18.0 - uTime * 6.0) * exp(-er * 1.3) * uEgg * 0.02;
+    }
+  }
   vec3 c;
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
@@ -133,10 +163,14 @@ void main() {
   c = mix(uHor, uSky, g) * (0.8 + 0.2 * sin(p.x * 6.0 + dist.x * 400.0));
   c += uHor * pow(max(0.0, 1.0 - abs(p.x) * 0.5), 2.0) * 0.35;
   `}
+  c = mix(c, c * 0.35 + eggC, eggM * (0.42 + uMem * 0.12));
   // thin-film oil sheen inside standing water; grows with contamination
   float oil = smoothstep(0.35, 0.8, wf.b + (pn - 0.5) * 0.4) * m;
   vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + wf.b * 1.6 + pw.y * 0.02 + uTime * 0.03));
   c = mix(c, c * (0.55 + film * 1.0), oil * (0.07 + 0.6 * uContam + 0.06 * uPud));
+  float edge = m * (1.0 - smoothstep(0.55, 0.95, m)) + (1.0 - m) * smoothstep(0.0, 0.6, m);
+  float eggEdge = exp(-length(vWorld.xz - vec2(0.2, -41.0)) * 0.55) * uMem * smoothstep(0.02, 0.5, m) * (1.0 - smoothstep(0.75, 1.0, m));
+  c += film * eggEdge * 0.35;
   float damped = (1.0 - m) * damp;
   float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * mix(0.35, 1.0, clamp(fres * 3.5, 0.0, 1.0));
   // puddle darkening so the water reads as depth, not paint
@@ -160,6 +194,7 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
   const uni = useRef<Record<string, THREE.IUniform> | null>(null)
   const rip = useRef({ x: 0, z: 0, s: 0 })
   const lastEgg = useRef(-100)
+  const egg = useRef(0)
 
   const { obj, mat } = useMemo(() => {
     const geo = new THREE.PlaneGeometry(size[0], size[1])
@@ -175,6 +210,8 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
         uWet: { value: 1 },
         uPud: { value: 0 },
         uRip: { value: new THREE.Vector3() },
+        uEgg: { value: 0 },
+        uMem: { value: 0 },
         uHor: { value: new THREE.Color() },
         uSky: { value: new THREE.Color() },
       },
@@ -233,9 +270,24 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
     u.uWet.value = streetU.uWet.value
     u.uHor.value.copy(palette.horizon).multiplyScalar(0.8)
     u.uSky.value.copy(palette.skyMid).multiplyScalar(0.7)
+    egg.current *= Math.exp(-dt * 0.9)
+    u.uEgg.value = egg.current
+    u.uMem.value = useStore.getState().dualReturned ? 1 : 0
     rip.current.s *= Math.exp(-dt * 1.4)
     u.uRip.value.set(rip.current.x, rip.current.z, rip.current.s)
   })
+
+  /** the one impossible puddle answers an intentional touch: ripple, a flash in the pane, a far-off note — nothing else */
+  const eggTouch = (e: any) => {
+    const dx = e.point.x - 0.2, dz = e.point.z + 41
+    if (dx * dx + dz * dz > 2.6 * 2.6 || rt.time - lastEgg.current < 9) return
+    lastEgg.current = rt.time
+    egg.current = 1
+    rip.current.x = e.point.x; rip.current.z = e.point.z; rip.current.s = 1.4
+    rt.impulse.rgb = Math.max(rt.impulse.rgb, 0.012)
+    audio.far()
+    useStore.getState().markEgg('puddle')
+  }
 
   const sample = (uvx: number, uvy: number) => {
     const c = mask.image as HTMLCanvasElement
@@ -248,6 +300,7 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
     <group ref={group}>
       <primitive
         object={obj}
+        onPointerDown={interactive ? (e: any) => { if (rt.touch && e.point) eggTouch(e) } : undefined}
         onPointerMove={interactive ? (e: any) => {
           if (rt.touch || !e.uv) return
           const wet = sample(e.uv.x, e.uv.y)
@@ -255,17 +308,7 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
           rip.current.x = e.point.x
           rip.current.z = e.point.z
           rip.current.s = Math.min(1.4, rip.current.s + 0.12)
-          // the "wrong" puddle: hovering the one mid-alley pool distorts reality for a beat
-          const dx = e.point.x - 0.2, dz = e.point.z + 41
-          if (dx * dx + dz * dz < 9 && rt.time - lastEgg.current > 14) {
-            lastEgg.current = rt.time
-            rt.fx.ripple = 1
-            rt.fx.rippleX = e.pointer ? e.pointer.x * 0.5 + 0.5 : 0.5
-            rt.fx.rippleY = e.pointer ? e.pointer.y * 0.5 + 0.5 : 0.5
-            rt.impulse.rgb = 0.025
-            useStore.getState().say('THE WATER REMEMBERS', 'It looked back at you.')
-            useStore.getState().markEgg('puddle')
-          }
+          eggTouch(e)
         } : undefined}
       />
     </group>

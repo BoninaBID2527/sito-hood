@@ -16,6 +16,8 @@ import { PortalPoster } from '../PortalPoster'
 import { GrazingSymbol } from './GrazingSymbol'
 import { StreetGraffiti } from './StreetGraffiti'
 import { NumberTrail } from './NumberTrail'
+import { Anamorph } from './Anamorph'
+import { StreetMemory } from './StreetMemory'
 import { alterco, pad } from '@/data/project'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
@@ -57,6 +59,8 @@ export function Decals() {
       <EasterEggs />
       <GrazingSymbol />
       <NumberTrail />
+      <Anamorph />
+      <StreetMemory />
     </group>
   )
 }

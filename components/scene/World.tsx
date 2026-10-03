@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { WorldGate } from './Director'
 import { StreetEnvironment } from './StreetEnvironment'
+import { Ambience } from './Ambience'
 import { Dust } from './street/Atmos'
 import { A, loadRoof, loadDualism } from '@/lib/assets'
 import { useStore } from '@/lib/store'
@@ -45,6 +46,7 @@ export function World() {
         </WorldGate>
       )}
       <Dust />
+      <Ambience />
     </>
   )
 }

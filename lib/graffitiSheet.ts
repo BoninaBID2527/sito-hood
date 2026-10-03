@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { alterco } from '@/data/project'
 import {
   Atlas, type Age, type Cell, type Spec,
-  applyAge, drawBigPoster, drawHand, drawNote, drawStencil, drawSticker, drawSymbol, drawThrow, drawTrackPoster, drawUV, drawWild, drawBlock,
+  applyAge, drawBigPoster, drawHand, drawNote, drawStencil, drawSticker, drawSymbol, drawThrow, drawTrackPoster, drawUV, drawGlyph, drawWild, drawBlock,
   paper, scrap, FONT,
 } from './graffiti'
 import { rng } from './math'
@@ -94,6 +94,7 @@ export function buildGraffiti(sc: number): Graffiti {
   N('note_hd', 'H.D. was here', 'pen', '#ff7a3a', 87, {}, { fade: 0.25, erase: 0.3 })
   N('note_ear', 'ascolta', 'beanie', '#f4efe6', 88, { circle: true }, { fade: 0.05 })
   add(S, 'uv_tag', 512, 256, (c, w, h) => drawUV(c, w, h, 91))
+  add(S, 'glyph', 128, 128, (c, w, h) => drawGlyph(c, w, h))
 
   /* roof (reuses the same families) */
   add(S, 'roof_throw', 640, 256, (c, w, h) => drawThrow(c, w, h, { text: 'STARE BENE', fill: '#ff7a3a', fill2: '#ffd0a0', outline: '#14141c', rim: '#f2eee6', seed: 101 }), { fade: 0.12, erase: 0.14, seed: 60 })
