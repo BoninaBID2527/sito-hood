@@ -131,6 +131,8 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .nav-secret:disabled { cursor: default; }
 .menu-btn { display: none; padding: 10px 0; mix-blend-mode: difference; color: #fff; }
 
+.hud-bottom, .rail { opacity: var(--ui-secondary, 1); }
+.nav-item:not(.is-active) { opacity: var(--ui-secondary, 1); }
 .hud-bottom {
   position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end;
   padding: 0 var(--gutter) calc(var(--gutter) * 0.6 + var(--safe-b));

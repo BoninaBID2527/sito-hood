@@ -4,7 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
-import { rng } from '@/lib/math'
+import { rng, smoothstep } from '@/lib/math'
 import { tileUV } from '@/lib/geo'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { palette } from '@/lib/timeOfDay'
@@ -119,6 +119,8 @@ export function Walls() {
 }
 
 const tmpC = new THREE.Color()
+/** shared by every window material: how much of the night has arrived, and the late-hour lull */
+const winU = { t: { value: 0 }, late: { value: 0 } }
 /** emissive = base + windowsGlow × gain (null = never emits) */
 const EMIT: Record<WindowVariant, [number, number] | null> = {
   dark: null, warm: [0.12, 2.1], warm2: [0.14, 2.2], cool: [0.1, 1.5], tv: [0.2, 1.7], blind: [0.05, 0.55], boarded: null,
@@ -149,6 +151,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
     const lintelGeo = new THREE.BoxGeometry(1.25, 0.16, 0.22)
     const concrete = streetMat({ color: '#6f6a62', roughness: 0.95, aoBase: 0.6 })
     const meshes: THREE.InstancedMesh[] = []
+    const geos: THREE.BufferGeometry[] = []
     const mats: THREE.MeshStandardMaterial[] = []
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), p = new THREE.Vector3(), s = new THREE.Vector3(1, 1, 1)
     const eu = new THREE.Euler()
@@ -166,11 +169,27 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       })
       mat.userData.variant = v
       // per-instance tone also drives the glow (instanceColor only multiplies the diffuse term by default)
+      // each window has its own hour: it comes alive when the evening reaches its threshold; a few go dark late
       mat.onBeforeCompile = (sh) => {
-        sh.fragmentShader = sh.fragmentShader.replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif')
+        sh.uniforms.uWinT = winU.t
+        sh.uniforms.uLate = winU.late
+        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec2 aWin;\nvarying vec2 vWin;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvWin = aWin;')
+        sh.fragmentShader = sh.fragmentShader
+          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nuniform float uWinT;\nuniform float uLate;')
+          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);')
       }
-      mat.customProgramCacheKey = () => 'win-emit'
-      const im = new THREE.InstancedMesh(plane, mat, list.length)
+      mat.customProgramCacheKey = () => 'win-emit2'
+      const vg = plane.clone()
+      geos.push(vg)
+      const aWin = new Float32Array(list.length * 2)
+      list.forEach((d, i) => {
+        const h1 = Math.abs(Math.sin(d.z * 12.9898 + d.y * 78.233 + d.side * 4.1) * 43758.5453) % 1
+        const h2 = Math.abs(Math.sin(d.z * 39.346 + d.y * 11.135 + d.side * 7.7) * 24634.6345) % 1
+        aWin[i * 2] = 0.04 + Math.pow(h1, 0.8) * 0.9
+        aWin[i * 2 + 1] = h2
+      })
+      vg.setAttribute('aWin', new THREE.InstancedBufferAttribute(aWin, 2))
+      const im = new THREE.InstancedMesh(vg, mat, list.length)
       list.forEach((d, i) => {
         const inward = -d.side
         p.set(d.x + inward * 0.05, d.y, d.z)
@@ -201,11 +220,13 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
     }
     // sills/lintels are oriented with the wall: box depth axis = local z → needs same Y rotation, already in q.
     meshes.push(mk(sillGeo, sills), mk(lintelGeo, lintels))
-    return { meshes, mats, geos: [plane, sillGeo, lintelGeo], concrete }
+    return { meshes, mats, geos: [plane, sillGeo, lintelGeo, ...geos], concrete }
   }, [data])
 
   useFrame(() => {
     const w = palette.windows
+    winU.t.value = w
+    winU.late.value = smoothstep(0.34, 0.5, rt.smooth) * (1 - smoothstep(0.7, 0.72, rt.smooth))
     for (const m of built.mats) {
       const v = m.userData.variant as string
       const e = EMIT[v as WindowVariant]

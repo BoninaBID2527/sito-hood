@@ -104,7 +104,7 @@ export function Steam({ list = VENTS, size = 1 }: { list?: VentDef[]; size?: num
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uColor.value.copy(palette.horizon).lerp(palette.hemiSky, 0.55).multiplyScalar(0.65 + palette.lamps * 0.3)
-    u.uOpacity.value = 0.11 + palette.lamps * 0.05
+    u.uOpacity.value = 0.09 + palette.lamps * 0.1
   }, -1)
 
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose(); kit.cover.dispose(); kit.cMat.dispose(); kit.base.dispose() }, [kit])

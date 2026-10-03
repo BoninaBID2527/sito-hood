@@ -101,7 +101,7 @@ vec3 aMask(vec3 wp, float off) {
   float grain = an(vAW.xz * 22.0) * 0.55 + an(vAW.xz * 71.0) * 0.45;
   float wear = 0.75 - 0.35 * exp(-vAW.x * vAW.x * 0.6) * an(vAW.xz * vec2(3.0, 0.6));
   float cover = smoothstep(0.22, 0.62, grain + wear - 0.55);
-  diffuseColor.a = m * cover * 0.78;
+  diffuseColor.a = m * cover * 0.6;
   diffuseColor.rgb *= 0.9 + 0.2 * grain;
   uRGBm = vec3(mr, mg, mb);
 }`)

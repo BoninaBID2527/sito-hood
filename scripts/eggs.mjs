@@ -15,7 +15,7 @@ await page.waitForTimeout(7000)
 const settle = () => page.waitForFunction(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 }, null, { timeout: 90000 }).catch(() => {})
 const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); await settle(); await page.waitForTimeout(2500) }
 const screen = (x, y, z) => page.evaluate(([x, y, z]) => { const c = window.__camera; c.updateMatrixWorld(); const v = new c.position.constructor(x, y, z).project(c); return { sx: (v.x * 0.5 + 0.5) * innerWidth, sy: (-v.y * 0.5 + 0.5) * innerHeight, behind: v.z > 1 } }, [x, y, z])
-const state = (fn) => page.evaluate(fn)
+const state = (fn, arg) => page.evaluate(fn, arg)
 
 // 1. lamp
 await jump(0.05)
@@ -32,20 +32,41 @@ await jump(0.24)
 s = await screen(3.1, 5.9, -36.45)
 await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1500)
 const toast1 = await state(() => window.__hd.store.getState().toast?.text ?? '')
-check('fire escape: hovering the stencil reveals a track number', /05/.test(toast1) || (await state(() => window.__hd.store.getState().eggs.includes('stencil'))), toast1)
+check('number 05 (fire-escape tag): resting the pointer on it registers it silently', (await state(() => window.__hd.store.getState().nums[4])) === true && toast1 === '', toast1)
 
 // 3. puddle
 await page.mouse.move(5, 5)
 s = await screen(0.2, 0.02, -41)
 await page.mouse.move(s.sx - 30, s.sy); await page.mouse.move(s.sx, s.sy, { steps: 6 }); await page.waitForTimeout(1500)
 const toast2 = await state(() => window.__hd.store.getState().toast?.text ?? '')
-check('puddle: hover distorts reality', (await state(() => window.__hd.store.getState().eggs.includes('puddle'))), toast2)
+check('puddle: the impossible puddle answers (no toast)', (await state(() => window.__hd.store.getState().eggs.includes('puddle'))) && toast2 === '', toast2)
 
 // 4. hidden letter hover
 await jump(0.12)
 s = await screen(-3.31, 2.1, -20.5)
 await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
 check('graffiti letters: hovering a hidden tag registers it', (await state(() => window.__hd.store.getState().letters.filter(Boolean).length)) >= 1)
+
+// 4b. the rest of the 01–07 trail, each on its own physical object (hover = rest the pointer, touch = tap)
+const trail = [
+  [0, 0.04, 2.896, 1.5, 2.6, '01 stencil on the utility box'],
+  [1, 0.0, -2.762, 1.42, 11.3, '02 sticker on the drainpipe'],
+  [2, 0.12, 2.735, 1.62, -12.5, '03 number painted on the door'],
+  [3, 0.2, -2.9245, 1.6, -24.6, '04 torn poster fragment'],
+  [6, 0.45, -4.1, 0.05, -92.4, '07 marking beside the water'],
+]
+for (const [i, p, x, y, z, name] of trail) {
+  await jump(p)
+  s = await screen(x, y, z)
+  await page.mouse.move(5, 5); await page.mouse.move(s.sx, s.sy, { steps: 4 }); await page.waitForTimeout(1400)
+  check(`number ${name}`, (await state((i) => window.__hd.store.getState().nums[i], i)) === true, JSON.stringify(s))
+}
+check('numbers persist in localStorage', (await state(() => JSON.parse(localStorage.getItem('hd:nums') || '[]').filter(Boolean).length)) >= 5)
+
+// 4c. the anamorphic mark: aligned camera = silent recognition
+await jump(0.165)
+await page.waitForTimeout(3500)
+check('anamorphic ALTERCO: aligning with the scroll camera registers it (no popup)', (await state(() => window.__hd.store.getState().eggs.includes('anamorph') && !window.__hd.store.getState().toast)))
 
 // 5. credits poster
 await jump(0.5)
@@ -87,6 +108,7 @@ check('return rift: hover shows RETURN', (await state(() => window.__hd.store.ge
 await page.mouse.click(s.sx, s.sy)
 await page.waitForFunction(() => window.__hd.store.getState().mode === 'alterco' && window.__hd.rt.fx.tunnel < 0.05, null, { timeout: 120000 }).catch(() => {})
 check('return rift: click goes back to ALTERCO', (await state(() => window.__hd.store.getState().mode)) === 'alterco')
+check('the street remembers (dualReturned + persisted)', (await state(() => window.__hd.store.getState().dualReturned && localStorage.getItem('hd:dualret') === '1')))
 
 console.log(errors.length ? 'ERRORS:\n' + errors.join('\n') : 'no console errors')
 console.log(`${pass} passed, ${fail} failed`)

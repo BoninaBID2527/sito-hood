@@ -142,15 +142,6 @@ export function whisper(text?: string) {
   setTimeout(() => useStore.getState().set({ whisper: null }), 620)
 }
 
-const NUM_LINES = [
-  'Stencilled on a box nobody opens.',
-  'Peeling off a drainpipe.',
-  'Someone painted the door number.',
-  'Half a poster is still a poster.',
-  'A tag hidden inside a tag.',
-  'Up on the roof, where the wind is.',
-  'Look at the water.',
-]
 /** One of the seven numbers, found on a physical object. No counter, no achievement — just a quiet acknowledgement. */
 export function foundNumber(i: number) {
   const s = useStore.getState()
@@ -163,6 +154,4 @@ export function foundNumber(i: number) {
   if (i === 4) s.markEgg('stencil')
   rt.impulse.rgb = Math.max(rt.impulse.rgb, 0.006)
   audio.tick()
-  const t = alterco.tracks[i]
-  s.say(`${pad(t.n)} \u2014 ${t.title.toUpperCase()}`, NUM_LINES[i])
 }

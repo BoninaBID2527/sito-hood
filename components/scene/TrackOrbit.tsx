@@ -37,6 +37,9 @@ const CARD_W_HALF = 1.075
  * Scroll drives the orbit angle (via the camera spring), drag adds inertial momentum,
  * and idle time gently snaps the nearest card to the front.
  */
+const TRACK_TINT = ['#ffb070', '#8ab4ff', '#e8dcc0', '#ff8068', '#8fffd8', '#c498ff', '#ffe49a']
+const _tint = new THREE.Color()
+
 export function TrackOrbit() {
   const camera = useThree((s) => s.camera)
   const gl = useThree((s) => s.gl)
@@ -355,6 +358,9 @@ export function TrackOrbit() {
     }
     // pool of light on the wet ground under the orbit
     pool.opacity = appear * (1 - recede * 0.7) * (0.12 + palette.lamps * 0.1)
+    // the track in front tints the light it stands in — the wet plaza answers a little differently for each of them
+    _tint.set(TRACK_TINT[((front % 7) + 7) % 7])
+    pool.color.lerp(_tint, Math.min(1, dt * 1.6))
   }, -0.4)
 
   const C = WORLD.plazaCenter

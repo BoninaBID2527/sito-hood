@@ -372,6 +372,7 @@ export function RooftopWorld() {
       <RoofBillboard />
       <CityGlow />
       <DualGlint />
+      <HiddenSign />
     </group>
   )
 }
@@ -470,6 +471,60 @@ function RoofBillboard() {
         <pointLight position={[0, kit.half + 1.0, 4]} color="#ffe2b8" intensity={60} distance={26} decay={2} />
         <pointLight position={[0, -kit.half - 2.5, 6]} color="#9ab4ff" intensity={26} distance={22} decay={2} />
       </group>
+    </group>
+  )
+}
+
+/**
+ * A dead sign on a far tower: letters in unlit glass tube, a steel frame, nothing else. It has always been there.
+ * If all seven numbers have been found, it comes on — slowly, stuttering at first — while the roof is on screen.
+ * No one is told; visitors who never found the numbers get the same roof, with the sign dark.
+ */
+function HiddenSign() {
+  const kit = useMemo(() => {
+    const c = document.createElement('canvas')
+    c.width = 2048; c.height = 400
+    const x = c.getContext('2d')!
+    x.font = '300px Bungee, Impact, sans-serif'
+    x.textAlign = 'center'; x.textBaseline = 'middle'
+    x.lineJoin = 'round'
+    x.strokeStyle = '#fff'; x.lineWidth = 26
+    x.strokeText('HOODDINO', 1024, 210)
+    x.globalCompositeOperation = 'destination-out'
+    x.lineWidth = 8; x.strokeText('HOODDINO', 1024, 210)
+    const map = new THREE.CanvasTexture(c)
+    map.colorSpace = THREE.SRGBColorSpace
+    map.anisotropy = 4
+    const W = 15, H = W * 400 / 2048
+    const letters = new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false, color: new THREE.Color(0.03, 0.03, 0.035) })
+    const frame = new GeoBuilder()
+    frame.box(W + 1.2, H + 1.0, 0.3, 0, 0, -0.3)
+    frame.box(0.35, 9, 0.35, -W * 0.36, -H / 2 - 4.5, -0.3).box(0.35, 9, 0.35, W * 0.36, -H / 2 - 4.5, -0.3)
+    frame.box(W + 1.6, 0.2, 0.2, 0, H / 2 + 0.6, 0.1).box(W + 1.6, 0.2, 0.2, 0, -H / 2 - 0.6, 0.1)
+    const frameGeo = frame.build()
+    const frameMat = streetMat({ color: '#15161a', roughness: 0.6, metalness: 0.7, aoBase: 0.9, macro: 0.4 })
+    const glow = new THREE.SpriteMaterial({ map: A.glow, color: '#ff9a50', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
+    return { W, H, letters, frameGeo, frameMat, glow, plane: new THREE.PlaneGeometry(W, H), map }
+  }, [])
+  const lit = useRef(0)
+  const neon = useMemo(() => new THREE.Color(), [])
+  useFrame((_, dt) => {
+    const all = useStore.getState().nums.every(Boolean)
+    if (all && rt.world === 'roof' && rt.smooth > 0.86) lit.current = Math.min(1, lit.current + dt / 18)
+    const l = lit.current
+    // a tube catching: it stutters before it holds
+    const stutter = l < 0.7 ? (Math.sin(l * 90) * Math.sin(l * 37 + 1) > -0.15 ? 1 : 0.12) : 1
+    const k = l * stutter
+    neon.setRGB(0.03 + 3.4 * k, 0.03 + 1.7 * k, 0.035 + 0.8 * k)
+    kit.letters.color.copy(neon)
+    kit.glow.opacity = k * 0.42
+  })
+  useEffect(() => () => { kit.letters.dispose(); kit.frameGeo.dispose(); kit.frameMat.dispose(); kit.glow.dispose(); kit.plane.dispose(); kit.map.dispose() }, [kit])
+  return (
+    <group position={[R - 9, 13, -96]} rotation={[0, 0.12, 0]}>
+      <mesh geometry={kit.frameGeo} material={kit.frameMat} />
+      <mesh geometry={kit.plane} material={kit.letters} position={[0, 0, 0.02]} renderOrder={4} />
+      <sprite material={kit.glow} position={[0, 0, 0.3]} scale={[kit.W * 1.9, kit.W * 0.8, 1]} />
     </group>
   )
 }

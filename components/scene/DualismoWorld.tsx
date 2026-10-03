@@ -363,7 +363,7 @@ function SpectralAir() {
           float st = 0.5 + 0.5 * n(vec2(vUv.x * 7.0 + uHue * 9.0, vUv.y * 1.4 - uTime * 0.05));
           vec3 c = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + uHue + vUv.y * 0.35 + uTime * 0.01));
           float near = smoothstep(2.0, 9.0, distance(cameraPosition, vW));
-          float a = across * along * st * near * uFade * 0.14;
+          float a = across * along * st * near * uFade * 0.11;
           gl_FragColor = vec4(c * a, a);
         }`,
     })
@@ -380,7 +380,9 @@ function SpectralAir() {
           float edge = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x) * smoothstep(0.0, 0.2, vUv.y) * smoothstep(1.0, 0.6, vUv.y);
           float near = smoothstep(3.0, 12.0, distance(cameraPosition, vW));
           vec3 c = mix(vec3(0.16, 0.2, 0.5), vec3(0.45, 0.25, 0.6), n(p * 0.7));
-          float a = smoothstep(0.25, 0.8, d) * edge * near * uFade * 0.12;
+          // keep the centre line clear: the artwork sits in clean air, the haze gathers toward the sides
+          float side = 0.3 + 0.7 * smoothstep(2.5, 15.0, abs(vW.x - ${D}.0));
+          float a = smoothstep(0.25, 0.8, d) * edge * near * uFade * 0.09 * side;
           gl_FragColor = vec4(c * a, a);
         }`,
     })
@@ -422,6 +424,23 @@ function ShaftMesh({ geo, base, hue, w, h, rotY = 0 }: { geo: THREE.BufferGeomet
 }
 
 /** Distortion halo around the official artwork: counter-rotating spectral arcs, never touching the artwork itself. */
+/** A soft dark pool of air behind the official artwork: local contrast, so it is the first thing the eye lands on. */
+function ArtworkContrast() {
+  const mat = useMemo(
+    () => new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, depthTest: true,
+      uniforms: { uFade: { value: 0 } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+      fragmentShader: 'varying vec2 vUv; uniform float uFade; void main(){ float r = length((vUv - 0.5) * 2.0); float a = smoothstep(1.0, 0.25, r); gl_FragColor = vec4(0.0, 0.0, 0.01, a * a * 0.4 * uFade); }',
+    }),
+    [],
+  )
+  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
+  useFrame(() => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
+  useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
+  return <mesh geometry={geo} material={mat} position={[D, 0.1, -0.5]} scale={[15, 15, 1]} renderOrder={2} />
+}
+
 function LensHalo() {
   const mat = useMemo(
     () =>
@@ -600,6 +619,7 @@ export function DualismoWorld() {
       <GlassHall />
       <FarDust />
       <SpectralAir />
+      <ArtworkContrast />
       <LensHalo />
       <TunnelRings />
       <Centerpiece />
