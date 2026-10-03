@@ -6,3 +6,5 @@ next-env.d.ts
 .DS_Store
 .scratch
 shots*
+secrets-roof.png
+.next-export
