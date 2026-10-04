@@ -15,6 +15,7 @@ import { palette } from '@/lib/timeOfDay'
 import { rig, installTrackInput } from '@/lib/trackRig'
 import { STATIONS, TRUSS, railPoints } from '@/lib/installation'
 import { GeoBuilder } from '@/lib/geo'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { createCardMaterial } from './TrackCard3D'
 import { SPECS, TrackObject, useObjectMats, CARD_H as OBJ_H } from './TrackObjects'
 import { TrackTypography } from './TrackTypography'
@@ -75,7 +76,17 @@ export function TrackOrbit() {
       fragmentShader: 'uniform float uI; uniform vec3 uC; varying float vY; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(abs(dot(normalize(vN), normalize(vV))), 1.8); float h = smoothstep(-1.0, -0.05, vY); gl_FragColor = vec4(uC, uI * f * (0.25 + 0.75 * h) * 0.14); }',
     })
     const cones = Array.from({ length: TRACK_COUNT }, () => coneMat.clone())
-    const lampGeo = new THREE.SphereGeometry(0.09, 8, 6)
+    // the lamps on the truss are one merged mesh (12 spheres on the unit circle; the ring group scales it onto the ellipse)
+    const lamps: THREE.BufferGeometry[] = []
+    for (let k = 0; k < 12; k++) {
+      const a = (k / 12) * Math.PI * 2
+      const g = new THREE.SphereGeometry(0.09, 8, 6)
+      g.scale(1 / TRUSS.rx, 1, 1 / TRUSS.rz)
+      g.translate(Math.sin(a), -0.17, Math.cos(a))
+      lamps.push(g)
+    }
+    const lampGeo = mergeGeometries(lamps, false)!
+    lamps.forEach((g) => g.dispose())
     const lampMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.6, 2.1, 1.5) })
     // foreground poles: they stand just inside the camera's path, so between two tracks one slides past the lens (depth punctuation)
     const poles = new GeoBuilder()
@@ -284,10 +295,7 @@ export function TrackOrbit() {
       <group ref={ringRef} visible={false}>
         <mesh geometry={rigKit.ringGeo} material={rigKit.ringMat} rotation={[Math.PI / 2, 0, 0]} />
         <mesh geometry={rigKit.ring2Geo} material={rigKit.ringMat} rotation={[Math.PI / 2, 0, 0]} position={[0, -0.34, 0]} scale={[0.985, 0.985, 1]} />
-        {Array.from({ length: 12 }, (_, k) => {
-          const a = (k / 12) * Math.PI * 2
-          return <mesh key={k} geometry={rigKit.lampGeo} material={rigKit.lampMat} position={[Math.sin(a), -0.17, Math.cos(a)]} scale={[1 / TRUSS.rx / 1, 1, 1 / TRUSS.rz / 1]} />
-        })}
+        <mesh geometry={rigKit.lampGeo} material={rigKit.lampMat} />
       </group>
       <mesh ref={poleRef} geometry={rigKit.poleGeo} material={objMats.metal} visible={false} />
       <lineSegments geometry={rigKit.wireGeo} material={rigKit.wireMat} frustumCulled={false} />

@@ -6,7 +6,6 @@ import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
 import { rng } from '@/lib/math'
 import { streetMat } from './materials'
-import { ChunkedMesh } from './chunks'
 import { SEGS, wallX } from './layout'
 
 /** Pipes, ACs, dumpsters, bins, crates, bike, hydrant, bollards — merged per material (a handful of draw calls). */
@@ -168,7 +167,7 @@ export function Props() {
   return (
     <group>
       {built.parts.map((p, i) => (
-        <ChunkedMesh key={i} geometry={p.geo} material={p.mat} />
+        <mesh key={i} geometry={p.geo} material={p.mat} />
       ))}
       {built.fans.map((f, i) => (
         <mesh key={i} geometry={built.fanGeo} material={built.fanMat} position={f.pos} rotation={[0, f.rot, 0]} />

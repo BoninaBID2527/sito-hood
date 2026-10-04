@@ -18,7 +18,6 @@ import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
-import { ChunkCuller } from './street/chunks'
 import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
 
@@ -44,7 +43,6 @@ export function StreetEnvironment() {
   }, -1)
   return (
     <group ref={root}>
-      <ChunkCuller />
       <Walls />
       <Windows />
       <StreetLevel skip={SKIP} />
