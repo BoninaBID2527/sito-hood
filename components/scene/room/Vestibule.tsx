@@ -20,14 +20,14 @@ export function Vestibule({ lit = 1 }: { lit?: number }) {
     for (let i = 0; i < pos.count; i++) {
       // inside faces: floor warm-dark, ceiling very dark, walls in between; darker with depth
       const ny = nor.getY(i)
-      const base = ny > 0.5 ? '#0c0a09' : ny < -0.5 ? '#1c1613' : '#17120f'
+      const base = ny > 0.5 ? '#2a2019' : ny < -0.5 ? '#4a382c' : '#43322a'
       const t = Math.min(1, -pos.getZ(i) / d)
-      c.set(base).multiplyScalar(lit * (1.15 - t * 0.85))
+      c.set(base).multiplyScalar(lit * (1.5 - t * 0.9))
       col.set([c.r, c.g, c.b], i * 3)
     }
     g.setAttribute('color', new THREE.BufferAttribute(col, 3))
     const mat = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, fog: false })
-    const strip = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff9a54').multiplyScalar(1.6), fog: false })
+    const strip = new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff9a54').multiplyScalar(2.6), fog: false })
     return { geo: g, mat, strip }
   }, [lit])
   useEffect(() => () => { geo.dispose(); mat.dispose(); strip.dispose() }, [geo, mat, strip])
