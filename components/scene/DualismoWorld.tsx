@@ -58,7 +58,8 @@ void main() {
 function Particles() {
   const camera = useThree((s) => s.camera)
   const kit = useMemo(() => {
-    const n = Math.round(1100 * rt.quality.particleScale)
+    const s0 = rt.quality.particleScale
+    const n = Math.round(1100 * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
@@ -79,13 +80,15 @@ function Particles() {
       blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D, 0, 0) }, uSize: { value: rt.touch ? 0.7 : 1 }, uArrive: { value: 0 } },
     })
-    return { g, mat, ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
+    return { g, mat, n, s0, v2: new THREE.Vector2(), ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
   }, [])
   useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uArrive.value = rt.dual.t
-    kit.ray.setFromCamera(new THREE.Vector2(rt.rx, rt.ry), camera)
+    // particle count follows the live quality (draw range), never above what the device started with
+    kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0))))
+    kit.ray.setFromCamera(kit.v2.set(rt.rx, rt.ry), camera)
     if (kit.ray.ray.intersectPlane(kit.plane, kit.hit)) u.uMouse.value.lerp(kit.hit, 0.15)
   }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
@@ -95,7 +98,8 @@ function Particles() {
 /** Very distant, very slow specks: scale cues far beyond the visible geometry (parallax comes from the camera drift). */
 function FarDust() {
   const kit = useMemo(() => {
-    const n = Math.round(700 * rt.quality.particleScale)
+    const s0 = rt.quality.particleScale
+    const n = Math.round(700 * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
@@ -110,9 +114,9 @@ function FarDust() {
       vertexShader: pVert, fragmentShader: pFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D + 9999, 0, 0) }, uSize: { value: 2.2 }, uArrive: { value: 0 } },
     })
-    return { g, mat }
+    return { g, mat, n, s0 }
   }, [])
-  useWorldFrame('dualism', () => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t }, -0.5)
+  useWorldFrame('dualism', () => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t; kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0)))) }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
   return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
 }

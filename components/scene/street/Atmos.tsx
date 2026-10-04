@@ -148,9 +148,12 @@ void main() {
 }
 `
 
+const _white = new THREE.Color('#ffffff')
+
 export function Dust({ color = '#ffd9a8', opacity = 0.32, count = 520, box = [16, 9, 22] as [number, number, number] }) {
   const kit = useMemo(() => {
-    const n = Math.round(count * rt.quality.particleScale)
+    const s0 = rt.quality.particleScale
+    const n = Math.round(count * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
@@ -169,11 +172,12 @@ export function Dust({ color = '#ffd9a8', opacity = 0.32, count = 520, box = [16
       blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uBox: { value: new THREE.Vector3(...box) }, uColor: { value: new THREE.Color(color) }, uOpacity: { value: opacity }, uSize: { value: rt.touch ? 0.5 : 0.65 } },
     })
-    return { g, mat }
+    return { g, mat, n, s0 }
   }, [color, opacity, count, box])
   useFrame(() => {
     kit.mat.uniforms.uTime.value = rt.time
-    kit.mat.uniforms.uColor.value.copy(palette.sun).lerp(new THREE.Color('#ffffff'), 0.35)
+    kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0))))
+    kit.mat.uniforms.uColor.value.copy(palette.sun).lerp(_white, 0.35)
     kit.mat.uniforms.uOpacity.value = opacity * (0.5 + palette.lamps * 0.5)
   }, -1)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
