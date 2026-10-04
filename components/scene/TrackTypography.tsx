@@ -193,6 +193,10 @@ export function TrackTypography() {
     const red = rt.reducedMotion
     const t = rt.time
     const recede = smoothstep(0.6, 0.665, p)
+    // portrait: the composition is gathered toward the middle so number + title + artwork fit the narrow frame
+    const asp = rt.aspect
+    const lat = asp < 1 ? 0.4 : asp < 1.3 ? 0.4 + 0.6 * smoothstep(1, 1.3, asp) : 1
+    const shrink = asp < 1 ? 0.8 : 1
     for (let i = 0; i < 7; i++) {
       const g = groups.current[i]
       if (!g) continue
@@ -235,12 +239,12 @@ export function TrackTypography() {
           case 6: oy = (k === 2 ? 0 : (k === 0 ? 1 : -1)) * (1 - f) * 0.5 * mot; break // settles to rest
           default: oy = Math.sin(t * 0.4) * 0.02 * mot
         }
-        m.position.set(it.pos[0] + ox, it.pos[1] + oy, it.pos[2] + oz)
+        m.position.set((it.pos[0] + ox) * lat, it.pos[1] + oy, it.pos[2] + oz)
         m.rotation.set(it.rot?.[0] ?? 0, (it.rot?.[1] ?? 0) + ry, (it.rot?.[2] ?? 0) + rz)
         // the monument grows a little as the camera arrives
         const sc = i === 3 ? 0.94 + f * 0.06 : 1
         const aspect = pl.cell.aspect
-        m.scale.set(it.h * aspect * sc, it.h * sc, 1)
+        m.scale.set(it.h * aspect * sc * shrink, it.h * sc * shrink, 1)
         m.visible = pl.m.opacity > 0.01
       }
     }
