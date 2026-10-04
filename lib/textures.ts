@@ -18,10 +18,21 @@ export interface BrickSet {
 }
 
 /** Tile = 2.4 m wide (11 bricks), 2.4 m tall (32 courses). */
-export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete', seed: number): BrickSet {
-  // texel density follows the tier: 2.3 mm / 1.6 mm / 1.2 mm per texel (ultra gets the finest — walls are most of every frame)
-  const lv = rt.quality.level
-  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024
+type BrickVariant = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
+
+/** the brick tile at the base density (1024²: 2.3 mm per texel) — what the loader screen waits for */
+export function brickSet(variant: BrickVariant, seed: number): BrickSet {
+  const g = brickGen(variant, seed, 1024)
+  let r = g.next()
+  while (!r.done) r = g.next()
+  return r.value
+}
+
+/**
+ * The same tile at a finer texel density, as a *generator*: it yields every few courses so the caller can spend a few ms per frame
+ * (see lib/assets.upgradeBricks — the finer tile replaces the base one after ENTER, in idle time, so the loader never waits for it).
+ */
+export function* brickGen(variant: BrickVariant, seed: number, W: number): Generator<void, BrickSet, void> {
   const H = W
   const k = W / 1024
   const rows = 32, per = 11
@@ -48,6 +59,7 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
 
   if (variant !== 'concrete') {
     for (let row = 0; row < rows; row++) {
+      if (row % 4 === 3) yield
       const off = row % 2 ? bw / 2 : 0
       for (let c = 0; c <= per; c++) {
         const x = c * bw + off

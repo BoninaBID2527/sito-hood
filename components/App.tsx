@@ -25,7 +25,7 @@ import { usePointerRig } from '@/hooks/usePointerRig'
 import { useStore, detectTier } from '@/lib/store'
 import { rt } from '@/lib/runtime'
 import { SETTINGS } from '@/lib/quality'
-import { loadCore, buildCards } from '@/lib/assets'
+import { loadCore, buildCards, upgradeBricks } from '@/lib/assets'
 import { scroll } from '@/lib/scroll'
 import * as actions from '@/lib/actions'
 import * as roomActions from '@/lib/roomActions'
@@ -83,6 +83,15 @@ export default function App() {
       vid,
       act: (name: string, ...a: unknown[]) => ((actions as any)[name] ?? (roomActions as any)[name])?.(...a),
     }
+  }, [])
+
+  // after ENTER, in idle time: the finer brick tiles replace the base ones (never part of the loader's wait)
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout> | undefined
+    const unsub = useStore.subscribe((s, prev) => {
+      if (s.phase === 'entered' && prev.phase !== 'entered') t = setTimeout(() => void upgradeBricks(), 3500)
+    })
+    return () => { unsub(); if (t) clearTimeout(t) }
   }, [])
 
   // shareable state: /?room=hooddino walks straight to the studio door and through it, right after ENTER (never before — no autoplay, no audio)

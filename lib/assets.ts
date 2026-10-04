@@ -182,6 +182,33 @@ export async function buildCards() {
   void trackLabel
 }
 
+/**
+ * Finer brick tiles (walls are most of every frame). Generated after ENTER, a slice per animation frame, then swapped into the live
+ * textures (every wall material keeps its texture object). Base density = what ships in loadCore; tablets/desktops get 1.9 / 1.5 / 1.1 mm.
+ */
+let bricksUpgraded = false
+export async function upgradeBricks() {
+  if (bricksUpgraded || !A.coreReady) return
+  const lv = rt.quality.level
+  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024
+  if (W <= 1024) return
+  bricksUpgraded = true
+  const seeds = { red: 11, dark: 12, weathered: 13, plaster: 14, concrete: 15 } as const
+  for (const k of Object.keys(seeds) as (keyof typeof seeds)[]) {
+    const gen = T.brickGen(k, seeds[k], W)
+    let r = gen.next()
+    while (!r.done) { await nextFrame(); r = gen.next() }
+    const fresh = r.value
+    const live = A.brick[k].map
+    live.image = fresh.map.image
+    live.dispose() // size changed: the GPU copy is re-created with the new storage on the next draw
+    live.needsUpdate = true
+    fresh.map.dispose()
+    fresh.bump.dispose()
+    await nextFrame()
+  }
+}
+
 export async function loadRoof() {
   if (A.roofReady) return
   A.roofDeck = T.roofDeckTexture(14)
