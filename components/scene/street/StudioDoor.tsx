@@ -12,6 +12,7 @@ import { streetMat } from './materials'
 import { Vestibule } from '../room/Vestibule'
 import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { GeoBuilder } from '@/lib/geo'
+import { A } from '@/lib/assets'
 
 /**
  * THE ENTRANCE to the HOODDINO ROOM — a small prefab (painted corrugated steel, acoustic foam stapled to the brick, a red work
@@ -27,7 +28,6 @@ const FRONT = 0.34 // width of the pillars either side of the opening
 export function StudioDoor() {
   const leaf = useRef<THREE.Group>(null)
   const inner = useRef<THREE.Group>(null)
-  const spillMesh = useRef<THREE.Mesh>(null)
   const kit = useMemo(() => {
     const steel = corrugatedTexture()
     steel.repeat.set(1, 1)
@@ -38,7 +38,10 @@ export function StudioDoor() {
       steel: streetMat({ map: steel, roughness: 0.6, metalness: 0.55, color: '#ffffff', aoBase: 0.55 }),
       frame: streetMat({ color: '#1a1b1c', roughness: 0.7, metalness: 0.5, aoBase: 0.5 }),
       leaf: streetMat({ map: leafTex, roughness: 0.55, metalness: 0.1, color: '#ffffff', aoBase: 0.5 }),
-      sign: new THREE.MeshBasicMaterial({ map: sign, fog: true }),
+      // the enamel plate is a lit sign (a small lamp above it): bright enough to read from across the plaza mouth
+      sign: new THREE.MeshBasicMaterial({ map: sign, fog: true, toneMapped: false, color: new THREE.Color(1.5, 1.45, 1.3) }),
+      leak: new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff9a50').multiplyScalar(2.4), fog: false }),
+      halo: new THREE.MeshBasicMaterial({ map: A.glow, color: new THREE.Color('#ff3a2a'), transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
       lamp: new THREE.MeshBasicMaterial({ color: new THREE.Color('#ff3a2a').multiplyScalar(2.2), fog: false }),
       glow: new THREE.MeshBasicMaterial({ map: spill, color: new THREE.Color('#ff9650'), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
       foam: streetMat({ color: '#18191c', roughness: 0.98, aoBase: 0.5 }),
@@ -62,7 +65,13 @@ export function StudioDoor() {
       .box(0.55, 1.9, 0.07, -hw - 0.3, 1.45, 0.02)
       .box(0.55, 1.4, 0.07, hw + 0.3, 1.2, 0.02)
       .build()
-    const geos = { shell, frame, foam }
+    // warm light leaking round the door leaf (from the lit room): a hairline of light on the threshold and both jambs
+    const leak = new GeoBuilder()
+      .box(DOOR.w - 0.04, 0.025, 0.02, 0, 0.02, 0.1)
+      .box(0.02, DOOR.h - 0.1, 0.02, -op + 0.03, DOOR.h / 2, 0.1)
+      .box(0.02, DOOR.h - 0.1, 0.02, op - 0.03, DOOR.h / 2, 0.1)
+      .build()
+    const geos = { shell, frame, foam, leak }
     const disposables: { dispose(): void }[] = [steel, leafTex, sign, spill, ...Object.values(mats), ...Object.values(geos)]
     return { mats, geos, disposables }
   }, [])
@@ -87,10 +96,9 @@ export function StudioDoor() {
     // the airlock and the spill on the pavement exist only while the door is (being) opened
     const open = room.door > 0.01
     if (inner.current && inner.current.visible !== open) inner.current.visible = open
-    if (spillMesh.current) {
-      if (spillMesh.current.visible !== open) spillMesh.current.visible = open
-      kit.mats.glow.opacity = room.door * 0.55
-    }
+    kit.mats.glow.opacity = 0.2 + room.door * 0.45
+    // a lamp that is slightly alive (never a blinking game marker): ±8 % at a slow, irregular rate
+    kit.mats.halo.opacity = rt.reducedMotion ? 0.5 : 0.5 + 0.08 * Math.sin(rt.time * 1.3) * Math.sin(rt.time * 0.37)
   })
 
   const op = DOOR.w / 2 // half opening
@@ -106,11 +114,13 @@ export function StudioDoor() {
       <group ref={leaf} position={[-op, 0, 0.02]}>
         <mesh material={kit.mats.leaf} position={[op, DOOR.h / 2, 0]}><boxGeometry args={[DOOR.w - 0.02, DOOR.h - 0.02, 0.07]} /></mesh>
       </group>
+      <mesh geometry={kit.geos.leak} material={kit.mats.leak} />
       {/* enamel plate + the red work lamp over the door (a motivated, unmistakable cue) */}
       <mesh material={kit.mats.sign} position={[0, H - 0.2, 0.085]}><planeGeometry args={[1.45, 0.36]} /></mesh>
       <mesh material={kit.mats.lamp} position={[op + FRONT / 2, DOOR.h + 0.28, 0.12]}><sphereGeometry args={[0.075, 10, 8]} /></mesh>
-      {/* warm spill from the open door onto the pavement */}
-      <mesh ref={spillMesh} visible={false} material={kit.mats.glow} position={[0, 0.012, 1.15]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[1.5, 2.3]} /></mesh>
+      <mesh material={kit.mats.halo} position={[op + FRONT / 2, DOOR.h + 0.28, 0.2]}><planeGeometry args={[0.9, 0.9]} /></mesh>
+      {/* warm spill from the door onto the pavement: a faint glow always, a full pool once it opens */}
+      <mesh material={kit.mats.glow} position={[0, 0.012, 1.15]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[1.5, 2.3]} /></mesh>
       <DoorHit />
     </group>
   )

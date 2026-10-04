@@ -149,6 +149,10 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
     const plane = new THREE.PlaneGeometry(1.0, 1.55)
     const sillGeo = new THREE.BoxGeometry(1.35, 0.12, 0.3)
     const lintelGeo = new THREE.BoxGeometry(1.25, 0.16, 0.22)
+    // jambs: the reveal that makes a window a hole in a thick wall (the glass plane sits ~15 cm behind the jamb faces)
+    const jambGeo = new THREE.BoxGeometry(0.09, 1.55, 0.2)
+    const jambs: THREE.Matrix4[] = []
+    const rightV = new THREE.Vector3()
     const concrete = streetMat({ color: '#6f6a62', roughness: 0.95, aoBase: 0.6 })
     const meshes: THREE.InstancedMesh[] = []
     const geos: THREE.BufferGeometry[] = []
@@ -205,6 +209,11 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
         sills.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(d.w, 1, 1)))
         p.set(d.x + inward * 0.1, d.y + 0.88, d.z)
         lintels.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(d.w, 1, 1)))
+        rightV.set(1, 0, 0).applyQuaternion(q)
+        for (const sg of [-1, 1]) {
+          p.set(d.x + inward * 0.1, d.y, d.z).addScaledVector(rightV, sg * (d.w * 0.5 + 0.045))
+          jambs.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(1, d.h, 1)))
+        }
       })
       im.instanceMatrix.needsUpdate = true
       im.frustumCulled = false
@@ -219,8 +228,8 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       return im
     }
     // sills/lintels are oriented with the wall: box depth axis = local z → needs same Y rotation, already in q.
-    meshes.push(mk(sillGeo, sills), mk(lintelGeo, lintels))
-    return { meshes, mats, geos: [plane, sillGeo, lintelGeo, ...geos], concrete }
+    meshes.push(mk(sillGeo, sills), mk(lintelGeo, lintels), mk(jambGeo, jambs))
+    return { meshes, mats, geos: [plane, sillGeo, lintelGeo, jambGeo, ...geos], concrete }
   }, [data])
 
   useWorldFrame('alley', () => {

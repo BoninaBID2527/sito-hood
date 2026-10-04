@@ -163,7 +163,7 @@ void main() {
   if (uBloom > 0.01) {
     vec3 b = max(textureLod(tScene, uv, 3.0).rgb - 0.85, 0.0) * 0.55
            + max(textureLod(tScene, uv, 5.0).rgb - 0.45, 0.0) * 0.8;
-    col += b * uBloom * 0.9;
+    col += b * uBloom * 0.9 * (1.0 - 0.35 * uDual);
   }
 
   col *= uExposure;
@@ -181,7 +181,9 @@ void main() {
   // Dualismo grade: iridescent lift
   if (uDual > 0.001) {
     vec3 irid = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + r * 1.4 + uTime * 0.03 + lum));
-    col = mix(col, col * 0.78 + irid * 0.17 * (0.3 + lum), uDual * 0.55);
+    // iridescence lives in the lights, not in the blacks (no milky lift), plus a gentle S-curve for depth
+    col = mix(col, col * 0.84 + irid * 0.16 * lum, uDual * 0.55);
+    col = mix(col, col * col * (3.0 - 2.0 * col), uDual * 0.3);
   }
 
   // dim while a track is focused

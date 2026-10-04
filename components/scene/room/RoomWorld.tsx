@@ -238,11 +238,11 @@ function Workstation({ kit }: { kit: RoomKit }) {
         <planeGeometry args={[0.98, 0.265]} />
       </mesh>
       {/* secondary (landscape) monitor: an abstract arrangement view — not readable, nothing invented */}
-      <mesh position={[-0.52, 1.14, -8.275]} material={kit.mats.daw}>
+      <mesh position={[-0.52, 1.14, -8.292]} material={kit.mats.daw}>
         <planeGeometry args={[0.6, 0.34]} />
       </mesh>
       {/* HERO: the vertical studio monitor — poster outside PLAY, the real video when focused */}
-      <mesh ref={screen} position={[MONITOR.x, MONITOR.y, -8.265]} material={kit.mats.screen}>
+      <mesh ref={screen} position={[MONITOR.x, MONITOR.y, -8.277]} material={kit.mats.screen}>
         <planeGeometry args={[MONITOR.w, MONITOR.h]} />
       </mesh>
       {/* the phone on the desk (TikTok) */}
@@ -362,11 +362,11 @@ function Lighting() {
     if (lamp.current) lamp.current.intensity = 2.4 * (1 - 0.35 * room.dim)
     if (blue.current) blue.current.intensity = 3.0 * d
     if (red.current) red.current.intensity = 2.1 * d
-    if (wash.current) wash.current.intensity = 6 * d
+    if (wash.current) wash.current.intensity = 9 * d
   }, 0)
   return (
     <>
-      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.55, -4.3]} color="#cfe0ff" intensity={6} distance={8} decay={2} />}
+      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.55, -4.3]} color="#cfe0ff" intensity={9} distance={9} decay={2} />}
       <pointLight ref={lamp} position={[-0.72, 1.28, -8.0]} color="#ffb070" intensity={2.4} distance={4.2} decay={2} />
       {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#3f6dff" intensity={3} distance={6} decay={2} />}
       {level >= 2 && <pointLight ref={red} position={[2.3, 2.3, -2.9]} color="#ff3a2a" intensity={2.1} distance={4.5} decay={2} />}

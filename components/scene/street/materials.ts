@@ -13,6 +13,8 @@ export const streetU = {
   uDissolve: { value: 0 },
   /** 0..1 — how much standing water has gathered (puddle threshold falls along the journey) */
   uPud: { value: 0 },
+  /** 1 = fine micro-surface detail (aggregate, pitting) on the street materials; 0 on the mobile tier */
+  uMicro: { value: 1 },
 }
 
 const GLSL_UTIL = /* glsl */ `
@@ -123,6 +125,7 @@ uniform float uSunAmt;
 uniform float uWet;
 uniform float uDissolve;
 uniform float uPud;
+uniform float uMicro;
 uniform vec3 uSunCol;
 ${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
@@ -176,6 +179,17 @@ ${
   float rustM_ = 0.0;
   float grime_ = smoothstep(0.45, 0.85, vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)) * smoothstep(1.5, 12.0, h_);
   diffuseColor.rgb *= 1.0 - 0.28 * grime_ * mac_;
+  // micro-surface (V3.4): fine aggregate / pitting that lives below the texture's resolution. Fades out with distance, so it never
+  // shimmers and costs nothing where it cannot be seen (uMicro = 0 on the mobile tier).
+  float microR_ = 0.0;
+  if (uMicro > 0.5) {
+    float fdm_ = 1.0 - smoothstep(5.0, 15.0, length(vViewPosition));
+    if (fdm_ > 0.01) {
+      float mi_ = (vn3_(vWPos * 34.0 + 11.0) * 0.6 + vn3_(vWPos * 97.0 + 23.0) * 0.4) - 0.5;
+      diffuseColor.rgb *= 1.0 + mi_ * 0.34 * fdm_ * mac_;
+      microR_ = mi_ * 0.3 * fdm_ * mac_;
+    }
+  }
 ${
   brick
     ? `  // patched masonry / painted-over panels
@@ -287,6 +301,7 @@ ${
         `#include <roughnessmap_fragment>
   roughnessFactor = clamp(roughnessFactor * (0.88 + (nM_ - 0.5) * 0.5 * mac_ + st_ * 0.15) - damp_ * 0.38 * mac_ - uWet * 0.06 * (1.0 - smoothstep(0.0, 6.0, h_)), 0.3, 1.0);
   roughnessFactor *= brickRough_;
+  roughnessFactor = clamp(roughnessFactor + microR_, 0.15, 1.0);
   roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
   roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, 0.04, puddle_), dampG_ * 0.9);
   roughnessFactor = max(0.12, roughnessFactor - asphaltPolish_ * 0.14);`,
@@ -312,7 +327,7 @@ ${
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}4`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}5`
   return m
 }
 

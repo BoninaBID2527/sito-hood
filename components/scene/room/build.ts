@@ -129,10 +129,19 @@ export function buildRoomGeometry(level: number): RoomGeo {
   s.box(2.6, 0.5, 0.03, 0.2, 0.46, -8.55, '#17161a')
   s.box(2.55, 0.04, 0.6, 0.2, 0.2, -8.25, '#222125')
   // monitors (bezels) + stands
-  s.box(0.66, 0.4, 0.04, -0.52, 1.14, -8.3, '#0b0b0d')
+  // a monitor is a body with a raised bezel: the screen plane sits ~2 cm *inside* it (never a plane floating in front of a slab)
+  const monitor = (cx: number, cy: number, cz: number, w: number, h: number) => {
+    const t = 0.022, d = 0.032
+    s.box(w, h, 0.03, cx, cy, cz - 0.015, '#0b0b0d')
+    s.box(w, t, d, cx, cy + h / 2 - t / 2, cz + d / 2 - 0.004, '#121216')
+    s.box(w, t, d, cx, cy - h / 2 + t / 2, cz + d / 2 - 0.004, '#121216')
+    s.box(t, h - 2 * t, d, cx - w / 2 + t / 2, cy, cz + d / 2 - 0.004, '#121216')
+    s.box(t, h - 2 * t, d, cx + w / 2 - t / 2, cy, cz + d / 2 - 0.004, '#121216')
+  }
+  monitor(-0.52, 1.14, -8.3, 0.66, 0.4)
   s.cyl(0.015, 0.015, 0.22, -0.52, 0.86, -8.4, '#2a2b30')
   s.box(0.2, 0.012, 0.14, -0.52, 0.78, -8.36, '#2a2b30')
-  s.box(0.48, 0.76, 0.045, 0.5, 1.2, -8.29, '#0b0b0d')
+  monitor(0.5, 1.2, -8.285, 0.48, 0.76)
   s.cyl(0.018, 0.018, 0.26, 0.5, 0.88, -8.42, '#2a2b30')
   s.box(0.22, 0.012, 0.16, 0.5, 0.78, -8.38, '#2a2b30')
   // monitor speakers on floor stands

@@ -38,8 +38,8 @@ export function Atmosphere() {
         fog.color.copy(ROOM_FOG)
         fog.density = 0.026
       } else if (dual) {
-        fog.color.set('#0b1030')
-        fog.density = 0.012
+        fog.color.set('#070b26')
+        fog.density = 0.0095
       } else {
         fog.color.copy(palette.fog)
         fog.density = palette.fogDensity
@@ -53,7 +53,7 @@ export function Atmosphere() {
       } else {
         hemi.current.color.copy(dual ? new THREE.Color('#7fa8ff') : palette.hemiSky)
         hemi.current.groundColor.copy(dual ? new THREE.Color('#2a1a58') : palette.hemiGround)
-        hemi.current.intensity = dual ? 1.0 : palette.hemiI * 1.25
+        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 1.7 : 1.25)
       }
     }
     if (sun.current) {

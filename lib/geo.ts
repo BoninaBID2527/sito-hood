@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 
 /** Tiny geometry builder: collect transformed primitives, merge once → 1 draw call. */
 export class GeoBuilder {
@@ -19,6 +20,12 @@ export class GeoBuilder {
   }
   box(w: number, h: number, d: number, x: number, y: number, z: number, rx = 0, ry = 0, rz = 0) {
     this.place(new THREE.BoxGeometry(w, h, d), x, y, z, rx, ry, rz)
+    return this
+  }
+  /** a box with softened edges (r = edge radius): hero hardware catches the light on its edges instead of reading as a cut-out */
+  rbox(w: number, h: number, d: number, x: number, y: number, z: number, r = 0.012, rx = 0, ry = 0, rz = 0) {
+    const rr = Math.min(r, Math.min(w, h, d) * 0.45)
+    this.place(new RoundedBoxGeometry(w, h, d, 2, rr), x, y, z, rx, ry, rz)
     return this
   }
   cyl(rt: number, rb: number, h: number, x: number, y: number, z: number, seg = 8, rx = 0, ry = 0, rz = 0) {
