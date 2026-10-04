@@ -385,7 +385,7 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 @media (max-width: 760px) {
   .room-links { flex-direction: row; gap: 14px; right: auto; left: var(--gutter); top: calc(var(--gutter) * 0.65 + var(--safe-t) + 96px); }
   .room-stage { bottom: calc(var(--gutter) * 3.2 + var(--safe-b) + 28px); }
-  .room-enter { bottom: calc(var(--gutter) * 3.4 + var(--safe-b)); }
+  .room-enter { bottom: calc(var(--gutter) * 3.4 + var(--safe-b)); white-space: normal; max-width: calc(100vw - var(--gutter) * 2); gap: 12px; padding: 12px 16px; }
   .room-chip-t { font-size: clamp(24px, 8vw, 34px); }
 }
 @media (prefers-reduced-motion: reduce) { .room-enter, .room-chip, .room-nav { transition: none; } }

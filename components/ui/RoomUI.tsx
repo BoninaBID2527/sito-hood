@@ -80,7 +80,7 @@ export function RoomUI() {
   const offer = mode === 'alterco' && near && selected === null
   const st = STATIONS[station]
   const playing = video === 'playing' || video === 'loading'
-  const domVideo = video === 'error' || videoMode() === 'dom'
+  const domVideo = videoMode() === 'dom' && video !== 'error'
 
   return (
     <>
@@ -170,7 +170,10 @@ export function RoomUI() {
               <span className="label room-time" aria-label="Video time">{fmt(time)} / {fmt(roomMedia.videoDuration)}</span>
               <button className="label" onClick={() => closeFocus()} aria-label="Close video" data-cursor="link">CLOSE</button>
               {video === 'error' && (
-                <a className="label room-fallback" href={roomMedia.video} target="_blank" rel="noopener noreferrer">OPEN THE VIDEO FILE ↗</a>
+                <>
+                  <span className="label room-time" role="status">VIDEO COULD NOT BE PLAYED HERE</span>
+                  <a className="label room-fallback" href={roomMedia.video} target="_blank" rel="noopener noreferrer">OPEN THE FILE ↗</a>
+                </>
               )}
             </motion.div>
           )}

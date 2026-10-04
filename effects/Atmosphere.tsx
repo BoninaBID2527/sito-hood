@@ -49,7 +49,7 @@ export function Atmosphere() {
       if (inRoom) {
         hemi.current.color.copy(ROOM_SKY)
         hemi.current.groundColor.copy(ROOM_GROUND)
-        hemi.current.intensity = 1.7 * (1 - 0.5 * room.dim)
+        hemi.current.intensity = 2.0 * (1 - 0.5 * room.dim)
       } else {
         hemi.current.color.copy(dual ? new THREE.Color('#7fa8ff') : palette.hemiSky)
         hemi.current.groundColor.copy(dual ? new THREE.Color('#2a1a58') : palette.hemiGround)

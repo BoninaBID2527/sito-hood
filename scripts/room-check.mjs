@@ -24,7 +24,7 @@ const until = (fn, arg, to = 240000) => page.waitForFunction(fn, arg, { timeout:
 const hd = (f, a) => page.evaluate(f, a)
 const sim = (s) => hd((s) => new Promise((r) => { const t0 = window.__hd.rt.time; const f = () => (window.__hd.rt.time - t0 > s ? r() : requestAnimationFrame(f)); f() }), s)
 
-await page.goto(`http://localhost:${PORT}/?debug=1&quality=${quality}`)
+await page.goto(`http://localhost:${PORT}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
 await page.click('button:has-text("ENTER")')
 await sim(2)
@@ -93,6 +93,10 @@ await chip.click()
 ok(await until(() => window.__hd.store.getState().roomFocus && window.__hd.room.push > 0.97), 'PLAY pushes the camera to the monitor')
 ok(await hd(() => window.__hd.rt.world === 'room' && window.__hd.room.dim > 0.9), 'lights lowered (dim)')
 ok(reqs.some((u) => /\.mp4/.test(u)), 'video requested only after PLAY')
+if ((process.env.EXTRA || '').includes('roomvideo=dom')) {
+  ok(!!(await page.$('.room-video-dom video')), 'DOM fallback: the same <video> is shown in the vertical frame')
+  ok(await hd(() => !window.__hd.vid.tex), 'DOM fallback: no WebGL video texture is created')
+}
 if (webm) {
   ok(await until(() => window.__hd.vid.el && window.__hd.vid.el.currentTime > 0.3 && !window.__hd.vid.el.paused, null, 120000), 'video is playing')
   ok(await hd(() => window.__hd.vid.el.muted === false && window.__hd.vid.el.volume > 0), 'audio on because the visitor pressed PLAY')
@@ -130,6 +134,6 @@ await sim(1)
 ok(await until(() => window.__hd.store.getState().roomNear), 'door offered again after leaving')
 console.log(errors.length ? 'CONSOLE:\n' + [...new Set(errors)].join('\n') : 'no console errors/warnings')
 ok(errors.length === 0, 'no console errors / hydration warnings')
-console.log(`\nroom-check [${quality} ${w}x${h}${touch ? ' touch' : ''}${process.env.REDUCED === '1' ? ' reduced' : ''}]: ${pass} passed, ${fail} failed`)
+console.log(`\nroom-check${process.env.EXTRA ? ' ' + process.env.EXTRA : ''} [${quality} ${w}x${h}${touch ? ' touch' : ''}${process.env.REDUCED === '1' ? ' reduced' : ''}]: ${pass} passed, ${fail} failed`)
 await browser.close()
 process.exit(fail ? 1 : 0)

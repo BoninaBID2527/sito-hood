@@ -12,8 +12,9 @@ import { roomMedia } from '@/data/room'
  *                      audio is on because the visitor asked for it; the scene shows a THREE.VideoTexture
  *   CLOSE / EXIT     → pause; on exit `releaseVideo()` also drops the source and the texture so nothing is decoded or held
  *
- * `playsinline` keeps iPhone from taking the video fullscreen. If the texture path fails (error / texture unsupported) the same
- * element is shown in a DOM frame over the room (`mode: 'dom'`), so the video always plays.
+ * `playsinline` keeps iPhone from taking the video fullscreen. `?roomvideo=dom` (or `vid.mode = 'dom'`) shows the same element in a
+ * DOM frame over the room instead of on the 3D monitor — the visually coherent fallback if the WebGL video texture misbehaves on a device.
+ * A source that cannot be loaded/decoded leaves the poster on the monitor and offers the file as a plain link.
  */
 export const vid = {
   el: null as HTMLVideoElement | null,
@@ -56,7 +57,7 @@ function ensure() {
     const t = Math.floor(v.currentTime)
     if (t !== useStore.getState().videoTime) set({ videoTime: t })
   })
-  on('error', () => { vid.mode = 'dom'; set({ video: 'error' }); audio.duck(false) })
+  on('error', () => { set({ video: 'error' }); audio.duck(false) })
   vid.el = v
   return v
 }
@@ -101,7 +102,7 @@ export function playVideo() {
     p.catch((e: unknown) => {
       // autoplay policy / unsupported source → surface it, keep the controls usable
       if ((e as { name?: string })?.name === 'NotAllowedError') set({ video: 'paused' })
-      else { vid.mode = 'dom'; set({ video: 'error' }) }
+      else set({ video: 'error' })
     })
   }
 }
