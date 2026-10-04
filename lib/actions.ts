@@ -39,7 +39,7 @@ export function selectTrack(i: number | null) {
   s.set({ selected: idx })
   s.visit(idx)
   lockScroll()
-  gsap.to(rt.fx, { focusDim: 0.55, duration: 1.0, ease: 'power2.out' })
+  gsap.to(rt.fx, { focusDim: 0.32, duration: 1.0, ease: 'power2.out' })
   rt.impulse.rgb = Math.max(rt.impulse.rgb, 0.006)
   audio.thud()
   const v = useStore.getState().visited
