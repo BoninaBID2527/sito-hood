@@ -12,6 +12,7 @@ import { streetMat, streetU } from './materials'
 import { SEGS } from './layout'
 import { useStore } from '@/lib/store'
 import { audio } from '@/lib/audio'
+import { throttleReflector } from './reflectThrottle'
 
 const GROUND_W = 44
 const GROUND_L = 176
@@ -185,11 +186,11 @@ function PuddleLayer() {
 
 /** Planar reflection + wetness-field water over a world-aligned mask (street puddles, rooftop ponds). */
 export function WaterSheet({ mask, size, position, interactive = false }: { mask: THREE.Texture; size: [number, number]; position: [number, number, number]; interactive?: boolean }) {
-  const tier = useStore((s) => s.tier)
   const scene = useThree((s) => s.scene)
   const camera = useThree((s) => s.camera)
-  const q = rt.quality
-  const real = q.reflector && tier !== 'low'
+  // creation-time quality: the reflector's resolution / existence is fixed for the session; its update cadence adapts live
+  const q = useRef(rt.quality).current
+  const real = q.reflector
   const group = useRef<THREE.Group>(null)
   const uni = useRef<Record<string, THREE.IUniform> | null>(null)
   const rip = useRef({ x: 0, z: 0, s: 0 })
@@ -226,9 +227,10 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
         textureWidth: q.reflectorRes,
         textureHeight: Math.round(q.reflectorRes * 0.62),
         clipBias: 0.003,
-        multisample: q.tier === 'high' ? 2 : 0,
+        multisample: q.level >= 2 ? 2 : 0,
         shader,
       })
+      throttleReflector(r)
       material = r.material as THREE.ShaderMaterial
       object = r
     } else {

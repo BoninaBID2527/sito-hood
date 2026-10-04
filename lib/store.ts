@@ -52,7 +52,7 @@ export const useStore = create<State>((set, get) => ({
   phase: 'loading',
   loadProgress: 0,
   sound: false,
-  tier: 'medium',
+  tier: 'balanced',
   mode: 'alterco',
   scene: 'alley',
   selected: null,

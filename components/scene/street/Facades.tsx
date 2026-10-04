@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rng, smoothstep } from '@/lib/math'
@@ -223,7 +223,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
     return { meshes, mats, geos: [plane, sillGeo, lintelGeo, ...geos], concrete }
   }, [data])
 
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const w = palette.windows
     winU.t.value = w
     winU.late.value = smoothstep(0.34, 0.5, rt.smooth) * (1 - smoothstep(0.7, 0.72, rt.smooth))

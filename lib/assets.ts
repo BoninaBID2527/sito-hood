@@ -124,8 +124,7 @@ export async function loadCore(onProgress: (p: number) => void) {
         A.banner = T.bannerTexture('HOODDINO')
         A.projection = T.projectionTexture('ALTERCO')
         // every wall piece, poster and sticker lives in two atlases (lib/graffitiSheet.ts)
-        const tier = rt.quality.tier
-        A.graf = buildGraffiti(tier === 'high' ? 0.9 : tier === 'medium' ? 0.75 : 0.6)
+        A.graf = buildGraffiti(rt.quality.atlas)
         A.pieces = []
         // seven hidden letters — the scavenger hunt that spells ALTERCO, each by a different hand
         const hands = [

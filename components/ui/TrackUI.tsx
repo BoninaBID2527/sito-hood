@@ -30,44 +30,37 @@ export function TrackUI() {
       {show && (
         <motion.section className="track-ui" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }} aria-label="Tracklist">
           <div className="tu-readout">
+            {/* the title itself is built into the space around the object (3D typography); this is only the quiet index + controls */}
             <AnimatePresence mode="wait">
-              <motion.div
-                key={tr.id}
-                initial={{ opacity: 0, y: 36, filter: 'blur(12px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -24, filter: 'blur(10px)' }}
-                transition={{ type: 'spring', stiffness: 140, damping: 20, filter: { duration: 0.45, ease: 'easeOut' } }}
-              >
-                <span className="tu-n label">TRACK {pad(tr.n)} / {pad(alterco.tracks.length)}</span>
-                <span className="tu-title display">{tr.title}</span>
-                {tr.tag && <span className="tu-tag label">({tr.tag})</span>}
+              <motion.div key={tr.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35 }}>
+                <span className="tu-count label" aria-live="polite">
+                  {pad(tr.n)} / {pad(alterco.tracks.length)}
+                  <span className="sr-only"> {tr.title}{tr.tag ? ` (${tr.tag})` : ''}</span>
+                </span>
               </motion.div>
             </AnimatePresence>
-            <button className="tu-open label hit" data-cursor="link" data-cursor-label="OPEN" onClick={() => selectTrack(front)}>
-              OPEN TRACK <span>→</span>
-            </button>
-            <div className="tu-arrows">
-            <button className="hit label" aria-label="Previous track" onClick={() => jumpToTrack((front + 6) % 7)}>←</button>
-            <button className="hit label" aria-label="Next track" onClick={() => jumpToTrack((front + 1) % 7)}>→</button>
+            <div className="tu-controls">
+              <button className="hit label tu-step" aria-label="Previous track" onClick={() => jumpToTrack((front + 6) % 7)}>←</button>
+              <button className="tu-open label hit" data-cursor="link" data-cursor-label="OPEN" onClick={() => selectTrack(front)}>
+                OPEN <span>→</span>
+              </button>
+              <button className="hit label tu-step" aria-label="Next track" onClick={() => jumpToTrack((front + 1) % 7)}>→</button>
             </div>
           </div>
-          <ol className="tu-index">
+          <ol className="tu-dots" aria-label="Tracks">
             {alterco.tracks.map((t, i) => (
               <li key={t.id}>
                 <button
-                  className={`label hit ${i === front ? 'is-front' : ''} ${visited.includes(i) ? 'is-seen' : ''}`}
+                  className={`hit ${i === front ? 'is-front' : ''} ${visited.includes(i) ? 'is-seen' : ''}`}
                   data-cursor="link"
                   aria-label={`${pad(t.n)} ${trackLabel(t)}`}
                   aria-current={i === front}
                   onClick={() => jumpToTrack(i)}
-                >
-                  <i>{pad(t.n)}</i>
-                  <b />
-                </button>
+                ><b /></button>
               </li>
             ))}
           </ol>
-          <div className="tu-hint label">{rt.touch ? 'SWIPE · TAP A CARD' : 'SCROLL · DRAG · CLICK A CARD'}</div>
+          <div className="tu-hint label">{rt.touch ? 'SWIPE · TAP' : 'SCROLL · DRAG · CLICK'}</div>
         </motion.section>
       )}
     </AnimatePresence>

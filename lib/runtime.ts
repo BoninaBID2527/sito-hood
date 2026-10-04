@@ -70,8 +70,12 @@ export const rt = {
   /** the alley/roof/dualism world currently being rendered */
   world: 'alley' as 'alley' | 'roof' | 'dualism',
   /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */
-  stats: { calls: 0, tris: 0 },
-  quality: SETTINGS.medium as QualitySettings,
+  stats: { calls: 0, tris: 0, refl: 0 },
+  quality: SETTINGS.balanced as QualitySettings,
+  /** current render DPR (the adaptive manager moves it inside the tier's range) */
+  dpr: 1,
+  /** live diagnostics for ?perf=1 (written by PerfGovernor; never read by the scene) */
+  perf: { ms: 16.7, fps: 60, dpr: 1, tier: 'balanced' as string, hitches: 0, changes: 0, calls: 0, tris: 0, tex: 0, geo: 0, forced: false },
 }
 
 export type Runtime = typeof rt

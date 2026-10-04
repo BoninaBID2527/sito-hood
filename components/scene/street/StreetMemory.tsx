@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rt } from '@/lib/runtime'
@@ -32,7 +32,7 @@ export function StreetMemory() {
   useEffect(() => () => Object.values(kit).forEach((k) => { k.geo.dispose(); k.mat.dispose() }), [kit])
 
   const lvl = useRef({ uv: 0, glyph: 0 })
-  useFrame((_, dt) => {
+  useWorldFrame('alley', (_, dt) => {
     const mem = useStore.getState().dualReturned
     // dusk: window-light rises through the journey → paint wakes up. Memory keeps it half-awake.
     const dusk = smoothstep(0.35, 0.8, palette.windows)

@@ -1,7 +1,8 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
+import { DistCull } from './DistCull'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rng } from '@/lib/math'
@@ -57,10 +58,10 @@ export function Decals() {
       <Signs />
       <WorldTitles />
       <EasterEggs />
-      <GrazingSymbol />
+      <DistCull at={[-3, 1.2, -33]} r={75}><GrazingSymbol /></DistCull>
       <NumberTrail />
-      <Anamorph />
-      <StreetMemory />
+      <DistCull at={[0, 0, -21]} r={55}><Anamorph /></DistCull>
+      <DistCull at={[0, 1, -48]} r={75}><StreetMemory /></DistCull>
     </group>
   )
 }
@@ -82,7 +83,7 @@ function Signs() {
     }
   }, [])
   const refs = useRef<THREE.MeshStandardMaterial[]>([])
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const k = 0.25 + palette.lamps * 0.9
     built.alterco.emissiveIntensity = 0.5 * k + 0.35
     built.tracks.emissiveIntensity = 0.3 * k
@@ -95,16 +96,20 @@ function Signs() {
   return (
     <group>
       {/* blade sign perpendicular to the wall — readable head-on while walking down the alley */}
+      <DistCull at={[bladeX, 5, -31]} r={58}>
       <group position={[bladeX - 1.05, 5.0, -31]}>
         <mesh geometry={built.plane} material={built.alterco} scale={[1.7, 0.85, 1]} />
         <mesh geometry={built.barGeo} material={built.bar} position={[0.9, 0.5, 0]} scale={[1, 1, 1.0]} rotation={[0, Math.PI / 2, 0]} />
         <mesh geometry={built.barGeo} material={built.bar} position={[0.55, 0, 0]} scale={[1, 1, 2.0]} rotation={[0, Math.PI / 2, 0]} />
       </group>
+      </DistCull>
       {/* TRACKS → at the mouth of the plaza */}
       <mesh geometry={built.plane} material={built.tracks} position={[wallX(-1, -67) + 0.09, 3.1, -67]} rotation={[0, Math.PI / 2, 0]} scale={[2.2, 1.1, 1]} />
       {/* roof access (the way out — nav hint) */}
       <mesh geometry={built.plane} material={built.roof} position={[wallX(1, -68) - 0.09, 4.6, -68]} rotation={[0, -Math.PI / 2, 0]} scale={[2.4, 0.9, 1]} />
-      <mesh geometry={built.plane} material={built.oneWay} position={[wallX(-1, -10) + 0.08, 2.5, -10.5]} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 0.34, 1]} />
+      <DistCull at={[wallX(-1, -10), 2.5, -10.5]} r={58}>
+        <mesh geometry={built.plane} material={built.oneWay} position={[wallX(-1, -10) + 0.08, 2.5, -10.5]} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 0.34, 1]} />
+      </DistCull>
     </group>
   )
 }
@@ -123,7 +128,7 @@ function WorldTitles() {
   const cableGeo = useMemo(() => new THREE.CylinderGeometry(0.014, 0.014, 1, 4), [])
   const bannerRef = useRef<THREE.Mesh>(null)
 
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const pos = bannerGeo.attributes.position as THREE.BufferAttribute
     const t = rt.time
     for (let i = 0; i < pos.count; i++) {
@@ -160,11 +165,15 @@ function WorldTitles() {
 
   return (
     <group>
-      <mesh ref={bannerRef} geometry={bannerGeo} material={bannerMat} position={[0.04, 7.4, -26]} rotation={[0.05, 0, 0]} />
-      {cableSegs.map((c, i) => (
-        <mesh key={i} geometry={cableGeo} material={cableMat} position={c.p} quaternion={c.q} scale={[1, c.len, 1]} />
-      ))}
-      <mesh geometry={projGeo} material={projMat} position={[wallX(1, -36) - 0.12, 7.4, -36]} rotation={[0, -Math.PI / 2, 0]} renderOrder={5} />
+      <DistCull at={[0, 7.4, -26]} r={58}>
+        <mesh ref={bannerRef} geometry={bannerGeo} material={bannerMat} position={[0.04, 7.4, -26]} rotation={[0.05, 0, 0]} />
+        {cableSegs.map((c, i) => (
+          <mesh key={i} geometry={cableGeo} material={cableMat} position={c.p} quaternion={c.q} scale={[1, c.len, 1]} />
+        ))}
+      </DistCull>
+      <DistCull at={[wallX(1, -36), 7.4, -36]} r={58}>
+        <mesh geometry={projGeo} material={projMat} position={[wallX(1, -36) - 0.12, 7.4, -36]} rotation={[0, -Math.PI / 2, 0]} renderOrder={5} />
+      </DistCull>
     </group>
   )
 }
@@ -191,7 +200,7 @@ function EasterEggs() {
   const hov = useRef({ letter: -1, credits: false })
   useEffect(() => () => { geo.dispose(); letterMats.forEach((m) => m.dispose()); creditsMat.dispose() }, [geo, letterMats, creditsMat])
 
-  useFrame((_, dt) => {
+  useWorldFrame('alley', (_, dt) => {
     letterMats.forEach((m, i) => {
       const target = letters[i] ? 1.1 : hov.current.letter === i ? 0.7 : 0
       m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 8)
@@ -204,7 +213,8 @@ function EasterEggs() {
   return (
     <group>
       {LETTER_SPOTS.map((l, i) => (
-        <group key={i} position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
+        <DistCull key={i} at={[wallX(l.side, l.z), l.y, l.z]} r={65}>
+        <group position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
           <mesh geometry={geo} material={letterMats[i]} scale={[l.s, l.s, 1]} renderOrder={4} />
           {/* generous invisible hit area — the glyphs are small and far away */}
           <mesh
@@ -215,9 +225,10 @@ function EasterEggs() {
             onPointerOut={() => { hov.current.letter = -1; set('default') }}
             onClick={(e) => { e.stopPropagation(); foundLetter(i) }}
           >
-            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+            <meshBasicMaterial visible={false} />
           </mesh>
         </group>
+        </DistCull>
       ))}
 
       {/* credits wheat-paste, half hidden behind a dumpster in the plaza */}

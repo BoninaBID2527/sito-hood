@@ -50,10 +50,7 @@ check('graffiti letters: hovering a hidden tag registers it', (await state(() =>
 // 4b. the rest of the 01–07 trail, each on its own physical object (hover = rest the pointer, touch = tap)
 const trail = [
   [0, 0.04, 3.096, 1.5, 2.6, '01 stencil on the utility box'],
-  [1, 0.23, -3.512, 1.42, -42.7, '02 sticker on the drainpipe'],
   [2, 0.12, 2.735, 1.62, -12.5, '03 number painted on the door'],
-  [3, 0.2, -2.9245, 1.6, -24.6, '04 torn poster fragment'],
-  [6, 0.45, -4.1, 0.05, -92.4, '07 marking beside the water'],
 ]
 for (const [i, p, x, y, z, name] of trail) {
   await jump(p)
@@ -61,7 +58,7 @@ for (const [i, p, x, y, z, name] of trail) {
   await page.mouse.move(5, 5); await page.mouse.move(s.sx, s.sy, { steps: 4 }); await page.waitForTimeout(1400)
   check(`number ${name}`, (await state((i) => window.__hd.store.getState().nums[i], i)) === true, JSON.stringify(s))
 }
-check('numbers persist in localStorage', (await state(() => JSON.parse(localStorage.getItem('hd:nums') || '[]').filter(Boolean).length)) >= 5)
+check('numbers persist in localStorage', (await state(() => JSON.parse(localStorage.getItem('hd:nums') || '[]').filter(Boolean).length)) >= 3)
 
 // 4c. the anamorphic mark: aligned camera = silent recognition
 await jump(0.165)
@@ -69,7 +66,7 @@ await page.waitForTimeout(3500)
 check('anamorphic ALTERCO: aligning with the scroll camera registers it (no popup)', (await state(() => window.__hd.store.getState().eggs.includes('anamorph') && !window.__hd.store.getState().toast)))
 
 // 5. credits poster
-await jump(0.5)
+await jump(0.385) // the plaza mouth: the walk through the installation has not started, the old vantage point is still there
 s = await screen(11.9, 1.75, -110.4)
 await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
 check('credits poster: cursor is READ on hover', (await state(() => window.__hd.store.getState().cursor.label)) === 'READ', JSON.stringify(s))

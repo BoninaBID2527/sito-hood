@@ -71,6 +71,16 @@ if (hit) {
   await page.screenshot({ path: `${out}/hover.png` })
   await page.mouse.click(w * hit[0], h * hit[1])
   await page.waitForTimeout(2500)
+  // a tap on a neighbour first travels the camera to it; the second tap on the track in front opens it
+  if ((await st(() => window.__hd.store.getState().selected)) === null) {
+    await page.waitForTimeout(3500)
+    for (const [fx, fy] of [[hit[0], hit[1]], [0.5, 0.55], [0.5, 0.6], [0.5, 0.5]]) {
+      await page.mouse.move(w * fx, h * fy)
+      await page.waitForTimeout(500)
+      if ((await st(() => window.__hd.store.getState().cursor.label)) === 'OPEN') { await page.mouse.click(w * fx, h * fy); break }
+    }
+    await page.waitForTimeout(2500)
+  }
   const sel = await st(() => window.__hd.store.getState().selected)
   check('clicking a card selects the track', sel !== null, `selected=${sel}`)
   await page.waitForTimeout(6000)

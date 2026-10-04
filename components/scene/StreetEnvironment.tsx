@@ -16,6 +16,7 @@ import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
 import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
+import { FarGate } from './street/DistCull'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
@@ -48,14 +49,14 @@ export function StreetEnvironment() {
       <StreetLevel skip={SKIP} />
       <GroundGate />
       <ContactShadows />
-      <FireEscapes />
-      <Props />
+      <NoReflect><FireEscapes /></NoReflect>
+      <FarGate><Props /></FarGate>
       <Lamps />
-      <Decals />
+      <NoReflect><Decals /></NoReflect>
       <NoReflect><Steam /></NoReflect>
-      <Cables />
+      <NoReflect><Cables /></NoReflect>
       <NoReflect><Foreground /></NoReflect>
-      <NoReflect><WallDetail /></NoReflect>
+      <FarGate><NoReflect><WallDetail /></NoReflect></FarGate>
       <NoReflect><AirLayers /></NoReflect>
       <Backdrop />
       <AltercoArtwork mode="plaza" />

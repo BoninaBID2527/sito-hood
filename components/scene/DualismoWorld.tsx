@@ -1,7 +1,8 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { dualismo } from '@/data/project'
@@ -13,6 +14,7 @@ import { exitDualism } from '@/lib/actions'
 import { createArtworkMaterial } from './ArtworkMaterial'
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js'
 import { palette } from '@/lib/timeOfDay'
+import { throttleReflector } from './street/reflectThrottle'
 
 const D = WORLD.dualismX
 
@@ -56,7 +58,8 @@ void main() {
 function Particles() {
   const camera = useThree((s) => s.camera)
   const kit = useMemo(() => {
-    const n = Math.round(1100 * rt.quality.particleScale)
+    const s0 = rt.quality.particleScale
+    const n = Math.round(1100 * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
@@ -77,13 +80,15 @@ function Particles() {
       blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D, 0, 0) }, uSize: { value: rt.touch ? 0.7 : 1 }, uArrive: { value: 0 } },
     })
-    return { g, mat, ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
+    return { g, mat, n, s0, v2: new THREE.Vector2(), ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uArrive.value = rt.dual.t
-    kit.ray.setFromCamera(new THREE.Vector2(rt.rx, rt.ry), camera)
+    // particle count follows the live quality (draw range), never above what the device started with
+    kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0))))
+    kit.ray.setFromCamera(kit.v2.set(rt.rx, rt.ry), camera)
     if (kit.ray.ray.intersectPlane(kit.plane, kit.hit)) u.uMouse.value.lerp(kit.hit, 0.15)
   }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
@@ -93,7 +98,8 @@ function Particles() {
 /** Very distant, very slow specks: scale cues far beyond the visible geometry (parallax comes from the camera drift). */
 function FarDust() {
   const kit = useMemo(() => {
-    const n = Math.round(700 * rt.quality.particleScale)
+    const s0 = rt.quality.particleScale
+    const n = Math.round(700 * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
@@ -108,9 +114,9 @@ function FarDust() {
       vertexShader: pVert, fragmentShader: pFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D + 9999, 0, 0) }, uSize: { value: 2.2 }, uArrive: { value: 0 } },
     })
-    return { g, mat }
+    return { g, mat, n, s0 }
   }, [])
-  useFrame(() => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t }, -0.5)
+  useWorldFrame('dualism', () => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t; kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0)))) }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
   return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
 }
@@ -139,7 +145,7 @@ function TunnelRings() {
     return { geo, rings }
   }, [])
   const refs = useRef<(THREE.Mesh | null)[]>([])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     kit.rings.forEach((r, i) => {
       const m = refs.current[i]
       if (!m) return
@@ -224,9 +230,8 @@ void main() {
 
 function GlassHall() {
   const kit = useMemo(() => {
-    const t = rt.quality.tier
-    const rows = t === 'high' ? 26 : t === 'medium' ? 18 : 12
-    const crystals = t === 'high' ? 30 : t === 'medium' ? 18 : 10
+    const rows = rt.quality.dualRows
+    const crystals = rt.quality.dualCrystals
     const r = rng(1313)
     const mat = new THREE.ShaderMaterial({
       vertexShader: glassVert, fragmentShader: glassFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
@@ -273,7 +278,7 @@ function GlassHall() {
     cr.renderOrder = 2
     return { mat, slabs, cr }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uFade.value = rt.dual.t
@@ -290,8 +295,7 @@ function GlassHall() {
 
 /** Black-glass floor: the world above is mirrored below. Thin-film sheen creeps in at grazing angles. */
 function MirrorFloor() {
-  const tier = rt.quality.tier
-  const real = rt.quality.reflector && tier !== 'low'
+  const real = rt.quality.reflector
   const kit = useMemo(() => {
     const geo = new THREE.PlaneGeometry(160, 260)
     const shader = {
@@ -319,7 +323,8 @@ function MirrorFloor() {
     let obj: THREE.Mesh
     let mat: THREE.ShaderMaterial
     if (real) {
-      const rf = new Reflector(geo, { color: new THREE.Color(0.9, 0.95, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.tier === 'high' ? 2 : 0, shader })
+      const rf = new Reflector(geo, { color: new THREE.Color(0.9, 0.95, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.level >= 2 ? 2 : 0, shader })
+      throttleReflector(rf)
       mat = rf.material as THREE.ShaderMaterial
       obj = rf
     } else {
@@ -337,7 +342,7 @@ function MirrorFloor() {
     obj.renderOrder = 1
     return { obj, mat, geo }
   }, [real])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     kit.mat.uniforms.uTime.value = rt.time
     kit.mat.uniforms.uFade.value = rt.dual.t
     kit.obj.visible = rt.world === 'dualism'
@@ -391,7 +396,7 @@ function SpectralAir() {
     const sheets = Array.from({ length: 12 }, (_, i) => ({ z: 4 - i * 17 - (i % 2) * 4, w: 40 + i * 6, h: 18 + i * 2 }))
     return { shaft, haze, geo, shafts, sheets }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const t = rt.time
     kit.shaft.uniforms.uTime.value = t
     kit.shaft.uniforms.uFade.value = rt.dual.t
@@ -436,7 +441,7 @@ function ArtworkContrast() {
     [],
   )
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
-  useFrame(() => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
+  useWorldFrame('dualism', () => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
   return <mesh geometry={geo} material={mat} position={[D, 0.1, -0.5]} scale={[15, 15, 1]} renderOrder={2} />
 }
@@ -466,7 +471,7 @@ function LensHalo() {
   const mat2 = useMemo(() => { const m = mat.clone(); m.uniforms = { uTime: mat.uniforms.uTime, uFade: mat.uniforms.uFade, uDir: { value: -1 } }; return m }, [mat])
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
   const g = useRef<THREE.Group>(null)
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     mat.uniforms.uTime.value = rt.time
     mat.uniforms.uFade.value = rt.dual.t
     if (g.current) { g.current.visible = rt.world === 'dualism'; g.current.rotation.z = rt.time * 0.03 }
@@ -497,7 +502,7 @@ function Orbiter({ index }: { index: number }) {
   const flag = useRef(false)
   useEffect(() => () => { discMat.dispose(); ringMat.dispose(); discGeo.dispose(); ringGeo.dispose() }, [discMat, ringMat, discGeo, ringGeo])
 
-  useFrame((_, dt) => {
+  useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
     const st = useStore.getState()
@@ -550,7 +555,7 @@ function Centerpiece() {
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1, 24, 24), [])
   const halo = useMemo(() => new THREE.SpriteMaterial({ map: A.glow, color: '#7fb0ff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.5, fog: false }), [])
   useEffect(() => () => { mat.dispose(); geo.dispose(); halo.dispose() }, [mat, geo, halo])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const o = g.current
     if (!o) return
     const u = mat.uniforms
@@ -587,7 +592,7 @@ function ReturnRift() {
   const hov = useRef(0)
   const flag = useRef(false)
   useEffect(() => () => { mat.dispose(); geo.dispose(); core.dispose() }, [mat, geo, core])
-  useFrame((_, dt) => {
+  useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
     hov.current += ((flag.current ? 1 : 0) - hov.current) * Math.min(1, dt * 7)

@@ -1,7 +1,8 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { rt } from '@/lib/runtime'
 import { useStore } from '@/lib/store'
@@ -55,7 +56,7 @@ export function GrazingSymbol() {
   const hov = useRef(0)
   const flag = useRef(false)
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  useFrame((_, dt) => {
+  useWorldFrame('alley', (_, dt) => {
     // grazing-angle visibility: 1 − |N·V| rises as the camera slides along the wall
     v.copy(camera.position).sub(pos).normalize()
     const g = 1 - Math.abs(v.dot(nrm))

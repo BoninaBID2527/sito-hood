@@ -20,7 +20,8 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
   const group = useRef<THREE.Group>(null)
   const front = useMemo(() => createArtworkMaterial(A.covers.alterco), [])
   const dark = useMemo(() => new THREE.MeshStandardMaterial({ color: '#0d0d0f', roughness: 0.8 }), [])
-  const back = useMemo(() => new THREE.MeshStandardMaterial({ map: A.covers.alterco, color: '#555', roughness: 0.9 }), [])
+  // seen from behind the print glows through its stock (back-lit physical print), so the artwork still reads from every side of the installation
+  const back = useMemo(() => new THREE.MeshStandardMaterial({ map: A.covers.alterco, color: '#8c8c8c', roughness: 0.9, emissive: new THREE.Color('#ffffff'), emissiveMap: A.covers.alterco, emissiveIntensity: 0.32 }), [])
   const geo = useMemo(() => new THREE.BoxGeometry(1, 1, 0.045), [])
   const tilt = useRef({ x: 0, y: 0 })
   const halo = useMemo(() => new THREE.SpriteMaterial({ map: A.glow, color: mode === 'final' ? '#9ab4ff' : '#ffb27a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 }), [mode])
@@ -73,6 +74,7 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
   const _t = useMemo(() => new THREE.Vector3(), [])
   const _q = useMemo(() => new THREE.Quaternion(), [])
   const _dn = useMemo(() => new THREE.Vector3(0, -1, 0), [])
+  const _d = useMemo(() => new THREE.Vector3(), [])
 
   useEffect(
     () => () => {
@@ -156,9 +158,9 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
             const cone = coneRefs.current[i]
             if (cone) {
               _t.set(x * 0.6, py - half * 0.15, z0 - 0.05)
-              const d = _t.clone().sub(_v)
+              const d = _d.copy(_t).sub(_v)
               const len = d.length()
-              cone.position.copy(_v).add(_dn.clone().multiplyScalar(0))
+              cone.position.copy(_v)
               cone.position.y += 0.16
               cone.scale.set(0.5 + len * 0.18, len * 0.98, 0.5 + len * 0.18)
               _q.setFromUnitVectors(_dn, d.normalize())
@@ -203,8 +205,8 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
           {[0, 1, 2, 3].map((i) => (
             <group key={i}>
               <mesh ref={(o) => { parts.current['lamp' + i] = o }} geometry={rig.box} material={rig.steel} />
-              <mesh ref={(o) => { parts.current['lens' + i] = o }} geometry={rig.lensGeo} material={rig.lens} />
-              <mesh ref={(o) => { coneRefs.current[i] = o }} geometry={rig.coneGeo} material={rig.coneMat} frustumCulled={false} renderOrder={4} />
+              <mesh ref={(o) => { parts.current['lens' + i] = o; o?.layers.set(1) }} geometry={rig.lensGeo} material={rig.lens} />
+              <mesh ref={(o) => { coneRefs.current[i] = o; o?.layers.set(1) }} geometry={rig.coneGeo} material={rig.coneMat} frustumCulled={false} renderOrder={4} />
             </group>
           ))}
         </group>

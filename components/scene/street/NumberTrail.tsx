@@ -38,8 +38,14 @@ export function NumberMark({ index, cell, atlas, position, rotation, w, hit = 2.
   )
   const h = w / cell.aspect
   const state = useRef({ over: false, dwell: 0 })
+  const grp = useRef<THREE.Group>(null)
+  const wp = useMemo(() => new THREE.Vector3(...position), [position])
   useEffect(() => () => { geo.dispose(); mat.dispose() }, [geo, mat])
-  useFrame((_, dt) => {
+  useFrame(({ camera }, dt) => {
+    // a mark far behind / far ahead of the camera costs nothing (two passes: main + reflection)
+    const near = camera.position.distanceToSquared(wp) < 70 * 70
+    if (grp.current && grp.current.visible !== near) grp.current.visible = near
+    if (!near) return
     const s = state.current
     if (s.over && !found) {
       s.dwell += dt
@@ -50,7 +56,7 @@ export function NumberMark({ index, cell, atlas, position, rotation, w, hit = 2.
   })
   const set = useStore.getState().setCursor
   return (
-    <group position={position} rotation={rotation}>
+    <group ref={grp} position={position} rotation={rotation}>
       {children}
       <mesh geometry={geo} material={mat} scale={[w, h, 1]} renderOrder={6} />
       <mesh
@@ -61,7 +67,7 @@ export function NumberMark({ index, cell, atlas, position, rotation, w, hit = 2.
         onClick={(e) => { e.stopPropagation(); foundNumber(index) }}
       >
         <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        <meshBasicMaterial visible={false} />
       </mesh>
     </group>
   )
@@ -131,7 +137,7 @@ function HitOnly({ index, position, rotation, size }: { index: number; position:
       onClick={(e) => { e.stopPropagation(); foundNumber(index) }}
     >
       <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+      <meshBasicMaterial visible={false} />
     </mesh>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
@@ -67,13 +67,14 @@ export function Lamps() {
 
   const lights = useRef<THREE.PointLight[]>([])
   const bulbs = useRef<(THREE.Mesh | null)[]>([])
+  const groups = useRef<(THREE.Group | null)[]>([])
   const glows = useRef<(THREE.Sprite | null)[]>([])
   const cones = useRef<(THREE.Mesh | null)[]>([])
   const levels = useRef<number[]>(LAMPS.map(() => 1))
   const flick = useMemo(() => LAMPS.map((l) => rng(l.id + 3)), [])
   const lampOn = useRef(true)
   const lastToggle = useRef(-10)
-  const order = useRef<number[]>([])
+  const order = useRef<number[]>([0, 1, 2])
 
   const bulbMats = useMemo(() => LAMPS.map(() => new THREE.MeshBasicMaterial({ color: new THREE.Color(6, 4.6, 2.6) })), [])
   const glowMats = useMemo(() => LAMPS.map(() => kit.glowMat('#ffb868')), [kit])
@@ -98,9 +99,12 @@ export function Lamps() {
   }, [kit, bulbMats, glowMats, coneMats, splitMats])
 
   const tmp = useMemo(() => new THREE.Vector3(), [])
-  useFrame(({ camera }, dt) => {
+  useWorldFrame('alley', ({ camera }, dt) => {
     // per-lamp brightness (flicker, egg toggle, time of day)
     LAMPS.forEach((l, i) => {
+      const g = groups.current[i]
+      if (g) { const dd = dist(camera.position, i); const near = dd < 72; if (g.visible !== near) g.visible = near
+      const co = cones.current[i]; if (co) { const cn = near && dd < 42; if (co.visible !== cn) co.visible = cn } }
       let v = palette.lamps
       if (l.flicker) {
         const t = rt.time
@@ -138,7 +142,17 @@ export function Lamps() {
       } else glowMats[7].color.copy(baseCol)
     }
     // pool: three real lights hop to the nearest lamps (intensity depends only on distance → no popping)
-    order.current = LAMPS.map((_, i) => i).sort((a, b) => dist(camera.position, a) - dist(camera.position, b))
+    // the three nearest lamps, without allocating
+    {
+      let d0 = 1e9, d1 = 1e9, d2 = 1e9, i0 = 0, i1 = 0, i2 = 0
+      for (let i = 0; i < LAMPS.length; i++) {
+        const d = dist(camera.position, i)
+        if (d < d0) { d2 = d1; i2 = i1; d1 = d0; i1 = i0; d0 = d; i0 = i }
+        else if (d < d1) { d2 = d1; i2 = i1; d1 = d; i1 = i }
+        else if (d < d2) { d2 = d; i2 = i }
+      }
+      order.current[0] = i0; order.current[1] = i1; order.current[2] = i2
+    }
     for (let k = 0; k < lights.current.length; k++) {
       const L = lights.current[k]
       const idx = order.current[k]
@@ -158,11 +172,11 @@ export function Lamps() {
         <pointLight key={i} ref={(r) => { if (r) lights.current[i] = r }} distance={30} decay={2} intensity={0} />
       ))}
       {LAMPS.map((l, i) => (
-        <group key={l.id} position={[l.x, 0, l.z]} scale={[l.arm, 1, 1]}>
+        <group key={l.id} ref={(r) => { groups.current[i] = r }} position={[l.x, 0, l.z]} scale={[l.arm, 1, 1]}>
           <mesh geometry={kit.geo} material={kit.metal} />
           <mesh ref={(r) => { bulbs.current[i] = r }} geometry={kit.bulbGeo} material={bulbMats[i]} position={[0.98, HEIGHT + 0.42, 0]} />
           <sprite ref={(r) => { glows.current[i] = r }} material={glowMats[i]} position={[0.98, HEIGHT + 0.42, 0]} scale={[3.2, 3.2, 1]} />
-          <mesh ref={(r) => { cones.current[i] = r }} geometry={kit.coneGeo} material={coneMats[i]} position={[0.98, HEIGHT + 0.4, 0]} renderOrder={3} />
+          <mesh ref={(r) => { cones.current[i] = r; r?.layers.set(1) }} geometry={kit.coneGeo} material={coneMats[i]} position={[0.98, HEIGHT + 0.4, 0]} renderOrder={3} />
           {l.id === 3 && [0, 1].map((k) => (
             <sprite key={k} ref={(r) => { splitRefs.current[k] = r }} material={splitMats[k]} position={[0.98, HEIGHT + 0.42, 0]} scale={[2.4, 2.4, 1]} />
           ))}
@@ -181,7 +195,7 @@ export function Lamps() {
               onPointerOver={(e) => { e.stopPropagation(); useStore.getState().setCursor('lamp', 'LIGHT') }}
               onPointerOut={() => useStore.getState().setCursor('default')}
             >
-              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+              <meshBasicMaterial visible={false} />
             </mesh>
           )}
         </group>
