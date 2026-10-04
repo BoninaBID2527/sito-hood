@@ -340,9 +340,10 @@ ${
     float up_ = rw_.y * 0.5 + 0.5;
     vec3 env_ = mix(uSkyHor, uSkyTop, smoothstep(0.5, 0.95, up_));
     env_ = mix(env_ * 0.3, env_, smoothstep(0.3, 0.55, up_));
+    env_ = mix(vec3(dot(env_, vec3(0.333))), env_, 0.55); // reflections are desaturated: a metal is not a mirror of the sunset
     float fr_ = pow(1.0 - clamp(dot(normal, vv_), 0.0, 1.0), 4.0);
-    float ks_ = (metalnessFactor * 0.6 + 0.04 + fr_ * 0.4) * (1.0 - roughnessFactor * 0.78);
-    totalEmissiveRadiance += env_ * mix(vec3(1.0), max(diffuseColor.rgb * 3.0, vec3(0.07)), metalnessFactor) * ks_ * 1.3;
+    float ks_ = (metalnessFactor * 0.5 + fr_ * 0.35) * (1.0 - roughnessFactor * 0.8);
+    totalEmissiveRadiance += env_ * clamp(diffuseColor.rgb * 1.4 + 0.04, 0.04, 0.5) * ks_ * 0.45;
   }`
     : ''
 }`,

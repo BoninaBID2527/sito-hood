@@ -20,14 +20,17 @@ export interface BrickSet {
 /** Tile = 2.4 m wide (11 bricks), 2.4 m tall (32 courses). */
 export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete', seed: number): BrickSet {
   // texel density follows the tier: 2.3 mm / 1.6 mm / 1.2 mm per texel (ultra gets the finest — walls are most of every frame)
-  const W = rt.quality.level >= 3 ? 2048 : rt.quality.level === 2 ? 1536 : 1024
+  const lv = rt.quality.level
+  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024
   const H = W
   const k = W / 1024
   const rows = 32, per = 11
   const bw = W / per, bh = H / rows
   const r = rng(seed)
   const { canvas, ctx } = makeCanvas(W, H)
-  const bump = makeCanvas(W, H)
+  // the height map stays 1024² whatever the albedo density (drawn in albedo coordinates, scaled down): bump needs shape, not grain
+  const bump = makeCanvas(1024, 1024)
+  bump.ctx.setTransform(1024 / W, 0, 0, 1024 / H, 0, 0)
   const base: Record<string, RGB> = {
     red: [128, 62, 46], dark: [96, 68, 60], weathered: [118, 86, 66], plaster: [128, 62, 46], concrete: [86, 86, 84],
   }
