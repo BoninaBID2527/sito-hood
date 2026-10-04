@@ -163,6 +163,43 @@ No other external fonts, images or audio were added in V3.1. The ALTERCO / DUALI
 13. If DUALISMO has been found, a faint iridescent glint stays on a distant tower on the rooftop; after you come back from DUALISMO the street is slightly wrong in a few places.
 </details>
 
+## V3.2 notes — the track installation + real-device performance
+
+### Track experience (`lib/installation.ts`, `lib/trackRig.ts`, `components/scene/TrackOrbit.tsx`, `TrackTypography.tsx`)
+The seven tracks are no longer a carousel. The plaza holds one installation: the official ALTERCO artwork stands at its centre and the seven
+objects hang around it at their own depth / height / scale / angle from an overhead truss. The **camera walks around the outside** (one pose per
+track, entry → 01 … 07 → back to the pool), always looking inward, so the artwork is the shared background of every composition and the
+neighbours sit in peripheral depth. Dark steel poles stand just inside the camera path and slide past the lens between tracks.
+* **Input**: the page scroll *is* the walk (`zoneT(progress)·6`); horizontal drag adds inertial offset (vertical drags stay with the page scroll
+  on touch); idle input snaps magnetically (velocity-aware) to the nearest track. The camera never travels faster than 2.1 stations/s, so one aggressive
+  wheel flick cannot skip four tracks — it passes each one. A tap on a neighbour travels there; a tap on the track in front opens a deeper focus where the
+  **camera itself moves toward the track** (the object is not pulled to the camera). No modal: a compact caption + links, the scene stays visible.
+* **Typography is environmental** (Anton, one cream/amber system, seven compositions built only from `alterco.tracks`): 01 assembles/obscured, 02 lifts,
+  03 rigid and frontal, 04 monumental and vertical, 05 loosens (restrained), 06 two masses crossing in depth, 07 settles. A neighbour is only a ghost of itself.
+* **Track UI** is minimal: `03 / 07`, previous/open/next, seven tiny dots. Portrait phones gather the composition toward the centre and dolly back.
+* **Reduced motion**: no spring travel (fast critical damping), no float/sway, typography reveals instantly.
+
+### Performance (`lib/quality.ts`, `lib/adaptive.ts`, `components/scene/PerfGovernor.tsx`)
+* **Tiers** `ultra · high · balanced · mobile` (never shown to visitors): chosen from touch / screen size (phone → mobile, iPad-class tablet → balanced), cores, memory, GPU
+  renderer string (software renderer → mobile) and `MAX_TEXTURE_SIZE`.
+* **Adaptive manager** (`lib/adaptive.ts`): 1-second window averages (never one dropped frame); 3 consecutive slow windows (>24 ms) → first lower the DPR in 0.15
+  steps (least visible), then drop a tier; 8 consecutive calm windows (≤18.2 ms ≈ locked 60 fps) + 12 s cooldown → restore DPR, then the tier, never above the device's
+  initial tier; a restore that fails within 25 s blocks that tier for 90 s and makes the next restore more patient. Tab switches / world changes get a grace period.
+  Live-adaptive: DPR, MSAA (HDR target re-allocated only on change), reflection cadence, bloom/grain, particle counts (draw range), track LOD reach.
+* **Reflections** were the biggest cost (the planar reflection is a second full scene render: 194 of 399 calls at the opening). Now: refreshed at most every 0.25 s while the
+  camera stands still, every N frames (N by tier) while moving, rendered with a short far plane, and the reflected scene is reduced (fire escapes, decals, cables, number marks,
+  light cones, track typography/wires/uplights are drawn once, not twice; only the focused track is mirrored). The `mobile` tier uses the analytic reflection in the same shader.
+  The impossible puddle works on every tier.
+* **Section-based activation**: `useWorldFrame` — the rooftop, DUALISMO and street-only systems do no per-frame work while another world is on screen. Small alley systems
+  (lamps, number marks, letters, fire escapes, UV paint, anamorph…) are distance-culled. Hit meshes use `material.visible = false` (still raycast, no draw call).
+* **Hygiene**: no allocations in the lamp / particle / typography loops, pointer & scroll state stay in `rt` (no React state per frame), one-tap post-FX path when
+  there is no chromatic aberration, `rt.stats` separates the main and the reflection pass.
+* There are **no shadow maps** (contact shadows are baked decals), no per-frame raycasting (R3F raycasts on pointer events only).
+* **Developer tools**: `?perf=1` shows FPS, smoothed frame time, DPR, tier, draw calls, triangles, textures, hitches and adaptation count (no analytics, nothing stored or sent).
+  `?quality=mobile|balanced|high|ultra` pins a tier and turns adaptation off (legacy `low`/`medium` still work).
+* `scripts/census.mjs <tier>` (per-section calls/tris averaged over real frames), `scripts/profile.mjs` (per-subtree attribution), `scripts/tracks-check.mjs` (input-feel behaviours).
+  All headless runs use software GL: **counts only, never FPS**.
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
