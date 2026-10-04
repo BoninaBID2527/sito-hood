@@ -49,6 +49,7 @@ export default function ExperienceCanvas() {
       onCreated={({ gl, camera, scene, raycaster }) => {
         gl.setClearColor('#000000', 1)
         camera.layers.enable(1) // layer 1 = main camera only (skipped by planar reflections)
+        raycaster.layers.enable(1) // …but still pickable: interactive things may live on layer 1 (drawn once, not mirrored)
         rt.quality = SETTINGS[useStore.getState().tier]
         if (process.env.NODE_ENV !== 'production' || window.location.search.includes('debug')) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
