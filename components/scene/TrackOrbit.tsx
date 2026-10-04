@@ -18,6 +18,7 @@ import { GeoBuilder } from '@/lib/geo'
 import { createCardMaterial } from './TrackCard3D'
 import { SPECS, TrackObject, useObjectMats, CARD_H as OBJ_H } from './TrackObjects'
 import { TrackTypography } from './TrackTypography'
+import { NoReflect } from './street/NoReflect'
 import { streetMat } from './street/materials'
 
 const CARD_W = 2.15
@@ -93,6 +94,12 @@ export function TrackOrbit() {
   const hoverSm = useRef<number[]>(new Array(TRACK_COUNT).fill(0))
   const focusSm = useRef<number[]>(new Array(TRACK_COUNT).fill(0))
   const sheen = useRef(new THREE.Vector2(0.5, 0.5))
+  // only the object in front is mirrored in the water (a second render of it); the others are drawn once
+  const mirrored = useRef<boolean[]>(new Array(TRACK_COUNT).fill(true))
+  useEffect(() => {
+    cardRefs.current.forEach((g) => g?.traverse((o) => o.layers.set(1)))
+    mirrored.current.fill(false)
+  }, [])
 
   // drag / swipe on the canvas (horizontal intent only; vertical belongs to the page scroll)
   useEffect(() => installTrackInput(gl.domElement), [gl])
@@ -120,7 +127,7 @@ export function TrackOrbit() {
     const st = useStore.getState()
     const aspect = rt.aspect
     const portrait = aspect < 1
-    const reach = 0.5 + Math.min(1.6, rt.quality.trackReach * 0.55) // stations (each side) that still render at full cost
+    const reach = 0.4 + 0.45 * rt.quality.trackReach // stations (each side) that still render at full cost (the rest cost nothing)
 
     const appear = smoothstep(0.3, 0.4, p)
     const recede = smoothstep(0.6, 0.665, p)
@@ -150,6 +157,12 @@ export function TrackOrbit() {
       const show = u.uAppear.value > 0.02
       if (grp.visible !== show) grp.visible = show
       if (!show) continue
+      const wantMirror = d < 0.85 && rt.quality.reflector
+      if (wantMirror !== mirrored.current[i]) {
+        mirrored.current[i] = wantMirror
+        const layer = wantMirror ? 0 : 1
+        grp.traverse((o) => o.layers.set(layer))
+      }
 
       // position: the object's own spot, floating a hair; at the end of the walk the installation opens outward
       const open = recede * 2.6
@@ -266,7 +279,8 @@ export function TrackOrbit() {
           />
         </group>
       ))}
-      <TrackTypography />
+      <NoReflect><TrackTypography /></NoReflect>
+      <NoReflect>
       <group ref={ringRef} visible={false}>
         <mesh geometry={rigKit.ringGeo} material={rigKit.ringMat} rotation={[Math.PI / 2, 0, 0]} />
         <mesh geometry={rigKit.ring2Geo} material={rigKit.ringMat} rotation={[Math.PI / 2, 0, 0]} position={[0, -0.34, 0]} scale={[0.985, 0.985, 1]} />
@@ -280,7 +294,8 @@ export function TrackOrbit() {
       {alterco.tracks.map((tr, i) => (
         <mesh key={'sh' + tr.id} ref={(r) => { coneRefs.current[i] = r }} geometry={rigKit.coneGeo} material={rigKit.cones[i]} frustumCulled={false} renderOrder={4} />
       ))}
-      <mesh geometry={poolGeo} material={pool} position={[C.x, 0.035, C.z + 1]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1} />
+      </NoReflect>
+      <NoReflect><mesh geometry={poolGeo} material={pool} position={[C.x, 0.035, C.z + 1]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1} /></NoReflect>
     </group>
   )
 }

@@ -205,8 +205,8 @@ export function AltercoArtwork({ mode, position, size = 4.5 }: { mode: 'plaza' |
           {[0, 1, 2, 3].map((i) => (
             <group key={i}>
               <mesh ref={(o) => { parts.current['lamp' + i] = o }} geometry={rig.box} material={rig.steel} />
-              <mesh ref={(o) => { parts.current['lens' + i] = o }} geometry={rig.lensGeo} material={rig.lens} />
-              <mesh ref={(o) => { coneRefs.current[i] = o }} geometry={rig.coneGeo} material={rig.coneMat} frustumCulled={false} renderOrder={4} />
+              <mesh ref={(o) => { parts.current['lens' + i] = o; o?.layers.set(1) }} geometry={rig.lensGeo} material={rig.lens} />
+              <mesh ref={(o) => { coneRefs.current[i] = o; o?.layers.set(1) }} geometry={rig.coneGeo} material={rig.coneMat} frustumCulled={false} renderOrder={4} />
             </group>
           ))}
         </group>
