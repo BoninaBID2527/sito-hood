@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
@@ -132,7 +132,7 @@ export function WallDetail() {
   }, [])
 
   const led = useRef<THREE.MeshBasicMaterial>(null)
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const k = 0.15 + palette.lamps * 0.85
     kit.spillMat.opacity = 0.2 * k
     kit.bulbMat.color.setRGB(4 * k + 0.6, 3 * k + 0.45, 1.8 * k + 0.3)

@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder, tileUV, worldUV } from '@/lib/geo'
@@ -201,7 +201,7 @@ export function RooftopEnvironment() {
     return { disposables, deckGeo, deckMat, concrete, brick, parGeo, capGeo, capMat, bulk, woodGeo, ironGeo, tankWood, tankIron, parts, glassGeo, glassMat, nbGeo, nbMat, nbDecGeo, nbDecMat, tallGeo, towerMat, fieldGeo, crownGeo, crownMat, beaconMat, crownTops, roofDecals, doorMat, doorGeo, lampGlow, lampBulb, bulbGeo, boxes }
   }, [])
 
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     const w = palette.windows
     updateTowerMaterial(kit.towerMat)
     kit.beaconMat.opacity = Math.sin(rt.time * 1.7) > 0.5 ? 0.9 : 0.15
@@ -279,7 +279,7 @@ function RoofGlyph() {
   const hov = useRef(0)
   const flag = useRef(false)
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  useFrame((_, dt) => {
+  useWorldFrame('roof', (_, dt) => {
     hov.current += ((flag.current ? 1 : 0) - hov.current) * Math.min(1, dt * 6)
     mat.uniforms.uTime.value = rt.time
     mat.uniforms.uHover.value = hov.current
@@ -315,7 +315,7 @@ function Festoon() {
     const glow = new THREE.SpriteMaterial({ map: A.glow, color: '#ffbb70', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
     return { pts: pts.slice(1, 10), wire, wm, bulb, bm, glow }
   }, [])
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     const k = palette.lamps
     kit.bm.color.setRGB(5 * k, 3.6 * k, 1.8 * k)
     kit.glow.opacity = 0.7 * k
@@ -339,7 +339,7 @@ function Festoon() {
 function AntennaLights() {
   const spots: [number, number, number][] = [[6, 11.1, -19], [-8.5, 9.1, -21], [13.2, 13.1, -21], [10, 6.55, -6], [-1.5, 4.3, -16.5], [14.5, 3.5, -19], [-6, 3.7, 2]]
   const mats = useMemo(() => spots.map(() => new THREE.SpriteMaterial({ map: A.glow, color: '#ff3a2a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })), [])
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     const done = useStore.getState().visited.length === 7
     const t = rt.time
     mats.forEach((m, i) => {
@@ -441,7 +441,7 @@ function RoofBillboard() {
     const glowMat = new THREE.SpriteMaterial({ map: A.glow, color: '#ffa866', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })
     return { S, half, cx, cy, cz, yaw, parts, ledGeo, ledMat, lens, lensGeo, coneGeo, coneMat, lamps, bld, bldMat, glowMat }
   }, [])
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     updateTowerMaterial(kit.bldMat)
     const p = rt.smooth
     const on = Math.max(0, Math.min(1, (p - 0.78) / 0.1))
@@ -511,7 +511,7 @@ function HiddenSign() {
   }, [])
   const lit = useRef(0)
   const neon = useMemo(() => new THREE.Color(), [])
-  useFrame((_, dt) => {
+  useWorldFrame('roof', (_, dt) => {
     updateTowerMaterial(kit.towerMat)
     const all = useStore.getState().nums.every(Boolean)
     if (all && rt.world === 'roof' && rt.smooth > 0.86) lit.current = Math.min(1, lit.current + dt / 18)
@@ -562,7 +562,7 @@ function DualGlint() {
   )
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     mat.uniforms.uTime.value = rt.time
     mat.uniforms.uA.value = found ? Math.max(0, Math.min(1, (rt.smooth - 0.8) / 0.12)) * 0.9 : 0
   })
@@ -586,7 +586,7 @@ function CityGlow() {
   )
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  useFrame(() => {
+  useWorldFrame('roof', () => {
     mat.uniforms.uA.value = 0.1 + palette.windows * 0.16
     mat.uniforms.uC.value.copy(palette.horizon).lerp(_cityWarm, 0.45)
   })

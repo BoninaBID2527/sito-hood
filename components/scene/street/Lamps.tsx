@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
@@ -99,7 +99,7 @@ export function Lamps() {
   }, [kit, bulbMats, glowMats, coneMats, splitMats])
 
   const tmp = useMemo(() => new THREE.Vector3(), [])
-  useFrame(({ camera }, dt) => {
+  useWorldFrame('alley', ({ camera }, dt) => {
     // per-lamp brightness (flicker, egg toggle, time of day)
     LAMPS.forEach((l, i) => {
       const g = groups.current[i]

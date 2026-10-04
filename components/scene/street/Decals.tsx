@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rng } from '@/lib/math'
@@ -82,7 +82,7 @@ function Signs() {
     }
   }, [])
   const refs = useRef<THREE.MeshStandardMaterial[]>([])
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const k = 0.25 + palette.lamps * 0.9
     built.alterco.emissiveIntensity = 0.5 * k + 0.35
     built.tracks.emissiveIntensity = 0.3 * k
@@ -123,7 +123,7 @@ function WorldTitles() {
   const cableGeo = useMemo(() => new THREE.CylinderGeometry(0.014, 0.014, 1, 4), [])
   const bannerRef = useRef<THREE.Mesh>(null)
 
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const pos = bannerGeo.attributes.position as THREE.BufferAttribute
     const t = rt.time
     for (let i = 0; i < pos.count; i++) {
@@ -191,7 +191,7 @@ function EasterEggs() {
   const hov = useRef({ letter: -1, credits: false })
   useEffect(() => () => { geo.dispose(); letterMats.forEach((m) => m.dispose()); creditsMat.dispose() }, [geo, letterMats, creditsMat])
 
-  useFrame((_, dt) => {
+  useWorldFrame('alley', (_, dt) => {
     letterMats.forEach((m, i) => {
       const target = letters[i] ? 1.1 : hov.current.letter === i ? 0.7 : 0
       m.emissiveIntensity += (target - m.emissiveIntensity) * Math.min(1, dt * 8)

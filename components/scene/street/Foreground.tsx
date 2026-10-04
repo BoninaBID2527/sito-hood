@@ -1,7 +1,7 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
@@ -142,7 +142,7 @@ export function Foreground() {
     return { scooter, lampMat, lampGeo, plane, sMats, bracketGeo, bracketMat, awnTex, awnMats, awnGeo, atlas, clothGeo, clothMat, ropeMat, ropesMerged, bagGeo, bagMat, bagsMerged }
   }, [])
 
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     const k = 0.1 + palette.lamps * 0.5
     kit.sMats.forEach((m) => (m.emissiveIntensity = k))
     kit.lampMat.emissiveIntensity = 0.3 + palette.lamps * 1.3

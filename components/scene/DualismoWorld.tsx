@@ -1,7 +1,8 @@
 'use client'
 
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import { useEffect, useMemo, useRef } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { dualismo } from '@/data/project'
@@ -80,7 +81,7 @@ function Particles() {
     })
     return { g, mat, ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uArrive.value = rt.dual.t
@@ -111,7 +112,7 @@ function FarDust() {
     })
     return { g, mat }
   }, [])
-  useFrame(() => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t }, -0.5)
+  useWorldFrame('dualism', () => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
   return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
 }
@@ -140,7 +141,7 @@ function TunnelRings() {
     return { geo, rings }
   }, [])
   const refs = useRef<(THREE.Mesh | null)[]>([])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     kit.rings.forEach((r, i) => {
       const m = refs.current[i]
       if (!m) return
@@ -273,7 +274,7 @@ function GlassHall() {
     cr.renderOrder = 2
     return { mat, slabs, cr }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
     u.uTime.value = rt.time
     u.uFade.value = rt.dual.t
@@ -337,7 +338,7 @@ function MirrorFloor() {
     obj.renderOrder = 1
     return { obj, mat, geo }
   }, [real])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     kit.mat.uniforms.uTime.value = rt.time
     kit.mat.uniforms.uFade.value = rt.dual.t
     kit.obj.visible = rt.world === 'dualism'
@@ -391,7 +392,7 @@ function SpectralAir() {
     const sheets = Array.from({ length: 12 }, (_, i) => ({ z: 4 - i * 17 - (i % 2) * 4, w: 40 + i * 6, h: 18 + i * 2 }))
     return { shaft, haze, geo, shafts, sheets }
   }, [])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const t = rt.time
     kit.shaft.uniforms.uTime.value = t
     kit.shaft.uniforms.uFade.value = rt.dual.t
@@ -436,7 +437,7 @@ function ArtworkContrast() {
     [],
   )
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
-  useFrame(() => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
+  useWorldFrame('dualism', () => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
   return <mesh geometry={geo} material={mat} position={[D, 0.1, -0.5]} scale={[15, 15, 1]} renderOrder={2} />
 }
@@ -466,7 +467,7 @@ function LensHalo() {
   const mat2 = useMemo(() => { const m = mat.clone(); m.uniforms = { uTime: mat.uniforms.uTime, uFade: mat.uniforms.uFade, uDir: { value: -1 } }; return m }, [mat])
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
   const g = useRef<THREE.Group>(null)
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     mat.uniforms.uTime.value = rt.time
     mat.uniforms.uFade.value = rt.dual.t
     if (g.current) { g.current.visible = rt.world === 'dualism'; g.current.rotation.z = rt.time * 0.03 }
@@ -497,7 +498,7 @@ function Orbiter({ index }: { index: number }) {
   const flag = useRef(false)
   useEffect(() => () => { discMat.dispose(); ringMat.dispose(); discGeo.dispose(); ringGeo.dispose() }, [discMat, ringMat, discGeo, ringGeo])
 
-  useFrame((_, dt) => {
+  useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
     const st = useStore.getState()
@@ -550,7 +551,7 @@ function Centerpiece() {
   const geo = useMemo(() => new THREE.PlaneGeometry(1, 1, 24, 24), [])
   const halo = useMemo(() => new THREE.SpriteMaterial({ map: A.glow, color: '#7fb0ff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.5, fog: false }), [])
   useEffect(() => () => { mat.dispose(); geo.dispose(); halo.dispose() }, [mat, geo, halo])
-  useFrame(() => {
+  useWorldFrame('dualism', () => {
     const o = g.current
     if (!o) return
     const u = mat.uniforms
@@ -587,7 +588,7 @@ function ReturnRift() {
   const hov = useRef(0)
   const flag = useRef(false)
   useEffect(() => () => { mat.dispose(); geo.dispose(); core.dispose() }, [mat, geo, core])
-  useFrame((_, dt) => {
+  useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
     hov.current += ((flag.current ? 1 : 0) - hov.current) * Math.min(1, dt * 7)
