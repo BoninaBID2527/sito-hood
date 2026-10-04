@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs'
 const quality = process.argv[2] || 'balanced'
 const [w, h] = (process.argv[3] || '1280x720').split('x').map(Number)
 const PORT = process.env.PORT || 3000
+const BASEPATH = process.env.BASEPATH || '' // e.g. /sito-hood for the static export
 const touch = process.env.TOUCH === '1'
 const webm = process.env.WEBM ? readFileSync(process.env.WEBM) : null
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
@@ -24,7 +25,7 @@ const until = (fn, arg, to = 240000) => page.waitForFunction(fn, arg, { timeout:
 const hd = (f, a) => page.evaluate(f, a)
 const sim = (s) => hd((s) => new Promise((r) => { const t0 = window.__hd.rt.time; const f = () => (window.__hd.rt.time - t0 > s ? r() : requestAnimationFrame(f)); f() }), s)
 
-await page.goto(`http://localhost:${PORT}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
+await page.goto(`http://localhost:${PORT}${BASEPATH}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
 await page.click('button:has-text("ENTER")')
 await sim(2)
@@ -134,6 +135,11 @@ await sim(1)
 ok(await until(() => window.__hd.store.getState().roomNear), 'door offered again after leaving')
 console.log(errors.length ? 'CONSOLE:\n' + [...new Set(errors)].join('\n') : 'no console errors/warnings')
 ok(errors.length === 0, 'no console errors / hydration warnings')
+if (BASEPATH) {
+  const room = reqs.filter((u) => /\/room\//.test(u))
+  ok(room.length >= 8 && room.every((u) => new URL(u).pathname.startsWith(BASEPATH + '/room/')), 'every room asset is requested under ' + BASEPATH + '/room/', `(${room.length} requests)`)
+  ok(!reqs.some((u) => new URL(u).pathname.startsWith('/room/')), 'no request escapes the base path')
+}
 console.log(`\nroom-check${process.env.EXTRA ? ' ' + process.env.EXTRA : ''} [${quality} ${w}x${h}${touch ? ' touch' : ''}${process.env.REDUCED === '1' ? ' reduced' : ''}]: ${pass} passed, ${fail} failed`)
 await browser.close()
 process.exit(fail ? 1 : 0)

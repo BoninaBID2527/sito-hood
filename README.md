@@ -223,6 +223,62 @@ camera looks down the whole alley from the far side of the plaza, where the old 
 composition), one mirrored object instead of seven, short reflection far plane, distance culling of far alley props. Triangles: A 123k → 80k, C 59k → 60k, D/E 59k → 80k (high).
 Textures are flat (71–88) and GPU resources stay bounded across world switches (e2e).
 
+## V3.3 notes — THE HOODDINO ROOM
+
+One authored space behind the street: the person and the process behind ALTERCO. Nothing in the street, the track installation, the rooftop, DUALISMO or the secrets was redesigned.
+
+### What it is
+* **Entrance** — a small prefab (corrugated steel, acoustic foam on the brick, an enamel plate *THE HOODDINO ROOM*, a red work lamp, a padded door) bolted to the **alley's left wall at z ≈ −67, just before the plaza** (scroll progress ≈ 0.327; `components/scene/street/StudioDoor.tsx`). Within ~13 m an `ENTER` chip appears (keyboard-reachable); the 3D door is clickable too; `MENU → THE ROOM` and `/?room=hooddino` (after ENTER) walk there and go in.
+* **Threshold** — one continuous camera move (`lib/roomActions.ts`, `lib/room.ts`): street pose → in front of the door (the leaf swings open) → through the aperture → *(the world swaps while the dark airlock fills the frame behind a 0.2 s dip; the first room frames are drawn before the fade returns)* → entry station. Leaving replays it backwards and ends on the exact street pose the visitor left: the scroll position is never touched while inside.
+* **Stations** (no WASD, no free camera; pointer = subtle parallax only): `entry hero → workstation → WHO IS HOODDINO? → live → exit`. ←/→, wheel, horizontal swipe, dots, prev/next. `Esc` closes the video focus, then exits. `BACK TO STREET` is always on screen.
+* **Room** (`components/scene/room/`): workstation as the hero (vertical studio monitor, secondary arrangement view, MIDI keyboard, interface, monitors on stands, desk lamp, cables), bio wall, live wall, a lounge corner with a CRT-like display, the official ALTERCO artwork (untouched) as a framed print above the sofa — *not* a track selector. Motivated light only: desk lamp, blue LED strip, deep-red under-desk strip, orange LED frame, fluorescent fixtures, the dusk of the alley leaking through the open door. No DUALISMO entrance, cover, track or clue anywhere in the room.
+
+### Real artist material (and where it is used)
+| file in the media pack | delivery file(s) in `public/room/` | used for |
+|---|---|---|
+| `HOODDINO_PHOTO_02` (portrait, orange/white jacket) | `portrait-lo.webp` 384 px, `portrait-hi.webp` 1024 px | print on the WHO IS HOODDINO? wall |
+| `HOODDINO_PHOTO_01` (live) | `live-lo.webp`, `live-hi.webp` | print on the live wall |
+| `HOODDINO_PHOTO_03` (distorted) | `signal-lo.webp` 256 px, `signal-hi.webp` 768 px | the CRT-like display (restrained scanlines / jitter) |
+| `HOODDINO_STUDIO_ARRANGIAMENTO_WEB.mp4` | `hooddino-studio-arrangiamento.mp4` (byte-for-byte copy) + `studio-poster.webp` (frame at 55 s) | the vertical monitor |
+| `ROOM_REF_01–05` | — | visual direction only, not shipped |
+
+`scripts/optimize-room-media.sh <pack>` regenerates the derivatives (originals are never modified). The brief names the source `ScreenRecording_10-04-2026 03-53-25_1.mp4`; the pack contained the web delivery file above, which is what ships.
+**Video**: MP4, H.264 High@3.1 + AAC-LC 44.1 kHz stereo, 512×854 (portrait), 30 fps, 56.07 s, 4,860,666 bytes (≈4.6 MiB, ≈693 kbit/s overall), `moov` atom first (progressive start). Note the footage is an outdoor guitar session with burned-in captions, not a screen recording of a DAW.
+**Biography**: exactly the supplied paragraph (`data/room.ts`), on the wall as a photocopied sheet, as real text in the DOM (`SemanticContent`, always present), and as a readable caption on portrait screens.
+
+### Video (`lib/roomVideo.ts`)
+Outside the room nothing exists. Approaching creates a detached `<video preload="none">` (no network, no decode). **PLAY is the only thing that attaches the source and starts picture + sound** — `play()` runs synchronously inside the click/tap (Safari/iOS), `playsinline` is set, audio is on *because the visitor pressed PLAY* (the optional ambience ducks while it plays). PLAY pushes the camera to the monitor and lowers the room lights; controls are real DOM buttons: `PLAY/PAUSE`, `SOUND ON/OFF`, time, `CLOSE` (pauses, restores camera and lights). Exiting the room pauses, drops the `src`, and disposes the `VideoTexture`. The 3D monitor shows a `THREE.VideoTexture` once the first frame is ready; `?roomvideo=dom` (or a future per-device switch) shows the same element in a vertical DOM frame instead; an undecodable source leaves the poster and offers the file as a link. Stock headless Chromium has no H.264 decoder, so the tests answer the mp4 request with a WebM re-encode of the same footage — **real Safari / iPhone / iPad testing is still required**.
+
+### Social (spatial first, accessible always)
+Spotify → the right studio monitor; TikTok → the phone on the desk; Instagram → the *LIVE DATES / UPDATED ON INSTAGRAM ↗* card on the live wall (no invented dates). Hover/focus wakes the object (screen / glow) and shows a small label (`SPOTIFY ↗`). A restrained quick-access list of the same three real URLs (`open.spotify.com/artist/6ETJU37OTsdfeTeDMN7oKI`, `instagram.com/hoodddddddd`, `tiktok.com/@hooddddddddd`) is always on screen inside the room (real `<a>`, new tab, ≥44 px targets) and in the semantic DOM.
+
+### Performance & loading
+* **Loading tiers** — initial page: nothing of the room (only +~28 KB of JS for the door, state and actions); *approach* (≈13 m from the door): the room's JS chunk, procedural shell textures and the low photo tier (≈55 KB) + poster; *committing to enter*: high-detail photos, the typographic walls and the paste-up atlas load during the 1.7 s walk to the door, textures are uploaded off-screen; *PLAY*: the video.
+* **Activation** — the room group is hidden by `WorldGate` outside `rt.world === 'room'`; every room `useFrame` is `useWorldFrame('room')`; the street door is distance-culled (46 m) and drawn once (`NoReflect`), its airlock only exists while the door is opening. Inside, the street is a hidden world (no draw, no per-frame work), the SkyDome and Dust are hidden.
+* **No extra reflection pass, no shadow maps.** Static geometry merged per material (≈12–22 draw calls), vertex-coloured props in one mesh, one decal atlas, contact shadows as one merged layer, up to 4 point lights (desk lamp always; fluorescent wash + blue fill from `balanced`; red accent from `high`). The CRT shader and its jitter run only in the room, are off with reduced motion, and the `mobile` tier uses a static texture instead.
+* **Tiers** — `mobile` keeps the architecture, portrait, biography, video, links, ALTERCO print and the desk lamp; drops secondary decals, the high photo tier, props/cables, the shelf, the rug, extra lights, the CRT shader. Texture sizes follow the tier (`S()` in `lib/roomTextures.ts`).
+* `?perf=1` already shows `world room`; `?quality=` is unchanged.
+
+### Accessibility
+Semantic biography/links/room description; `BACK TO STREET` always visible; stations reachable by keyboard and dots; video controls are labelled buttons with `aria-pressed`; `aria-live` narration of the room; touch targets ≥ 44 px; reduced motion = short damped moves, no idle drift, no CRT instability, instant station changes; the street entrance is offered by a real button, not only by the 3D door.
+
+### Measured census (headless software GL — counts only, no FPS; `scripts/census-room.mjs`)
+Draw calls / triangles per frame, averaged over 24 real frames (same method as V3.2).
+| state | high | balanced | mobile |
+|---|---|---|---|
+| ROOM ENTRY (arriving) | 22 / 3.4k | 22 / 3.4k | 19 / 2.1k |
+| ROOM IDLE | 21 / 3.4k | 21 / 3.4k | 19 / 2.1k |
+| BIO WALL | 13 / 2.3k | 13 / 2.3k | 13 / 1.9k |
+| WORKSTATION IDLE | 16 / 3.1k | 16 / 3.1k | 14 / 1.8k |
+| VIDEO PLAYING | 15 / 3.1k | 15 / 3.1k | 14 / 1.8k |
+| LIVE WALL | 12 / 2.2k | 12 / 2.2k | 11 / 1.9k |
+
+Textures / geometries / programs: street at the door 79 / 161 / 78 (high) → inside the room 104–106 / 195–196 / 91–92 → after leaving 105 / 197 / 93. **After returning to the street the room's GPU resources (~25 textures, ~35 geometries, ~15 programs; texture memory not measured — sizes are capped at 1024² / 768² / 512² by tier) stay allocated; no room draw call and no room `useFrame` runs** (street frames after leaving are in the same range as at the door: 133–202 vs 130–235 calls on high, 118 vs 118–140 on mobile — the spread is the throttled planar reflection), and the **video element is paused with its `src` removed and its texture disposed**.
+Street cost of the entrance (high, same machine, vs. the V3.2 build): initial load 30 → 32 requests, 1913 → 1941 KB JS; draw calls near the door ≈ +5–7 (merged shell + leaf + plate + lamp), none in the reflection pass, none beyond 46 m.
+
+### Tests
+`node scripts/room-check.mjs [tier] [WxH]` (56–58 checks: entrance, threshold, bio, links, explicit PLAY, no autoplay, pause/close/exit, release, keyboard, no console errors; `TOUCH=1`, `REDUCED=1`, `EXTRA='&roomvideo=dom'`, `BASEPATH=/sito-hood PORT=3100` for the static export), `scripts/room-shots.mjs` (visual walk-through), `scripts/census-room.mjs`, `scripts/street-calls.mjs`. Existing suites unchanged (E2E 22/22, secrets 18/18, tracks 8/8; `secrets.mjs` now waits for the pointer parallax in simulation time before the grazing-glyph click so it is frame-rate independent).
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
