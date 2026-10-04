@@ -1,5 +1,6 @@
 import { alterco, artist, dualismo, pad, trackLabel } from '@/data/project'
 import { linksFor } from '@/data/streaming'
+import { roomBio, roomCopy, roomLinks } from '@/data/room'
 
 /**
  * Real, readable DOM for crawlers, screen readers and no-WebGL fallbacks.
@@ -27,6 +28,18 @@ export function SemanticContent() {
           ))}
         </ul>
       )}
+      <h2>{roomCopy.title}</h2>
+      <p>A studio behind the alley, entered through the door just before the plaza. Inside: the workstation with a one-minute studio video, the biography wall, the live wall and the official ALTERCO artwork.</p>
+      <h3>{roomBio.headline.join(' ')}</h3>
+      <p>{roomBio.paragraph}</p>
+      <p>{roomBio.meta.join(' — ')}</p>
+      <h3>Live</h3>
+      <p>{roomCopy.live[0]} — {roomCopy.live[1].replace(' ↗', '')}.</p>
+      <ul>
+        {Object.values(roomLinks).map((l) => (
+          <li key={l.label}><a href={l.url}>{l.label.charAt(0) + l.label.slice(1).toLowerCase()}</a></li>
+        ))}
+      </ul>
       <h2>{dualismo.title}</h2>
       <p>A hidden 2-track project: {dualismo.tracks.map(trackLabel).join(', ')}.</p>
     </div>

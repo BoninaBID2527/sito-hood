@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { rng } from '@/lib/math'
@@ -154,6 +154,7 @@ void main() {
 const _white = new THREE.Color('#ffffff')
 
 export function Dust({ color = '#ffd9a8', opacity = 0.32, count = 520, box = [16, 9, 22] as [number, number, number] }) {
+  const pts = useRef<THREE.Points>(null)
   const kit = useMemo(() => {
     const s0 = rt.quality.particleScale
     const n = Math.round(count * s0)
@@ -178,13 +179,17 @@ export function Dust({ color = '#ffd9a8', opacity = 0.32, count = 520, box = [16
     return { g, mat, n, s0 }
   }, [color, opacity, count, box])
   useFrame(() => {
+    // inside the HOODDINO ROOM the street dust is neither updated nor drawn
+    const inRoom = rt.world === 'room'
+    if (pts.current && pts.current.visible === inRoom) pts.current.visible = !inRoom
+    if (inRoom) return
     kit.mat.uniforms.uTime.value = rt.time
     kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0))))
     kit.mat.uniforms.uColor.value.copy(palette.sun).lerp(_white, 0.35)
     kit.mat.uniforms.uOpacity.value = opacity * (0.5 + palette.lamps * 0.5)
   }, -1)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
-  return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={7} />
+  return <points ref={pts} geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={7} />
 }
 
 /* ───────────────────────── cables ───────────────────────── */

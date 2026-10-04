@@ -14,6 +14,7 @@ import { WorldTitles } from './ui/WorldTitles'
 import { TrackUI, TrackFocus } from './ui/TrackUI'
 import { FinalCTA } from './ui/FinalCTA'
 import { DualismoUI } from './ui/DualismoUI'
+import { RoomUI } from './ui/RoomUI'
 import { CustomCursor } from './ui/CustomCursor'
 import { Toast } from './ui/Toast'
 import { CreditsPanel } from './ui/CreditsPanel'
@@ -27,6 +28,8 @@ import { SETTINGS } from '@/lib/quality'
 import { loadCore, buildCards } from '@/lib/assets'
 import { scroll } from '@/lib/scroll'
 import * as actions from '@/lib/actions'
+import * as roomActions from '@/lib/roomActions'
+import { room } from '@/lib/room'
 
 const ExperienceCanvas = dynamic(() => import('./scene/ExperienceCanvas'), { ssr: false })
 
@@ -75,8 +78,21 @@ export default function App() {
       A,
       store: useStore,
       reset: () => resetSecrets(),
-      act: (name: string, ...a: unknown[]) => (actions as any)[name]?.(...a),
+      room,
+      act: (name: string, ...a: unknown[]) => ((actions as any)[name] ?? (roomActions as any)[name])?.(...a),
     }
+  }, [])
+
+  // shareable state: /?room=hooddino walks straight to the studio door and through it, right after ENTER (never before — no autoplay, no audio)
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('room') !== 'hooddino') return
+    const unsub = useStore.subscribe((s, prev) => {
+      if (s.phase === 'entered' && prev.phase !== 'entered') {
+        unsub()
+        setTimeout(() => void roomActions.enterRoom({ direct: true }), 1200)
+      }
+    })
+    return unsub
   }, [])
 
   const ready = useStore((s) => s.phase === 'ready' || s.phase === 'entered')
@@ -95,6 +111,7 @@ export default function App() {
         <TrackFocus />
         <FinalCTA />
         <DualismoUI />
+        <RoomUI />
         <HUD />
         <Toast />
         <Whisper />

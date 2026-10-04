@@ -21,6 +21,7 @@ import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
+import { StudioDoor } from './street/StudioDoor'
 
 const SKIP = [
   { side: -1 as const, z: 7, r: 3.2 }, { side: 1 as const, z: -15, r: 3.2 }, { side: -1 as const, z: -29, r: 3 },
@@ -61,6 +62,7 @@ export function StreetEnvironment() {
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />
+      <StudioDoor />
     </group>
   )
 }

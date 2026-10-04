@@ -9,6 +9,7 @@ import { applyScrub, buildParamTimeline, sampleCamera, WORLD, type CamSample } f
 import { evalTimeOfDay } from '@/lib/timeOfDay'
 import { bump, clamp, damp, smoothstep, stepSpring, type Spring } from '@/lib/math'
 import { rig, stepRig } from '@/lib/trackRig'
+import { room, stepRoom } from '@/lib/room'
 
 const _right = new THREE.Vector3()
 const _up = new THREE.Vector3()
@@ -72,8 +73,9 @@ export function Director() {
 
     // world selection
     const cs = sampleCamera(p, sample.current)
-    rt.world = mode === 'dualism' || mode === 'dualism-out' ? 'dualism' : cs.world
+    rt.world = mode === 'dualism' || mode === 'dualism-out' ? 'dualism' : room.inside ? 'room' : cs.world
     stepRig(dt)
+    stepRoom(dt)
 
     // ── camera
     const cam = camera
@@ -87,6 +89,21 @@ export function Director() {
       look.current.set(D + rt.px * 0.3, 0.1, 0)
       cam.lookAt(look.current)
       fov = 52 + (1 - d) * 16
+    } else if (rt.world === 'room') {
+      // THE HOODDINO ROOM: authored stations, no free camera — the pointer only breathes a little parallax into the shot
+      cam.position.copy(room.cpos)
+      look.current.copy(room.clook)
+      fov = room.fov
+      cam.lookAt(look.current)
+      cam.updateMatrixWorld()
+      _right.setFromMatrixColumn(cam.matrixWorld, 0)
+      _up.setFromMatrixColumn(cam.matrixWorld, 1)
+      const k = S * (1 - room.push * 0.75)
+      cam.position.addScaledVector(_right, rt.px * 0.1 * k)
+      cam.position.addScaledVector(_up, rt.py * 0.045 * k)
+      cam.lookAt(look.current)
+      cam.rotateY(-rt.px * 0.012 * k)
+      cam.rotateX(rt.py * 0.008 * k)
     } else {
       cam.position.copy(cs.pos)
       look.current.copy(cs.look)
@@ -96,6 +113,12 @@ export function Director() {
         cam.position.lerp(rig.pos, rig.w)
         look.current.lerp(rig.look, rig.w)
         fov += rig.fov
+      }
+
+      // the visitor walks to the studio door and through it: the room rig owns the pose
+      if (room.w > 0.001) {
+        cam.position.lerp(room.pos, room.w)
+        look.current.lerp(room.look, room.w)
       }
 
       // entry fly-in (first seconds after ENTER)
@@ -120,7 +143,7 @@ export function Director() {
       cam.updateMatrixWorld()
       _right.setFromMatrixColumn(cam.matrixWorld, 0)
       _up.setFromMatrixColumn(cam.matrixWorld, 1)
-      const near = rt.world === 'roof' ? 0.5 : 1
+      const near = (rt.world === 'roof' ? 0.5 : 1) * (1 - room.w)
       const sel = store.selected !== null ? 0.35 : 1
       cam.position.addScaledVector(_right, rt.px * 0.3 * S * near * sel)
       cam.position.addScaledVector(_up, rt.py * 0.12 * S * near * sel)
@@ -131,7 +154,7 @@ export function Director() {
       cam.rotateZ((cs.roll + clamp(rt.velocity * 0.05, -0.01, 0.01) - rt.px * 0.004) * S)
 
       // breathing, only where it belongs (no breathing while the orbit is the subject)
-      const breathe = (1 - rig.w) * S
+      const breathe = (1 - rig.w) * (1 - room.w) * S
       cam.position.y += Math.sin(rt.time * 0.85) * 0.006 * breathe
       cam.position.x += Math.sin(rt.time * 0.55 + 1.3) * 0.004 * breathe
       cam.rotateZ(Math.sin(rt.time * 0.42) * 0.0012 * breathe)
@@ -153,7 +176,7 @@ export function Director() {
 }
 
 /** Shows its children only while `rt.world` matches (set per frame — no React re-renders). */
-export function WorldGate({ world, children, extra }: { world: 'alley' | 'roof' | 'dualism'; children: ReactNode; extra?: () => boolean }) {
+export function WorldGate({ world, children, extra }: { world: 'alley' | 'roof' | 'dualism' | 'room'; children: ReactNode; extra?: () => boolean }) {
   const ref = useRef<THREE.Group>(null)
   useFrame(() => {
     if (!ref.current) return
