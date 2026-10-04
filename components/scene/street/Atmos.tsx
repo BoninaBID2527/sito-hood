@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { rng } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { palette } from '@/lib/timeOfDay'
+import { DistCull } from './DistCull'
 import { patchSway } from './materials'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { wallX } from './layout'
@@ -113,7 +114,9 @@ export function Steam({ list = VENTS, size = 1 }: { list?: VentDef[]; size?: num
     <group>
       <mesh geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={6} />
       {kit.vents.map((v, i) => (
-        <mesh key={i} geometry={kit.cover} material={kit.cMat} position={[v.x, ((v as any).y ?? 0) + 0.03, v.z]} />
+        <DistCull key={i} at={[v.x, 0, v.z]} r={56}>
+          <mesh geometry={kit.cover} material={kit.cMat} position={[v.x, ((v as any).y ?? 0) + 0.03, v.z]} />
+        </DistCull>
       ))}
     </group>
   )

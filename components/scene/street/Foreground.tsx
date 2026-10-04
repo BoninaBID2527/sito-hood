@@ -1,6 +1,7 @@
 'use client'
 
 import { useWorldFrame } from '@/hooks/useWorldFrame'
+import { DistCull } from './DistCull'
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
@@ -164,26 +165,36 @@ export function Foreground() {
   return (
     <group>
       {/* scooter */}
+      <DistCull at={[scX, 1, 12.4]} r={58}>
       <group position={[scX, 0, 12.4]} rotation={[0, 0.2, -0.04]}>
         {kit.scooter.map((p, i) => <mesh key={i} geometry={p.geo} material={p.mat} />)}
         <mesh geometry={kit.lampGeo} material={kit.lampMat} />
       </group>
+      </DistCull>
       {/* blade signs on brackets */}
+      <DistCull at={[sx(-1, -5.2), 3, -5.2]} r={58}>
       <group position={[sx(-1, -5.2) + 0.7, 3.15, -5.2]}>
         <mesh geometry={kit.bracketGeo} material={kit.bracketMat} rotation={[0, Math.PI / 2, 0]} position={[0.0, 0.1, 0]} />
         <mesh geometry={kit.plane} material={kit.sMats[0]} scale={[1.05, 0.78, 1]} position={[0.62, -0.2, 0]} />
       </group>
+      </DistCull>
+      <DistCull at={[sx(1, -20.5), 4, -20.5]} r={58}>
       <group position={[sx(1, -20.5) - 0.7, 4.1, -20.5]}>
         <mesh geometry={kit.bracketGeo} material={kit.bracketMat} rotation={[0, -Math.PI / 2, 0]} position={[0.0, 0.1, 0]} />
         <mesh geometry={kit.plane} material={kit.sMats[1]} scale={[0.9, 0.67, 1]} position={[-0.58, -0.2, 0]} />
       </group>
+      </DistCull>
       {/* shop awnings (camera slips past them) */}
+      <DistCull at={[sx(-1, -14.5), 3.5, -14.5]} r={58}>
       <group position={[sx(-1, -14.5) + 0.04, 3.55, -14.5]} rotation={[0, Math.PI / 2, 0]}>
         <mesh geometry={kit.awnGeo} material={kit.awnMats[0]} rotation={[-1.05, 0, 0]} scale={[2.6, 1.55, 1]} />
       </group>
+      </DistCull>
+      <DistCull at={[sx(1, 6.8), 3.7, 6.8]} r={58}>
       <group position={[sx(1, 6.8) - 0.04, 3.7, 6.8]} rotation={[0, -Math.PI / 2, 0]}>
         <mesh geometry={kit.awnGeo} material={kit.awnMats[1]} rotation={[-1.05, 0, 0]} scale={[2.8, 1.55, 1]} />
       </group>
+      </DistCull>
       {/* laundry */}
       <mesh geometry={kit.ropesMerged} material={kit.ropeMat} />
       <mesh geometry={kit.clothGeo} material={kit.clothMat} />
