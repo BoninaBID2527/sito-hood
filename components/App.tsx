@@ -30,6 +30,7 @@ import { scroll } from '@/lib/scroll'
 import * as actions from '@/lib/actions'
 import * as roomActions from '@/lib/roomActions'
 import { room } from '@/lib/room'
+import { vid } from '@/lib/roomVideo'
 
 const ExperienceCanvas = dynamic(() => import('./scene/ExperienceCanvas'), { ssr: false })
 
@@ -79,6 +80,7 @@ export default function App() {
       store: useStore,
       reset: () => resetSecrets(),
       room,
+      vid,
       act: (name: string, ...a: unknown[]) => ((actions as any)[name] ?? (roomActions as any)[name])?.(...a),
     }
   }, [])

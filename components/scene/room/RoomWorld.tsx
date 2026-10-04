@@ -218,7 +218,7 @@ function Workstation({ kit }: { kit: RoomKit }) {
   useWorldFrame('room', () => {
     const s = state.current
     const mat = kit.mats.screen as THREE.MeshBasicMaterial
-    const wantLive = vid.live && videoMode() === 'texture'
+    const wantLive = vid.live && videoMode() === 'texture' && !!vid.el && vid.el.readyState >= 2
     if (wantLive !== s.live) {
       s.live = wantLive
       const t = wantLive ? videoTexture() : null
@@ -272,7 +272,7 @@ function Prints({ geoP, geoL, mats, kit, detail }: { geoP: THREE.BufferGeometry;
       <mesh geometry={geoP} material={mats.portrait} position={[3.146, 1.17, -5.45]} rotation={[0, -Math.PI / 2, 0]} />
       {paraMat && <mesh material={paraMat} position={[3.17, 1.17, -3.45]} rotation={[0, -Math.PI / 2, 0.012]}><planeGeometry args={[1.8, 1.35]} /></mesh>}
       {headMat && <mesh material={headMat} position={[3.19, 2.3, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.0, 0.833]} /></mesh>}
-      {metaMat && <mesh material={metaMat} position={[3.19, 0.28, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.9, 0.483]} /></mesh>}
+      {metaMat && <mesh material={metaMat} position={[3.19, 0.25, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.6, 0.433]} /></mesh>}
       {/* LIVE — left wall (faces +x): the documentary print and the card that points to Instagram for dates */}
       <mesh geometry={geoL} material={mats.live} position={[-3.15, 1.25, -3.2]} rotation={[0, Math.PI / 2, 0]} />
       {cardMat && <mesh ref={card} material={cardMat} position={[-3.15, 0.85, -4.55]} rotation={[0, Math.PI / 2, -0.035]}><planeGeometry args={[0.9, 0.6]} /></mesh>}
@@ -362,11 +362,11 @@ function Lighting() {
     if (lamp.current) lamp.current.intensity = 2.4 * (1 - 0.35 * room.dim)
     if (blue.current) blue.current.intensity = 3.0 * d
     if (red.current) red.current.intensity = 2.1 * d
-    if (wash.current) wash.current.intensity = 4.5 * d
+    if (wash.current) wash.current.intensity = 6 * d
   }, 0)
   return (
     <>
-      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.55, -4.3]} color="#cfe0ff" intensity={4.5} distance={8} decay={2} />}
+      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.55, -4.3]} color="#cfe0ff" intensity={6} distance={8} decay={2} />}
       <pointLight ref={lamp} position={[-0.72, 1.28, -8.0]} color="#ffb070" intensity={2.4} distance={4.2} decay={2} />
       {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#3f6dff" intensity={3} distance={6} decay={2} />}
       {level >= 2 && <pointLight ref={red} position={[2.3, 2.3, -2.9]} color="#ff3a2a" intensity={2.1} distance={4.5} decay={2} />}
