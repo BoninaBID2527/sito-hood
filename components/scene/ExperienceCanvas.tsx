@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Director } from './Director'
@@ -23,12 +24,17 @@ if (typeof window !== 'undefined' && !(window as any).__clockWarnPatched) {
 }
 
 export default function ExperienceCanvas() {
-  const tier = useStore((s) => s.tier)
-  const q = SETTINGS[tier]
+  // initial DPR from the detected tier; afterwards the adaptive manager owns it (PerfGovernor → setDpr)
+  const initial = useRef<number | null>(null)
+  if (initial.current === null) {
+    const q0 = SETTINGS[useStore.getState().tier]
+    initial.current = Math.max(q0.dprMin, Math.min(window.devicePixelRatio || 1, q0.dprMax))
+    rt.dpr = initial.current
+  }
   return (
     <Canvas
       className="canvas"
-      dpr={[1, q.dprMax]}
+      dpr={initial.current}
       camera={{ fov: 50, near: 0.1, far: 700, position: [0, 1.7, 16] }}
       gl={{
         antialias: false, // MSAA happens on the HDR render target (see PostFX)
@@ -43,7 +49,7 @@ export default function ExperienceCanvas() {
       onCreated={({ gl, camera, scene, raycaster }) => {
         gl.setClearColor('#000000', 1)
         camera.layers.enable(1) // layer 1 = main camera only (skipped by planar reflections)
-        rt.quality = q
+        rt.quality = SETTINGS[useStore.getState().tier]
         if (process.env.NODE_ENV !== 'production' || window.location.search.includes('debug')) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           Object.assign(window as any, { __gl: gl, __rc: raycaster, __scene: scene, __camera: camera })

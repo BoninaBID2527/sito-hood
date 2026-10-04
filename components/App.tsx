@@ -1,6 +1,7 @@
 'use client'
 
 import { A } from '@/lib/assets'
+import { PerfHud } from '@/components/ui/PerfHud'
 import { loadSecrets, resetSecrets } from '@/lib/secrets'
 import gsap from 'gsap'
 import { useEffect, useRef } from 'react'
@@ -22,7 +23,7 @@ import { startMotionBridge } from '@/lib/mv'
 import { usePointerRig } from '@/hooks/usePointerRig'
 import { useStore, detectTier } from '@/lib/store'
 import { rt } from '@/lib/runtime'
-import { SETTINGS, type Tier } from '@/lib/quality'
+import { SETTINGS } from '@/lib/quality'
 import { loadCore, buildCards } from '@/lib/assets'
 import { scroll } from '@/lib/scroll'
 import * as actions from '@/lib/actions'
@@ -43,8 +44,7 @@ export default function App() {
       useStore.getState().set({ phase: 'nogl' })
       return
     }
-    const q = new URLSearchParams(window.location.search).get('quality') as Tier | null
-    const tier = q && SETTINGS[q] ? q : detectTier()
+    const tier = detectTier() // honours ?quality=mobile|balanced|high|ultra (legacy low/medium); otherwise device-based
     rt.quality = SETTINGS[tier]
     useStore.getState().set({ tier })
     rt.fx.fade = 0
@@ -88,6 +88,7 @@ export default function App() {
       <div className="stage" aria-hidden="true">{ready && <ExperienceCanvas />}</div>
       <div ref={spacer} className="scroll-spacer" />
       <ScrollRig spacerRef={spacer} />
+      <PerfHud />
       <div className="overlay">
         <WorldTitles />
         <TrackUI />

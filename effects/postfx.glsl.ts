@@ -60,6 +60,8 @@ vec3 aces(vec3 x) {
 
 // channel-split scene sample; 'off' is in uv units
 vec3 scene(vec2 uv, vec2 off) {
+  // no aberration → one tap instead of three (most of the journey)
+  if (abs(off.x) + abs(off.y) < 0.00002) return textureLod(tScene, uv, 0.0).rgb;
   return vec3(
     textureLod(tScene, uv + off, 0.0).r,
     textureLod(tScene, uv, 0.0).g,

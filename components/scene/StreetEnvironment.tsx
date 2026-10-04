@@ -48,12 +48,12 @@ export function StreetEnvironment() {
       <StreetLevel skip={SKIP} />
       <GroundGate />
       <ContactShadows />
-      <FireEscapes />
+      <NoReflect><FireEscapes /></NoReflect>
       <Props />
       <Lamps />
-      <Decals />
+      <NoReflect><Decals /></NoReflect>
       <NoReflect><Steam /></NoReflect>
-      <Cables />
+      <NoReflect><Cables /></NoReflect>
       <NoReflect><Foreground /></NoReflect>
       <NoReflect><WallDetail /></NoReflect>
       <NoReflect><AirLayers /></NoReflect>

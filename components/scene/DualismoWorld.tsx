@@ -13,6 +13,7 @@ import { exitDualism } from '@/lib/actions'
 import { createArtworkMaterial } from './ArtworkMaterial'
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js'
 import { palette } from '@/lib/timeOfDay'
+import { throttleReflector } from './street/reflectThrottle'
 
 const D = WORLD.dualismX
 
@@ -224,9 +225,8 @@ void main() {
 
 function GlassHall() {
   const kit = useMemo(() => {
-    const t = rt.quality.tier
-    const rows = t === 'high' ? 26 : t === 'medium' ? 18 : 12
-    const crystals = t === 'high' ? 30 : t === 'medium' ? 18 : 10
+    const rows = rt.quality.dualRows
+    const crystals = rt.quality.dualCrystals
     const r = rng(1313)
     const mat = new THREE.ShaderMaterial({
       vertexShader: glassVert, fragmentShader: glassFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
@@ -290,8 +290,7 @@ function GlassHall() {
 
 /** Black-glass floor: the world above is mirrored below. Thin-film sheen creeps in at grazing angles. */
 function MirrorFloor() {
-  const tier = rt.quality.tier
-  const real = rt.quality.reflector && tier !== 'low'
+  const real = rt.quality.reflector
   const kit = useMemo(() => {
     const geo = new THREE.PlaneGeometry(160, 260)
     const shader = {
@@ -319,7 +318,8 @@ function MirrorFloor() {
     let obj: THREE.Mesh
     let mat: THREE.ShaderMaterial
     if (real) {
-      const rf = new Reflector(geo, { color: new THREE.Color(0.9, 0.95, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.tier === 'high' ? 2 : 0, shader })
+      const rf = new Reflector(geo, { color: new THREE.Color(0.9, 0.95, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.level >= 2 ? 2 : 0, shader })
+      throttleReflector(rf)
       mat = rf.material as THREE.ShaderMaterial
       obj = rf
     } else {

@@ -570,6 +570,8 @@ function DualGlint() {
   return <mesh geometry={geo} material={mat} position={[R - 20, 33, -168]} scale={[9, 9, 1]} renderOrder={6} />
 }
 
+const _cityWarm = new THREE.Color('#ffa060')
+
 /** The city's own light scattered in the haze above the horizon: separates the skyline layers without any extra geometry. */
 function CityGlow() {
   const mat = useMemo(
@@ -586,7 +588,7 @@ function CityGlow() {
   useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
   useFrame(() => {
     mat.uniforms.uA.value = 0.1 + palette.windows * 0.16
-    mat.uniforms.uC.value.copy(palette.horizon).lerp(new THREE.Color('#ffa060'), 0.45)
+    mat.uniforms.uC.value.copy(palette.horizon).lerp(_cityWarm, 0.45)
   })
   return <mesh geometry={geo} material={mat} position={[R, 40, -330]} scale={[900, 160, 1]} renderOrder={-30} />
 }

@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { postFrag, postVert } from './postfx.glsl'
 import { rt } from '@/lib/runtime'
 import { A } from '@/lib/assets'
+import { useStore } from '@/lib/store'
 
 /**
  * Takes over rendering: scene → HDR render target → one custom full-screen pass
@@ -17,6 +18,7 @@ export function PostFX() {
   const camera = useThree((s) => s.camera)
   const size = useThree((s) => s.size)
   const dpr = useThree((s) => s.viewport.dpr)
+  const tier = useStore((s) => s.tier)
 
   const kit = useMemo(() => {
     const exts = gl.extensions
@@ -77,6 +79,15 @@ export function PostFX() {
     kit.mat.uniforms.uRes.value.copy(v)
     kit.mat.uniforms.uAspect.value = v.x / v.y
   }, [gl, kit, size, dpr])
+
+  // MSAA follows the (adaptive) tier: re-allocate the HDR target only when the sample count actually changes
+  useEffect(() => {
+    const n = gl.capabilities.isWebGL2 ? rt.quality.msaa : 0
+    if (kit.target.samples !== n) {
+      kit.target.samples = n
+      kit.target.dispose()
+    }
+  }, [tier, gl, kit])
 
   useEffect(
     () => () => {

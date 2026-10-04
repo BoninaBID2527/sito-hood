@@ -215,7 +215,7 @@ function EasterEggs() {
             onPointerOut={() => { hov.current.letter = -1; set('default') }}
             onClick={(e) => { e.stopPropagation(); foundLetter(i) }}
           >
-            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+            <meshBasicMaterial visible={false} />
           </mesh>
         </group>
       ))}

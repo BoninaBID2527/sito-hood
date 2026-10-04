@@ -271,9 +271,8 @@ const SHAFTS: { x: number; z: number; w: number; len: number; rz: number }[] = [
 /** Depth cues for the alley: drifting haze sheets in the air + low-sun light shafts through gaps in the buildings. */
 export function AirLayers() {
   const kit = useMemo(() => {
-    const t = rt.quality.tier
-    const nHaze = t === 'high' ? 8 : t === 'medium' ? 5 : 3
-    const nShaft = t === 'high' ? 5 : t === 'medium' ? 3 : 2
+    const nHaze = rt.quality.haze
+    const nShaft = rt.quality.shafts
     const haze = new THREE.ShaderMaterial({
       vertexShader: airVert, fragmentShader: hazeFrag, transparent: true, depthWrite: false,
       uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#8a8ea0') }, uA: { value: 0.12 }, uSeed: { value: 0 } },
