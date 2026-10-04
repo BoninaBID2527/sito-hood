@@ -18,7 +18,7 @@ for (const p of plist.split(',').map(Number)) {
     const rt = window.__hd.rt, scene = window.__scene
     const frames = (n) => new Promise((res) => { const t0 = rt.time; let k = 0; const f = () => { if (rt.time !== t0 + 0 && ++k >= n) res(); else requestAnimationFrame(f) }; requestAnimationFrame(f) })
     // the reflection pass is throttled, so one frame is either 'main' or 'main + reflection': sample several and keep both
-    const read = async () => { let mn = 1e9, mx = 0; for (let k = 0; k < 7; k++) { await frames(1); mn = Math.min(mn, rt.stats.calls); mx = Math.max(mx, rt.stats.calls) } return { calls: mx, main: mn } }
+    const read = async () => { let mn = 0, mx = 0; const N = 5; for (let k = 0; k < N; k++) { await frames(1); mn += rt.stats.calls - rt.stats.refl; mx += rt.stats.refl } return { calls: Math.round(mn / N + mx / N), main: Math.round(mn / N), refl: Math.round(mx / N) } }
     const base = await read(); base.tris = 0
     const live = (o) => { let n = 0, tri = 0; o.traverse((c) => { if (c.isMesh || c.isPoints || c.isLine || c.isSprite) { let v = true, a = c; while (a) { if (!a.visible) { v = false; break } a = a.parent } if (v) n++ } }); return n }
     const cands = []
@@ -38,13 +38,13 @@ for (const p of plist.split(',').map(Number)) {
       c.o.visible = false
       const r = await read()
       c.o.visible = true
-      res.push({ path: c.path, kind: c.kind, objs: c.n, dCalls: base.calls - r.calls, dMain: base.main - r.main })
+      res.push({ path: c.path, kind: c.kind, objs: c.n, dCalls: base.calls - r.calls, dMain: base.main - r.main, dRefl: base.refl - r.refl })
     }
     res.sort((a, b) => b.dCalls - a.dCalls)
     const g = window.__gl
     return { base, tex: g.info.memory.textures, geo: g.info.memory.geometries, prog: g.info.programs?.length, world: rt.world, top: res.slice(0, 26) }
   })
-  console.log(`\n== p=${p} world=${out.world} main-only=${out.base.main} main+reflection=${out.base.calls} textures=${out.tex} geometries=${out.geo}`)
-  for (const r of out.top) console.log(`  main ${String(r.dMain).padStart(3)}  +reflection ${String(r.dCalls - r.dMain).padStart(3)}   ${r.path.padEnd(14)} ${r.kind} (${r.objs} objs)`)
+  console.log(`\n== p=${p} world=${out.world} main=${out.base.main} reflection-pass=${out.base.refl} textures=${out.tex} geometries=${out.geo}`)
+  for (const r of out.top) console.log(`  main ${String(r.dMain).padStart(3)}  reflection ${String(r.dRefl).padStart(3)}   ${r.path.padEnd(14)} ${r.kind} (${r.objs} objs)`)
 }
 await browser.close()

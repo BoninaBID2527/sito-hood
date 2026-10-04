@@ -70,7 +70,7 @@ export const rt = {
   /** the alley/roof/dualism world currently being rendered */
   world: 'alley' as 'alley' | 'roof' | 'dualism',
   /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */
-  stats: { calls: 0, tris: 0 },
+  stats: { calls: 0, tris: 0, refl: 0 },
   quality: SETTINGS.balanced as QualitySettings,
   /** current render DPR (the adaptive manager moves it inside the tier's range) */
   dpr: 1,

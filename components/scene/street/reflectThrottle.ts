@@ -24,6 +24,9 @@ export function throttleReflector(r: THREE.Mesh) {
     lastP.copy(cam.position)
     lastQ.copy(cam.quaternion)
     lastT = rt.time
+    const info = (renderer as THREE.WebGLRenderer).info
+    const c0 = info.render.calls
     orig.call(this, renderer, scene, camera, ...rest)
+    rt.stats.refl += info.render.calls - c0
   }
 }

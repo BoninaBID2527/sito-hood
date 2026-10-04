@@ -18,16 +18,19 @@ const P = (i) => (process.env.BASE === '1' ? 0.36 + (i / 6) * 0.24 : 0.41 + (i /
 const settle = () => page.waitForFunction(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 && (r.world !== 'alley' || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.06)) }, null, { timeout: 240000 }).catch(() => {})
 const sample = (n = 24) => page.evaluate(async (n) => {
   const rt = window.__hd.rt, g = window.__gl
-  const out = { calls: [], tris: [] }
+  const out = { calls: [], tris: [], refl: [] }
   let last = rt.time
-  await new Promise((res) => { const f = () => { if (rt.time !== last) { last = rt.time; out.calls.push(rt.stats.calls); out.tris.push(rt.stats.tris) } if (out.calls.length >= n) res(); else requestAnimationFrame(f) }; requestAnimationFrame(f) })
+  await new Promise((res) => { const f = () => { if (rt.time !== last) { last = rt.time; out.calls.push(rt.stats.calls); out.tris.push(rt.stats.tris); out.refl.push(rt.stats.refl || 0) } if (out.calls.length >= n) res(); else requestAnimationFrame(f) }; requestAnimationFrame(f) })
   const avg = (a) => Math.round(a.reduce((s, v) => s + v, 0) / a.length)
   const f = rt.fx
+  const refreshed = out.refl.filter((v) => v > 0)
+  const mainAvg = avg(out.calls.map((c, i) => c - out.refl[i]))
+  const reflPass = refreshed.length ? avg(refreshed) : 0
   const post = ['rgb', 'liquid', 'tunnel', 'glitch', 'focusDim', 'dualism'].filter((k) => Math.abs(f[k] || 0) > 0.02)
-  return { avg: avg(out.calls), min: Math.min(...out.calls), max: Math.max(...out.calls), tris: avg(out.tris), tex: g.info.memory.textures, geo: g.info.memory.geometries, prog: g.info.programs?.length, dpr: rt.dpr, tier: rt.quality.tier, post, world: rt.world, reflectEvery: rt.quality.reflectEvery, reflRes: rt.quality.reflector ? rt.quality.reflectorRes : 0, msaa: rt.quality.msaa, buf: [g.domElement.width, g.domElement.height] }
+  return { main: mainAvg, reflPass, reflFrames: refreshed.length + '/' + out.calls.length, avg: avg(out.calls), min: Math.min(...out.calls), max: Math.max(...out.calls), tris: avg(out.tris), tex: g.info.memory.textures, geo: g.info.memory.geometries, prog: g.info.programs?.length, dpr: rt.dpr, tier: rt.quality.tier, post, world: rt.world, reflectEvery: rt.quality.reflectEvery, reflRes: rt.quality.reflector ? rt.quality.reflectorRes : 0, msaa: rt.quality.msaa, buf: [g.domElement.width, g.domElement.height] }
 }, n)
 const rows = []
-const run = async (name, fn) => { await fn(); const r = await sample(); rows.push([name, r]); console.log(`${name.padEnd(26)} calls avg ${String(r.avg).padStart(3)} (min ${r.min}, max ${r.max})  tris ${(r.tris / 1000).toFixed(0)}k  tex ${r.tex} geo ${r.geo}  dpr ${r.dpr}  buf ${r.buf.join('×')}  tier ${r.tier}  post[${r.post.join(',')}]`) }
+const run = async (name, fn) => { await fn(); const r = await sample(); rows.push([name, r]); console.log(`${name.padEnd(26)} calls avg ${String(r.avg).padStart(3)} (min ${r.min}, max ${r.max}) = main ${r.main} + reflection ${r.reflPass} on ${r.reflFrames} frames  tris ${(r.tris / 1000).toFixed(0)}k  tex ${r.tex} geo ${r.geo}  dpr ${r.dpr}  buf ${r.buf.join('×')}  tier ${r.tier}  post[${r.post.join(',')}]`) }
 await run('A opening alley', async () => { await page.evaluate(() => window.__hd.jump(0.0)); await settle(); await page.waitForTimeout(2000) })
 await run('B mid alley', async () => { await page.evaluate(() => window.__hd.jump(0.2)); await settle(); await page.waitForTimeout(2000) })
 await run('C tracks idle (04)', async () => { await page.evaluate((p) => window.__hd.jump(p), P(3)); await settle(); await page.waitForTimeout(2500) })
@@ -46,5 +49,5 @@ await run('G DUALISMO', async () => {
   await page.waitForTimeout(2500)
 })
 console.log(errors.length ? 'CONSOLE:\n' + [...new Set(errors)].join('\n') : 'no console errors/warnings')
-console.log('JSON ' + JSON.stringify(rows.map(([n, r]) => [n, r.avg, r.min, r.max, Math.round(r.tris / 1000), r.tex, r.dpr, r.buf.join('x')])))
+console.log('JSON ' + JSON.stringify(rows.map(([n, r]) => [n, r.avg, r.main, r.reflPass, Math.round(r.tris / 1000), r.tex, r.dpr, r.buf.join('x')])))
 await browser.close()

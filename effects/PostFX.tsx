@@ -127,6 +127,7 @@ export function PostFX() {
 
     gl.info.autoReset = false
     gl.info.reset()
+    rt.stats.refl = 0
     gl.setRenderTarget(kit.target)
     gl.clear()
     gl.render(scene, camera)
