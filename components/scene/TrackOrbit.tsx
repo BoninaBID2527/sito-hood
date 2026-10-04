@@ -165,7 +165,7 @@ export function TrackOrbit() {
       const m = mats[i]
       const u = m.uniforms
       u.uAppear.value = clamp(vis * 1.2 - i * 0.02, 0, 1) * (1 - recede * 0.3)
-      const show = u.uAppear.value > 0.02
+      const show = u.uAppear.value > 0.07
       if (grp.visible !== show) grp.visible = show
       if (!show) continue
       const wantMirror = d < 0.85 && rt.quality.reflector

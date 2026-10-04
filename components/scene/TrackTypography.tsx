@@ -197,13 +197,15 @@ export function TrackTypography() {
     const asp = rt.aspect
     const lat = asp < 1 ? 0.4 : asp < 1.3 ? 0.4 + 0.6 * smoothstep(1, 1.3, asp) : 1
     const shrink = asp < 1 ? 0.8 : 1
+    // phones keep only the composition of the track in front (neighbours are not drawn at all)
+    const tk = rt.quality.level === 0 ? 0.62 : 1
     for (let i = 0; i < 7; i++) {
       const g = groups.current[i]
       if (!g) continue
       const d = Math.abs(rig.u - i)
       // composition weight: full at its station, gone two stations away
       // the composition belongs to its station: a neighbour is only a ghost of itself, anything further is not rendered at all
-      const vis0 = (1 - smoothstep(0.5, 1.4, d)) * (on ? 1 : 0) * (1 - recede)
+      const vis0 = (1 - smoothstep(0.5 * tk, 1.4 * tk, d)) * (on ? 1 : 0) * (1 - recede)
       const focusI = st.selected === i
       const vis = vis0 * (st.selected === null || focusI ? 1 : 0.35)
       const show = vis > 0.01

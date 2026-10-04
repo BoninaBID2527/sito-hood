@@ -39,7 +39,7 @@ export const SETTINGS: Record<Tier, QualitySettings> = {
   ultra: { tier: 'ultra', level: 3, dprMax: 2, dprMin: 1.25, msaa: 4, reflector: true, reflectorRes: 1024, reflectEvery: 1, particleScale: 1, steam: 6, bloom: 0.35, grain: 1, windows: true, fireEscapeDetail: 1, haze: 8, shafts: 5, dualRows: 26, dualCrystals: 30, atlas: 1, trackReach: 3 },
   high: { tier: 'high', level: 2, dprMax: 1.5, dprMin: 1, msaa: 4, reflector: true, reflectorRes: 768, reflectEvery: 1, particleScale: 1, steam: 6, bloom: 0.35, grain: 1, windows: true, fireEscapeDetail: 1, haze: 8, shafts: 5, dualRows: 26, dualCrystals: 30, atlas: 0.9, trackReach: 2 },
   balanced: { tier: 'balanced', level: 1, dprMax: 1.4, dprMin: 1, msaa: 2, reflector: true, reflectorRes: 384, reflectEvery: 2, particleScale: 0.6, steam: 4, bloom: 0.25, grain: 0.9, windows: true, fireEscapeDetail: 0.7, haze: 5, shafts: 3, dualRows: 18, dualCrystals: 18, atlas: 0.75, trackReach: 2 },
-  mobile: { tier: 'mobile', level: 0, dprMax: 1.2, dprMin: 0.8, msaa: 0, reflector: false, reflectorRes: 256, reflectEvery: 3, particleScale: 0.3, steam: 2, bloom: 0.16, grain: 0.7, windows: true, fireEscapeDetail: 0.4, haze: 3, shafts: 2, dualRows: 12, dualCrystals: 10, atlas: 0.6, trackReach: 1 },
+  mobile: { tier: 'mobile', level: 0, dprMax: 1.2, dprMin: 0.8, msaa: 0, reflector: false, reflectorRes: 256, reflectEvery: 3, particleScale: 0.3, steam: 2, bloom: 0.16, grain: 0.7, windows: true, fireEscapeDetail: 0.4, haze: 3, shafts: 2, dualRows: 12, dualCrystals: 10, atlas: 0.6, trackReach: 0.5 },
 }
 
 const ALIAS: Record<string, Tier> = { low: 'mobile', medium: 'balanced', mobile: 'mobile', balanced: 'balanced', high: 'high', ultra: 'ultra' }
