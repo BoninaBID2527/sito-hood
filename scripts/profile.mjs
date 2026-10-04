@@ -17,8 +17,9 @@ for (const p of plist.split(',').map(Number)) {
   const out = await page.evaluate(async () => {
     const rt = window.__hd.rt, scene = window.__scene
     const frames = (n) => new Promise((res) => { const t0 = rt.time; let k = 0; const f = () => { if (rt.time !== t0 + 0 && ++k >= n) res(); else requestAnimationFrame(f) }; requestAnimationFrame(f) })
-    const read = async () => { await frames(2); return { calls: rt.stats.calls, tris: rt.stats.tris } }
-    const base = await read()
+    // the reflection pass is throttled, so one frame is either 'main' or 'main + reflection': sample several and keep both
+    const read = async () => { let mn = 1e9, mx = 0; for (let k = 0; k < 7; k++) { await frames(1); mn = Math.min(mn, rt.stats.calls); mx = Math.max(mx, rt.stats.calls) } return { calls: mx, main: mn } }
+    const base = await read(); base.tris = 0
     const live = (o) => { let n = 0, tri = 0; o.traverse((c) => { if (c.isMesh || c.isPoints || c.isLine || c.isSprite) { let v = true, a = c; while (a) { if (!a.visible) { v = false; break } a = a.parent } if (v) n++ } }); return n }
     const cands = []
     const walk = (o, path, depth) => {
@@ -27,7 +28,7 @@ for (const p of plist.split(',').map(Number)) {
         if (!c.visible || n === 0) return
         const p = `${path}/${i}`
         cands.push({ o: c, path: p, n, kind: c.type + (c.geometry ? ':' + c.geometry.type : ''), depth })
-        if (depth < 4 && c.children.length > 0) walk(c, p, depth + 1)
+        if (depth < 2 && c.children.length > 0) walk(c, p, depth + 1)
       })
     }
     walk(scene, '', 0)
@@ -37,13 +38,13 @@ for (const p of plist.split(',').map(Number)) {
       c.o.visible = false
       const r = await read()
       c.o.visible = true
-      res.push({ path: c.path, kind: c.kind, objs: c.n, dCalls: base.calls - r.calls, dTris: base.tris - r.tris })
+      res.push({ path: c.path, kind: c.kind, objs: c.n, dCalls: base.calls - r.calls, dMain: base.main - r.main })
     }
     res.sort((a, b) => b.dCalls - a.dCalls)
     const g = window.__gl
     return { base, tex: g.info.memory.textures, geo: g.info.memory.geometries, prog: g.info.programs?.length, world: rt.world, top: res.slice(0, 26) }
   })
-  console.log(`\n== p=${p} world=${out.world} calls=${out.base.calls} tris=${out.base.tris} textures=${out.tex} geometries=${out.geo} programs=${out.prog}`)
-  for (const r of out.top) console.log(`  ${String(r.dCalls).padStart(4)} calls ${String(r.dTris).padStart(7)} tris  ${r.path.padEnd(14)} ${r.kind} (${r.objs} objs)`)
+  console.log(`\n== p=${p} world=${out.world} main-only=${out.base.main} main+reflection=${out.base.calls} textures=${out.tex} geometries=${out.geo}`)
+  for (const r of out.top) console.log(`  main ${String(r.dMain).padStart(3)}  +reflection ${String(r.dCalls - r.dMain).padStart(3)}   ${r.path.padEnd(14)} ${r.kind} (${r.objs} objs)`)
 }
 await browser.close()
