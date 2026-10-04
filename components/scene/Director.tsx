@@ -8,19 +8,10 @@ import { useStore } from '@/lib/store'
 import { applyScrub, buildParamTimeline, sampleCamera, WORLD, type CamSample } from '@/lib/timeline'
 import { evalTimeOfDay } from '@/lib/timeOfDay'
 import { bump, clamp, damp, smoothstep, stepSpring, type Spring } from '@/lib/math'
+import { rig, stepRig } from '@/lib/trackRig'
 
 const _right = new THREE.Vector3()
 const _up = new THREE.Vector3()
-/** per-track "shot": when a track is focused the camera itself re-composes (offset, dolly, target shift, lens), so each state is a new frame */
-const SHOTS = [
-  { dx: -0.9, dy: 0.15, dz: 1.2, lx: -0.5, ly: 0.1, fov: -3 },
-  { dx: 0.8, dy: -0.1, dz: 1.5, lx: 0.5, ly: 0.05, fov: -4 },
-  { dx: -0.5, dy: 0.3, dz: 0.8, lx: -0.3, ly: 0.25, fov: -2 },
-  { dx: 1.0, dy: 0.1, dz: 1.8, lx: 0.6, ly: 0, fov: -4 },
-  { dx: -1.1, dy: -0.1, dz: 1.4, lx: -0.6, ly: -0.05, fov: -3 },
-  { dx: 0.6, dy: 0.25, dz: 1.0, lx: 0.4, ly: 0.15, fov: -2 },
-  { dx: -0.4, dy: 0.1, dz: 2.0, lx: -0.2, ly: 0, fov: -5 },
-]
 const _dir = new THREE.Vector3()
 const _upY = new THREE.Vector3(0, 1, 0)
 const _up2 = new THREE.Vector3()
@@ -39,7 +30,6 @@ export function Director() {
   const spring = useRef<Spring>({ x: 0, v: 0 })
   const sample = useRef<CamSample>({ pos: new THREE.Vector3(), look: new THREE.Vector3(), fov: 50, roll: 0, world: 'alley' })
   const lastFov = useRef(0)
-  const shot = useRef({ dx: 0, dy: 0, dz: 0, lx: 0, ly: 0, fov: 0 })
   const look = useRef(new THREE.Vector3())
 
   useEffect(() => {
@@ -83,6 +73,7 @@ export function Director() {
     // world selection
     const cs = sampleCamera(p, sample.current)
     rt.world = mode === 'dualism' || mode === 'dualism-out' ? 'dualism' : cs.world
+    stepRig(dt)
 
     // ── camera
     const cam = camera
@@ -100,24 +91,11 @@ export function Director() {
       cam.position.copy(cs.pos)
       look.current.copy(cs.look)
 
-      // focused track → the camera re-composes (eased between shots, so moving track-to-track is a camera move, not a cut)
-      {
-        const sh = shot.current
-        const on = rt.world === 'alley' && rt.orbit.sel > 0.002 && store.selected !== null
-        const tgt = on ? SHOTS[((store.selected ?? 0) % SHOTS.length + SHOTS.length) % SHOTS.length] : null
-        const k = 3.2 * (rt.reducedMotion ? 0 : 1)
-        const e = rt.orbit.sel * rt.orbit.sel * (3 - 2 * rt.orbit.sel)
-        for (const key of ['dx', 'dy', 'dz', 'lx', 'ly', 'fov'] as const) sh[key] = damp(sh[key], tgt ? tgt[key] : 0, k || 100, dt)
-        if (Math.abs(sh.dx) + Math.abs(sh.dz) + Math.abs(sh.dy) > 0.001) {
-          const narrow = rt.aspect < 1.2 ? 0.5 : 1
-          _dir.copy(look.current).sub(cam.position).normalize()
-          _right.crossVectors(_dir, _upY).normalize()
-          _up2.crossVectors(_right, _dir)
-          void e
-          cam.position.addScaledVector(_right, sh.dx * narrow).addScaledVector(_up2, sh.dy).addScaledVector(_dir, sh.dz * narrow)
-          look.current.addScaledVector(_right, sh.lx * narrow).addScaledVector(_up2, sh.ly)
-        }
-        fov += sh.fov
+      // the track installation: the camera walks the rig (entry → 01 … 07 → exit); the rig owns the pose while it is active
+      if (rig.w > 0.001) {
+        cam.position.lerp(rig.pos, rig.w)
+        look.current.lerp(rig.look, rig.w)
+        fov += rig.fov
       }
 
       // entry fly-in (first seconds after ENTER)
@@ -127,13 +105,6 @@ export function Director() {
         cam.position.z += k * k * 6 * w
         cam.position.y += k * k * 0.5 * w
         fov += k * 6 * w
-      }
-
-      // fit the orbit on narrow screens by dollying back
-      const orbitW = bump(0.33, 0.4, 0.62, 0.69, p)
-      if (orbitW > 0.001 && rt.aspect < 1.2) {
-        _dir.copy(cam.position).sub(look.current).normalize()
-        cam.position.addScaledVector(_dir, orbitW * Math.max(0, 1 / rt.aspect - 0.78) * 2.6)
       }
 
       // transition push (dualism tunnel pulls the camera forward)
@@ -160,7 +131,7 @@ export function Director() {
       cam.rotateZ((cs.roll + clamp(rt.velocity * 0.05, -0.01, 0.01) - rt.px * 0.004) * S)
 
       // breathing, only where it belongs (no breathing while the orbit is the subject)
-      const breathe = (1 - orbitW) * S
+      const breathe = (1 - rig.w) * S
       cam.position.y += Math.sin(rt.time * 0.85) * 0.006 * breathe
       cam.position.x += Math.sin(rt.time * 0.55 + 1.3) * 0.004 * breathe
       cam.rotateZ(Math.sin(rt.time * 0.42) * 0.0012 * breathe)

@@ -199,5 +199,6 @@ export function applyScrub(tl: gsap.core.Timeline, p: number) {
 }
 
 /** Which track slot index is at the front for a given progress inside the orbit zone. */
-export const orbitZone = { a: CP.tracksStart, b: CP.tracksEnd }
+/** scroll range in which the camera walks through the installation (track 01 at a, track 07 at b) */
+export const orbitZone = { a: 0.41, b: 0.595 }
 export const zoneT = (p: number) => Math.min(1, Math.max(0, (p - orbitZone.a) / (orbitZone.b - orbitZone.a)))
