@@ -488,9 +488,9 @@ export function signTexture(o: SignOpts) {
 }
 
 /** Painted overhead banner — the HOODDINO title as a physical object. */
-export function bannerTexture(text: string) {
+export function bannerTexture(text: string, seed = 21, ink = '#e8e1d0') {
   const W = 2048, H = 512
-  const r = rng(21)
+  const r = rng(seed)
   const { canvas, ctx } = makeCanvas(W, H)
   ctx.fillStyle = '#16140f'
   ctx.fillRect(0, 0, W, H)
@@ -498,7 +498,7 @@ export function bannerTexture(text: string) {
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   const px = fitText(ctx, text, W - 190, (p) => `${p}px ${DISPLAY_FONT}`, H * 0.86)
-  ctx.fillStyle = '#e8e1d0'
+  ctx.fillStyle = ink
   ctx.fillText(text, W / 2, H / 2 + px * 0.04)
   // paint breakup — scrape the lettering
   ctx.globalCompositeOperation = 'destination-out'
@@ -511,7 +511,7 @@ export function bannerTexture(text: string) {
   ctx.fillRect(0, 0, W, H)
   ctx.globalCompositeOperation = 'source-over'
   // drips
-  ctx.fillStyle = '#e8e1d0'
+  ctx.fillStyle = ink
   for (let i = 0; i < 14; i++) {
     const x = W * 0.1 + r() * W * 0.8, len = r.range(18, 90)
     ctx.fillRect(x, H * 0.72, 3.5, len)

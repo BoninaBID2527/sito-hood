@@ -162,16 +162,8 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .menu button i { font-style: normal; opacity: 0.5; }
 
 /* ═══════════════════ world typography ═══════════════════ */
-.world-titles { position: absolute; inset: 0; perspective: 1400px; perspective-origin: 50% 45%; overflow: hidden; }
-.depth-word { position: absolute; left: var(--gutter); bottom: 15vh; transform-style: preserve-3d; will-change: transform, opacity, filter; }
-.depth-word.right { left: auto; right: calc(var(--gutter) * 1.4); text-align: right; }
-.depth-stage { position: relative; transform-style: preserve-3d; }
-.dw-layer { display: block; font-size: clamp(64px, 15.5vw, 280px); line-height: 0.84; white-space: nowrap; }
-.dw-mid { position: relative; color: var(--paper); text-shadow: 0 6px 40px rgba(0, 0, 0, 0.55); }
-.dw-back, .dw-front { position: absolute; inset: 0; }
-.dw-back { color: rgba(229, 72, 60, 0.5); }
-.dw-front { color: transparent; -webkit-text-stroke: 1.2px rgba(127, 227, 255, 0.85); }
-.dw-tag { display: block; margin-top: 14px; color: var(--dim); }
+.world-titles { position: absolute; inset: 0; pointer-events: none; }
+.title-tag { position: absolute; left: 50%; bottom: calc(var(--gutter) * 2.2 + var(--safe-b)); transform: translateX(-50%); color: var(--dim); white-space: nowrap; }
 
 /* ═══════════════════ track UI ═══════════════════ */
 .track-ui { position: absolute; inset: 0; }
@@ -283,8 +275,6 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
   .menu-btn { display: block; }
   .wordmark { font-size: 20px; }
   .rail { display: none; }
-  .dw-layer { font-size: clamp(60px, 24vw, 150px); }
-  .depth-word, .depth-word.right { left: var(--gutter); right: auto; text-align: left; bottom: 20vh; }
   .tu-readout { bottom: calc(var(--gutter) * 5.4 + var(--safe-b)); max-width: 80vw; }
   .tu-title { font-size: clamp(40px, 13vw, 90px); }
   .tu-index { right: var(--gutter); }

@@ -29,6 +29,8 @@ export interface Assets {
   glow: THREE.Texture
   dot: THREE.Texture
   banner: THREE.Texture
+  /** the second hung banner (ALTERCO) — physical replacement of the old screen-space title word */
+  banner2: THREE.Texture
   projection: THREE.Texture
   posters: THREE.Texture[]
   /** atlases for all street typography (spray + paper) */
@@ -122,6 +124,7 @@ export async function loadCore(onProgress: (p: number) => void) {
       }],
       ['graffiti', 14, () => {
         A.banner = T.bannerTexture('HOODDINO')
+        A.banner2 = T.bannerTexture('ALTERCO', 29, '#f0d9b0')
         A.projection = T.projectionTexture('ALTERCO')
         // every wall piece, poster and sticker lives in two atlases (lib/graffitiSheet.ts)
         A.graf = buildGraffiti(rt.quality.atlas)

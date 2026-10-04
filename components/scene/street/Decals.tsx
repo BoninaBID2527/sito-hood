@@ -114,45 +114,42 @@ function Signs() {
   )
 }
 
-/** HOODDINO banner hung across the alley + ALTERCO light-projected onto the brick. */
-function WorldTitles() {
-  const bannerGeo = useMemo(() => new THREE.PlaneGeometry(5.7, 1.43, 28, 6), [])
-  const base = useMemo(() => Float32Array.from(bannerGeo.attributes.position.array as Float32Array), [bannerGeo])
-  const bannerMat = useMemo(() => new THREE.MeshStandardMaterial({ map: A.banner, roughness: 0.85, side: THREE.DoubleSide }), [])
-  const projMat = useMemo(
-    () => new THREE.MeshBasicMaterial({ map: A.projection, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, color: new THREE.Color('#ffe2b4'), opacity: 0.0, fog: false }),
-    [],
-  )
-  const projGeo = useMemo(() => new THREE.PlaneGeometry(13, 3.25), [])
+/**
+ * The two monumental titles of the journey are physical objects in the alley: a HOODDINO banner hung across it (z −26) and an ALTERCO
+ * banner further in (z −50), each on four cables to the fire escapes, lit by the evening; plus ALTERCO light-projected onto the brick.
+ * (V3.4: these replace the old screen-space DOM words, which floated in front of the lens and covered the lower viewport on tablets.)
+ */
+const BANNERS = [
+  { z: -26, y: 7.4, x: 0.04, tex: 'banner' as const, sway: 0 },
+  { z: -50, y: 6.6, x: -0.12, tex: 'banner2' as const, sway: 1.7 },
+]
+
+function HungBanner({ z, y, x, tex, sway }: (typeof BANNERS)[number]) {
+  const geo = useMemo(() => new THREE.PlaneGeometry(5.7, 1.43, 28, 6), [])
+  const base = useMemo(() => Float32Array.from(geo.attributes.position.array as Float32Array), [geo])
+  const mat = useMemo(() => new THREE.MeshStandardMaterial({ map: A[tex], roughness: 0.85, side: THREE.DoubleSide }), [tex])
   const cableMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#0a0a0a' }), [])
   const cableGeo = useMemo(() => new THREE.CylinderGeometry(0.014, 0.014, 1, 4), [])
-  const bannerRef = useRef<THREE.Mesh>(null)
-
   useWorldFrame('alley', () => {
-    const pos = bannerGeo.attributes.position as THREE.BufferAttribute
-    const t = rt.time
+    // the cloth breathes (only while the street is on screen, and only near the camera — DistCull hides it otherwise)
+    const pos = geo.attributes.position as THREE.BufferAttribute
+    const t = rt.time + sway
     for (let i = 0; i < pos.count; i++) {
-      const x = base[i * 3], y = base[i * 3 + 1]
-      pos.setZ(i, Math.sin(x * 1.4 + t * 1.2) * 0.07 + Math.sin(x * 3.1 - t * 0.8) * 0.02 + (1 - Math.abs(x) / 2.85) * 0.04 * Math.sin(t * 0.5 + y))
-      pos.setY(i, y - Math.pow(x / 2.85, 2) * 0.0 - (1 - Math.pow(x / 2.85, 2)) * 0.0)
+      const bx = base[i * 3], by = base[i * 3 + 1]
+      pos.setZ(i, Math.sin(bx * 1.4 + t * 1.2) * 0.07 + Math.sin(bx * 3.1 - t * 0.8) * 0.02 + (1 - Math.abs(bx) / 2.85) * 0.04 * Math.sin(t * 0.5 + by))
     }
     pos.needsUpdate = true
-    // the projection "breathes" and misregisters now and then
-    const flick = 0.5 + 0.12 * Math.sin(rt.time * 9.0) * Math.sin(rt.time * 2.3) + (Math.sin(rt.time * 0.7) > 0.96 ? -0.3 : 0)
-    projMat.opacity = Math.max(0, flick) * (0.35 + palette.lamps * 0.65) * (0.7 + rt.fx.contam * 0.6)
   })
-  useEffect(() => () => { bannerGeo.dispose(); bannerMat.dispose(); projMat.dispose(); projGeo.dispose(); cableMat.dispose(); cableGeo.dispose() }, [bannerGeo, bannerMat, projMat, projGeo, cableMat, cableGeo])
-
-  // cables from banner corners up to the walls
+  useEffect(() => () => { geo.dispose(); mat.dispose(); cableMat.dispose(); cableGeo.dispose() }, [geo, mat, cableMat, cableGeo])
+  // cables from the banner corners up to the walls
   const cableSegs = useMemo(() => {
     const out: { p: THREE.Vector3; q: THREE.Quaternion; len: number }[] = []
-    const z = -26, y = 7.4
-    const hwL = -3.0, hwR = 2.9
+    const hwL = wallX(-1, z) + 0.1, hwR = wallX(1, z) - 0.1
     const pairs: [[number, number], [number, number]][] = [
-      [[-2.85, y + 0.7], [hwL, y + 1.6]],
-      [[2.85, y + 0.7], [hwR, y + 1.6]],
-      [[-2.85, y - 0.7], [hwL, y - 0.4]],
-      [[2.85, y - 0.7], [hwR, y - 0.4]],
+      [[-2.85 + x, y + 0.7], [hwL, y + 1.6]],
+      [[2.85 + x, y + 0.7], [hwR, y + 1.6]],
+      [[-2.85 + x, y - 0.7], [hwL, y - 0.4]],
+      [[2.85 + x, y - 0.7], [hwR, y - 0.4]],
     ]
     for (const [a, b] of pairs) {
       const A3 = new THREE.Vector3(a[0], a[1], z), B3 = new THREE.Vector3(b[0], b[1], z)
@@ -161,16 +158,32 @@ function WorldTitles() {
       out.push({ p: A3.clone().add(B3).multiplyScalar(0.5), q, len: dir.length() })
     }
     return out
-  }, [])
+  }, [x, y, z])
+  return (
+    <DistCull at={[0, y, z]} r={58}>
+      <mesh geometry={geo} material={mat} position={[x, y, z]} rotation={[0.05, 0, 0]} />
+      {cableSegs.map((c, i) => (
+        <mesh key={i} geometry={cableGeo} material={cableMat} position={c.p} quaternion={c.q} scale={[1, c.len, 1]} />
+      ))}
+    </DistCull>
+  )
+}
 
+function WorldTitles() {
+  const projMat = useMemo(
+    () => new THREE.MeshBasicMaterial({ map: A.projection, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, color: new THREE.Color('#ffe2b4'), opacity: 0.0, fog: false }),
+    [],
+  )
+  const projGeo = useMemo(() => new THREE.PlaneGeometry(13, 3.25), [])
+  useWorldFrame('alley', () => {
+    // the projection "breathes" and misregisters now and then
+    const flick = 0.5 + 0.12 * Math.sin(rt.time * 9.0) * Math.sin(rt.time * 2.3) + (Math.sin(rt.time * 0.7) > 0.96 ? -0.3 : 0)
+    projMat.opacity = Math.max(0, flick) * (0.35 + palette.lamps * 0.65) * (0.7 + rt.fx.contam * 0.6)
+  })
+  useEffect(() => () => { projMat.dispose(); projGeo.dispose() }, [projMat, projGeo])
   return (
     <group>
-      <DistCull at={[0, 7.4, -26]} r={58}>
-        <mesh ref={bannerRef} geometry={bannerGeo} material={bannerMat} position={[0.04, 7.4, -26]} rotation={[0.05, 0, 0]} />
-        {cableSegs.map((c, i) => (
-          <mesh key={i} geometry={cableGeo} material={cableMat} position={c.p} quaternion={c.q} scale={[1, c.len, 1]} />
-        ))}
-      </DistCull>
+      {BANNERS.map((b) => <HungBanner key={b.tex} {...b} />)}
       <DistCull at={[wallX(1, -36), 7.4, -36]} r={58}>
         <mesh geometry={projGeo} material={projMat} position={[wallX(1, -36) - 0.12, 7.4, -36]} rotation={[0, -Math.PI / 2, 0]} renderOrder={5} />
       </DistCull>
