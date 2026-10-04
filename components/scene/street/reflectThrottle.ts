@@ -7,6 +7,8 @@ import { rt } from '@/lib/runtime'
  *  · moving → every `reflectEvery` frames (tier setting; 1 = every frame), never staler than 120 ms
  * The texture matrix is recomputed together with the image, so old image + old matrix always stay consistent.
  */
+const REFLECT_FAR = 65
+
 export function throttleReflector(r: THREE.Mesh) {
   const orig = (r as unknown as { onBeforeRender: (...a: unknown[]) => void }).onBeforeRender
   let n = 0
@@ -14,7 +16,7 @@ export function throttleReflector(r: THREE.Mesh) {
   const lastP = new THREE.Vector3(1e9, 0, 0)
   const lastQ = new THREE.Quaternion()
   ;(r as unknown as { onBeforeRender: (...a: unknown[]) => void }).onBeforeRender = function (this: unknown, renderer: unknown, scene: unknown, camera: unknown, ...rest: unknown[]) {
-    const cam = camera as THREE.Camera
+    const cam = camera as THREE.PerspectiveCamera
     const every = Math.max(1, rt.quality.reflectEvery)
     const moved = cam.position.distanceToSquared(lastP) > 4e-6 || Math.abs(cam.quaternion.dot(lastQ)) < 0.9999995
     const age = rt.time - lastT
@@ -26,7 +28,11 @@ export function throttleReflector(r: THREE.Mesh) {
     lastT = rt.time
     const info = (renderer as THREE.WebGLRenderer).info
     const c0 = info.render.calls
+    // the reflection only needs the nearby world (fog hides the rest): a short far plane lets frustum culling drop distant geometry
+    const far = cam.far
+    cam.far = Math.min(far, REFLECT_FAR)
     orig.call(this, renderer, scene, camera, ...rest)
+    cam.far = far
     rt.stats.refl += info.render.calls - c0
   }
 }

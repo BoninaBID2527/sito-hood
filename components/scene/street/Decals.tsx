@@ -1,6 +1,7 @@
 'use client'
 
 import { useWorldFrame } from '@/hooks/useWorldFrame'
+import { DistCull } from './DistCull'
 import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
@@ -57,10 +58,10 @@ export function Decals() {
       <Signs />
       <WorldTitles />
       <EasterEggs />
-      <GrazingSymbol />
+      <DistCull at={[-3, 1.2, -33]} r={75}><GrazingSymbol /></DistCull>
       <NumberTrail />
-      <Anamorph />
-      <StreetMemory />
+      <DistCull at={[0, 0, -21]} r={55}><Anamorph /></DistCull>
+      <DistCull at={[0, 1, -48]} r={75}><StreetMemory /></DistCull>
     </group>
   )
 }
@@ -204,7 +205,8 @@ function EasterEggs() {
   return (
     <group>
       {LETTER_SPOTS.map((l, i) => (
-        <group key={i} position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
+        <DistCull key={i} at={[wallX(l.side, l.z), l.y, l.z]} r={65}>
+        <group position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
           <mesh geometry={geo} material={letterMats[i]} scale={[l.s, l.s, 1]} renderOrder={4} />
           {/* generous invisible hit area — the glyphs are small and far away */}
           <mesh
@@ -218,6 +220,7 @@ function EasterEggs() {
             <meshBasicMaterial visible={false} />
           </mesh>
         </group>
+        </DistCull>
       ))}
 
       {/* credits wheat-paste, half hidden behind a dumpster in the plaza */}
