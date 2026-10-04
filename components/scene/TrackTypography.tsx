@@ -60,7 +60,7 @@ function compose(i: number): Item[] {
       ]
     case 3: // GIUDIZIO DIVINO — monumental, vertical, architectural
       return [
-        { text: num(i), h: 5.2, pos: [-2.2, 0.5, -1.7], style: 'solid', a: 0.8 },
+        { text: num(i), h: 5.2, pos: [-3.5, 0.5, -1.7], style: 'solid', a: 0.8 },
         { text: w[0], h: 1.15, pos: [2.5, 0.2, -0.5], rot: [0, 0, Math.PI / 2], style: 'solid', a: 0.96 },
         { text: w[1], h: 1.15, pos: [3.75, -0.5, -0.9], rot: [0, 0, Math.PI / 2], style: 'outline', a: 0.9 },
       ]
@@ -190,7 +190,6 @@ export function TrackTypography() {
     const p = rt.smooth
     const on = rt.world === 'alley' && p > 0.3 && p < 0.7
     const st = useStore.getState()
-    const reach = 0.5 + Math.min(1.6, rt.quality.trackReach * 0.55)
     const red = rt.reducedMotion
     const t = rt.time
     const recede = smoothstep(0.6, 0.665, p)
@@ -199,7 +198,8 @@ export function TrackTypography() {
       if (!g) continue
       const d = Math.abs(rig.u - i)
       // composition weight: full at its station, gone two stations away
-      const vis0 = (1 - smoothstep(reach - 0.55, reach + 0.25, d)) * (on ? 1 : 0) * (1 - recede)
+      // the composition belongs to its station: a neighbour is only a ghost of itself, anything further is not rendered at all
+      const vis0 = (1 - smoothstep(0.5, 1.4, d)) * (on ? 1 : 0) * (1 - recede)
       const focusI = st.selected === i
       const vis = vis0 * (st.selected === null || focusI ? 1 : 0.35)
       const show = vis > 0.01
