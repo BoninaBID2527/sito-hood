@@ -155,10 +155,10 @@ export function buildRoomGeometry(level: number): RoomGeo {
   // phone stand (TikTok object) — the phone itself is a screen mesh
   s.box(0.08, 0.012, 0.09, 1.18, 0.78, -7.98, '#18181b', { ry: 0.3 })
   // chair
-  s.cyl(0.04, 0.04, 0.4, 0.1, 0.25, -7.12, '#1b1b1d')
-  s.box(0.5, 0.08, 0.5, 0.1, 0.5, -7.12, '#2a2528', { ry: 0.22 })
-  s.box(0.46, 0.5, 0.07, 0.04, 0.82, -6.88, '#2a2528', { ry: 0.22, rx: -0.12 })
-  for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; s.box(0.34, 0.025, 0.04, 0.1 + Math.cos(a) * 0.17, 0.05, -7.12 + Math.sin(a) * 0.17, '#17171a', { ry: -a }) }
+  s.cyl(0.04, 0.04, 0.4, -0.95, 0.25, -7.45, '#1b1b1d')
+  s.box(0.5, 0.08, 0.5, -0.95, 0.5, -7.45, '#3a3235', { ry: 0.9 })
+  s.box(0.46, 0.5, 0.07, -1.12, 0.82, -7.62, '#3a3235', { ry: 0.9, rx: -0.12 })
+  for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; s.box(0.34, 0.025, 0.04, -0.95 + Math.cos(a) * 0.17, 0.05, -7.45 + Math.sin(a) * 0.17, '#17171a', { ry: -a }) }
   // dark-floor crates / flight case
   s.box(0.6, 0.45, 0.45, 2.45, 0.225, -8.2, '#25262a')
   s.box(0.5, 0.4, 0.4, 2.55, 0.65, -8.2, '#2e2f33', { ry: 0.2 })
@@ -228,8 +228,8 @@ export function buildRoomGeometry(level: number): RoomGeo {
   g.box(0.02, 0.02, 0.92, fx, 1.93, fz, '#ff8a2a', { i: 2.0 })
   g.box(0.02, 0.02, 0.92, fx, 1.03, fz, '#ff8a2a', { i: 2.0 })
   // fluorescent fixtures (cool-white), one slightly dead
-  g.box(0.16, 0.05, 1.3, 0.2, h - 0.12, -3.6, '#dce8ff', { i: 1.7 })
-  g.box(0.16, 0.05, 1.3, 0.2, h - 0.12, -6.6, '#dce8ff', { i: 0.7 })
+  g.box(0.14, 0.04, 1.1, 0.2, h - 0.12, -3.6, '#dce8ff', { i: 1.15 })
+  g.box(0.14, 0.04, 1.1, 0.2, h - 0.12, -6.6, '#dce8ff', { i: 0.55 })
   // equipment LEDs (interface, keyboard, speakers)
   for (let i = 0; i < 4; i++) g.box(0.012, 0.012, 0.004, -1.06 + i * 0.05, 0.84, -7.945, i === 2 ? '#ff3a2a' : '#44ff88', { i: 2.4 })
   for (const sx of [-1.5, 1.85]) g.box(0.014, 0.014, 0.004, sx + 0.09, 0.86, (sx < 0 ? -8.2 : -8.15) + 0.155, '#44aaff', { i: 2.4 })

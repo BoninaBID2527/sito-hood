@@ -341,7 +341,7 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .room-links { position: absolute; right: var(--gutter); top: calc(var(--gutter) * 0.65 + var(--safe-t) + 44px); display: flex; flex-direction: column; align-items: flex-end; gap: 0; color: var(--dim); }
 .room-links a { display: inline-block; padding: 12px 0; min-height: 44px; color: var(--dim); transition: color 0.25s; pointer-events: auto; }
 .room-links a:hover { color: var(--paper); }
-.room-stage { position: absolute; left: 0; right: 0; bottom: calc(var(--gutter) * 3.5 + var(--safe-b) + 24px); display: flex; justify-content: center; padding: 0 var(--gutter); }
+.room-stage { position: absolute; left: 0; right: 0; bottom: calc(var(--gutter) * 3.5 + var(--safe-b) + 24px); display: flex; justify-content: flex-start; padding: 0 var(--gutter); }
 .room-chip {
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 20px 14px 18px; min-height: 48px;
   border-left: 2px solid var(--amber); background: rgba(5, 5, 6, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: var(--paper); text-align: left;

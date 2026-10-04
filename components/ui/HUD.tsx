@@ -60,7 +60,7 @@ export function HUD() {
         <button className="wordmark display hit" onClick={hoodClick} data-cursor="link" aria-label="HOODDINO">
           HOODDINO
         </button>
-        <nav className="nav" aria-label="Journey" hidden={inRoom}>
+        <nav className="nav" aria-label="Journey" style={inRoom ? { display: 'none' } : undefined}>
           {NAV_POINTS.map((n, i) => (
             <button key={n.id} className={`nav-item hit label ${active === n.id && !away ? 'is-active' : ''}`} data-cursor="link" onClick={() => go(n.p)}>
               <i>0{i + 1}</i>

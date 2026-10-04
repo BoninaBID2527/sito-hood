@@ -38,7 +38,7 @@ export interface RoomStation {
 export const STATIONS: RoomStation[] = [
   { id: 'entry', label: 'THE ROOM', cam: [0.1, 1.55, -2.3], look: [0.2, 1.2, -8.4], fov: 54, narrow: { cam: [0.1, 1.55, -1.9], look: [0.3, 1.2, -8.4], fov: 56 } },
   { id: 'workstation', label: 'WORKSTATION', cam: [0.25, 1.32, -5.5], look: [0.3, 1.08, -8.4], fov: 48, narrow: { cam: [0.3, 1.35, -5.6], look: [0.4, 1.08, -8.4], fov: 52 } },
-  { id: 'bio', label: 'WHO IS HOODDINO?', cam: [-0.2, 1.42, -4.6], look: [3.2, 1.28, -4.55], fov: 50, narrow: { cam: [-0.6, 1.4, -3.55], look: [3.2, 1.3, -3.55], fov: 52 } },
+  { id: 'bio', label: 'WHO IS HOODDINO?', cam: [-0.2, 1.42, -4.6], look: [3.2, 1.42, -4.55], fov: 50, narrow: { cam: [-0.6, 1.4, -3.55], look: [3.2, 1.3, -3.55], fov: 52 } },
   { id: 'live', label: 'LIVE', cam: [0.6, 1.4, -3.95], look: [-3.2, 1.2, -3.85], fov: 50, narrow: { cam: [0.3, 1.38, -3.4], look: [-3.2, 1.22, -3.3], fov: 52 } },
   { id: 'exit', label: 'EXIT', cam: [0.0, 1.5, -2.2], look: [0.0, 1.35, 3], fov: 54 },
 ]

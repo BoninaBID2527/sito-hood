@@ -101,8 +101,8 @@ function makeKit(level: number) {
     screen: new THREE.MeshBasicMaterial({ map: RX.posterPlay ?? RX.poster, toneMapped: false, color: new THREE.Color(0.62, 0.62, 0.64) }),
     phone: new THREE.MeshBasicMaterial({ map: RX.phone, toneMapped: false, color: new THREE.Color(0.7, 0.7, 0.75) }),
     keys: std({ map: RX.keys, roughness: 0.5 }),
-    cover: std({ map: A.covers.alterco, roughness: 0.4 }),
-    aperture: new THREE.MeshBasicMaterial({ map: apertureTex, fog: false, toneMapped: false, color: new THREE.Color(1.3, 1.3, 1.4) }),
+    cover: std({ map: A.covers.alterco, roughness: 0.4, emissive: '#ffffff', emissiveMap: A.covers.alterco, emissiveIntensity: 0.4 }),
+    aperture: new THREE.MeshBasicMaterial({ map: apertureTex, fog: false, toneMapped: false, side: THREE.DoubleSide, color: new THREE.Color(1.3, 1.3, 1.4) }),
     leaf: std({ map: leafTex, roughness: 0.55 }),
     shadow: new THREE.MeshBasicMaterial({ map: RX.blob, color: '#000', transparent: true, opacity: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   }
@@ -127,8 +127,8 @@ export function RoomWorld({ detail }: { detail: boolean }) {
   const live = (detail && RX.liveHi) || RX.live
   const signal = (detail && RX.signalHi) || RX.signal
   const photoMats = useMemo(() => ({
-    portrait: new THREE.MeshStandardMaterial({ map: portrait, roughness: 0.5 }),
-    live: new THREE.MeshStandardMaterial({ map: live, roughness: 0.5 }),
+    portrait: new THREE.MeshStandardMaterial({ map: portrait, roughness: 0.5, emissive: '#ffffff', emissiveMap: portrait, emissiveIntensity: 0.32 }),
+    live: new THREE.MeshStandardMaterial({ map: live, roughness: 0.5, emissive: '#ffffff', emissiveMap: live, emissiveIntensity: 0.32 }),
   }), [portrait, live])
   useEffect(() => () => { photoMats.portrait.dispose(); photoMats.live.dispose() }, [photoMats])
   useEffect(() => {
@@ -258,10 +258,10 @@ const hover = { video: 0, spotify: 0, tiktok: 0, instagram: 0, crt: 0, active: '
 
 function Prints({ geoP, geoL, mats, kit, detail }: { geoP: THREE.BufferGeometry; geoL: THREE.BufferGeometry; mats: { portrait: THREE.Material; live: THREE.Material }; kit: RoomKit; detail: boolean }) {
   const card = useRef<THREE.Mesh>(null)
-  const cardMat = useMemo(() => (detail && RX.liveCard ? new THREE.MeshStandardMaterial({ map: RX.liveCard, alphaTest: 0.35, roughness: 0.8 }) : null), [detail])
+  const cardMat = useMemo(() => (detail && RX.liveCard ? new THREE.MeshStandardMaterial({ map: RX.liveCard, alphaTest: 0.35, roughness: 0.8, emissive: '#ffffff', emissiveMap: RX.liveCard, emissiveIntensity: 0.3 }) : null), [detail])
   const headMat = useMemo(() => (detail && RX.headline ? new THREE.MeshBasicMaterial({ map: RX.headline, transparent: true, depthWrite: false, toneMapped: false, color: new THREE.Color(0.85, 0.85, 0.85) }) : null), [detail])
   const metaMat = useMemo(() => (detail && RX.meta ? new THREE.MeshBasicMaterial({ map: RX.meta, transparent: true, depthWrite: false, toneMapped: false, color: new THREE.Color(0.8, 0.8, 0.8) }) : null), [detail])
-  const paraMat = useMemo(() => (detail && RX.paragraph ? new THREE.MeshStandardMaterial({ map: RX.paragraph, alphaTest: 0.35, roughness: 0.85 }) : null), [detail])
+  const paraMat = useMemo(() => (detail && RX.paragraph ? new THREE.MeshStandardMaterial({ map: RX.paragraph, alphaTest: 0.35, roughness: 0.85, emissive: '#ffffff', emissiveMap: RX.paragraph, emissiveIntensity: 0.3 }) : null), [detail])
   useEffect(() => () => { cardMat?.dispose(); headMat?.dispose(); metaMat?.dispose(); paraMat?.dispose() }, [cardMat, headMat, metaMat, paraMat])
   useWorldFrame('room', () => {
     if (cardMat) cardMat.color.setScalar(1 + 0.2 * hover.instagram)
@@ -271,7 +271,7 @@ function Prints({ geoP, geoL, mats, kit, detail }: { geoP: THREE.BufferGeometry;
       {/* WHO IS HOODDINO? — right wall (faces −x): portrait print, the exact biography, the painted headline and stencilled meta */}
       <mesh geometry={geoP} material={mats.portrait} position={[3.146, 1.17, -5.45]} rotation={[0, -Math.PI / 2, 0]} />
       {paraMat && <mesh material={paraMat} position={[3.17, 1.17, -3.45]} rotation={[0, -Math.PI / 2, 0.012]}><planeGeometry args={[1.8, 1.35]} /></mesh>}
-      {headMat && <mesh material={headMat} position={[3.19, 2.35, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.3, 0.958]} /></mesh>}
+      {headMat && <mesh material={headMat} position={[3.19, 2.3, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.0, 0.833]} /></mesh>}
       {metaMat && <mesh material={metaMat} position={[3.19, 0.28, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.9, 0.483]} /></mesh>}
       {/* LIVE — left wall (faces +x): the documentary print and the card that points to Instagram for dates */}
       <mesh geometry={geoL} material={mats.live} position={[-3.15, 1.25, -3.2]} rotation={[0, Math.PI / 2, 0]} />
@@ -355,15 +355,18 @@ function Lighting() {
   const lamp = useRef<THREE.PointLight>(null)
   const blue = useRef<THREE.PointLight>(null)
   const red = useRef<THREE.PointLight>(null)
+  const wash = useRef<THREE.PointLight>(null)
   const level = rt.quality.level
   useWorldFrame('room', () => {
     const d = 1 - 0.55 * room.dim
     if (lamp.current) lamp.current.intensity = 2.4 * (1 - 0.35 * room.dim)
     if (blue.current) blue.current.intensity = 3.0 * d
     if (red.current) red.current.intensity = 2.1 * d
+    if (wash.current) wash.current.intensity = 4.5 * d
   }, 0)
   return (
     <>
+      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.55, -4.3]} color="#cfe0ff" intensity={4.5} distance={8} decay={2} />}
       <pointLight ref={lamp} position={[-0.72, 1.28, -8.0]} color="#ffb070" intensity={2.4} distance={4.2} decay={2} />
       {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#3f6dff" intensity={3} distance={6} decay={2} />}
       {level >= 2 && <pointLight ref={red} position={[2.3, 2.3, -2.9]} color="#ff3a2a" intensity={2.1} distance={4.5} decay={2} />}
