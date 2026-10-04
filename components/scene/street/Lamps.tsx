@@ -103,7 +103,8 @@ export function Lamps() {
     // per-lamp brightness (flicker, egg toggle, time of day)
     LAMPS.forEach((l, i) => {
       const g = groups.current[i]
-      if (g) { const near = dist(camera.position, i) < 80; if (g.visible !== near) g.visible = near }
+      if (g) { const dd = dist(camera.position, i); const near = dd < 72; if (g.visible !== near) g.visible = near
+      const co = cones.current[i]; if (co) { const cn = near && dd < 42; if (co.visible !== cn) co.visible = cn } }
       let v = palette.lamps
       if (l.flicker) {
         const t = rt.time
