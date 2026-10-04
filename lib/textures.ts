@@ -22,7 +22,7 @@ type BrickVariant = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
 
 /** the brick tile at the base density (1024²: 2.3 mm per texel) — what the loader screen waits for */
 export function brickSet(variant: BrickVariant, seed: number): BrickSet {
-  const g = brickGen(variant, seed, 1024)
+  const g = brickGen(variant, seed, 1024, false)
   let r = g.next()
   while (!r.done) r = g.next()
   return r.value
@@ -32,7 +32,7 @@ export function brickSet(variant: BrickVariant, seed: number): BrickSet {
  * The same tile at a finer texel density, as a *generator*: it yields every few courses so the caller can spend a few ms per frame
  * (see lib/assets.upgradeBricks — the finer tile replaces the base one after ENTER, in idle time, so the loader never waits for it).
  */
-export function* brickGen(variant: BrickVariant, seed: number, W: number): Generator<void, BrickSet, void> {
+export function* brickGen(variant: BrickVariant, seed: number, W: number, detail = true): Generator<void, BrickSet, void> {
   const H = W
   const k = W / 1024
   const rows = 32, per = 11
@@ -50,7 +50,7 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number): Gener
   ctx.fillStyle = mortar
   ctx.fillRect(0, 0, W, H)
   // mortar is sand + lime: grain and lighter / darker runs, before the bricks go on
-  for (let i = 0; i < 9000 * k * k; i++) {
+  for (let i = 0; detail && i < 9000 * k * k; i++) {
     ctx.fillStyle = r() < 0.5 ? 'rgba(210,200,180,0.10)' : 'rgba(0,0,0,0.16)'
     ctx.fillRect(r() * W, r() * H, 1 + r() * 1.6 * k, 1 + r() * 1.6 * k)
   }
@@ -71,20 +71,22 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number): Gener
         const bumpV = 150 + r() * 90
         // per-brick surface life, drawn identically on both wrap copies so the tile stays seamless
         const gradA = r.range(0.04, 0.12), gradB = r.range(0.06, 0.16)
-        const specks = Array.from({ length: Math.round((bw * bh) / (70 * k * k)) }, () => [r(), r(), r() < 0.5, r()] as const)
-        const chip = r() < 0.22 ? { cx: r() < 0.5 ? 0 : 1, cy: r() < 0.5 ? 0 : 1, s: r.range(0.06, 0.16) } : null
-        const crack = r() < 0.06 ? { x0: r.range(0.2, 0.8), a: r.range(-0.6, 0.6) } : null
+        const specks = detail ? Array.from({ length: Math.round((bw * bh) / (70 * k * k)) }, () => [r(), r(), r() < 0.5, r()] as const) : []
+        const chip = detail && r() < 0.22 ? { cx: r() < 0.5 ? 0 : 1, cy: r() < 0.5 ? 0 : 1, s: r.range(0.06, 0.16) } : null
+        const crack = detail && r() < 0.06 ? { x0: r.range(0.2, 0.8), a: r.range(-0.6, 0.6) } : null
         for (const dx of [0, -W]) {
           const gx = x + dx + 2 * k, gy = y + 2 * k, gw = bw - 4 * k, gh = bh - 4 * k
           ctx.fillStyle = col
           roundRect(ctx, gx, gy, gw, gh, 2.5 * k)
           ctx.fill()
-          // soft kiln gradient across the face (sun-baked side / shaded side)
-          const g = ctx.createLinearGradient(gx, gy, gx + gw * 0.35, gy + gh)
-          g.addColorStop(0, `rgba(255,222,180,${gradA})`)
-          g.addColorStop(1, `rgba(0,0,0,${gradB})`)
-          ctx.fillStyle = g
-          ctx.fillRect(gx, gy, gw, gh)
+          if (detail) {
+            // soft kiln gradient across the face (sun-baked side / shaded side)
+            const g = ctx.createLinearGradient(gx, gy, gx + gw * 0.35, gy + gh)
+            g.addColorStop(0, `rgba(255,222,180,${gradA})`)
+            g.addColorStop(1, `rgba(0,0,0,${gradB})`)
+            ctx.fillStyle = g
+            ctx.fillRect(gx, gy, gw, gh)
+          }
           // sand-faced grain: light + dark speckles inside the brick
           for (const [sx, sy, light, sa] of specks) {
             ctx.fillStyle = light ? `rgba(235,200,160,${0.08 + sa * 0.14})` : `rgba(20,10,8,${0.10 + sa * 0.2})`
@@ -123,12 +125,12 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number): Gener
     // poured concrete panels with seams, bug-holes and form-tie marks
     ctx.fillStyle = rgb(...b0)
     ctx.fillRect(0, 0, W, H)
-    for (let i = 0; i < 2600 * k * k; i++) {
+    for (let i = 0; detail && i < 2600 * k * k; i++) {
       ctx.fillStyle = r() < 0.5 ? 'rgba(210,210,205,0.06)' : 'rgba(0,0,0,0.10)'
       ctx.fillRect(r() * W, r() * H, 1 + r() * 2.2 * k, 1 + r() * 2.2 * k)
     }
-    for (let i = 0; i < 70; i++) { ctx.fillStyle = 'rgba(20,20,22,0.45)'; ctx.beginPath(); ctx.arc(r() * W, r() * H, (0.8 + r() * 2.4) * k, 0, Math.PI * 2); ctx.fill() }
-    for (const fx of [W * 0.25, W * 0.75]) for (const fy of [H * 0.25, H * 0.75]) { ctx.fillStyle = 'rgba(30,30,32,0.5)'; ctx.beginPath(); ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); ctx.fill() }
+    for (let i = 0; detail && i < 70; i++) { ctx.fillStyle = 'rgba(20,20,22,0.45)'; ctx.beginPath(); ctx.arc(r() * W, r() * H, (0.8 + r() * 2.4) * k, 0, Math.PI * 2); ctx.fill() }
+    if (detail) for (const fx of [W * 0.25, W * 0.75]) for (const fy of [H * 0.25, H * 0.75]) { ctx.fillStyle = 'rgba(30,30,32,0.5)'; ctx.beginPath(); ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); ctx.fill() }
     bump.ctx.fillStyle = '#9a9a9a'
     bump.ctx.fillRect(0, 0, W, H)
     ctx.fillStyle = 'rgba(0,0,0,0.5)'

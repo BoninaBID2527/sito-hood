@@ -6,9 +6,10 @@ const out = []
 for (let i = 0; i < Number(n); i++) {
   const page = await (await browser.newContext({ viewport: { width: 960, height: 540 } })).newPage()
   const t0 = Date.now()
-  await page.goto(`http://localhost:${port}/?quality=${quality}`)
+  await page.goto(`http://localhost:${port}/?quality=${quality}&debug=1`)
   await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
   out.push(Date.now() - t0)
+  if (i === 0) { const st = await page.evaluate(() => window.__loadSteps || null); if (st) console.log('  loader steps (ms):', st.map(([n, ms]) => `${n} ${ms}`).join(' · ')) }
   await page.close()
 }
 console.log(`port ${port} ${quality}: ENTER screen after ${out.map((v) => (v / 1000).toFixed(1) + 's').join(', ')}`)

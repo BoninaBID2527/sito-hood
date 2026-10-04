@@ -72,8 +72,10 @@ type Step = [string, number, () => void | Promise<void>]
 async function run(steps: Step[], onProgress: (p: number) => void) {
   const total = steps.reduce((a, s) => a + s[1], 0)
   let done = 0
-  for (const [, w, fn] of steps) {
+  for (const [name, w, fn] of steps) {
+    const t0 = performance.now()
     await fn()
+    if (typeof window !== 'undefined') ((window as unknown as { __loadSteps?: [string, number][] }).__loadSteps ??= []).push([name, Math.round(performance.now() - t0)])
     done += w
     onProgress(done / total)
     await nextFrame() // let the loader paint between heavy canvas jobs
@@ -190,12 +192,11 @@ let bricksUpgraded = false
 export async function upgradeBricks() {
   if (bricksUpgraded || !A.coreReady) return
   const lv = rt.quality.level
-  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024
-  if (W <= 1024) return
+  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024 // (the mobile tier keeps 1024² but still gets the per-brick detail)
   bricksUpgraded = true
   const seeds = { red: 11, dark: 12, weathered: 13, plaster: 14, concrete: 15 } as const
   for (const k of Object.keys(seeds) as (keyof typeof seeds)[]) {
-    const gen = T.brickGen(k, seeds[k], W)
+    const gen = T.brickGen(k, seeds[k], W, true)
     let r = gen.next()
     while (!r.done) { await nextFrame(); r = gen.next() }
     const fresh = r.value
