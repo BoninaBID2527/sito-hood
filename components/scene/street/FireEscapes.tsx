@@ -7,6 +7,7 @@ import { GeoBuilder, tileUV } from '@/lib/geo'
 import { rt } from '@/lib/runtime'
 import { streetMat } from './materials'
 import { wallX } from './layout'
+import { DistCull } from './DistCull'
 
 const FLOOR_H = 3.35
 const Y0 = 4.4
@@ -107,10 +108,12 @@ export function FireEscapes() {
       {PLACEMENTS.map((p, i) => {
         const v = built.variants[p.floors]
         return (
-          <group key={i} position={[wallX(p.side, p.z), 0, p.z]} rotation={[0, p.side === -1 ? 0 : Math.PI, 0]}>
-            <mesh geometry={v.solid} material={built.metal} />
-            <mesh geometry={v.grate} material={built.grating} />
-          </group>
+          <DistCull key={i} at={[wallX(p.side, p.z), 6, p.z]} r={62}>
+            <group position={[wallX(p.side, p.z), 0, p.z]} rotation={[0, p.side === -1 ? 0 : Math.PI, 0]}>
+              <mesh geometry={v.solid} material={built.metal} />
+              <mesh geometry={v.grate} material={built.grating} />
+            </group>
+          </DistCull>
         )
       })}
     </group>
