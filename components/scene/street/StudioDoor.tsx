@@ -11,6 +11,7 @@ import { doorLeafTexture, corrugatedTexture, doorSignTexture, spillTexture } fro
 import { streetMat } from './materials'
 import { Vestibule } from '../room/Vestibule'
 import { useWorldFrame } from '@/hooks/useWorldFrame'
+import { GeoBuilder } from '@/lib/geo'
 
 /**
  * THE ENTRANCE to the HOODDINO ROOM — a small prefab (painted corrugated steel, acoustic foam stapled to the brick, a red work
@@ -25,6 +26,8 @@ const FRONT = 0.34 // width of the pillars either side of the opening
 
 export function StudioDoor() {
   const leaf = useRef<THREE.Group>(null)
+  const inner = useRef<THREE.Group>(null)
+  const spillMesh = useRef<THREE.Mesh>(null)
   const kit = useMemo(() => {
     const steel = corrugatedTexture()
     steel.repeat.set(1, 1)
@@ -40,8 +43,28 @@ export function StudioDoor() {
       glow: new THREE.MeshBasicMaterial({ map: spill, color: new THREE.Color('#ff9650'), transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
       foam: streetMat({ color: '#18191c', roughness: 0.98, aoBase: 0.5 }),
     }
-    const disposables: { dispose(): void }[] = [steel, leafTex, sign, spill, ...Object.values(mats)]
-    return { mats, disposables }
+    // shell, frame and foam are merged: three draw calls for the whole prefab (+ leaf, plate, lamp)
+    const hw = W / 2, op = DOOR.w / 2, depth = DOOR.depth
+    const shell = new GeoBuilder()
+      .box(W + 0.1, 0.1, depth + 0.1, 0, H + 0.04, -depth / 2)
+      .box(0.08, H, depth, -hw + 0.02, H / 2, -depth / 2)
+      .box(0.08, H, depth, hw - 0.02, H / 2, -depth / 2)
+      .box(FRONT, H, 0.1, -(op + FRONT / 2), H / 2, 0.02)
+      .box(FRONT, H, 0.1, op + FRONT / 2, H / 2, 0.02)
+      .box(DOOR.w + 0.02, H - DOOR.h, 0.1, 0, DOOR.h + (H - DOOR.h) / 2, 0.02)
+      .build()
+    const frame = new GeoBuilder()
+      .box(0.06, DOOR.h, 0.1, -op - 0.02, DOOR.h / 2, 0.06)
+      .box(0.06, DOOR.h, 0.1, op + 0.02, DOOR.h / 2, 0.06)
+      .box(DOOR.w + 0.1, 0.06, 0.1, 0, DOOR.h + 0.02, 0.06)
+      .build()
+    const foam = new GeoBuilder()
+      .box(0.55, 1.9, 0.07, -hw - 0.3, 1.45, 0.02)
+      .box(0.55, 1.4, 0.07, hw + 0.3, 1.2, 0.02)
+      .build()
+    const geos = { shell, frame, foam }
+    const disposables: { dispose(): void }[] = [steel, leafTex, sign, spill, ...Object.values(mats), ...Object.values(geos)]
+    return { mats, geos, disposables }
   }, [])
   useEffect(() => () => kit.disposables.forEach((d) => d.dispose()), [kit])
 
@@ -61,27 +84,24 @@ export function StudioDoor() {
       const target = room.door * 1.72
       if (Math.abs(leaf.current.rotation.y - target) > 1e-3) leaf.current.rotation.y = target
     }
-    kit.mats.glow.opacity = room.door * 0.55
+    // the airlock and the spill on the pavement exist only while the door is (being) opened
+    const open = room.door > 0.01
+    if (inner.current && inner.current.visible !== open) inner.current.visible = open
+    if (spillMesh.current) {
+      if (spillMesh.current.visible !== open) spillMesh.current.visible = open
+      kit.mats.glow.opacity = room.door * 0.55
+    }
   })
 
-  const depth = DOOR.depth
-  const hw = W / 2
   const op = DOOR.w / 2 // half opening
   return (
     <group position={[DOOR.x, 0, DOOR.z]} rotation={[0, Math.PI / 2, 0]}>
-      {/* interior airlock (visible once the door opens) */}
-      <Vestibule />
-      {/* shell: roof, two flanks, two pillars + lintel around the opening */}
-      <mesh material={kit.mats.steel} position={[0, H + 0.04, -depth / 2]}><boxGeometry args={[W + 0.1, 0.1, depth + 0.1]} /></mesh>
-      <mesh material={kit.mats.steel} position={[-hw + 0.02, H / 2, -depth / 2]}><boxGeometry args={[0.08, H, depth]} /></mesh>
-      <mesh material={kit.mats.steel} position={[hw - 0.02, H / 2, -depth / 2]}><boxGeometry args={[0.08, H, depth]} /></mesh>
-      <mesh material={kit.mats.steel} position={[-(op + FRONT / 2), H / 2, 0.02]}><boxGeometry args={[FRONT, H, 0.1]} /></mesh>
-      <mesh material={kit.mats.steel} position={[op + FRONT / 2, H / 2, 0.02]}><boxGeometry args={[FRONT, H, 0.1]} /></mesh>
-      <mesh material={kit.mats.steel} position={[0, DOOR.h + (H - DOOR.h) / 2, 0.02]}><boxGeometry args={[DOOR.w + 0.02, H - DOOR.h, 0.1]} /></mesh>
-      {/* door frame */}
-      <mesh material={kit.mats.frame} position={[-op - 0.02, DOOR.h / 2, 0.06]}><boxGeometry args={[0.06, DOOR.h, 0.1]} /></mesh>
-      <mesh material={kit.mats.frame} position={[op + 0.02, DOOR.h / 2, 0.06]}><boxGeometry args={[0.06, DOOR.h, 0.1]} /></mesh>
-      <mesh material={kit.mats.frame} position={[0, DOOR.h + 0.02, 0.06]}><boxGeometry args={[DOOR.w + 0.1, 0.06, 0.1]} /></mesh>
+      {/* interior airlock (only drawn once the door starts to open) */}
+      <group ref={inner} visible={false}><Vestibule /></group>
+      {/* the prefab: painted corrugated steel shell, door frame, acoustic foam stapled to the brick beside it */}
+      <mesh geometry={kit.geos.shell} material={kit.mats.steel} />
+      <mesh geometry={kit.geos.frame} material={kit.mats.frame} />
+      <mesh geometry={kit.geos.foam} material={kit.mats.foam} />
       {/* padded leaf, hinged on the left jamb, swings into the airlock */}
       <group ref={leaf} position={[-op, 0, 0.02]}>
         <mesh material={kit.mats.leaf} position={[op, DOOR.h / 2, 0]}><boxGeometry args={[DOOR.w - 0.02, DOOR.h - 0.02, 0.07]} /></mesh>
@@ -89,11 +109,8 @@ export function StudioDoor() {
       {/* enamel plate + the red work lamp over the door (a motivated, unmistakable cue) */}
       <mesh material={kit.mats.sign} position={[0, H - 0.2, 0.085]}><planeGeometry args={[1.45, 0.36]} /></mesh>
       <mesh material={kit.mats.lamp} position={[op + FRONT / 2, DOOR.h + 0.28, 0.12]}><sphereGeometry args={[0.075, 10, 8]} /></mesh>
-      {/* acoustic foam stapled to the brick beside the prefab */}
-      <mesh material={kit.mats.foam} position={[-hw - 0.3, 1.45, 0.02]}><boxGeometry args={[0.55, 1.9, 0.07]} /></mesh>
-      <mesh material={kit.mats.foam} position={[hw + 0.3, 1.2, 0.02]}><boxGeometry args={[0.55, 1.4, 0.07]} /></mesh>
       {/* warm spill from the open door onto the pavement */}
-      <mesh material={kit.mats.glow} position={[0, 0.012, 1.15]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[1.5, 2.3]} /></mesh>
+      <mesh ref={spillMesh} visible={false} material={kit.mats.glow} position={[0, 0.012, 1.15]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[1.5, 2.3]} /></mesh>
       <DoorHit />
     </group>
   )

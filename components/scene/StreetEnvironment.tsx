@@ -16,7 +16,7 @@ import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
 import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
-import { FarGate } from './street/DistCull'
+import { FarGate, DistCull } from './street/DistCull'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
@@ -62,7 +62,8 @@ export function StreetEnvironment() {
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />
-      <StudioDoor />
+      {/* the studio entrance: not drawn (in either pass) unless the camera is within ~60 m of it */}
+      <DistCull at={[-3.55, 1.3, -67]} r={62}><NoReflect><StudioDoor /></NoReflect></DistCull>
     </group>
   )
 }
