@@ -1,7 +1,7 @@
 'use client'
 
 import { useWorldFrame } from '@/hooks/useWorldFrame'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { rng, smoothstep } from '@/lib/math'
@@ -10,6 +10,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { streetMat } from './materials'
+import { registerCull } from './chunks'
 import { PLAZA, SEGS, segAt, windowsFor, pickWindow, type BrickKind, type WinInst } from './layout'
 import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
 
@@ -127,9 +128,11 @@ const EMIT: Record<WindowVariant, [number, number] | null> = {
   barred: [0.0, 0.18], sheet: [0.04, 0.85], shutter: null, broken: null, ac: null,
 }
 
-/** Windows, sills and lintels — instanced. */
+/** Windows, sills and lintels — instanced, split into z-zones so each zone is frustum- and distance-culled on its own. */
+const WIN_ZONES: { z0: number; z1: number }[] = [{ z0: 40, z1: -26 }, { z0: -26, z1: -76 }, { z0: -76, z1: -130 }]
+
 export function Windows({ skip = {} as Record<string, number[]> }) {
-  const data = useMemo(() => {
+  const zones = useMemo(() => {
     const all: WinInst[] = []
     SEGS.forEach((s, i) => all.push(...windowsFor(s, 1000 + i * 7, skip[`${s.side}`] ?? [])))
     // plaza walls
@@ -141,9 +144,23 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
         all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
       }
     }
-    return all
+    return WIN_ZONES.map((zn) => ({ ...zn, data: all.filter((d) => d.z <= zn.z0 && d.z > zn.z1) }))
   }, [skip])
+  return (
+    <group>
+      {zones.map((zn, i) => (
+        <WindowZone key={i} data={zn.data} z0={zn.z0} z1={zn.z1} />
+      ))}
+    </group>
+  )
+}
 
+function WindowZone({ data, z0, z1 }: { data: WinInst[]; z0: number; z1: number }) {
+  const grp = useRef<THREE.Group>(null)
+  useEffect(() => {
+    const zc = (Math.max(z0, 20) + Math.max(z1, -125)) / 2
+    return grp.current ? registerCull(grp.current, [0, 10, zc], Math.abs(Math.max(z0, 20) - Math.max(z1, -125)) / 2 + 14, 150) : undefined
+  }, [z0, z1])
   const built = useMemo(() => {
     const variants = WINDOW_VARIANTS
     const plane = new THREE.PlaneGeometry(1.0, 1.55)
@@ -207,7 +224,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
         lintels.push(new THREE.Matrix4().compose(p.clone(), q.clone(), new THREE.Vector3(d.w, 1, 1)))
       })
       im.instanceMatrix.needsUpdate = true
-      im.frustumCulled = false
+      im.frustumCulled = true // per-zone bounding sphere (from the instances) → culled when the zone is out of view
       meshes.push(im)
       mats.push(mat)
     }
@@ -215,7 +232,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
       const im = new THREE.InstancedMesh(geo, concrete, list.length)
       list.forEach((m, i) => im.setMatrixAt(i, m))
       im.instanceMatrix.needsUpdate = true
-      im.frustumCulled = false
+      im.frustumCulled = true
       return im
     }
     // sills/lintels are oriented with the wall: box depth axis = local z → needs same Y rotation, already in q.
@@ -245,7 +262,7 @@ export function Windows({ skip = {} as Record<string, number[]> }) {
   )
 
   return (
-    <group>
+    <group ref={grp}>
       {built.meshes.map((m, i) => (
         <primitive key={i} object={m} />
       ))}

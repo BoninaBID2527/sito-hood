@@ -9,6 +9,7 @@ import { rng } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { palette } from '@/lib/timeOfDay'
 import { streetMat } from './materials'
+import { ChunkedMesh } from './chunks'
 import { SEGS, wallX } from './layout'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
@@ -153,11 +154,11 @@ export function WallDetail() {
 
   return (
     <group>
-      {kit.parts.map((p, i) => <mesh key={i} geometry={p.geo} material={p.mat} />)}
-      {kit.cableGeo && <mesh geometry={kit.cableGeo} material={kit.cableMat} />}
-      <mesh geometry={kit.bulbGeo} material={kit.bulbMat} />
-      <mesh geometry={kit.spillGeo} material={kit.spillMat} renderOrder={3} />
-      <mesh geometry={kit.ledGeo} material={kit.ledMat} />
+      {kit.parts.map((p, i) => <ChunkedMesh key={i} geometry={p.geo} material={p.mat} />)}
+      {kit.cableGeo && <ChunkedMesh geometry={kit.cableGeo} material={kit.cableMat} />}
+      <ChunkedMesh geometry={kit.bulbGeo} material={kit.bulbMat} />
+      <ChunkedMesh geometry={kit.spillGeo} material={kit.spillMat} renderOrder={3} />
+      <ChunkedMesh geometry={kit.ledGeo} material={kit.ledMat} />
       {kit.neons.map((n, i) => (
         <mesh key={'n' + i} geometry={kit.neonGeo} material={n.m} position={[wallX(n.side, n.z) - n.side * 0.08, n.y, n.z]} rotation={[0, rotFor(n.side), 0]} scale={[n.w, n.h, 1]} />
       ))}
