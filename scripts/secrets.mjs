@@ -58,6 +58,17 @@ for (const touch of [false, true]) {
     await page.waitForTimeout(900)
     check(`[${tag}] number ${name}`, await page.evaluate((i) => window.__hd.store.getState().nums[i], i), JSON.stringify(s))
   }
+  if (!touch) {
+    // the grazing-angle glyph (V2 egg): aim, let the parallax settle, re-aim, click
+    await jump(0.15)
+    let g = await T.screen(-2.95, 1.2, -33.4)
+    await page.mouse.move(g.sx, g.sy, { steps: 4 }); await page.waitForTimeout(1200)
+    g = await T.screen(-2.95, 1.2, -33.4)
+    await page.mouse.move(g.sx, g.sy, { steps: 2 }); await page.waitForTimeout(900)
+    g = await T.screen(-2.95, 1.2, -33.4)
+    await page.mouse.click(g.sx, g.sy); await page.waitForTimeout(900)
+    check('[mouse] grazing-angle glyph egg still registers', await page.evaluate(() => window.__hd.store.getState().eggs.includes('symbol')), JSON.stringify(g))
+  }
   check(`[${tag}] no toast / counter after finding numbers`, await page.evaluate(() => !window.__hd.store.getState().toast))
   if (!touch) {
     // roof marking 06 + 7/7 → persistence across reload
