@@ -62,8 +62,8 @@ export function StreetEnvironment() {
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />
-      {/* the studio entrance: not drawn (in either pass) unless the camera is within ~60 m of it */}
-      <DistCull at={[-3.55, 1.3, -67]} r={62}><NoReflect><StudioDoor /></NoReflect></DistCull>
+      {/* the studio entrance: not drawn (in either pass) unless the camera is within ~46 m of it */}
+      <DistCull at={[-3.55, 1.3, -67]} r={46}><NoReflect><StudioDoor /></NoReflect></DistCull>
     </group>
   )
 }
