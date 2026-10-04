@@ -16,11 +16,12 @@ import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
 import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
-import { FarGate } from './street/DistCull'
+import { FarGate, DistCull } from './street/DistCull'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
 import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
+import { StudioDoor } from './street/StudioDoor'
 
 const SKIP = [
   { side: -1 as const, z: 7, r: 3.2 }, { side: 1 as const, z: -15, r: 3.2 }, { side: -1 as const, z: -29, r: 3 },
@@ -61,6 +62,8 @@ export function StreetEnvironment() {
       <Backdrop />
       <AltercoArtwork mode="plaza" />
       <TrackOrbit />
+      {/* the studio entrance: not drawn (in either pass) unless the camera is within ~46 m of it */}
+      <DistCull at={[-3.55, 1.3, -67]} r={46}><NoReflect><StudioDoor /></NoReflect></DistCull>
     </group>
   )
 }

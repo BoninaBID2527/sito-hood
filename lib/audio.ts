@@ -14,7 +14,7 @@ class AudioEngine {
   private on = false
   private noise: AudioBuffer | null = null
   private emitters: Emitter[] = []
-  private world: 'alley' | 'roof' | 'dualism' = 'alley'
+  private world: 'alley' | 'roof' | 'dualism' | 'room' = 'alley'
   private nextDrip = 0
   private dripAt = 0
 
@@ -162,7 +162,7 @@ class AudioEngine {
   }
 
   /** called every frame from the scene: listener follows the camera, beds cross-fade by world, drips land in the alley */
-  update(cam: THREE.Camera, world: 'alley' | 'roof' | 'dualism', t: number) {
+  update(cam: THREE.Camera, world: 'alley' | 'roof' | 'dualism' | 'room', t: number) {
     const ctx = this.ctx
     if (!ctx || !this.on || !this.emitters.length) return
     const L = ctx.listener
@@ -230,6 +230,15 @@ class AudioEngine {
     if (this.ambientEl && this.on) this.ambientEl.play().catch(() => undefined)
   }
 
+  /** The studio video owns the soundstage while it plays: the optional ambience steps well back (only if it was switched on). */
+  duck(on: boolean) {
+    if (!this.ctx || !this.master || !this.on) return
+    const t = this.ctx.currentTime
+    this.master.gain.cancelScheduledValues(t)
+    this.master.gain.linearRampToValueAtTime(on ? 0.06 : 1, t + (on ? 0.5 : 1.6))
+    if (this.ambientEl) this.ambientEl.volume = on ? 0.03 : 0.5
+  }
+
   /** Slightly muffle the room when we go through the liquid / tunnel. */
   tone(freq: number, dur: number, type: OscillatorType, vol: number, slideTo?: number) {
     if (!this.ctx || !this.master || !this.on) return
@@ -251,6 +260,6 @@ class AudioEngine {
   whoosh() { this.tone(180, 1.6, 'sawtooth', 0.05, 900) }
 }
 
-type Emitter = { gain: GainNode; base: number; world: 'alley' | 'roof' | 'dualism'; pos?: THREE.Vector3; panner?: PannerNode }
+type Emitter = { gain: GainNode; base: number; world: 'alley' | 'roof' | 'dualism' | 'room'; pos?: THREE.Vector3; panner?: PannerNode }
 
 export const audio = new AudioEngine()

@@ -62,10 +62,12 @@ for (const touch of [false, true]) {
   if (!touch) {
     // the grazing-angle glyph (V2 egg): aim, let the parallax settle, re-aim, click
     await jump(0.15)
+    // (the pointer parallax is damped per *frame*: wait for it in simulation time, not wall time, so the aim holds at any frame rate)
+    const pointerSettled = () => page.waitForFunction(() => { const r = window.__hd.rt; return Math.abs(r.px - r.rx) < 0.004 && Math.abs(r.py - r.ry) < 0.004 }, null, { timeout: 120000 }).catch(() => {})
     let g = await T.screen(-2.95, 1.2, -33.4)
-    await page.mouse.move(g.sx, g.sy, { steps: 4 }); await page.waitForTimeout(1200)
+    await page.mouse.move(g.sx, g.sy, { steps: 4 }); await pointerSettled(); await page.waitForTimeout(600)
     g = await T.screen(-2.95, 1.2, -33.4)
-    await page.mouse.move(g.sx, g.sy, { steps: 2 }); await page.waitForTimeout(900)
+    await page.mouse.move(g.sx, g.sy, { steps: 2 }); await pointerSettled(); await page.waitForTimeout(600)
     g = await T.screen(-2.95, 1.2, -33.4)
     await page.mouse.click(g.sx, g.sy); await page.waitForTimeout(900)
     check('[mouse] grazing-angle glyph egg still registers', await page.evaluate(() => window.__hd.store.getState().eggs.includes('symbol')), JSON.stringify(g))

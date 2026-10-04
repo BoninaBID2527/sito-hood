@@ -3,7 +3,8 @@ import { alterco } from '@/data/project'
 import { detectTier, type Tier } from './quality'
 
 export type CursorKind = 'default' | 'link' | 'track' | 'portal' | 'lamp' | 'drag' | 'text' | 'explore'
-export type Mode = 'alterco' | 'dualism-in' | 'dualism' | 'dualism-out'
+export type Mode = 'alterco' | 'dualism-in' | 'dualism' | 'dualism-out' | 'room-in' | 'room' | 'room-out'
+export type VideoState = 'idle' | 'loading' | 'ready' | 'playing' | 'paused' | 'ended' | 'error'
 
 interface Toast {
   id: number
@@ -38,6 +39,15 @@ interface State {
   menu: boolean
   /** ids of discovered Easter eggs (lamp, puddle, stencil, letters, credits, portal, hood, glitch, tracks) */
   eggs: string[]
+  /** THE HOODDINO ROOM: the street door is in range / the nearest station / the studio video */
+  roomNear: boolean
+  /** 0 nothing loaded · 1 shell (approach) · 2 high-detail (room entry) */
+  roomLoad: 0 | 1 | 2
+  roomStation: number
+  roomFocus: boolean
+  video: VideoState
+  videoMuted: boolean
+  videoTime: number
 
   set: (p: Partial<State>) => void
   setCursor: (kind: CursorKind, label?: string) => void
@@ -71,6 +81,13 @@ export const useStore = create<State>((set, get) => ({
   hoodClicks: 0,
   menu: false,
   eggs: [],
+  roomNear: false,
+  roomLoad: 0,
+  roomStation: 0,
+  roomFocus: false,
+  video: 'idle',
+  videoMuted: false,
+  videoTime: 0,
 
   set: (p) => set(p),
   setCursor: (kind, label) => {

@@ -92,7 +92,12 @@ export function SkyDome() {
     u.uTime.value = rt.time
     u.uContam.value = rt.fx.contam
     u.uMirror.value = rt.mirror
-    if (mesh.current) mesh.current.position.copy(camera.position)
+    if (mesh.current) {
+      mesh.current.position.copy(camera.position)
+      // the room is enclosed: no sky pass at all while inside
+      const show = rt.world !== 'room'
+      if (mesh.current.visible !== show) mesh.current.visible = show
+    }
   }, -1)
   return (
     <mesh ref={mesh} renderOrder={-100} frustumCulled={false} material={mat}>

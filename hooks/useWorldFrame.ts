@@ -6,7 +6,7 @@ import { rt } from '@/lib/runtime'
  * The alley, the rooftop and DUALISMO are separate worlds; when the visitor is in one of them the other two do no per-frame work
  * (their groups are hidden by WorldGate, so they already cost no draw calls — this removes the CPU side too).
  */
-export function useWorldFrame(world: 'alley' | 'roof' | 'dualism', cb: RenderCallback, priority = 0) {
+export function useWorldFrame(world: 'alley' | 'roof' | 'dualism' | 'room', cb: RenderCallback, priority = 0) {
   useFrame((s, d, f) => {
     if (rt.world === world) cb(s, d, f)
   }, priority)

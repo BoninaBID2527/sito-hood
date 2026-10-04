@@ -319,3 +319,73 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .fallback .dim { color: var(--dim); margin-top: 14px; }
 .fb-links { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
 @media (max-width: 760px) { .fallback { grid-template-columns: 1fr; } }
+
+/* ═══════════════════ THE HOODDINO ROOM ═══════════════════ */
+.room-enter {
+  position: absolute; left: 50%; bottom: calc(var(--gutter) * 2.3 + var(--safe-b)); transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 12px 20px;
+  border: 1px solid rgba(242, 237, 226, 0.4); background: rgba(5, 5, 6, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: var(--paper); white-space: nowrap; transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.room-enter-k { color: var(--paper); }
+.room-enter-v { color: var(--amber); }
+.room-enter:hover { background: var(--paper); border-color: var(--paper); }
+.room-enter:hover .room-enter-k, .room-enter:hover .room-enter-v { color: #050506; }
+.room-ui { position: absolute; inset: 0; pointer-events: none; }
+.room-exit {
+  position: absolute; left: var(--gutter); top: calc(var(--gutter) * 0.65 + var(--safe-t) + 44px); min-height: 44px; padding: 11px 16px;
+  border: 1px solid rgba(242, 237, 226, 0.5); background: rgba(5, 5, 6, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  color: var(--paper); display: inline-flex; align-items: center; gap: 10px; transition: background 0.3s, color 0.3s;
+}
+.room-exit:hover:not(:disabled) { background: var(--paper); color: #050506; }
+.room-links { position: absolute; right: var(--gutter); top: calc(var(--gutter) * 0.65 + var(--safe-t) + 44px); display: flex; flex-direction: column; align-items: flex-end; gap: 0; color: var(--dim); }
+.room-links a { display: inline-block; padding: 12px 0; min-height: 44px; color: var(--dim); transition: color 0.25s; pointer-events: auto; }
+.room-links a:hover { color: var(--paper); }
+.room-stage { position: absolute; left: 0; right: 0; bottom: calc(var(--gutter) * 3.5 + var(--safe-b) + 24px); display: flex; justify-content: flex-start; padding: 0 var(--gutter); }
+.room-chip {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 20px 14px 18px; min-height: 48px;
+  border-left: 2px solid var(--amber); background: rgba(5, 5, 6, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: var(--paper); text-align: left;
+  transition: background 0.3s, color 0.3s;
+}
+.room-chip:hover { background: rgba(242, 237, 226, 0.92); color: #050506; }
+.room-chip-k { color: var(--dim); }
+.room-chip-t { font-size: clamp(26px, 4vw, 42px); }
+.room-chip-v { color: var(--amber); }
+.room-chip:hover .room-chip-k, .room-chip:hover .room-chip-v { color: #050506; }
+.room-bio {
+  max-width: min(560px, 92vw); max-height: 42vh; overflow: auto; padding: 16px 18px; background: rgba(5, 5, 6, 0.72);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-left: 2px solid var(--amber); overscroll-behavior: contain;
+}
+.room-bio-k { color: var(--amber); margin-bottom: 8px; }
+.room-bio-m { color: var(--dim); margin-top: 10px; font-size: 10px; }
+.room-bio-p { font-size: 14px; line-height: 1.6; color: var(--paper); }
+.room-nav {
+  position: absolute; left: 50%; bottom: calc(var(--gutter) * 0.6 + var(--safe-b)); transform: translateX(-50%); display: grid; grid-template-columns: auto auto auto;
+  grid-template-areas: "a d b" "s s s"; align-items: center; justify-items: center; column-gap: 6px; row-gap: 0; transition: opacity 0.4s;
+}
+.room-nav > .room-arrow:first-child { grid-area: a; }
+.room-nav > .room-arrow:nth-of-type(2) { grid-area: b; }
+.room-arrow { width: 44px; height: 44px; font-size: 26px; line-height: 1; color: var(--paper); }
+.room-arrow:disabled { opacity: 0.25; cursor: default; }
+.room-dots { list-style: none; display: flex; align-items: center; grid-area: d; }
+.room-dot { position: relative; width: 28px; height: 44px; }
+.room-dot::after { content: ''; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border: 1px solid var(--paper); border-radius: 50%; transition: background 0.3s, transform 0.3s; }
+.room-dot.is-on::after { background: var(--amber); border-color: var(--amber); transform: scale(1.35); }
+.room-st { grid-area: s; color: var(--dim); margin-top: -4px; }
+.room-controls {
+  position: absolute; left: 50%; bottom: calc(var(--gutter) * 0.9 + var(--safe-b)); transform: translateX(-50%); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center;
+  padding: 4px 8px; background: rgba(5, 5, 6, 0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(242, 237, 226, 0.25); max-width: 94vw;
+}
+.room-controls button { min-height: 44px; padding: 0 16px; color: var(--paper); transition: color 0.2s, background 0.2s; }
+.room-controls button:hover { background: var(--paper); color: #050506; }
+.room-time { padding: 0 12px; color: var(--dim); font-variant-numeric: tabular-nums; }
+.room-fallback { padding: 0 12px; color: var(--amber); min-height: 44px; display: inline-flex; align-items: center; }
+.room-video-dom { position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); height: min(70vh, 640px); aspect-ratio: 512 / 854; max-width: 86vw; pointer-events: auto; box-shadow: 0 0 80px rgba(0, 0, 0, 0.7); }
+.room-video-dom video { width: 100%; height: 100%; background: #000; object-fit: cover; }
+@media (max-width: 760px) {
+  .room-links { flex-direction: row; gap: 14px; right: auto; left: var(--gutter); top: calc(var(--gutter) * 0.65 + var(--safe-t) + 96px); }
+  .room-stage { bottom: calc(var(--gutter) * 3.2 + var(--safe-b) + 28px); }
+  .room-enter { bottom: calc(var(--gutter) * 3.4 + var(--safe-b)); white-space: normal; max-width: calc(100vw - var(--gutter) * 2); gap: 12px; padding: 12px 16px; }
+  .room-chip-t { font-size: clamp(24px, 8vw, 34px); }
+}
+@media (prefers-reduced-motion: reduce) { .room-enter, .room-chip, .room-nav { transition: none; } }

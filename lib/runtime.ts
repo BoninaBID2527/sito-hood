@@ -68,7 +68,7 @@ export const rt = {
   /** 1 while the camera is below the water surface: the alley is rendered as its own reflection (mirrored in y) */
   mirror: 0,
   /** the alley/roof/dualism world currently being rendered */
-  world: 'alley' as 'alley' | 'roof' | 'dualism',
+  world: 'alley' as 'alley' | 'roof' | 'dualism' | 'room',
   /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */
   stats: { calls: 0, tris: 0, refl: 0 },
   quality: SETTINGS.balanced as QualitySettings,
