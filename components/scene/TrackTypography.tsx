@@ -43,38 +43,37 @@ function compose(i: number): Item[] {
   switch (i) {
     case 0: // POTREI — still assembling, partly obscured
       return [
-        { text: w.join(' '), h: 1.7, pos: [0.25, -0.15, -0.7], style: 'solid', a: 0.92 },
-        { text: num(i), h: 0.95, pos: [-2.05, 1.75, -0.2], style: 'outline', a: 0.8 },
+        { text: w.join(' '), h: 1.5, pos: [1.35, -0.45, -0.8], style: 'solid', a: 0.92 },
+        { text: num(i), h: 0.95, pos: [-2.4, 1.85, -0.2], style: 'outline', a: 0.8 },
       ]
     case 1: // WE / MADE / IT — open vertical space, lifting
       return [
         { text: w[0], h: 1.05, pos: [1.75, 1.35, -0.35], style: 'solid', a: 0.95 },
         { text: w[1], h: 1.05, pos: [2.05, 0.2, -0.35], style: 'solid', a: 0.95 },
         { text: w[2], h: 1.05, pos: [1.6, -0.95, -0.35], style: 'amber', a: 0.95 },
-        { text: num(i), h: 2.1, pos: [-1.9, 2.5, -1.0], style: 'outline', a: 0.55 },
+        { text: num(i), h: 1.9, pos: [-2.3, 2.1, -1.0], style: 'outline', a: 0.55 },
       ]
     case 2: // NON È SWAG — direct, frontal, rigid
       return [
         { text: num(i), h: 3.3, pos: [0, 0.3, -0.9], style: 'ghost', a: 0.5 },
-        { text: `${w[0]} ${w[1]}`, h: 1.3, pos: [0, -2.0, 0.14], style: 'solid', a: 0.98 },
-        { text: w[2], h: 1.45, pos: [0, -3.3, 0.14], style: 'solid', a: 0.98 },
+        { text: w.join(' '), h: 1.15, pos: [0, -2.05, 0.14], style: 'solid', a: 0.98 },
       ]
     case 3: // GIUDIZIO DIVINO — monumental, vertical, architectural
       return [
-        { text: num(i), h: 6.4, pos: [-1.5, 0.6, -1.6], style: 'solid', a: 0.82 },
+        { text: num(i), h: 5.2, pos: [-2.2, 0.5, -1.7], style: 'solid', a: 0.8 },
         { text: w[0], h: 1.15, pos: [2.5, 0.2, -0.5], rot: [0, 0, Math.PI / 2], style: 'solid', a: 0.96 },
         { text: w[1], h: 1.15, pos: [3.75, -0.5, -0.9], rot: [0, 0, Math.PI / 2], style: 'outline', a: 0.9 },
       ]
     case 4: // LASCIARSI / ANDARE — negative space, loosening
       return [
-        { text: w[0], h: 0.62, pos: [0.5, 2.05, -0.25], style: 'solid', a: 0.9 },
-        { text: w[1], h: 0.62, pos: [-0.4, -2.1, -0.35], style: 'solid', a: 0.9 },
+        { text: w[0], h: 0.55, pos: [0.5, 1.95, -0.25], style: 'solid', a: 0.9 },
+        { text: w[1], h: 0.55, pos: [-0.4, -1.95, -0.35], style: 'solid', a: 0.9 },
         { text: num(i), h: 0.8, pos: [2.0, 0.2, -0.3], style: 'outline', a: 0.7 },
       ]
     case 5: // PAROLE / CONTRASTANTI — two masses facing / crossing in depth
       return [
-        { text: w[0], h: 1.55, pos: [-1.5, 1.0, 0.25], rot: [0, 0.6, 0], style: 'solid', a: 0.96 },
-        { text: w[1], h: 1.15, pos: [1.6, -0.7, -0.5], rot: [0, -0.6, 0], style: 'outline', a: 0.92 },
+        { text: w[0], h: 1.15, pos: [-2.1, 0.9, 0.25], rot: [0, 0.6, 0], style: 'solid', a: 0.96 },
+        { text: w[1], h: 0.8, pos: [2.2, -0.8, -0.5], rot: [0, -0.6, 0], style: 'outline', a: 0.92 },
         { text: num(i), h: 1.0, pos: [0, 2.35, -0.3], style: 'ghost', a: 0.6 },
       ]
     default: // STARE / BENE — breathing room, resolving

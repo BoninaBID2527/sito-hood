@@ -23,12 +23,12 @@ const Y = [2.3, 3.5, 2.5, 4.7, 2.1, 3.1, 2.6]
 /** inner ellipse (objects) */
 const ROX = 3.9, ROZ = 5.9
 /** camera distance from its object, outward (m) and its height above the object centre */
-const CAM_D = [4.5, 4.3, 4.6, 5.8, 4.4, 4.5, 4.4]
-const CAM_DY = [0.3, 0.1, 0.35, -0.9, 0.35, 0.2, 0.15]
+const CAM_D = [5.9, 5.6, 6.1, 7.2, 5.8, 5.9, 5.8]
+const CAM_DY = [0.35, 0.15, 0.4, -0.7, 0.4, 0.25, 0.2]
 /** how far the look-target is pulled from the object toward the artwork (0 = object, 1 = artwork) */
 const BIAS = [0.3, 0.26, 0.3, 0.16, 0.3, 0.28, 0.22]
 /** camera field of view per station (closer / wider for the monumental one) */
-export const FOV = [50, 50, 49, 55, 49, 50, 48]
+export const FOV = [50, 50, 50, 54, 50, 50, 49]
 
 export interface Station {
   pos: THREE.Vector3

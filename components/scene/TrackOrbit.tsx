@@ -78,10 +78,10 @@ export function TrackOrbit() {
     const lampMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.6, 2.1, 1.5) })
     // foreground poles: they stand just inside the camera's path, so between two tracks one slides past the lens (depth punctuation)
     const poles = new GeoBuilder()
-    railPoints(8).forEach(({ p, side }, k) => {
+    railPoints(6).forEach(({ p, side }, k) => {
       const dd = 1.05 + (k % 3) * 0.12
       const x = p.x + side.x * dd, z = p.z + side.y * dd
-      poles.cyl(0.045, 0.055, 9.0, x, 4.2, z, 8)
+      poles.cyl(0.032, 0.04, 9.0, x, 4.2, z, 8)
       poles.box(0.5, 0.05, 0.05, x, 3.2 + (k % 4) * 0.7, z, 0, k * 0.8, 0)
     })
     const poleGeo = poles.build()
