@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { rng } from './math'
+import { rt } from './runtime'
 
 export const DISPLAY_FONT = 'Anton, "Arial Narrow", Impact, sans-serif'
 export const MONO_FONT = '"Space Mono", ui-monospace, Menlo, monospace'
@@ -30,7 +31,8 @@ export function toTexture(canvas: HTMLCanvasElement, o: TexOpts = {}) {
     t.wrapS = t.wrapT = THREE.RepeatWrapping
   }
   if (o.repeat) t.repeat.set(o.repeat[0], o.repeat[1])
-  t.anisotropy = o.aniso ?? 8
+  // oblique asphalt / floors / walls: twice the filtering on the tiers that can afford it (three clamps to the GPU's maximum)
+  t.anisotropy = (o.aniso ?? 8) * (rt.quality.level >= 2 ? 2 : 1)
   t.generateMipmaps = o.mipmaps !== false
   t.minFilter = t.generateMipmaps ? THREE.LinearMipmapLinearFilter : THREE.LinearFilter
   if (o.channel != null) t.channel = o.channel

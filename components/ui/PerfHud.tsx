@@ -17,12 +17,15 @@ export function PerfHud() {
     const id = window.setInterval(() => {
       const p = rt.perf
       if (!ref.current) return
+      const cv = document.querySelector('.stage canvas') as HTMLCanvasElement | null
+      const buf = cv ? `${cv.width}×${cv.height} for css ${cv.clientWidth}×${cv.clientHeight} (×${(cv.width / Math.max(1, cv.clientWidth)).toFixed(2)}, device ×${(window.devicePixelRatio || 1).toFixed(2)})` : '–'
       ref.current.textContent =
         `${p.fps.toFixed(0)} fps  ${p.ms.toFixed(1)} ms` +
         `\ntier ${p.tier}${p.forced ? ' (pinned)' : ''}  dpr ${p.dpr.toFixed(2)}` +
         `\ncalls ${p.calls}  tris ${(p.tris / 1000).toFixed(0)}k` +
         `\ntex ${p.tex}  geo ${p.geo}` +
         `\nhitches ${p.hitches}  adapt ${p.changes}` +
+        `\nbuffer ${buf}` +
         `\nworld ${rt.world}  p ${rt.smooth.toFixed(3)}`
     }, 400)
     return () => window.clearInterval(id)

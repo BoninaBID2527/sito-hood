@@ -267,7 +267,7 @@ kbd { font-family: var(--mono); font-size: 9px; border: 1px solid var(--faint); 
 .credits-row dd { font-weight: 700; }
 .credits-close { margin-top: 20px; padding: 8px 0; border-bottom: 1px solid #111; }
 
-.whisper { position: absolute; font-size: clamp(40px, 9vw, 160px); color: #fff; mix-blend-mode: screen; text-shadow: -7px 0 #ff2a4a, 7px 0 #2ad4ff; transform: skewX(-8deg); letter-spacing: 0.02em; pointer-events: none; white-space: nowrap; }
+.whisper { position: absolute; font-size: clamp(30px, 5.2vw, 84px); max-width: 70vw; color: #fff; mix-blend-mode: screen; text-shadow: -7px 0 #ff2a4a, 7px 0 #2ad4ff; transform: skewX(-8deg); letter-spacing: 0.02em; pointer-events: none; white-space: nowrap; }
 
 /* ═══════════════════ responsive ═══════════════════ */
 @media (max-width: 760px) {

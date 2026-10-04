@@ -81,7 +81,7 @@ export function StudioDoor() {
   const near = useRef(false)
   useWorldFrame('alley', ({ camera }) => {
     const p = camera.position
-    const n = room.phase === 'off' && Math.abs(p.z - DOOR.z) < 13 && p.z > DOOR.z - 12 && p.x > DOOR.x - 1
+    const n = room.phase === 'off' && p.z < DOOR.z + 18 && p.z > DOOR.z - 12 && p.x > DOOR.x - 1
     if (n !== near.current) {
       near.current = n
       room.near = n

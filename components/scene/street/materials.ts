@@ -15,6 +15,9 @@ export const streetU = {
   uPud: { value: 0 },
   /** 1 = fine micro-surface detail (aggregate, pitting) on the street materials; 0 on the mobile tier */
   uMicro: { value: 1 },
+  /** analytic sky used for metal / glossy reflections (written every frame by effects/Atmosphere) */
+  uSkyTop: { value: new THREE.Color('#37406a') },
+  uSkyHor: { value: new THREE.Color('#c88a62') },
 }
 
 const GLSL_UTIL = /* glsl */ `
@@ -127,6 +130,8 @@ uniform float uDissolve;
 uniform float uPud;
 uniform float uMicro;
 uniform vec3 uSunCol;
+uniform vec3 uSkyTop;
+uniform vec3 uSkyHor;
 ${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
 ${GLSL_UTIL}`,
@@ -324,10 +329,26 @@ ${
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
   float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
-  totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
+  totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
+${
+  metal
+    ? `  {
+    // sky in the metal (V3.4): a cheap analytic environment — warm horizon, cool zenith, dark ground — instead of a second render pass.
+    // Reflection strength follows the material: rougher steel = dimmer, blurrier; polished edges catch the sky at grazing angles.
+    vec3 vv_ = normalize(vViewPosition);
+    vec3 rw_ = inverseTransformDirection(reflect(-vv_, normal), viewMatrix);
+    float up_ = rw_.y * 0.5 + 0.5;
+    vec3 env_ = mix(uSkyHor, uSkyTop, smoothstep(0.5, 0.95, up_));
+    env_ = mix(env_ * 0.3, env_, smoothstep(0.3, 0.55, up_));
+    float fr_ = pow(1.0 - clamp(dot(normal, vv_), 0.0, 1.0), 4.0);
+    float ks_ = (metalnessFactor * 0.6 + 0.04 + fr_ * 0.4) * (1.0 - roughnessFactor * 0.78);
+    totalEmissiveRadiance += env_ * mix(vec3(1.0), max(diffuseColor.rgb * 3.0, vec3(0.07)), metalnessFactor) * ks_ * 1.3;
+  }`
+    : ''
+}`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}5`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}6`
   return m
 }
 
