@@ -244,7 +244,8 @@ export function TrackOrbit() {
       rg.scale.set(TRUSS.rx, 1, TRUSS.rz)
       rg.visible = appear > 0.02
     }
-    if (poleRef.current) poleRef.current.visible = rig.w > 0.02 && appear > 0.5
+    // the foreground poles are a landscape-screen device; on phones a pole at arm's length reads as an artefact
+    if (poleRef.current) poleRef.current.visible = rig.w > 0.02 && appear > 0.5 && rt.quality.level > 0 && aspect > 1.1
     // pool of light on the wet ground: it follows the front object's tint
     const C = WORLD.plazaCenter
     pool.opacity = appear * (1 - recede * 0.7) * (0.12 + palette.lamps * 0.1)

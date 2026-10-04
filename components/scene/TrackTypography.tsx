@@ -205,7 +205,7 @@ export function TrackTypography() {
       const d = Math.abs(rig.u - i)
       // composition weight: full at its station, gone two stations away
       // the composition belongs to its station: a neighbour is only a ghost of itself, anything further is not rendered at all
-      const vis0 = (1 - smoothstep(0.5 * tk, 1.4 * tk, d)) * (on ? 1 : 0) * (1 - recede)
+      const vis0 = Math.pow(1 - smoothstep(0.5 * tk, 1.4 * tk, d), 2.2) * (on ? 1 : 0) * (1 - recede)
       const focusI = st.selected === i
       const vis = vis0 * (st.selected === null || focusI ? 1 : 0.35)
       const show = vis > 0.01
