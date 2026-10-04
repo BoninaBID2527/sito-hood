@@ -97,6 +97,9 @@ export async function enterRoom(opts: { direct?: boolean } = {}) {
   room.inside = true
   room.phase = 'inside'
   useStore.getState().set({ mode: 'room', roomStation: 0, roomFocus: false })
+  // the first room frames compile the room's shaders: stay black until they have been drawn
+  const t0 = rt.time
+  await until(() => rt.time - t0 >= 0.12, 6)
   await fade(1, 0.75)
 }
 

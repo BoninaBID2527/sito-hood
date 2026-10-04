@@ -433,11 +433,13 @@ function Interactions() {
   )
 }
 
-/** one-off: while the visitor walks up to the door the room is compiled and its textures are uploaded off-screen */
+/**
+ * one-off, while the visitor walks up to the door: the room's textures are uploaded to the GPU off-screen.
+ * (Programs are NOT precompiled: three keys a program on the lights that are visible, and with the street on screen that would be
+ * the wrong variant for ~150 street programs. The first room frame compiles the right ones, behind the black of the airlock dip.)
+ */
 function Warm() {
   const gl = useThree((s) => s.gl)
-  const scene = useThree((s) => s.scene)
-  const camera = useThree((s) => s.camera)
   const done = useRef(false)
   useEffect(() => {
     roomScene.mounted = true
@@ -446,14 +448,9 @@ function Warm() {
   useFrame(() => {
     if (!room.warm || done.current) return
     done.current = true
-    ;(async () => {
-      try {
-        await gl.compileAsync(scene, camera)
-        for (const t of [RX.wall, RX.floor, RX.foam, RX.fabricRed, RX.fabricSlate, RX.wood, RX.keys, RX.daw, RX.portrait, RX.live, RX.signal, RX.poster]) if (t) gl.initTexture(t)
-      } catch {
-        /* the first visible frame compiles instead */
-      }
-    })()
+    for (const t of [RX.wall, RX.floor, RX.foam, RX.fabricRed, RX.fabricSlate, RX.wood, RX.keys, RX.daw, RX.portrait, RX.live, RX.signal, RX.poster, RX.posterPlay]) {
+      try { if (t) gl.initTexture(t) } catch { /* uploaded on first use instead */ }
+    }
   })
   return null
 }

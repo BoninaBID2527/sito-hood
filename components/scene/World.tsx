@@ -8,7 +8,6 @@ import { Ambience } from './Ambience'
 import { Dust } from './street/Atmos'
 import { A, loadRoof, loadDualism } from '@/lib/assets'
 import { useStore } from '@/lib/store'
-import { room } from '@/lib/room'
 
 // Code-split: the rooftop and the secret universe are separate chunks, fetched only after the user has entered.
 const RooftopWorld = dynamic(() => import('./RooftopEnvironment').then((m) => m.RooftopWorld), { ssr: false })
@@ -50,7 +49,7 @@ export function World() {
         </WorldGate>
       )}
       {roomLoad >= 1 && (
-        <WorldGate world="room" extra={() => room.warm}>
+        <WorldGate world="room">
           <RoomWorld detail={roomLoad >= 2} />
         </WorldGate>
       )}
