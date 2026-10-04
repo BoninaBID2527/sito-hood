@@ -200,6 +200,29 @@ neighbours sit in peripheral depth. Dark steel poles stand just inside the camer
 * `scripts/census.mjs <tier>` (per-section calls/tris averaged over real frames), `scripts/profile.mjs` (per-subtree attribution), `scripts/tracks-check.mjs` (input-feel behaviours).
   All headless runs use software GL: **counts only, never FPS**.
 
+### Measured rendering census (headless software GL — **counts only, no FPS**)
+Draw calls per frame, averaged over 24 real frames (`scripts/census.mjs`; "main + reflection" because the planar reflection is a second scene pass that is now throttled;
+a headless frame is ~1 s long so *every* frame looks "stale" to the throttle — at 60 fps a standing camera refreshes the reflection ~4×/s, see the last column).
+V3.1 = the deployed build at `7c6445b`, same machine, same script.
+
+| section | V3.1 high | V3.2 high | V3.1 medium → V3.2 balanced | V3.1 low → V3.2 mobile |
+|---|---|---|---|---|
+| A opening alley | 400 | **235** (−41 %) | 398 → **212** (−47 %) | 215 → **174** (−19 %) |
+| B mid alley | 248 | **165** (−33 %) | 246 → **159** (−35 %) | 169 → **148** (−12 %) |
+| C tracks idle | 260 | **224** (−14 %) | 258 → **218** (−16 %) | 134 → 154 (+15 %) |
+| D tracks, moving | 262 | 297 (+13 %) | 260 → **240** (−8 %) | 135 → 159 (+18 %) |
+| E track focused | 250 | 297 (+19 %)¹ | 249 → 245 (−2 %)¹ | 130 → 155 (+19 %) |
+| F rooftop | 132 | **81** (−39 %) | 132 → **78** (−41 %) | 67 → 67 |
+| G DUALISMO | 132 | 133 | 132 → **100** (−24 %) | — → 67 |
+
+¹ Headless artefact: at 60 fps a *standing* camera (idle / focused) pays main ≈ 194 + 103 × (4/60) ≈ **201** calls (−20 % vs V3.1), because the reflection refreshes at most every 0.25 s.
+While the camera moves the reflection refreshes every frame (high), every 2nd frame (balanced) or not at all (mobile uses the analytic reflection).
+
+The track section is the one place where the draw-call count is not lower on every tier: it is now a place (seven objects with their hardware, environmental typography, truss, poles, the artwork rig) and the
+camera looks down the whole alley from the far side of the plaza, where the old carousel only ever looked at the plaza. Mitigations: proximity LOD (full cost only for the focused object + neighbours; phones draw only the focused
+composition), one mirrored object instead of seven, short reflection far plane, distance culling of far alley props. Triangles: A 123k → 80k, C 59k → 60k, D/E 59k → 80k (high).
+Textures are flat (71–88) and GPU resources stay bounded across world switches (e2e).
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
