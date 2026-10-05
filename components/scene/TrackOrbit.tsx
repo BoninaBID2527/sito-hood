@@ -97,11 +97,34 @@ export function TrackOrbit() {
       poles.box(0.5, 0.05, 0.05, x, 3.2 + (k % 4) * 0.7, z, 0, k * 0.8, 0)
     })
     const poleGeo = poles.build()
-    return { ringMat, ringGeo, ring2Geo, wireGeo, wireMat, coneGeo, coneMat, cones, lampGeo, lampMat, poleGeo }
+    // the truss is HUNG, not floating: four steel guy cables run from it to eyebolt plates fixed to the plaza walls (V-pairs, with turnbuckles
+    // and a slight sag), so the whole installation has a visible load path
+    const sup = new GeoBuilder()
+    const cabs: THREE.BufferGeometry[] = []
+    const hw = 12
+    for (const sx of [-1, 1]) for (const dz of [-3.4, 3.4]) {
+      const a = new THREE.Vector3(TRUSS.cx + sx * (TRUSS.rx - 0.15), TRUSS.y + 0.02, TRUSS.cz + dz * 0.8) // clamp on the truss
+      const b = new THREE.Vector3(sx * (hw - 0.12), TRUSS.y + 3.3, TRUSS.cz + dz * 1.5) // eyebolt on the wall
+      const pts: THREE.Vector3[] = []
+      for (let k = 0; k <= 12; k++) { const t = k / 12; pts.push(a.clone().lerp(b, t).add(new THREE.Vector3(0, -Math.sin(t * Math.PI) * 0.16, 0))) }
+      cabs.push(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, 0.014, 5, false))
+      // wall plate + eyebolt + turnbuckle + truss clamp
+      sup.rbox(0.07, 0.42, 0.42, b.x + sx * 0.03, b.y, b.z, 0.01)
+      sup.add(new THREE.TorusGeometry(0.06, 0.016, 6, 12), b.x - sx * 0.06, b.y, b.z, 0, Math.PI / 2, 0)
+      const m = a.clone().lerp(b, 0.72)
+      sup.cyl(0.03, 0.03, 0.34, m.x, m.y - 0.1, m.z, 8, 0, 0, Math.PI / 2 - sx * 0.55)
+      sup.rbox(0.16, 0.14, 0.16, a.x, a.y - 0.03, a.z, 0.02)
+      for (const bz of [-0.15, 0.15]) sup.cyl(0.012, 0.012, 0.22, b.x + sx * 0.03 - sx * 0.01, b.y + bz * 0.8, b.z + bz, 6, 0, 0, Math.PI / 2)
+    }
+    const cabGeo = mergeGeometries(cabs, false)!
+    cabs.forEach((g) => g.dispose())
+    const supHw = sup.build()
+    return { ringMat, ringGeo, ring2Geo, wireGeo, wireMat, coneGeo, coneMat, cones, lampGeo, lampMat, poleGeo, cabGeo, supHw }
   }, [])
   const ringRef = useRef<THREE.Group>(null)
   const coneRefs = useRef<(THREE.Mesh | null)[]>([])
   const poleRef = useRef<THREE.Mesh>(null)
+  const supRef = useRef<THREE.Group>(null)
   const hoverSm = useRef<number[]>(new Array(TRACK_COUNT).fill(0))
   const focusSm = useRef<number[]>(new Array(TRACK_COUNT).fill(0))
   const sheen = useRef(new THREE.Vector2(0.5, 0.5))
@@ -122,7 +145,7 @@ export function TrackOrbit() {
       pool.dispose()
       poolGeo.dispose()
       twinMat.dispose(); glassMat.dispose()
-      rigKit.ringMat.dispose(); rigKit.ringGeo.dispose(); rigKit.ring2Geo.dispose(); rigKit.wireGeo.dispose(); rigKit.wireMat.dispose(); rigKit.coneGeo.dispose(); rigKit.coneMat.dispose(); rigKit.cones.forEach((c) => c.dispose()); rigKit.lampGeo.dispose(); rigKit.lampMat.dispose(); rigKit.poleGeo.dispose()
+      rigKit.ringMat.dispose(); rigKit.ringGeo.dispose(); rigKit.ring2Geo.dispose(); rigKit.wireGeo.dispose(); rigKit.wireMat.dispose(); rigKit.coneGeo.dispose(); rigKit.coneMat.dispose(); rigKit.cones.forEach((c) => c.dispose()); rigKit.lampGeo.dispose(); rigKit.lampMat.dispose(); rigKit.poleGeo.dispose(); rigKit.cabGeo.dispose(); rigKit.supHw.dispose()
     },
     [mats, geo, pool, poolGeo, twinMat, glassMat, rigKit],
   )
@@ -243,6 +266,7 @@ export function TrackOrbit() {
       rg.position.set(TRUSS.cx, TRUSS.y, TRUSS.cz)
       rg.scale.set(TRUSS.rx, 1, TRUSS.rz)
       rg.visible = appear > 0.02
+      if (supRef.current) supRef.current.visible = rg.visible
     }
     // the foreground poles are a landscape-screen device; on phones a pole at arm's length reads as an artefact
     if (poleRef.current) poleRef.current.visible = rig.w > 0.02 && appear > 0.5 && rt.quality.level > 0 && aspect > 1.1
@@ -299,6 +323,10 @@ export function TrackOrbit() {
         <mesh geometry={rigKit.lampGeo} material={rigKit.lampMat} />
       </group>
       <mesh ref={poleRef} geometry={rigKit.poleGeo} material={objMats.metal} visible={false} />
+      <group ref={supRef} visible={false}>
+        <mesh geometry={rigKit.cabGeo} material={objMats.metal} />
+        <mesh geometry={rigKit.supHw} material={objMats.metal} />
+      </group>
       <lineSegments geometry={rigKit.wireGeo} material={rigKit.wireMat} frustumCulled={false} />
       {alterco.tracks.map((tr, i) => (
         <mesh key={'sh' + tr.id} ref={(r) => { coneRefs.current[i] = r }} geometry={rigKit.coneGeo} material={rigKit.cones[i]} frustumCulled={false} renderOrder={4} />

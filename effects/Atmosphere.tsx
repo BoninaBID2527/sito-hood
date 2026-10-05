@@ -69,12 +69,12 @@ export function Atmosphere() {
       } else {
         hemi.current.color.copy(dual ? new THREE.Color('#7fa8ff') : palette.hemiSky)
         hemi.current.groundColor.copy(dual ? new THREE.Color('#2a1a58') : palette.hemiGround)
-        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 1.7 : 1.25)
+        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 2.2 : 1.25)
       }
     }
     if (sun.current) {
       sun.current.color.copy(palette.sun)
-      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42
+      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42 * (rt.world === 'roof' && rt.quality.shadow > 0 ? 3 : 1)
     }
     if (fill.current) {
       fill.current.color.copy(palette.hemiSky)

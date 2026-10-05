@@ -221,21 +221,21 @@ export function RooftopEnvironment() {
 
   return (
     <group position={[R, 0, 0]}>
-      <mesh geometry={kit.deckGeo} material={kit.deckMat} rotation={[-Math.PI / 2, 0, 0]} position={[3, 0, -6]} />
-      <mesh geometry={kit.parGeo} material={kit.brick} />
-      <mesh geometry={kit.capGeo} material={kit.capMat} />
+      <mesh geometry={kit.deckGeo} material={kit.deckMat} rotation={[-Math.PI / 2, 0, 0]} position={[3, 0, -6]} receiveShadow />
+      <mesh geometry={kit.parGeo} material={kit.brick} castShadow />
+      <mesh geometry={kit.capGeo} material={kit.capMat} castShadow />
       {/* bulkhead */}
-      <mesh geometry={kit.bulk} material={kit.brick} position={[-6, 1.8, 2]} />
+      <mesh geometry={kit.bulk} material={kit.brick} position={[-6, 1.8, 2]} castShadow />
       <mesh geometry={kit.doorGeo} material={kit.doorMat} position={[-3.46, 1.15, 2.5]} rotation={[0, Math.PI / 2, 0]} />
       <mesh geometry={kit.bulbGeo} material={kit.lampBulb} position={[-3.3, 2.75, 2.5]} />
       <sprite material={kit.lampGlow} position={[-3.3, 2.75, 2.5]} scale={[3.5, 3.5, 1]} />
       <pointLight position={[-2.6, 2.6, 2.5]} color="#ffb36b" intensity={14} distance={12} decay={2} />
       {/* tank */}
-      <mesh geometry={kit.woodGeo} material={kit.tankWood} />
-      <mesh geometry={kit.ironGeo} material={kit.tankIron} />
+      <mesh geometry={kit.woodGeo} material={kit.tankWood} castShadow />
+      <mesh geometry={kit.ironGeo} material={kit.tankIron} castShadow />
       <NumberMark index={5} cell={A.graf.spr.n06} atlas="spray" position={[10, 3.9, -6 + 1.72]} rotation={[0, 0, 0]} w={0.8} />
       {kit.parts.map((p, i) => (
-        <mesh key={i} geometry={p.geo} material={p.mat} />
+        <mesh key={i} geometry={p.geo} material={p.mat} castShadow />
       ))}
       <mesh geometry={kit.glassGeo} material={kit.glassMat} />
       <primitive object={kit.roofDecals.mesh} />
