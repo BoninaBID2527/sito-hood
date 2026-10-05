@@ -35,7 +35,7 @@ const step = async (s) => {
     case 'camOff': await page.evaluate(() => { window.__hd.rt.camOverride = null }); break
     case 'wait': await page.waitForTimeout(s.ms); break
     case 'settle': await settle(); break
-    case 'shot': await page.waitForTimeout(s.wait ?? 1500); await page.screenshot({ path: `${out}/${s.name}.png` }); log.push('shot ' + s.name); break
+    case 'shot': await page.waitForTimeout(s.wait ?? 1500); await page.screenshot({ path: `${out}/${s.name}.png`, timeout: 240000 }); log.push('shot ' + s.name); break
     case 'eval': log.push('eval ' + JSON.stringify(await page.evaluate(s.js))); break
     case 'act': await page.evaluate(([n, a]) => { const h = window.__hd; return ((h.act))(n, ...a) }, [s.name, s.args ?? []]); break
     case 'cp': { const cp = CHECKPOINTS.find((c) => String(c.n) === String(s.n)); if (!cp) { log.push('no checkpoint ' + s.n); break } await runCheckpoint(page, cp, out, { until, settle, log }); break }

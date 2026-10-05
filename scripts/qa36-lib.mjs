@@ -69,7 +69,7 @@ async function toDualism(page, h) {
 }
 
 export async function runCheckpoint(page, cp, out, h) {
-  const shot = async (wait = 1800) => { await page.waitForTimeout(cp.wait ?? wait); await page.screenshot({ path: `${out}/${String(cp.n).padStart(2, '0')}-${cp.name}.png` }); h.log.push(`shot ${cp.n} ${cp.name}`) }
+  const shot = async (wait = 1800) => { await page.waitForTimeout(cp.wait ?? wait); await page.screenshot({ path: `${out}/${String(cp.n).padStart(2, '0')}-${cp.name}.png`, timeout: 240000 }); h.log.push(`shot ${cp.n} ${cp.name}`) }
   if (cp.room) {
     if (cp.room === 'near') {
       await toAlley(page, h)
