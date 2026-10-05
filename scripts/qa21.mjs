@@ -19,6 +19,8 @@ await page.goto(`http://localhost:${process.env.PORT || 3000}/?debug=1&quality=$
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
 await page.click('button:has-text("ENTER")')
 await page.waitForTimeout(6000)
+// the finer brick tiles are generated after ENTER in idle time: wait for them so the captures show the settled state
+await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 180000, polling: 500 }).catch(() => console.log('brick upgrade not seen'))
 if (process.env.UI === '0') await page.addStyleTag({ content: '.overlay{display:none !important}' })
 const until = (fn, arg, to = 300000) => page.waitForFunction(fn, arg, { timeout: to, polling: 150 }).catch(() => console.log('timeout', String(fn).slice(0, 70)))
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 && (r.world !== 'alley' || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.06)) })
