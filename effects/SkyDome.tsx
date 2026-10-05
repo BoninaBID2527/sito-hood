@@ -60,8 +60,10 @@ export function SkyDome() {
         vertexShader: vert,
         fragmentShader: frag,
         side: THREE.BackSide,
+        // V3.5: drawn LAST among the opaque objects, depth-tested at the far plane → the (fbm-heavy) sky shader only runs for the few pixels
+        // that are really sky instead of being shaded for the whole screen and then painted over by walls
         depthWrite: false,
-        depthTest: false,
+        depthTest: true,
         fog: false,
         toneMapped: false,
         uniforms: {
@@ -100,7 +102,7 @@ export function SkyDome() {
     }
   }, -1)
   return (
-    <mesh ref={mesh} renderOrder={-100} frustumCulled={false} material={mat}>
+    <mesh ref={mesh} renderOrder={1000} frustumCulled={false} material={mat}>
       <sphereGeometry args={[400, 32, 16]} />
     </mesh>
   )
