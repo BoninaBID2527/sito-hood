@@ -69,6 +69,7 @@ export function PostFX() {
     const sc = new THREE.Scene()
     sc.add(quad)
     const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('debug')) (window as unknown as { __post: unknown }).__post = { target, mat }
     return { target, mat, sc, cam, quad }
   }, [gl])
 
