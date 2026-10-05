@@ -94,8 +94,8 @@ export function SkyDome() {
     u.uMirror.value = rt.mirror
     if (mesh.current) {
       mesh.current.position.copy(camera.position)
-      // the room is enclosed: no sky pass at all while inside
-      const show = rt.world !== 'room'
+      // the room is enclosed and DUALISMO paints its own backdrop (DualismoWorld): no sky pass at all in either
+      const show = rt.world !== 'room' && rt.world !== 'dualism'
       if (mesh.current.visible !== show) mesh.current.visible = show
     }
   }, -1)
