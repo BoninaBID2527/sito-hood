@@ -19,7 +19,7 @@ const boot = async () => {
   page.on('pageerror', (e) => errors.push('PAGEERROR ' + e.message))
   await page.goto(`http://localhost:${process.env.PORT || 3000}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
   await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
-  await page.click('button:has-text("ENTER")')
+  for (let i = 0; i < 4; i++) { try { await page.click('button:has-text("ENTER")', { timeout: 60000 }); break } catch { await page.waitForTimeout(3000) } }
   await page.waitForTimeout(6000)
   if (process.env.FAST !== '1') await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 240000, polling: 500 }).catch(() => {})
   await page.addStyleTag({ content: '.overlay{display:none !important}' })
