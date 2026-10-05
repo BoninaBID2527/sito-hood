@@ -29,6 +29,8 @@ export interface Assets {
   glow: THREE.Texture
   dot: THREE.Texture
   banner: THREE.Texture
+  /** the second hung banner (ALTERCO) — physical replacement of the old screen-space title word */
+  banner2: THREE.Texture
   projection: THREE.Texture
   posters: THREE.Texture[]
   /** atlases for all street typography (spray + paper) */
@@ -70,8 +72,10 @@ type Step = [string, number, () => void | Promise<void>]
 async function run(steps: Step[], onProgress: (p: number) => void) {
   const total = steps.reduce((a, s) => a + s[1], 0)
   let done = 0
-  for (const [, w, fn] of steps) {
+  for (const [name, w, fn] of steps) {
+    const t0 = performance.now()
     await fn()
+    if (typeof window !== 'undefined') ((window as unknown as { __loadSteps?: [string, number][] }).__loadSteps ??= []).push([name, Math.round(performance.now() - t0)])
     done += w
     onProgress(done / total)
     await nextFrame() // let the loader paint between heavy canvas jobs
@@ -122,6 +126,7 @@ export async function loadCore(onProgress: (p: number) => void) {
       }],
       ['graffiti', 14, () => {
         A.banner = T.bannerTexture('HOODDINO')
+        A.banner2 = T.bannerTexture('ALTERCO', 29, '#f0d9b0')
         A.projection = T.projectionTexture('ALTERCO')
         // every wall piece, poster and sticker lives in two atlases (lib/graffitiSheet.ts)
         A.graf = buildGraffiti(rt.quality.atlas)
@@ -177,6 +182,32 @@ export async function buildCards() {
     }),
   )
   void trackLabel
+}
+
+/**
+ * Finer brick tiles (walls are most of every frame). Generated after ENTER, a slice per animation frame, then swapped into the live
+ * textures (every wall material keeps its texture object). Base density = what ships in loadCore; tablets/desktops get 1.9 / 1.5 / 1.1 mm.
+ */
+let bricksUpgraded = false
+export async function upgradeBricks() {
+  if (bricksUpgraded || !A.coreReady) return
+  const lv = rt.quality.level
+  const W = lv >= 3 ? 2048 : lv === 2 ? 1536 : lv === 1 ? 1280 : 1024 // (the mobile tier keeps 1024² but still gets the per-brick detail)
+  bricksUpgraded = true
+  const seeds = { red: 11, dark: 12, weathered: 13, plaster: 14, concrete: 15 } as const
+  for (const k of Object.keys(seeds) as (keyof typeof seeds)[]) {
+    const gen = T.brickGen(k, seeds[k], W, true)
+    let r = gen.next()
+    while (!r.done) { await nextFrame(); r = gen.next() }
+    const fresh = r.value
+    const live = A.brick[k].map
+    live.image = fresh.map.image
+    live.dispose() // size changed: the GPU copy is re-created with the new storage on the next draw
+    live.needsUpdate = true
+    fresh.map.dispose()
+    fresh.bump.dispose()
+    await nextFrame()
+  }
 }
 
 export async function loadRoof() {

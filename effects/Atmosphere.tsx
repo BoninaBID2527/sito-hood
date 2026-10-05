@@ -6,6 +6,7 @@ import * as THREE from 'three'
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { room } from '@/lib/room'
+import { streetU } from '@/components/scene/street/materials'
 import { SkyDome } from './SkyDome'
 
 const ROOM_FOG = new THREE.Color('#100d0e')
@@ -38,22 +39,26 @@ export function Atmosphere() {
         fog.color.copy(ROOM_FOG)
         fog.density = 0.026
       } else if (dual) {
-        fog.color.set('#0b1030')
-        fog.density = 0.012
+        fog.color.set('#070b26')
+        fog.density = 0.0095
       } else {
         fog.color.copy(palette.fog)
         fog.density = palette.fogDensity
       }
     }
+    // sky colours for the metal / glossy reflections (street, roof, DUALISMO, room each reflect their own sky)
+    if (inRoom) { streetU.uSkyTop.value.set('#2a3144'); streetU.uSkyHor.value.set('#3a2f2c') }
+    else if (dual) { streetU.uSkyTop.value.set('#10196a'); streetU.uSkyHor.value.set('#3a58d0') }
+    else { streetU.uSkyTop.value.copy(palette.skyMid); streetU.uSkyHor.value.copy(palette.horizon) }
     if (hemi.current) {
       if (inRoom) {
         hemi.current.color.copy(ROOM_SKY)
         hemi.current.groundColor.copy(ROOM_GROUND)
-        hemi.current.intensity = 2.0 * (1 - 0.5 * room.dim)
+        hemi.current.intensity = 2.4 * (1 - 0.5 * room.dim)
       } else {
         hemi.current.color.copy(dual ? new THREE.Color('#7fa8ff') : palette.hemiSky)
         hemi.current.groundColor.copy(dual ? new THREE.Color('#2a1a58') : palette.hemiGround)
-        hemi.current.intensity = dual ? 1.0 : palette.hemiI * 1.25
+        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 1.7 : 1.25)
       }
     }
     if (sun.current) {

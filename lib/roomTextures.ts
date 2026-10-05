@@ -288,7 +288,7 @@ export async function loadRoomShell() {
   if (RX.shellReady) return
   const s = S(1024)
   const steps: (() => void | Promise<void>)[] = [
-    () => { RX.wall = paintWall(s, 21, '#3a4548', '#242c2f') },
+    () => { RX.wall = paintWall(s, 21, '#4a565a', '#2e373b') },
     () => { RX.floor = floorTex(S(512)) },
     () => { RX.foam = foamTex(S(256)) },
     () => { RX.fabricRed = fabricTex(S(256), '#4a1a1c', '#7a2c2a', 41); RX.fabricSlate = fabricTex(S(256), '#252a31', '#46505c', 42) },

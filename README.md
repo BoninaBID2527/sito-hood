@@ -279,6 +279,50 @@ Street cost of the entrance (high, same machine, vs. the V3.2 build): initial lo
 ### Tests
 `node scripts/room-check.mjs [tier] [WxH]` (56–58 checks: entrance, threshold, bio, links, explicit PLAY, no autoplay, pause/close/exit, release, keyboard, no console errors; `TOUCH=1`, `REDUCED=1`, `EXTRA='&roomvideo=dom'`, `BASEPATH=/sito-hood PORT=3100` for the static export), `scripts/room-shots.mjs` (visual walk-through), `scripts/census-room.mjs`, `scripts/street-calls.mjs`. Existing suites unchanged (E2E 22/22, secrets 18/18, tracks 8/8; `secrets.mjs` now waits for the pointer parallax in simulation time before the grazing-glyph click so it is frame-rate independent).
 
+## V3.4 notes — site-wide rendering quality pass
+
+Scope = the whole experience, not the iPad screenshots (those were *before* evidence of two symptoms). Method: a 21-checkpoint visual capture (`scripts/qa21.mjs`, desktop 1280×720 / tablet 1366×1024 / phone 390×844, software GL → pictures only) before and after, per-system code audit, then fixes ordered hero → midground → background. **No hardware FPS is claimed anywhere; real Safari / iPhone / iPad testing is still required.**
+
+### Systemic findings → what changed
+| finding | change |
+|---|---|
+| **Tablets were treated as low-end phones.** WebKit (iPadOS Safari and every iOS browser) reports a capped `hardwareConcurrency` and no `deviceMemory`, so `cores ≤ 4` demoted capable iPads to the `mobile` tier (DPR 0.8–1.2 on a ×2 panel) — the soft, blocky look. | `detectTier`: a tablet starts at `balanced` (only an explicit ≤2 GB report or a weak/software GPU demotes it). DPR caps raised: high 1.5→2, balanced 1.4→1.75, mobile 1.2→1.5 (min 0.85); the V3.2 adaptive manager still steps DPR/tier down on sustained slow windows. `?perf=1` now prints drawing-buffer vs CSS size and the device ratio. |
+| **Screen-space DOM title words (HOODDINO / ALTERCO)** floated in front of the lens, blurred, clipped, and covered the lower-right of tablet viewports. | Physical objects instead: the existing HOODDINO banner (z −26) plus a new hung ALTERCO banner (z −50) on four cables, fogged/occluded like everything else; the DOM keeps only a quiet one-line caption per title. The glitch "whisper" egg is size-capped. |
+| **Room entrance not discoverable** from the authored path (dark porch, out of frame, no state until 13 m). | Lit enamel plate, light leaking round the leaf and threshold, a slow red lamp with halo, a faint pavement spill; the `ENTER THE HOODDINO ROOM` state now appears ~18 m before the door (touch-sized). |
+| **Brick = flat rounded rectangles; texel density fixed at 2.3 mm.** | Per-brick kiln gradient, sand-face speckle, chipped corners, hairline cracks, grainy mortar; density follows the tier (1280 / 1536 / 2048 px, 1.9 / 1.5 / 1.1 mm) with a 1024² bump map. The finer tile is generated **after ENTER, one slice per frame**, and swapped into the live textures (`lib/assets.upgradeBricks`) — the loader waits for the base tile only (loader 12.4 s → 12.8–13.6 s headless, within noise). |
+| Detail below texture resolution shimmered / looked synthetic at close range. | `uMicro` micro-surface (34 and 97 cycles/m aggregate + pitting on albedo and roughness), faded out between 5 and 15 m (no shimmer, off on `mobile`). Anisotropy ×2 on high/ultra for oblique asphalt, floors, walls. |
+| Windows were flat planes pasted on the wall. | Instanced jambs give a ~15 cm reveal around every window (one extra draw call). |
+| Metals had no environment (pure metals reflect nothing → black). | Analytic, roughness-aware sky reflection in the street shader (warm horizon / cool zenith / dark ground, desaturated, Fresnel at grazing angles) — no extra render pass; per-world sky (street, roof, DUALISMO, room). |
+| Track hardware was cut-out boxes. | Rounded (2-segment) frames and bodies on the hero hardware (`GeoBuilder.rbox`). |
+| Rooftop skylights were glowing slabs lying on the deck. | Curbed skylights with a thin pane and mullions; roof night fill raised. |
+| DUALISMO: milky lift, over-bloom. | Iridescence only in the lights (no black lift), gentle S-curve, bloom ×0.65 there, deeper fog/hemisphere. CHIRONE, MESSAGGIO and the return logic are untouched. |
+| Room: dark, floating screens. | Monitors are a body + raised bezel with the screen recessed ~2 cm; brighter walls and a stronger fluorescent wash; the video lives on a physical vertical display. |
+
+Audited and left as is: tone-mapping/colour management (HDR target → ACES → `1/2.2`, sRGB for colour maps and the video, linear for data), post (chromatic aberration is ≈0 until progress 0.16 and grows narratively), reflections (V3.2 throttled planar pass kept — nothing returned to per-frame cost), shadows (still none: baked contact decals).
+**KTX2 / Basis / Draco were audited and not adopted**: every environment texture is generated on a canvas at runtime (GPU-compressing a canvas would need a build-time bake of procedural output) and the only downloaded images are the WebP covers and ≤107 KB room photographs; no GLTF/photo-texture pipeline exists to benefit. The decoder paths therefore do not exist to break under `/sito-hood/`.
+
+### Measured (headless software GL — counts only, same method as V3.2; `scripts/census.mjs`, `census-room.mjs`, `street-calls.mjs`, `load-time.mjs`)
+Draw calls per frame (avg of 24 frames, main + reflection):
+| section | V3.2 high | V3.4 high | V3.2 balanced | V3.4 balanced | V3.2 mobile | V3.4 mobile |
+|---|---|---|---|---|---|---|
+| A opening | 235 | 237 | 212 | 214 | 174 | 175 |
+| B mid alley | 165 | 168 | 159 | 165 | 148 | 154 |
+| C tracks idle | 224 | 226 | 218 | 216 | 154 | 154 |
+| D tracks moving | 297 | 301 | 240 | 244 | 159 | 161 |
+| E track focused | 297 | 299 | 245 | 246 | 155 | 155 |
+| F rooftop | 81 | 78 | 78 | 81 | 67 | 67 |
+| G DUALISMO | 133 | 128 | 100 | 100 | 67 | 67 |
+
+Triangles are **higher** (window jambs, bevelled hardware): street p = 0.2 high 81k → 101k, p = 0.327 high 71k → 92k, balanced 60k → 78k. Textures 71–93 (unchanged ±2), geometries +3. Room census (draw calls / triangles): ROOM ENTRY 22 / 3.5k, IDLE 21 / 3.5k, BIO WALL 13 / 2.3k, WORKSTATION 16 / 3.2k, VIDEO 15 / 3.2k, LIVE WALL 12 / 2.3k (high & balanced; mobile 19–11 / 2.2–1.9k); after leaving the room its textures/geometries stay allocated but nothing is drawn and the video is paused with its `src` dropped. Initial load: 32 requests, 2575 → 2580 KB (JS 1941 → 1947 KB).
+
+### Still below the V3.4 target (honest list)
+* Building massing is still boxy; there are no real shadow maps, only baked contact decals, so some hung / stacked props still read as slightly pasted. Window interiors have no parallax.
+* The plaza ground is still a flat plane with texture variation; the distant skyline is blocky (aggressively cheap by design) and its windows repeat.
+* DUALISMO remains additive-blend based; it is darker and cleaner but not "high-end" in the sense of real volumetrics.
+* The room is intentionally dark; the entry hero is readable but dim on small screens.
+* Triangle count rose ~25 %; draw calls did not.
+* Everything above was judged on software-rendered captures. **Real Safari / iPhone / iPad testing (tier chosen, DPR reached, adaptive behaviour, WebKit texture upload of the swapped brick tiles, video texture) is still required.**
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).

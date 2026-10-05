@@ -90,8 +90,14 @@ export function RooftopEnvironment() {
       metal.box(w * 0.9, 0.06, 1.2, x, 1.43, z)
     }
     bricks.box(0.95, 4.2, 0.95, -1.5, 2.1, -16.5).box(0.95, 3.4, 0.95, 14.5, 1.7, -19)
-    glass.box(3.0, 0.5, 2.0, 5.5, 0.3, -17.5)
-    glass.box(2.2, 0.45, 1.6, -3.5, 0.27, -2.5)
+    // skylights: a concrete curb, a thin pane set into it, aluminium mullions — not a glowing slab lying on the roof
+    for (const [x, z, w, d] of [[5.5, -17.5, 3.0, 2.0], [-3.5, -2.5, 2.2, 1.6]] as const) {
+      chill.box(w + 0.24, 0.32, 0.12, x, 0.16, z - d / 2 - 0.06).box(w + 0.24, 0.32, 0.12, x, 0.16, z + d / 2 + 0.06)
+      chill.box(0.12, 0.32, d, x - w / 2 - 0.06, 0.16, z).box(0.12, 0.32, d, x + w / 2 + 0.06, 0.16, z)
+      chill.box(w + 0.3, 0.04, 0.2, x, 0.33, z - d / 2 - 0.06).box(w + 0.3, 0.04, 0.2, x, 0.33, z + d / 2 + 0.06)
+      glass.box(w, 0.05, d, x, 0.27, z)
+      metal.box(w, 0.05, 0.06, x, 0.31, z).box(0.06, 0.05, d, x - w / 4, 0.31, z).box(0.06, 0.05, d, x + w / 4, 0.31, z)
+    }
     // antenna masts + dipoles
     const masts: [number, number, number][] = [[6, -19, 11], [-8.5, -21, 9], [13.2, -21, 13]]
     for (const [x, z, h] of masts) {
@@ -111,7 +117,7 @@ export function RooftopEnvironment() {
       mk(bricks, { map: A.brick.red.map, color: '#c9aa9a', roughness: 0.95 }),
       mk(wood2, { color: '#7a5a3a', roughness: 0.95 }),
     ]
-    const glassMat = keep(new THREE.MeshStandardMaterial({ color: '#0e1624', emissive: new THREE.Color('#5a90ff'), emissiveIntensity: 0.2, roughness: 0.15, metalness: 0.4 }))
+    const glassMat = keep(new THREE.MeshStandardMaterial({ color: '#0e1624', emissive: new THREE.Color('#5a90ff'), emissiveIntensity: 0.12, roughness: 0.12, metalness: 0.4 }))
     const glassGeo = keep(glass.build())
 
     // neighbouring rooftops below + tall neighbour on the left

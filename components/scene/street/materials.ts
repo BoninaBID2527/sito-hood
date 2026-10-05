@@ -13,6 +13,11 @@ export const streetU = {
   uDissolve: { value: 0 },
   /** 0..1 — how much standing water has gathered (puddle threshold falls along the journey) */
   uPud: { value: 0 },
+  /** 1 = fine micro-surface detail (aggregate, pitting) on the street materials; 0 on the mobile tier */
+  uMicro: { value: 1 },
+  /** analytic sky used for metal / glossy reflections (written every frame by effects/Atmosphere) */
+  uSkyTop: { value: new THREE.Color('#37406a') },
+  uSkyHor: { value: new THREE.Color('#c88a62') },
 }
 
 const GLSL_UTIL = /* glsl */ `
@@ -123,7 +128,10 @@ uniform float uSunAmt;
 uniform float uWet;
 uniform float uDissolve;
 uniform float uPud;
+uniform float uMicro;
 uniform vec3 uSunCol;
+uniform vec3 uSkyTop;
+uniform vec3 uSkyHor;
 ${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
 ${GLSL_UTIL}`,
@@ -176,6 +184,17 @@ ${
   float rustM_ = 0.0;
   float grime_ = smoothstep(0.45, 0.85, vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)) * smoothstep(1.5, 12.0, h_);
   diffuseColor.rgb *= 1.0 - 0.28 * grime_ * mac_;
+  // micro-surface (V3.4): fine aggregate / pitting that lives below the texture's resolution. Fades out with distance, so it never
+  // shimmers and costs nothing where it cannot be seen (uMicro = 0 on the mobile tier).
+  float microR_ = 0.0;
+  if (uMicro > 0.5) {
+    float fdm_ = 1.0 - smoothstep(5.0, 15.0, length(vViewPosition));
+    if (fdm_ > 0.01) {
+      float mi_ = (vn3_(vWPos * 34.0 + 11.0) * 0.6 + vn3_(vWPos * 97.0 + 23.0) * 0.4) - 0.5;
+      diffuseColor.rgb *= 1.0 + mi_ * 0.34 * fdm_ * mac_;
+      microR_ = mi_ * 0.3 * fdm_ * mac_;
+    }
+  }
 ${
   brick
     ? `  // patched masonry / painted-over panels
@@ -287,6 +306,7 @@ ${
         `#include <roughnessmap_fragment>
   roughnessFactor = clamp(roughnessFactor * (0.88 + (nM_ - 0.5) * 0.5 * mac_ + st_ * 0.15) - damp_ * 0.38 * mac_ - uWet * 0.06 * (1.0 - smoothstep(0.0, 6.0, h_)), 0.3, 1.0);
   roughnessFactor *= brickRough_;
+  roughnessFactor = clamp(roughnessFactor + microR_, 0.15, 1.0);
   roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
   roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, 0.04, puddle_), dampG_ * 0.9);
   roughnessFactor = max(0.12, roughnessFactor - asphaltPolish_ * 0.14);`,
@@ -309,10 +329,27 @@ ${
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
   float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
-  totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;`,
+  totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
+${
+  metal
+    ? `  {
+    // sky in the metal (V3.4): a cheap analytic environment — warm horizon, cool zenith, dark ground — instead of a second render pass.
+    // Reflection strength follows the material: rougher steel = dimmer, blurrier; polished edges catch the sky at grazing angles.
+    vec3 vv_ = normalize(vViewPosition);
+    vec3 rw_ = inverseTransformDirection(reflect(-vv_, normal), viewMatrix);
+    float up_ = rw_.y * 0.5 + 0.5;
+    vec3 env_ = mix(uSkyHor, uSkyTop, smoothstep(0.5, 0.95, up_));
+    env_ = mix(env_ * 0.3, env_, smoothstep(0.3, 0.55, up_));
+    env_ = mix(vec3(dot(env_, vec3(0.333))), env_, 0.55); // reflections are desaturated: a metal is not a mirror of the sunset
+    float fr_ = pow(1.0 - clamp(dot(normal, vv_), 0.0, 1.0), 4.0);
+    float ks_ = (metalnessFactor * 0.5 + fr_ * 0.35) * (1.0 - roughnessFactor * 0.8);
+    totalEmissiveRadiance += env_ * clamp(diffuseColor.rgb * 1.4 + 0.04, 0.04, 0.5) * ks_ * 0.45;
+  }`
+    : ''
+}`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}4`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}6`
   return m
 }
 

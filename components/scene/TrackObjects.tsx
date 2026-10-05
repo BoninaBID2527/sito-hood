@@ -41,10 +41,11 @@ function hardware(i: number) {
   const metal = new GeoBuilder(), paper = new GeoBuilder(), tape = new GeoBuilder(), body = new GeoBuilder(), lamp = new GeoBuilder()
   const hw = CARD_W / 2, hh = CARD_H / 2
   const frame = (t: number, z: number, d: number, b: GeoBuilder) => {
-    b.box(CARD_W + t * 2, t, d, 0, hh + t / 2, z)
-    b.box(CARD_W + t * 2, t, d, 0, -hh - t / 2, z)
-    b.box(t, CARD_H, d, hw + t / 2, 0, z)
-    b.box(t, CARD_H, d, -hw - t / 2, 0, z)
+    const e = Math.min(0.014, t * 0.3)
+    b.rbox(CARD_W + t * 2, t, d, 0, hh + t / 2, z, e)
+    b.rbox(CARD_W + t * 2, t, d, 0, -hh - t / 2, z, e)
+    b.rbox(t, CARD_H, d, hw + t / 2, 0, z, e)
+    b.rbox(t, CARD_H, d, -hw - t / 2, 0, z, e)
   }
   switch (i) {
     case 0: {
@@ -53,7 +54,7 @@ function hardware(i: number) {
       break
     }
     case 1: {
-      body.box(CARD_W + 0.2, CARD_H + 0.2, 0.34, 0, 0, -0.19)
+      body.rbox(CARD_W + 0.2, CARD_H + 0.2, 0.34, 0, 0, -0.19, 0.03)
       frame(0.07, 0.0, 0.09, metal)
       for (let k = 0; k < 6; k++) metal.box(CARD_W * 0.7, 0.025, 0.02, 0, -hh * 0.6 + k * 0.2, -0.37)
       break
@@ -74,7 +75,7 @@ function hardware(i: number) {
     }
     case 4: {
       for (const [x, y] of [[-hw, hh], [hw, hh], [-hw, -hh], [hw, -hh], [0, hh], [0, -hh]] as const) {
-        metal.box(0.22, 0.22, 0.09, x, y, 0.05)
+        metal.rbox(0.22, 0.22, 0.09, x, y, 0.05, 0.015)
         metal.cyl(0.035, 0.035, 0.05, x, y, 0.12, 8, Math.PI / 2)
       }
       paper.box(CARD_W + 0.02, CARD_H + 0.02, 0.012, 0, 0, -0.012)
@@ -86,7 +87,7 @@ function hardware(i: number) {
       break
     }
     case 6: {
-      body.box(CARD_W + 0.1, CARD_H + 0.1, 0.16, 0, 0, -0.1)
+      body.rbox(CARD_W + 0.1, CARD_H + 0.1, 0.16, 0, 0, -0.1, 0.02)
       frame(0.05, 0.0, 0.08, metal)
       metal.box(CARD_W + 0.2, 0.05, 0.05, 0, hh + 0.22, 0.34)
       for (const s of [-1, 0, 1]) { metal.box(0.04, 0.04, 0.4, s * CARD_W * 0.34, hh + 0.12, 0.17); lamp.add(new THREE.SphereGeometry(0.07, 8, 6), s * CARD_W * 0.34, hh + 0.2, 0.38) }

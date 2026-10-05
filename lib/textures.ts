@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { rng } from './math'
+import { rt } from './runtime'
 import {
   DISPLAY_FONT, MONO_FONT, blotches, fitText, grain, makeCanvas, noiseField, rgb, roundRect, tornPath, toTexture,
 } from './paint'
@@ -17,13 +18,30 @@ export interface BrickSet {
 }
 
 /** Tile = 2.4 m wide (11 bricks), 2.4 m tall (32 courses). */
-export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete', seed: number): BrickSet {
-  const W = 1024, H = 1024
+type BrickVariant = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
+
+/** the brick tile at the base density (1024²: 2.3 mm per texel) — what the loader screen waits for */
+export function brickSet(variant: BrickVariant, seed: number): BrickSet {
+  const g = brickGen(variant, seed, 1024, false)
+  let r = g.next()
+  while (!r.done) r = g.next()
+  return r.value
+}
+
+/**
+ * The same tile at a finer texel density, as a *generator*: it yields every few courses so the caller can spend a few ms per frame
+ * (see lib/assets.upgradeBricks — the finer tile replaces the base one after ENTER, in idle time, so the loader never waits for it).
+ */
+export function* brickGen(variant: BrickVariant, seed: number, W: number, detail = true): Generator<void, BrickSet, void> {
+  const H = W
+  const k = W / 1024
   const rows = 32, per = 11
   const bw = W / per, bh = H / rows
   const r = rng(seed)
   const { canvas, ctx } = makeCanvas(W, H)
-  const bump = makeCanvas(W, H)
+  // the height map stays 1024² whatever the albedo density (drawn in albedo coordinates, scaled down): bump needs shape, not grain
+  const bump = makeCanvas(1024, 1024)
+  bump.ctx.setTransform(1024 / W, 0, 0, 1024 / H, 0, 0)
   const base: Record<string, RGB> = {
     red: [128, 62, 46], dark: [96, 68, 60], weathered: [118, 86, 66], plaster: [128, 62, 46], concrete: [86, 86, 84],
   }
@@ -31,11 +49,17 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
   const mortar = variant === 'dark' ? '#2a2623' : variant === 'weathered' ? '#7a756c' : '#59544d'
   ctx.fillStyle = mortar
   ctx.fillRect(0, 0, W, H)
+  // mortar is sand + lime: grain and lighter / darker runs, before the bricks go on
+  for (let i = 0; detail && i < 9000 * k * k; i++) {
+    ctx.fillStyle = r() < 0.5 ? 'rgba(210,200,180,0.10)' : 'rgba(0,0,0,0.16)'
+    ctx.fillRect(r() * W, r() * H, 1 + r() * 1.6 * k, 1 + r() * 1.6 * k)
+  }
   bump.ctx.fillStyle = '#000'
   bump.ctx.fillRect(0, 0, W, H)
 
   if (variant !== 'concrete') {
     for (let row = 0; row < rows; row++) {
+      if (row % 4 === 3) yield
       const off = row % 2 ? bw / 2 : 0
       for (let c = 0; c <= per; c++) {
         const x = c * bw + off
@@ -44,31 +68,74 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
         const burnt = r() < 0.07 ? r.range(0.45, 0.7) : 1
         const tint = r.range(-8, 8)
         const col = rgb(b0[0] * (1 + v) * burnt + tint, b0[1] * (1 + v * 0.9) * burnt, b0[2] * (1 + v * 0.8) * burnt - tint * 0.5)
+        const bumpV = 150 + r() * 90
+        // per-brick surface life, drawn identically on both wrap copies so the tile stays seamless
+        const gradA = r.range(0.04, 0.12), gradB = r.range(0.06, 0.16)
+        const specks = detail ? Array.from({ length: Math.round((bw * bh) / (70 * k * k)) }, () => [r(), r(), r() < 0.5, r()] as const) : []
+        const chip = detail && r() < 0.22 ? { cx: r() < 0.5 ? 0 : 1, cy: r() < 0.5 ? 0 : 1, s: r.range(0.06, 0.16) } : null
+        const crack = detail && r() < 0.06 ? { x0: r.range(0.2, 0.8), a: r.range(-0.6, 0.6) } : null
         for (const dx of [0, -W]) {
-          const gx = x + dx + 2, gy = y + 2, gw = bw - 4, gh = bh - 4
+          const gx = x + dx + 2 * k, gy = y + 2 * k, gw = bw - 4 * k, gh = bh - 4 * k
           ctx.fillStyle = col
-          roundRect(ctx, gx, gy, gw, gh, 2.5)
+          roundRect(ctx, gx, gy, gw, gh, 2.5 * k)
           ctx.fill()
+          if (detail) {
+            // soft kiln gradient across the face (sun-baked side / shaded side)
+            const g = ctx.createLinearGradient(gx, gy, gx + gw * 0.35, gy + gh)
+            g.addColorStop(0, `rgba(255,222,180,${gradA})`)
+            g.addColorStop(1, `rgba(0,0,0,${gradB})`)
+            ctx.fillStyle = g
+            ctx.fillRect(gx, gy, gw, gh)
+          }
+          // sand-faced grain: light + dark speckles inside the brick
+          for (const [sx, sy, light, sa] of specks) {
+            ctx.fillStyle = light ? `rgba(235,200,160,${0.08 + sa * 0.14})` : `rgba(20,10,8,${0.10 + sa * 0.2})`
+            ctx.fillRect(gx + sx * gw, gy + sy * gh, (0.8 + sa * 1.4) * k, (0.8 + sa * 1.2) * k)
+          }
           // lit top edge / dark bottom edge
           ctx.fillStyle = 'rgba(255,230,200,0.10)'
-          ctx.fillRect(gx + 1, gy, gw - 2, 2)
+          ctx.fillRect(gx + k, gy, gw - 2 * k, 2 * k)
           ctx.fillStyle = 'rgba(0,0,0,0.18)'
-          ctx.fillRect(gx + 1, gy + gh - 2, gw - 2, 2)
-          bump.ctx.fillStyle = `rgb(${150 + r() * 90},${150 + r() * 90},${150 + r() * 90})`
-          roundRect(bump.ctx, gx, gy, gw, gh, 2.5)
+          ctx.fillRect(gx + k, gy + gh - 2 * k, gw - 2 * k, 2 * k)
+          // a chipped corner shows the pale core of the brick
+          if (chip) {
+            const cs = chip.s * gh
+            const cx0 = chip.cx ? gx + gw - cs * 1.4 : gx, cy0 = chip.cy ? gy + gh - cs : gy
+            ctx.fillStyle = 'rgba(176,132,104,0.55)'
+            ctx.beginPath()
+            ctx.moveTo(cx0, cy0); ctx.lineTo(cx0 + cs * 1.4, cy0); ctx.lineTo(cx0 + cs * 1.4 * (chip.cx ? 1 : 0.2), cy0 + cs); ctx.lineTo(cx0, cy0 + cs); ctx.closePath()
+            ctx.fill()
+          }
+          if (crack) {
+            ctx.strokeStyle = 'rgba(14,8,6,0.55)'
+            ctx.lineWidth = 1.1 * k
+            ctx.beginPath()
+            ctx.moveTo(gx + gw * crack.x0, gy)
+            ctx.lineTo(gx + gw * (crack.x0 + crack.a * 0.3), gy + gh * 0.5)
+            ctx.lineTo(gx + gw * (crack.x0 + crack.a * 0.1), gy + gh)
+            ctx.stroke()
+          }
+          bump.ctx.fillStyle = `rgb(${bumpV},${bumpV},${bumpV})`
+          roundRect(bump.ctx, gx, gy, gw, gh, 2.5 * k)
           bump.ctx.fill()
         }
       }
     }
   } else {
-    // poured concrete panels with seams
+    // poured concrete panels with seams, bug-holes and form-tie marks
     ctx.fillStyle = rgb(...b0)
     ctx.fillRect(0, 0, W, H)
+    for (let i = 0; detail && i < 2600 * k * k; i++) {
+      ctx.fillStyle = r() < 0.5 ? 'rgba(210,210,205,0.06)' : 'rgba(0,0,0,0.10)'
+      ctx.fillRect(r() * W, r() * H, 1 + r() * 2.2 * k, 1 + r() * 2.2 * k)
+    }
+    for (let i = 0; detail && i < 70; i++) { ctx.fillStyle = 'rgba(20,20,22,0.45)'; ctx.beginPath(); ctx.arc(r() * W, r() * H, (0.8 + r() * 2.4) * k, 0, Math.PI * 2); ctx.fill() }
+    if (detail) for (const fx of [W * 0.25, W * 0.75]) for (const fy of [H * 0.25, H * 0.75]) { ctx.fillStyle = 'rgba(30,30,32,0.5)'; ctx.beginPath(); ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); ctx.fill() }
     bump.ctx.fillStyle = '#9a9a9a'
     bump.ctx.fillRect(0, 0, W, H)
     ctx.fillStyle = 'rgba(0,0,0,0.5)'
-    for (const y of [0, H / 2]) ctx.fillRect(0, y, W, 3)
-    for (const x of [0, W / 2]) ctx.fillRect(x, 0, 3, H)
+    for (const y of [0, H / 2]) ctx.fillRect(0, y, W, 3 * k)
+    for (const x of [0, W / 2]) ctx.fillRect(x, 0, 3 * k, H)
   }
 
   if (variant === 'plaster') {
@@ -76,14 +143,14 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
     const p = makeCanvas(W, H)
     p.ctx.fillStyle = r() < 0.5 ? '#8c8478' : '#7c8078'
     p.ctx.fillRect(0, 0, W, H)
-    blotches(p.ctx, W, H, 40, seed + 3, [60, 55, 48], 0.1, 0.3, 40, 160)
+    blotches(p.ctx, W, H, 40, seed + 3, [60, 55, 48], 0.1, 0.3, 40 * k, 160 * k)
     grain(p.ctx, W, H, 26, seed + 4)
     p.ctx.globalCompositeOperation = 'destination-out'
     for (let i = 0; i < 5; i++) {
       const cx = r() * W, cy = r() * H
       p.ctx.beginPath()
       const n = 18
-      const rad = r.range(90, 200)
+      const rad = r.range(90, 200) * k
       for (let k = 0; k <= n; k++) {
         const a = (k / n) * Math.PI * 2
         const rr = rad * (0.6 + r() * 0.6)
@@ -94,7 +161,7 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
       p.ctx.fillStyle = '#000'
       p.ctx.fill()
       // wrap-around copies so the tile stays seamless
-      if (cx < 250) { p.ctx.save(); p.ctx.translate(W, 0); p.ctx.fill(); p.ctx.restore() }
+      if (cx < 250 * k) { p.ctx.save(); p.ctx.translate(W, 0); p.ctx.fill(); p.ctx.restore() }
     }
     ctx.drawImage(p.canvas, 0, 0)
     bump.ctx.globalAlpha = 0.5
@@ -104,8 +171,8 @@ export function brickSet(variant: 'red' | 'dark' | 'weathered' | 'plaster' | 'co
   }
 
   // grime + pixel grain
-  blotches(ctx, W, H, 60, seed + 7, [20, 16, 14], 0.06, 0.2, 30, 140)
-  blotches(ctx, W, H, 18, seed + 8, [200, 190, 170], 0.03, 0.08, 40, 110)
+  blotches(ctx, W, H, 60, seed + 7, [20, 16, 14], 0.06, 0.2, 30 * k, 140 * k)
+  blotches(ctx, W, H, 18, seed + 8, [200, 190, 170], 0.03, 0.08, 40 * k, 110 * k)
   grain(ctx, W, H, 22, seed + 9)
   return {
     map: toTexture(canvas, { wrap: true, aniso: 8 }),
@@ -488,9 +555,9 @@ export function signTexture(o: SignOpts) {
 }
 
 /** Painted overhead banner — the HOODDINO title as a physical object. */
-export function bannerTexture(text: string) {
+export function bannerTexture(text: string, seed = 21, ink = '#e8e1d0') {
   const W = 2048, H = 512
-  const r = rng(21)
+  const r = rng(seed)
   const { canvas, ctx } = makeCanvas(W, H)
   ctx.fillStyle = '#16140f'
   ctx.fillRect(0, 0, W, H)
@@ -498,7 +565,7 @@ export function bannerTexture(text: string) {
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
   const px = fitText(ctx, text, W - 190, (p) => `${p}px ${DISPLAY_FONT}`, H * 0.86)
-  ctx.fillStyle = '#e8e1d0'
+  ctx.fillStyle = ink
   ctx.fillText(text, W / 2, H / 2 + px * 0.04)
   // paint breakup — scrape the lettering
   ctx.globalCompositeOperation = 'destination-out'
@@ -511,7 +578,7 @@ export function bannerTexture(text: string) {
   ctx.fillRect(0, 0, W, H)
   ctx.globalCompositeOperation = 'source-over'
   // drips
-  ctx.fillStyle = '#e8e1d0'
+  ctx.fillStyle = ink
   for (let i = 0; i < 14; i++) {
     const x = W * 0.1 + r() * W * 0.8, len = r.range(18, 90)
     ctx.fillRect(x, H * 0.72, 3.5, len)
