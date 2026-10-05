@@ -36,7 +36,7 @@ export function roadY(x: number, z: number, d: number): number {
     y -= 0.03 * Math.pow(Math.min(1, Math.abs(x) / PLAZA.hw), 1.6)
     y -= 0.012 * Math.sin(z * 0.35) * smoothstep(-80, -90, z)
   }
-  return y - 0.045 * d
+  return y - 0.028 * d
 }
 
 export function buildGroundGeometry(mask: HTMLCanvasElement | null, fine = true): THREE.BufferGeometry {

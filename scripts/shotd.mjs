@@ -21,7 +21,7 @@ const boot = async () => {
   await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
   await page.click('button:has-text("ENTER")')
   await page.waitForTimeout(6000)
-  await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 240000, polling: 500 }).catch(() => {})
+  if (process.env.FAST !== '1') await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 240000, polling: 500 }).catch(() => {})
   await page.addStyleTag({ content: '.overlay{display:none !important}' })
 }
 await boot()
@@ -54,6 +54,9 @@ for (;;) {
   unlinkSync(f)
   log = []
   const t0 = Date.now()
+  // a code edit can make Fast Refresh reload the page (back to the ENTER screen): get back into the experience first
+  const entered = await page.evaluate(() => !!window.__hd && window.__hd.store.getState().phase === 'entered').catch(() => false)
+  if (!entered) { await boot(); log.push('(page had been reloaded: re-entered)') }
   try { for (const s of steps) { if (s.op === 'quit') { await browser.close(); process.exit(0) } await step(s) } } catch (e) { log.push('ERROR ' + String(e).slice(0, 300)) }
   log.push(`errors: ${errors.length ? [...new Set(errors)].join(' | ') : 'none'}`); errors = []
   log.push(`took ${((Date.now() - t0) / 1000).toFixed(1)}s`)

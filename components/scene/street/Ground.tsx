@@ -276,8 +276,7 @@ export function WaterSheet({ mask, size, position, interactive = false, rising =
 
   useFrame((_, dt) => {
     obj.visible = !rt.mirror
-    // the water level rises with the journey (ordinary wet street → puddles in every depression → the pool): the edge is where the water meets the ground
-    if (rising) obj.position.y = -0.045 + 0.065 * streetU.uPud.value
+    void rising
     const u = mat.uniforms
     u.uTime.value = rt.time
     u.uContam.value = Math.max(rt.fx.contam, rt.fx.dissolve)

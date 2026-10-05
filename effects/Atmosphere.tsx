@@ -74,7 +74,7 @@ export function Atmosphere() {
     }
     if (sun.current) {
       sun.current.color.copy(palette.sun)
-      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42 * (rt.quality.shadow > 0 ? 2.2 : 1)
+      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42
     }
     if (fill.current) {
       fill.current.color.copy(palette.hemiSky)

@@ -110,7 +110,7 @@ export function FireEscapes() {
         return (
           <DistCull key={i} at={[wallX(p.side, p.z), 6, p.z]} r={62}>
             <group position={[wallX(p.side, p.z), 0, p.z]} rotation={[0, p.side === -1 ? 0 : Math.PI, 0]}>
-              <mesh geometry={v.solid} material={built.metal} castShadow receiveShadow />
+              <mesh geometry={v.solid} material={built.metal} castShadow />
               <mesh geometry={v.grate} material={built.grating} />
             </group>
           </DistCull>
