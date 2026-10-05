@@ -362,7 +362,7 @@ Triangles are **higher** (window jambs, bevelled hardware): street p = 0.2 high 
 | V3.5 + scale 0.75 (effective density 1.31) | 49 % | 50 % |
 | V3.5 + scale 0.6 | 36 % | 38 % |
 
-At canvas dpr 1 (desktop) MSAA is kept, so only the scale rows apply (0.85 → ≈ 66 %, 0.75 → ≈ 57 %, 0.6 → ≈ 47 % of scale 1 in the same run). **These are relative software-GL numbers. No real-device FPS is claimed.** The real-device comparison (the actual success criterion: smoother than V3.4 on the device that lagged) still has to be done on that device: open `?perf=1`, scroll the journey, and read p95/p99, scale and adaptation events.
+At canvas dpr 1 (desktop) MSAA is kept, so only the scale rows apply: measured with MSAA off, scale 0.85 → ≈ 80 %, 0.75 → ≈ 68 %, 0.6 → ≈ 57 % of scale 1 (the MSAA-on baseline at dpr 1 was not A/B-measured). **These are relative software-GL numbers. No real-device FPS is claimed.** The real-device comparison (the actual success criterion: smoother than V3.4 on the device that lagged) still has to be done on that device: open `?perf=1`, scroll the journey, and read p95/p99, scale and adaptation events.
 
 **Not changed / limits.** Safari/iPhone/iPad were not available; WebKit behaviour of the render-target viewport path is standard WebGL 2 but unverified. `rt.cpuMs` measures JS submit time; on a back-pressured GPU that can read as CPU-bound, so the manager falls back to scale steps when the lighter tier is exhausted.
 
