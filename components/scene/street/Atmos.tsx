@@ -7,7 +7,7 @@ import { rng } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { palette } from '@/lib/timeOfDay'
 import { DistCull } from './DistCull'
-import { patchSway } from './materials'
+import { patchSway, streetU } from './materials'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { wallX } from './layout'
 
@@ -245,9 +245,9 @@ void main(){
 const hazeFrag = /* glsl */ `
 precision highp float;
 varying vec2 vUv; varying vec3 vW;
-uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed;
-float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float n(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
+uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed; uniform sampler2D uNz;
+// value noise from the shared baked texture (V3.5): 1 fetch per octave instead of 4 sin-hashes; these sheets overdraw most of the screen
+float n(vec2 p){ return textureLod(uNz, p * (1.0 / 32.0), 0.0).r; }
 float fbm(vec2 p){ return n(p)*.55 + n(p*2.1+7.)*.3 + n(p*4.3+3.)*.15; }
 void main(){
   vec2 p = vUv * vec2(3.0, 2.0) + vec2(uTime * 0.012 + vW.z * 0.37, vW.z * 1.1);
@@ -260,9 +260,8 @@ void main(){
 const shaftFrag = /* glsl */ `
 precision highp float;
 varying vec2 vUv; varying vec3 vW;
-uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed;
-float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-float n(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y); }
+uniform float uTime; uniform vec3 uCol; uniform float uA; uniform float uSeed; uniform sampler2D uNz;
+float n(vec2 p){ return textureLod(uNz, p * (1.0 / 32.0), 0.0).r; }
 void main(){
   float across = 1.0 - abs(vUv.x - 0.5) * 2.0;
   float along = smoothstep(0.0, 0.25, vUv.y) * smoothstep(1.0, 0.45, vUv.y);
@@ -287,11 +286,11 @@ export function AirLayers() {
     const nShaft = rt.quality.shafts
     const haze = new THREE.ShaderMaterial({
       vertexShader: airVert, fragmentShader: hazeFrag, transparent: true, depthWrite: false,
-      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#8a8ea0') }, uA: { value: 0.12 }, uSeed: { value: 0 } },
+      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#8a8ea0') }, uA: { value: 0.12 }, uSeed: { value: 0 }, uNz: streetU.uNz },
     })
     const shaft = new THREE.ShaderMaterial({
       vertexShader: airVert, fragmentShader: shaftFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#ffb36a') }, uA: { value: 0.3 }, uSeed: { value: 3 } },
+      uniforms: { uTime: { value: 0 }, uCol: { value: new THREE.Color('#ffb36a') }, uA: { value: 0.3 }, uSeed: { value: 3 }, uNz: streetU.uNz },
     })
     // all haze sheets → one merged geometry; all shafts (two crossed quads each) → another
     const hazeParts: THREE.BufferGeometry[] = []

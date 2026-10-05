@@ -141,6 +141,13 @@ export function createAdaptive(o: AdaptiveOpts) {
     stats.worst = a[n - 1]
   }
 
+  /** a device that really runs at < 4 fps produces back-to-back frames over 250 ms: that IS evidence (a lone one is a tab switch) */
+  let slowRun = 0
+  const sustained = (dt: number) => {
+    if (dt <= 0.25) { slowRun = 0; return true }
+    return ++slowRun >= 3 && !(typeof document !== 'undefined' && document.hidden)
+  }
+
   const sample = (dt: number, cpuMs: number) => {
     const ms = dt * 1000
     if (dt > 0.05) stats.hitches++
@@ -157,8 +164,8 @@ export function createAdaptive(o: AdaptiveOpts) {
     stats,
     /** statistics only (developer-pinned tier: nothing is ever changed) */
     observe(dt: number, cpuMs = 0) {
-      if (dt > 0.25) return
-      sample(dt, cpuMs)
+      if (dt > 0.25 && !sustained(dt)) return
+      sample(Math.min(dt, 0.25), cpuMs)
     },
     /** a scene change / tab return: ignore the next moments (shader compiles, texture uploads) */
     grace(sec = 1.5) {
@@ -168,7 +175,9 @@ export function createAdaptive(o: AdaptiveOpts) {
       winCpu = 0
     },
     tick(dt: number, cpuMs = 0) {
-      if (dt > 0.25) return // tab switch / debugger pause: not evidence about the device
+      if (dt <= 0.25) slowRun = 0
+      if (dt > 0.25 && !sustained(dt)) return // a lone long frame = tab switch / debugger pause: not evidence about the device
+      dt = Math.min(dt, 0.25)
       t += dt
       sample(dt, cpuMs)
       if (t < graceUntil) return
