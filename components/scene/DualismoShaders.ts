@@ -188,7 +188,7 @@ void main() {
   vec3 amb = dualSky(normalize(N + vec3(0.0, 0.12, 0.0))) * 0.14 * (0.5 + 0.5 * ndv);
   // the hero: the sleeve's light bleeds into the glass around it (milky near the picture, clear and dark toward the edges)
   float dE = length(max(abs(vLoc.xy) - vec2(1.72), 0.0));
-  vec3 spill = uArtCol * exp(-dE * 2.0) * smoothstep(0.85, 0.99, vLN.z) * 0.13 * uSheen * uArtI;
+  vec3 spill = mix(uArtCol, poleC, 0.35) * exp(-dE * 3.2) * smoothstep(0.85, 0.99, vLN.z) * 0.20 * uSheen;
 
   // bevels and grazing faces: where glass is thick it catches light along its edge (iron-glass green-cyan, with the film on top)
   vec3 edge = mix(poleC * vec3(0.9, 1.0, 0.9), film * 1.4, 0.45) * pow(inv, 2.6) * 0.42;

@@ -294,7 +294,8 @@ function Hero({ shared }: { shared: Shared }) {
     const br = 1 + Math.sin(rt.time * 0.9) * 0.05
     shared.uArtI.value = br * smoothstep(0.1, 0.9, arrive)
     kit.mat.uniforms.uArtI.value = 0.08 * br
-    kit.halo.opacity = (0.30 + 0.06 * Math.sin(rt.time * 0.9)) * arrive
+    kit.mat.uniforms.uSheen.value = br * smoothstep(0.1, 0.9, arrive)
+    kit.halo.opacity = (0.45 + 0.06 * Math.sin(rt.time * 0.9)) * arrive
     const fit = clamp(camera.aspect * 0.8 * 9.27 / HERO.w, 0.5, 1) // keep the monolith inside the frame on narrow screens
     o.scale.setScalar(fit)
     o.position.set(D, HERO.y * fit + (1 - fit) * 0.2 + Math.sin(rt.time * 0.5) * 0.06, 0)
@@ -441,16 +442,18 @@ function Orbiter({ index, shared }: { index: number; shared: Shared }) {
     const ringGeo = new THREE.PlaneGeometry(2.0, 2.0)
     return { face, coin, ring, faceGeo, coinGeo, ringGeo }
   }, [ringTex, index, shared])
-  const st = useRef({ hov: 0, sel: 0, flag: false })
+  const st = useRef({ hov: 0, sel: 0, other: 0, flag: false })
   useEffect(() => () => { kit.face.dispose(); kit.coin.dispose(); kit.ring.dispose(); kit.faceGeo.dispose(); kit.coinGeo.dispose(); kit.ringGeo.dispose() }, [kit])
 
   useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
     const s = st.current
-    const selected = useStore.getState().dualismoTrack === index
+    const picked = useStore.getState().dualismoTrack
+    const selected = picked === index
     s.hov += ((s.flag ? 1 : 0) - s.hov) * Math.min(1, dt * 6)
     s.sel += ((selected ? 1 : 0) - s.sel) * Math.min(1, dt * 2.6)
+    s.other += ((picked !== null && !selected ? 1 : 0) - s.other) * Math.min(1, dt * 2.6)
     const aspect = camera.aspect
     const wide = clamp((aspect - 1.0) / 0.5)
     const arrive = rt.dual.t
@@ -465,8 +468,12 @@ function Orbiter({ index, shared }: { index: number; shared: Shared }) {
     const sy = -0.2 * wide + -1.35 * (1 - wide)
     const sz = 1.5 * wide + 3.8 * (1 - wide)
     const w = s.sel * s.sel * (3 - 2 * s.sel)
-    o.position.set(D + ox + (sx - ox) * w, oy + (sy - oy) * w, oz + (sz - oz) * w)
-    const scale = (0.9 + s.hov * 0.2) * (1 + w * 0.75) * smoothstep(0, 0.5, arrive)
+    // the other token steps back to the opposite side (high, far, small) so the chosen one has the stage to itself
+    const v = s.other * s.other * (3 - 2 * s.other) * wide
+    const ex = -sx * 0.95, ey = 1.5, ez = -2.2
+    const bx = ox + (sx - ox) * w, by = oy + (sy - oy) * w, bz = oz + (sz - oz) * w
+    o.position.set(D + bx + (ex - bx) * v, by + (ey - by) * v, bz + (ez - bz) * v)
+    const scale = (0.9 + s.hov * 0.2) * (1 + w * 0.75) * (1 - 0.25 * v) * smoothstep(0, 0.5, arrive)
     o.scale.setScalar(scale)
     o.lookAt(D, 0.3, 14)
     const f = kit.face.uniforms
