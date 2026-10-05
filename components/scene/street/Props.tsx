@@ -54,7 +54,7 @@ export function Props() {
     // a rolled top rim, two thick plastic flip lids with a cross handle, fork pockets, a skirt and swivel casters
     const dumpster = (x: number, z: number, rot: number, body: GeoBuilder, scale = 1) => {
       const W = 0.95 * scale, H = 1.1, D = 1.8 * scale
-      const g = new RoundedBoxGeometry(W, H, D, 3, 0.05)
+      const g = new RoundedBoxGeometry(W, H, D, 2, 0.05)
       const pa = g.attributes.position as THREE.BufferAttribute
       for (let i = 0; i < pa.count; i++) { const k = pa.getY(i) > 0 ? 1 : 0.9; pa.setX(i, pa.getX(i) * k); pa.setZ(i, pa.getZ(i) * (pa.getY(i) > 0 ? 1 : 0.95)) }
       g.rotateY(rot)
@@ -64,7 +64,8 @@ export function Props() {
         const c = Math.cos(rot), sn = Math.sin(rot)
         b.add(geo, x + ox * c + oz * sn, oy, z - ox * sn + oz * c)
       }
-      const rb = (w: number, h: number, d: number, rr = 0.012) => new RoundedBoxGeometry(w, h, d, 2, Math.min(rr, Math.min(w, h, d) * 0.45))
+      // ribs / small parts are plain boxes (a rounded box is 300+ triangles); only the big tub and the lids keep softened edges
+      const rb = (w: number, h: number, d: number, rr = 0.012) => (rr >= 0.02 && Math.min(w, h, d) > 0.05 ? new RoundedBoxGeometry(w, h, d, 1, Math.min(rr, Math.min(w, h, d) * 0.45)) : new THREE.BoxGeometry(w, h, d))
       // vertical stiffening ribs on both long sides and the ends
       for (const sx of [-1, 1]) for (let k = -3; k <= 3; k++) place(rb(0.035, 0.84, 0.07, 0.012), body, sx * (W * 0.5 * 0.97 + 0.012), 0.7, k * 0.25 * scale)
       for (const sz of [-1, 1]) for (let k = -1; k <= 1; k++) place(rb(0.07, 0.8, 0.035, 0.012), body, k * 0.26 * scale, 0.7, sz * (D * 0.5 * 0.96 + 0.012))

@@ -27,7 +27,7 @@ export function Ground() {
   }, [])
 
   // the road is a real surface: crown, gutter channels, depressions where the water stays (see groundBuild.ts)
-  const groundGeo = useMemo(() => buildGroundGeometry(A.puddle.image as HTMLCanvasElement, rt.quality.level >= 1), [])
+  const groundGeo = useMemo(() => buildGroundGeometry(A.puddle.image as HTMLCanvasElement, rt.quality.level >= 2), [])
   const kerbs = useMemo(() => buildKerbs(), [])
 
   // sidewalks follow each wall segment

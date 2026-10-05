@@ -235,10 +235,9 @@ export function Windows() {
     // the stone surround of one unit window (local: x along the wall, y up, +z toward the street); instanced and scaled by (w, h)
     const sg = new GeoBuilder()
     const hh = WIN_H / 2
-    sg.rbox(1.34, 0.11, 0.2, 0, -hh - 0.04, 0.1, 0.018) // sill slab (projects 20 cm)
-    sg.box(1.38, 0.035, 0.24, 0, -hh - 0.115, 0.12) // drip lip
-    sg.rbox(1.36, 0.2, 0.11, 0, hh + 0.12, 0.055, 0.015) // lintel
-    sg.box(1.2, 0.05, 0.14, 0, hh + 0.245, 0.07) // lintel cap
+    // plain boxes only: this template is instanced ~430 times (rounded boxes cost 300+ triangles each → a quarter of a million per frame)
+    sg.box(1.34, 0.11, 0.2, 0, -hh - 0.04, 0.1) // sill slab (projects 20 cm)
+    sg.box(1.36, 0.2, 0.11, 0, hh + 0.12, 0.055) // lintel
     for (const sx of [-1, 1]) sg.box(0.1, WIN_H + 0.12, 0.05, sx * (0.5 + 0.05), 0.0, 0.025) // casing
     const surroundGeo = sg.build()
     const surround = streetMat({ color: '#75716a', roughness: 0.94, aoBase: 0.55, macro: 1.0, seed: 2.2 })

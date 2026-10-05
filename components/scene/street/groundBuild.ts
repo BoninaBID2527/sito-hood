@@ -42,14 +42,14 @@ export function roadY(x: number, z: number, d: number): number {
 export function buildGroundGeometry(mask: HTMLCanvasElement | null, fine = true): THREE.BufferGeometry {
   // grid lines: fine in the alley, coarse behind the walls
   const xs: number[] = []
-  const fx = fine ? 0.25 : 0.5
+  const fx = fine ? 0.4 : 0.6
   for (let x = -22; x < -12; x += 2) xs.push(x)
   for (let x = -12; x < -7; x += 0.5) xs.push(x)
   for (let x = -7; x < 7; x += fx) xs.push(Math.round(x * 1000) / 1000)
   for (let x = 7; x < 12; x += 0.5) xs.push(x)
   for (let x = 12; x <= 22.001; x += 2) xs.push(x)
   const zs: number[] = []
-  const fz = fine ? 0.5 : 1
+  const fz = fine ? 0.75 : 1.25
   for (let z = GROUND.zNear; z >= GROUND.zFar - 0.001; z -= fz) zs.push(z)
   const nx = xs.length, nz = zs.length
   let img: ImageData | null = null
@@ -99,7 +99,8 @@ export function buildKerbs() {
     s.lineTo(...P(w, h - 0.01))
     s.lineTo(...P(w - 0.012, h))
     s.lineTo(...P(bevel, h))
-    s.quadraticCurveTo(...P(0.0, h), ...P(-0.004, h - bevel))
+    s.lineTo(...P(0.0, h - bevel * 0.55)) // chamfered street-side edge (a straight bevel: a curve here multiplies the triangle count)
+    s.lineTo(...P(-0.006, h - bevel))
     s.lineTo(...P(-0.012, -0.06))
     return s
   }
@@ -114,7 +115,7 @@ export function buildKerbs() {
       if (bl < 0.2) continue
       const w = 0.2 + r() * 0.015
       const h = 0.168 + (r() - 0.5) * 0.006
-      const g = new THREE.ExtrudeGeometry(profile(w, h, 0.032 + r() * 0.012, side), { depth: bl, bevelEnabled: false, curveSegments: 3 })
+      const g = new THREE.ExtrudeGeometry(profile(w, h, 0.032 + r() * 0.012, side), { depth: bl, bevelEnabled: false, curveSegments: 1 })
       // chipped top edges: ~1 block in 4 loses a corner (vertices of the street-side top edge pushed in)
       if (r() < 0.28) {
         const pa = g.attributes.position as THREE.BufferAttribute
