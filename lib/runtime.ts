@@ -75,6 +75,8 @@ export const rt = {
   /** canvas DPR (fixed per tier — changing it re-allocates every buffer, so it only moves on a tier change) */
   dpr: 1,
   /** developer/QA only (set through window.__hd with ?debug): pins the camera to an exact pose for comparable captures */
+  /** QA only: the next frame resets the scroll spring to the raw progress (instant, no settling frames) */
+  snapSpring: null as number | null,
   camOverride: null as null | { pos: [number, number, number]; look: [number, number, number]; fov?: number },
   /** internal render scale 0.5..1 (fraction of the drawing buffer the scene is rendered into; the adaptive manager moves it instantly, no re-allocation) */
   scale: 1,

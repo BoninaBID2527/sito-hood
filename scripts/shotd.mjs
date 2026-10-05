@@ -30,7 +30,7 @@ let log = []
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 && (r.world !== 'alley' || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.06)) })
 const step = async (s) => {
   switch (s.op) {
-    case 'jump': await page.evaluate((p) => window.__hd.jump(p), s.p); await settle(); break
+    case 'jump': await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, s.p); await settle(); break
     case 'cam': await page.evaluate((c) => { window.__hd.rt.camOverride = c }, { pos: s.pos, look: s.look, fov: s.fov }); break
     case 'camOff': await page.evaluate(() => { window.__hd.rt.camOverride = null }); break
     case 'wait': await page.waitForTimeout(s.ms); break

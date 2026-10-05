@@ -64,7 +64,7 @@ export function Walls() {
     }
     // cast stone / concrete trim: lighter and rougher than the old near-black slab, with its own weathering
     A.sidewalk.repeat.set(1, 1)
-    const stone = streetMat({ map: A.sidewalk, color: '#8e897f', roughness: 0.93, aoBase: 0.45, macro: 0.9, seed: 5.5, vertexColors: true })
+    const stone = streetMat({ map: A.sidewalk, color: '#6f6b63', roughness: 0.94, aoBase: 0.45, macro: 1.0, seed: 5.5, vertexColors: true })
     const trim = streetMat({ color: '#3b3733', roughness: 0.9, aoBase: 0.5, vertexColors: true })
     mats.stone = stone
     mats.trim = trim
@@ -241,7 +241,7 @@ export function Windows() {
     sg.box(1.2, 0.05, 0.14, 0, hh + 0.245, 0.07) // lintel cap
     for (const sx of [-1, 1]) sg.box(0.1, WIN_H + 0.12, 0.05, sx * (0.5 + 0.05), 0.0, 0.025) // casing
     const surroundGeo = sg.build()
-    const surround = streetMat({ color: '#9a958a', roughness: 0.92, aoBase: 0.55, macro: 0.95, seed: 2.2 })
+    const surround = streetMat({ color: '#75716a', roughness: 0.94, aoBase: 0.55, macro: 1.0, seed: 2.2 })
     const meshes: THREE.InstancedMesh[] = []
     const geos: THREE.BufferGeometry[] = []
     const mats: THREE.MeshStandardMaterial[] = []

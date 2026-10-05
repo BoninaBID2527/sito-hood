@@ -81,7 +81,7 @@ export function wallWithOpenings(b: WallBuild): THREE.BufferGeometry {
   // ── reveals: the four faces of each shaft, shaded dark toward the back
   for (const hl of holes) {
     const xb = xw + side * hl.depth
-    const F = 0.78, B = 0.26
+    const F = 0.62, B = 0.1
     const d0 = 0, d1 = hl.depth / tile
     // faces on z (left/right jambs)
     quad([[xw, hl.y0, hl.z0], [xb, hl.y0, hl.z0], [xb, hl.y1, hl.z0], [xw, hl.y1, hl.z0]], [[d0, V(hl.y0)], [d1, V(hl.y0)], [d1, V(hl.y1)], [d0, V(hl.y1)]], [F, B, B, F], [0, 0, -1])

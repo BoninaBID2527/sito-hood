@@ -97,7 +97,7 @@ export async function runCheckpoint(page, cp, out, h) {
     if (cp.dual === 'return') { await page.evaluate(() => window.__hd.act('exitDualism')); await h.until(() => window.__hd.store.getState().mode === 'alterco', null, 600000); return shot(2500) }
   }
   await toAlley(page, h)
-  await page.evaluate((p) => window.__hd.jump(p), cp.p); await h.settle()
+  await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, cp.p); await h.settle()
   if (cp.cam) await page.evaluate((c) => { window.__hd.rt.camOverride = c }, cp.cam)
   await shot(cp.cam ? 2200 : 1800)
   await page.evaluate(() => { window.__hd.rt.camOverride = null })

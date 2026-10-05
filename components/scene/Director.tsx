@@ -55,6 +55,7 @@ export function Director() {
     rt.py = damp(rt.py, clamp(rt.ry + rt.ty, -1, 1), 3.0, dt)
 
     // ── scroll: under-damped spring on top of Lenis' smoothing
+    if (rt.snapSpring !== null && Math.abs(rt.progress - rt.snapSpring) < 0.003) { spring.current.x = rt.progress; spring.current.v = 0; rt.snapSpring = null }
     const prev = spring.current.x
     if (!frozen) {
       if (rt.reducedMotion) spring.current.x = damp(spring.current.x, rt.progress, 7, dt)
