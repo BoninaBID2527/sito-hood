@@ -94,6 +94,10 @@ export function TrackOrbit() {
       const dd = 1.05 + (k % 3) * 0.12
       const x = p.x + side.x * dd, z = p.z + side.y * dd
       poles.cyl(0.032, 0.04, 9.0, x, 4.2, z, 8)
+      // cast base flange with four anchor bolts and a grouted collar: the pole is bolted to the paving, it does not just end in it
+      poles.cyl(0.15, 0.17, 0.045, x, 0.022, z, 14)
+      poles.cyl(0.07, 0.09, 0.25, x, 0.17, z, 10)
+      for (let b = 0; b < 4; b++) poles.cyl(0.014, 0.014, 0.03, x + Math.cos(b * Math.PI / 2 + 0.4) * 0.12, 0.058, z + Math.sin(b * Math.PI / 2 + 0.4) * 0.12, 6)
       poles.box(0.5, 0.05, 0.05, x, 3.2 + (k % 4) * 0.7, z, 0, k * 0.8, 0)
     })
     const poleGeo = poles.build()

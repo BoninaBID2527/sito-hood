@@ -264,12 +264,51 @@ export function Windows() {
       mat.onBeforeCompile = (sh) => {
         sh.uniforms.uWinT = winU.t
         sh.uniforms.uLate = winU.late
-        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec2 aWin;\nvarying vec2 vWin;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvWin = aWin;')
+        sh.vertexShader = sh.vertexShader
+          .replace('#include <common>', '#include <common>\nattribute vec2 aWin;\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;')
+          .replace(
+            '#include <begin_vertex>',
+            `#include <begin_vertex>
+vWin = aWin;
+#ifdef USE_INSTANCING
+  mat4 imw_ = modelMatrix * instanceMatrix;
+#else
+  mat4 imw_ = modelMatrix;
+#endif
+vLPos = position;
+vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
+          )
+        // interior mapping (V3.6): the lit room behind the glass is a real box — back wall, side walls, floor, ceiling lamp — read along the
+        // view ray in the window's own space, so the glow shifts with the camera (parallax) instead of being a flat picture. Only lit variants pay for it.
+        const interior = lit
+          ? `
+  {
+    vec3 ro_ = vLPos;
+    vec3 rd_ = normalize(vLPos - vLCam);
+    float D_ = 1.5 + 1.4 * vWin.y;
+    vec3 tt_ = vec3((0.5 * sign(rd_.x) - ro_.x) / (abs(rd_.x) < 1e-4 ? 1e-4 : rd_.x), (0.775 * sign(rd_.y) - ro_.y) / (abs(rd_.y) < 1e-4 ? 1e-4 : rd_.y), (-D_ - ro_.z) / min(rd_.z, -1e-4));
+    float t_ = min(tt_.x, min(tt_.y, tt_.z));
+    vec3 hp_ = ro_ + rd_ * t_;
+    float lum_;
+    if (t_ == tt_.z) {
+      // back wall: lit, with a doorway or a shelf block and a darker wainscot band
+      float door_ = step(abs(hp_.x - (vWin.x - 0.5) * 0.5), 0.17) * step(hp_.y, 0.2);
+      float shelf_ = step(abs(hp_.x + (vWin.y - 0.5) * 0.5), 0.2) * step(abs(hp_.y - 0.25), 0.16);
+      lum_ = 0.95 - 0.5 * door_ - 0.32 * shelf_ - 0.18 * step(hp_.y, -0.45);
+    } else if (t_ == tt_.y) {
+      // ceiling carries the lamp; the floor is dark wood
+      lum_ = rd_.y > 0.0 ? 0.35 + 1.2 * step(length(hp_.xz - vec2((vWin.x - 0.5) * 0.4, -D_ * 0.45)), 0.2) : 0.28;
+    } else {
+      lum_ = 0.62 - 0.25 * smoothstep(0.0, 1.0, -hp_.z / D_);
+    }
+    totalEmissiveRadiance *= mix(0.62, 1.2, clamp(lum_, 0.0, 1.2));
+  }`
+          : ''
         sh.fragmentShader = sh.fragmentShader
-          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nuniform float uWinT;\nuniform float uLate;')
-          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);')
+          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;\nuniform float uWinT;\nuniform float uLate;')
+          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);' + interior)
       }
-      mat.customProgramCacheKey = () => 'win-emit2'
+      mat.customProgramCacheKey = () => 'win-emit3' + (lit ? 'i' : '')
       const vg = plane.clone()
       geos.push(vg)
       const aWin = new Float32Array(list.length * 2)
