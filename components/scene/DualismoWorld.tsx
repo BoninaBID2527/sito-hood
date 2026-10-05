@@ -154,11 +154,11 @@ function Monoliths({ shared, fit }: { shared: Shared; fit: number }) {
   const kit = useMemo(() => {
     const q = rt.quality
     const rows = q.dualRows
-    const pairs = Math.max(2, Math.round(q.dualCrystals * 0.5))
+    const pairs = Math.max(3, Math.round(q.dualCrystals * 0.22))
     const r = rng(1313)
-    const geo = new RoundedBoxGeometry(1, 1, 1, q.level >= 2 ? 2 : 1, 0.1)
+    const geo = new RoundedBoxGeometry(1, 1, 1, q.level >= 3 ? 2 : 1, 0.1) // 2 chamfer strips per edge is enough for 80 instances
     const mat = new THREE.ShaderMaterial({
-      vertexShader: monoVert, fragmentShader: monoFrag, fog: false,
+      vertexShader: monoVert, fragmentShader: monoFrag, fog: false, defines: rt.quality.level >= 2 ? { DISP: '' } : {},
       uniforms: { uTime: shared.uTime, uFade: shared.uFade, uArtI: shared.uArtI, uArt: shared.uArt, uArtCol: shared.uArtCol, uSheen: { value: 0 } },
     })
     const m4 = new THREE.Matrix4(), qt = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(1, 1, 1), pv = new THREE.Vector3()
@@ -195,15 +195,15 @@ function Monoliths({ shared, fit }: { shared: Shared; fit: number }) {
     const blades = new THREE.InstancedMesh(geo, mat, pairs * 2)
     const bd = new Float32Array(pairs * 2 * 3), bm = new Float32Array(pairs * 2 * 4)
     for (let i = 0; i < pairs; i++) {
-      const bz = r.range(-80, 2), bx = r.range(3.6, 9 + -bz * 0.12) * fit, by = r.range(0.2, 6 + -bz * 0.05)
-      const w = r.range(0.14, 0.36), h = r.range(1.6, 4.2) * (1 + -bz / 70), d = r.range(0.14, 0.36)
+      const bz = r.range(-90, -6), bx = r.range(5.5, 10 + -bz * 0.12) * fit, by = r.range(0.4, 7 + -bz * 0.05)
+      const w = r.range(0.28, 0.6), h = r.range(3, 7) * (1 + -bz / 90), d = r.range(0.2, 0.45)
       const yaw = r.range(0, Math.PI), roll = r.range(-0.5, 0.5), seed = r()
       for (const sgn of [-1, 1]) {
         const k = i * 2 + (sgn > 0 ? 1 : 0)
         m4.compose(pv.set(D + sgn * bx, by, bz), qt.setFromEuler(e.set(0, sgn * yaw, -sgn * roll)), sc)
         blades.setMatrixAt(k, m4)
         bd.set([w, h, d], k * 3)
-        bm.set([seed, 0, Math.min(0.045, w * 0.3), 0], k * 4)
+        bm.set([seed, 0, Math.min(0.06, w * 0.25), 0], k * 4)
       }
     }
     blades.geometry = geo.clone()
@@ -215,7 +215,7 @@ function Monoliths({ shared, fit }: { shared: Shared; fit: number }) {
   useWorldFrame('dualism', () => {
     // the live tier can drop below the one the world was built for: draw fewer rows, never rebuild
     kit.avenue.count = Math.min(kit.rows, rt.quality.dualRows) * 2
-    kit.blades.count = Math.min(kit.pairs, Math.max(2, Math.round(rt.quality.dualCrystals * 0.5))) * 2
+    kit.blades.count = Math.min(kit.pairs, Math.max(3, Math.round(rt.quality.dualCrystals * 0.22))) * 2
   }, -0.5)
   useEffect(() => () => { kit.avenue.geometry.dispose(); kit.blades.geometry.dispose(); kit.geo.dispose(); kit.avenue.dispose(); kit.blades.dispose(); kit.mat.dispose() }, [kit])
   return (
@@ -230,7 +230,7 @@ function Monoliths({ shared, fit }: { shared: Shared; fit: number }) {
 
 function Gate({ shared }: { shared: Shared }) {
   const kit = useMemo(() => {
-    const geo = new THREE.TorusGeometry(100, 1.5, 8, 256)
+    const geo = new THREE.TorusGeometry(100, 1.5, 6, 176)
     const mat = new THREE.ShaderMaterial({ vertexShader: ringVert, fragmentShader: ringFrag, fog: false, uniforms: { uTime: shared.uTime, uFade: shared.uFade } })
     const mesh = new THREE.InstancedMesh(geo, mat, 2)
     const m4 = new THREE.Matrix4()
@@ -251,10 +251,10 @@ function Hero({ shared }: { shared: Shared }) {
   const g = useRef<THREE.Group>(null)
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
   const kit = useMemo(() => {
-    const geo = new RoundedBoxGeometry(1, 1, 1, rt.quality.level >= 2 ? 2 : 1, 0.1)
+    const geo = new RoundedBoxGeometry(1, 1, 1, 2, 0.1)
     // the slab holds the emitter: it is not lit by it from the front, only its bevels pick up a little spill
     const mat = new THREE.ShaderMaterial({
-      vertexShader: monoVert, fragmentShader: monoFrag, fog: false,
+      vertexShader: monoVert, fragmentShader: monoFrag, fog: false, defines: rt.quality.level >= 2 ? { DISP: '' } : {},
       uniforms: { uTime: shared.uTime, uFade: shared.uFade, uArtI: { value: 0.1 }, uArt: shared.uArt, uArtCol: shared.uArtCol, uSheen: { value: 1 } },
     })
     const slab = new THREE.InstancedMesh(geo, mat, 1)
@@ -452,13 +452,12 @@ function Orbiter({ index, shared }: { index: number; shared: Shared }) {
     s.hov += ((s.flag ? 1 : 0) - s.hov) * Math.min(1, dt * 6)
     s.sel += ((selected ? 1 : 0) - s.sel) * Math.min(1, dt * 2.6)
     const aspect = camera.aspect
-    const fit = fitFor(aspect)
     const wide = clamp((aspect - 1.0) / 0.5)
     const arrive = rt.dual.t
     // orbit: ellipse tilted so the near pass is low (under the sleeve) and the far pass high (behind it)
     const t = rt.time * 0.14 + index * Math.PI
     const k = 0.3 + 0.7 * arrive
-    const ox = Math.cos(t) * 5.8 * fit * k
+    const ox = Math.cos(t) * 5.8 * clamp(aspect / 1.78, 0.3, 1) * k
     const oz = Math.sin(t) * 2.8 * k - 0.7
     const oy = 0.5 - Math.sin(t) * 1.95
     // stage: right of the sleeve on a wide screen, under it on a tall one
@@ -519,9 +518,9 @@ function ReturnDoor() {
     const s = st.current
     s.hov += ((s.flag ? 1 : 0) - s.hov) * Math.min(1, dt * 7)
     const aspect = camera.aspect
-    const px = Math.min(3.4, 1.0 + 2.4 * clamp((aspect - 0.5) / 1.1))
+    const px = Math.min(3.4, 1.9 * aspect)
     o.position.set(D - px, -1.35 + Math.sin(rt.time * 0.6) * 0.06, 4.4)
-    o.scale.setScalar((0.8 + s.hov * 0.2) * smoothstep(0.3, 1, rt.dual.t))
+    o.scale.setScalar((0.8 + s.hov * 0.2) * Math.min(1, 0.55 + aspect * 0.5) * smoothstep(0.3, 1, rt.dual.t))
     ;(o.children[0] as THREE.Mesh).rotation.z = rt.time * 0.15
     kit.ring.opacity = 0.42 + s.hov * 0.5
     kit.core.opacity = 0.28 + s.hov * 0.4

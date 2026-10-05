@@ -181,9 +181,9 @@ void main() {
   vec3 L = uArt - vWP;
   float dl = length(L);
   L /= dl;
-  float att = 1.0 / (1.0 + dl * dl * 0.035);
+  float att = 1.0 / (1.0 + dl * dl * 0.11);
   float lam = max(dot(N, L), 0.0);
-  vec3 artGlow = uArtCol * uArtI * att * (lam * 0.8 + pow(max(dot(N, normalize(L + V)), 0.0), 60.0) * 2.2);
+  vec3 artGlow = uArtCol * uArtI * att * (lam * 0.55 + pow(max(dot(N, normalize(L + V)), 0.0), 60.0) * 2.2);
   // faint ambient from the atmosphere itself: faces turned toward the cool pole take the cool light, toward the warm pole the rose
   vec3 amb = dualSky(normalize(N + vec3(0.0, 0.12, 0.0))) * 0.14 * (0.5 + 0.5 * ndv);
   // the hero: the sleeve's light bleeds into the glass around it (milky near the picture, clear and dark toward the edges)
@@ -198,10 +198,24 @@ void main() {
   vec3 aw = fwidth(vLoc);
   vec3 Vl = normalize(vVL);
   vec3 an = abs(vLN);
-  float ghost = 0.0;
-  if (an.z > 0.85)      ghost = ghostEdges(vLoc.xy, Vl.xy / max(abs(Vl.z), 0.3) * vDim.z * 0.55, 0.5 * vDim.xy, aw.xy);
-  else if (an.x > 0.85) ghost = ghostEdges(vLoc.zy, Vl.zy / max(abs(Vl.x), 0.3) * vDim.x * 0.55, 0.5 * vDim.zy, aw.zy);
-  else if (an.y > 0.85) ghost = ghostEdges(vLoc.xz, Vl.xz / max(abs(Vl.y), 0.3) * vDim.y * 0.55, 0.5 * vDim.xz, aw.xz);
+  vec3 ghost = vec3(0.0);
+  vec3 dk = vec3(0.94, 1.0, 1.06);   // dispersion: the three wavelengths bend a little differently, so the inner edges split into colour
+  #ifndef DISP
+  dk = vec3(1.0);
+  #endif
+  for (int c = 0; c < 3; c++) {
+    #ifndef DISP
+    if (c > 0) break;
+    #endif
+    float g = 0.0;
+    if (an.z > 0.85)      g = ghostEdges(vLoc.xy, Vl.xy / max(abs(Vl.z), 0.3) * vDim.z * 0.55 * dk[c], 0.5 * vDim.xy, aw.xy);
+    else if (an.x > 0.85) g = ghostEdges(vLoc.zy, Vl.zy / max(abs(Vl.x), 0.3) * vDim.x * 0.55 * dk[c], 0.5 * vDim.zy, aw.zy);
+    else if (an.y > 0.85) g = ghostEdges(vLoc.xz, Vl.xz / max(abs(Vl.y), 0.3) * vDim.y * 0.55 * dk[c], 0.5 * vDim.xz, aw.xz);
+    ghost[c] = g;
+  }
+  #ifndef DISP
+  ghost = vec3(ghost.x);
+  #endif
   vec3 ghostC = mix(poleC, vec3(0.8, 0.9, 1.0), 0.35) * ghost * (0.10 + 0.22 * inv) * (0.6 + 0.4 * streak);
   vec3 col = inner + amb + specCol + edge + sheen + spill + ghostC + artGlow * (0.25 + 0.75 * inv);
   // aerial perspective: near is sharp, far dissolves into the exact colour of the backdrop
@@ -268,8 +282,8 @@ void main() {
 
   // the artwork spills light forward onto the floor (cool left, rose right: the two poles of the artwork)
   vec2 dp = vW.xz - uArt.xz - vec2(0.0, 2.6);
-  float pool = exp(-(dp.x * dp.x / 30.0 + dp.y * dp.y / 55.0));
-  vec3 poolC = mix(uArtCol * vec3(0.8, 0.9, 1.1), uArtCol * vec3(1.15, 0.8, 0.9), smoothstep(-4.0, 4.0, dp.x)) * pool * uArtI * 0.12 * (1.0 - rough);
+  float pool = exp(-(dp.x * dp.x / 22.0 + dp.y * dp.y / 40.0));
+  vec3 poolC = mix(uArtCol * vec3(0.8, 0.9, 1.1), uArtCol * vec3(1.15, 0.8, 0.9), smoothstep(-4.0, 4.0, dp.x)) * pool * uArtI * 0.075 * (1.0 - rough);
 
   // slab seams: the floor is cut stone, which gives it scale and a reason to catch light
   vec2 g = vW.xz / 7.0;
@@ -437,7 +451,7 @@ void main() {
   float str = 0.62 + 0.38 * sin(u * 41.0 + uSeed * 9.0 + uTime * 0.05) * sin(u * 17.0 - uSeed * 5.0 - uTime * 0.03);
   float along = smoothstep(0.0, 0.18, vUv.y) * (1.0 - smoothstep(0.35, 1.0, vUv.y)) * 1.4;
   float near = smoothstep(5.0, 18.0, distance(cameraPosition, vW));
-  float a = across * str * along * near * uFade * 0.12;
+  float a = across * str * along * near * uFade * 0.24;
   gl_FragColor = vec4(uColor * a, a);
 }
 `
