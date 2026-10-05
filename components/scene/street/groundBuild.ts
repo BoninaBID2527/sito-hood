@@ -144,9 +144,9 @@ export function buildKerbs() {
     const kx = kerbX(side as -1 | 1, z)
     const x = side * (kx - 0.26)
     const y = roadY(x, z, 0)
-    iron.box(0.56, 0.05, 0.8, x, y - 0.01, z) // frame
-    for (let i = -3; i <= 3; i++) iron.box(0.03, 0.03, 0.72, x + i * 0.075, y + 0.012, z) // bars
-    iron.box(0.5, 0.01, 0.74, x, y - 0.08, z) // the dark throat below the bars
+    iron.box(0.56, 0.04, 0.8, x, y - 0.015, z) // cast-iron frame
+    iron.box(0.46, 0.012, 0.7, x, y - 0.012, z) // the grate plate (dark: at distance thin bars only alias into sparkle)
+    for (let i = -1; i <= 1; i++) iron.box(0.07, 0.03, 0.66, x + i * 0.14, y + 0.0, z) // three broad bars
   }
   return { stone: stoneGeo ? withWhite(stoneGeo) : null, iron: iron.empty ? null : withWhite(iron.build(), 0.9) }
 }

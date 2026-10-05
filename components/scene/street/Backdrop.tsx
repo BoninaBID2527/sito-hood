@@ -6,7 +6,8 @@ import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { palette } from '@/lib/timeOfDay'
 import { streetMat } from './materials'
-import { createTowerMaterial, updateTowerMaterial, tagBuilding } from '@/effects/TowerMaterial'
+import { createTowerMaterial, updateTowerMaterial } from '@/effects/TowerMaterial'
+import { buildCity } from './cityBlocks'
 
 /** Distant skyline layers (2.5D) + a few big blocks so the plaza reads as part of a city. */
 export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [-240, -330, -430], blocks: withBlocks = true }) {
@@ -18,18 +19,10 @@ export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [
       const lit = new THREE.MeshBasicMaterial({ map: l.lights, transparent: true, fog: false, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.0 })
       return { geo, sil, lit, w }
     })
-    // big blocks flanking the far end of the plaza
-    const blocks: { p: [number, number, number]; s: [number, number, number] }[] = [
-      { p: [-34, 19, -140], s: [30, 38, 26] },
-      { p: [-28, 26, -176], s: [28, 52, 24] },
-      { p: [36, 22, -146], s: [32, 44, 26] },
-      { p: [32, 30, -184], s: [30, 60, 26] },
-      { p: [-74, 33, -210], s: [40, 66, 30] },
-      { p: [78, 30, -216], s: [44, 60, 30] },
-    ]
+    // the near / mid city: stepped towers with cornices and roof plant, merged into one mesh (see cityBlocks.ts)
     const bMat = createTowerMaterial()
-    const bGeos = blocks.map((b, i) => tagBuilding(new THREE.BoxGeometry(...b.s), 0.17 + i * 0.13, 3.3 + (i % 3) * 0.5, 2.6 + (i % 4) * 0.4, [0.1, 0.5, 0.8, 0.3, 0.9, 0.6][i % 6]))
-    return { layers, blocks, bMat, bGeos }
+    const city = withBlocks ? buildCity() : null
+    return { layers, city, bMat }
   }, [])
 
   useFrame(() => {
@@ -41,7 +34,7 @@ export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [
     })
   }, -1)
 
-  useEffect(() => () => { kit.layers.forEach((l) => { l.geo.dispose(); l.sil.dispose(); l.lit.dispose() }); kit.bMat.dispose(); kit.bGeos.forEach((g) => g.dispose()) }, [kit])
+  useEffect(() => () => { kit.layers.forEach((l) => { l.geo.dispose(); l.sil.dispose(); l.lit.dispose() }); kit.bMat.dispose(); kit.city?.dispose() }, [kit])
 
   return (
     <group position={origin}>
@@ -51,9 +44,7 @@ export function Backdrop({ origin = [0, 0, 0] as [number, number, number], z = [
           <mesh geometry={l.geo} material={l.lit} position={[0, 0, 0.1]} renderOrder={-40 + i} />
         </group>
       ))}
-      {withBlocks && kit.blocks.map((b, i) => (
-        <mesh key={i} geometry={kit.bGeos[i]} material={kit.bMat} position={b.p} />
-      ))}
+      {kit.city && <mesh geometry={kit.city} material={kit.bMat} frustumCulled={false} />}
     </group>
   )
 }

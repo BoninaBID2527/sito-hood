@@ -22,7 +22,7 @@ export function Ground() {
     A.sidewalk.repeat.set(1, 1)
     const walk = streetMat({ map: A.sidewalk, color: '#6f6a62', roughness: 0.9, aoBase: 0.6 })
     const kerb = streetMat({ map: A.sidewalk, color: '#86837e', roughness: 0.86, aoBase: 0.5, macro: 0.8, seed: 8.1, vertexColors: true })
-    const iron = streetMat({ color: '#2a2a2c', roughness: 0.55, metalness: 0.8, aoBase: 0.6, vertexColors: true })
+    const iron = streetMat({ color: '#17171a', roughness: 0.8, metalness: 0.3, aoBase: 0.6, vertexColors: true })
     return { asphalt, walk, kerb, iron }
   }, [])
 
