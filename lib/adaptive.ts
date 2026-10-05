@@ -231,6 +231,9 @@ export function createAdaptive(o: AdaptiveOpts) {
           } else if (idx < TIERS.length - 1 && (cpuBound || lvl >= floor)) {
             const nt = TIERS[idx + 1]
             setTier(nt, `${avg.toFixed(0)}ms ${cpuBound ? 'cpu' : 'gpu@floor'}`)
+          } else if (lvl < floor) {
+            // lowest tier already (or a back-pressured GPU that looks CPU-bound from JS): pixels are all that is left to give
+            setLevel(lvl + 1, `${avg.toFixed(0)}ms last-resort`)
           } else bad = 0 // nothing left to give: a stable lower frame rate beats flapping
         }
       } else if (avg <= RESTORE_MS) {
