@@ -4,6 +4,7 @@ import { makeCanvas, toTexture, grain, nextFrame, track } from './paint'
 import { Atlas, FONT, applyAge, drawBlock, drawHand, drawStencil, drawSymbol, drawSticker, paper, scrap, drawBigPoster, type Cell } from './graffiti'
 import { roomBio, roomCopy, roomMedia } from '@/data/room'
 import { rt } from './runtime'
+import { plasterTex, plankTex, woodGrainTex, weaveTex, grainTex, rugTex, roomProbe } from './roomSurfaces'
 
 /**
  * THE HOODDINO ROOM — texture registry. Three staged builds, matching the loading strategy:
@@ -17,9 +18,11 @@ export interface RoomTextures {
   detailReady: boolean
   wall: THREE.Texture
   floor: THREE.Texture
-  foam: THREE.Texture
-  fabricRed: THREE.Texture
-  fabricSlate: THREE.Texture
+  fabric: THREE.Texture
+  grain: THREE.Texture
+  rug: THREE.Texture
+  /** tiny cube light-probe for glass / metal / glossy plastic */
+  probe: THREE.CubeTexture
   wood: THREE.Texture
   keys: THREE.Texture
   daw: THREE.Texture
@@ -81,115 +84,8 @@ function stain(ctx: Ctx, w: number, h: number, n: number, color: string, seed: n
   ctx.restore()
 }
 
-const wrap = (t: THREE.Texture) => { t.wrapS = t.wrapT = THREE.RepeatWrapping; return t }
 
 /* ───────────────────────── surfaces ───────────────────────── */
-
-/** painted block wall: roller streaks, chipped paint over raw concrete, rising damp, scuffs */
-function paintWall(size: number, seed: number, base: string, band: string) {
-  const { canvas, ctx } = makeCanvas(size, size)
-  const r = rng(seed)
-  ctx.fillStyle = base
-  ctx.fillRect(0, 0, size, size)
-  // vertical roller streaks
-  for (let i = 0; i < 90; i++) {
-    const x = r() * size, w = 6 + r() * 40
-    ctx.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.04)'
-    ctx.fillRect(x, 0, w, size)
-  }
-  // lower band (dado) — a darker tone with a hand-cut edge
-  const y0 = size * 0.62
-  ctx.fillStyle = band
-  ctx.beginPath()
-  ctx.moveTo(0, y0)
-  for (let x = 0; x <= size; x += 16) ctx.lineTo(x, y0 + Math.sin(x * 0.03) * 3 + (r() - 0.5) * 3)
-  ctx.lineTo(size, size)
-  ctx.lineTo(0, size)
-  ctx.fill()
-  // blocks / mortar lines of a cinder-block wall
-  ctx.strokeStyle = 'rgba(0,0,0,0.22)'
-  ctx.lineWidth = 2
-  const bh = size / 8
-  for (let y = 0; y <= size; y += bh) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(size, y); ctx.stroke() }
-  for (let row = 0; row < 8; row++) for (let x = (row % 2) * (size / 8); x < size; x += size / 4) { ctx.beginPath(); ctx.moveTo(x, row * bh); ctx.lineTo(x, (row + 1) * bh); ctx.stroke() }
-  // chips: the raw concrete under the paint
-  for (let i = 0; i < 70; i++) {
-    const x = r() * size, y = r() * size, w = 4 + r() * 22, h = 3 + r() * 12
-    ctx.fillStyle = `rgba(${120 + r() * 40},${116 + r() * 36},${108 + r() * 30},${0.35 + r() * 0.4})`
-    ctx.beginPath()
-    ctx.ellipse(x, y, w, h, r() * 3, 0, Math.PI * 2)
-    ctx.fill()
-  }
-  stain(ctx, size, size, 26, 'rgba(0,0,0,0.07)', seed + 3)
-  grain(ctx, size, size, 0.05, seed + 5)
-  return wrap(toTexture(canvas, { aniso: 8, wrap: true }))
-}
-
-function floorTex(size: number) {
-  const { canvas, ctx } = makeCanvas(size, size)
-  const r = rng(77)
-  ctx.fillStyle = '#242322'
-  ctx.fillRect(0, 0, size, size)
-  stain(ctx, size, size, 40, 'rgba(0,0,0,0.12)', 4)
-  stain(ctx, size, size, 18, 'rgba(120,110,100,0.07)', 5)
-  // saw-cut expansion joints
-  ctx.strokeStyle = 'rgba(0,0,0,0.5)'
-  ctx.lineWidth = 3
-  ctx.beginPath(); ctx.moveTo(0, size / 2); ctx.lineTo(size, size / 2); ctx.moveTo(size / 2, 0); ctx.lineTo(size / 2, size); ctx.stroke()
-  // scuffs and a couple of old paint drips
-  for (let i = 0; i < 60; i++) { ctx.strokeStyle = `rgba(200,190,170,${0.03 + r() * 0.05})`; ctx.lineWidth = 1 + r() * 2; ctx.beginPath(); const x = r() * size, y = r() * size; ctx.moveTo(x, y); ctx.lineTo(x + (r() - 0.5) * 60, y + (r() - 0.5) * 60); ctx.stroke() }
-  for (let i = 0; i < 5; i++) { ctx.fillStyle = ['rgba(200,50,40,0.5)', 'rgba(60,110,200,0.4)', 'rgba(240,200,60,0.4)'][i % 3]; ctx.beginPath(); ctx.ellipse(r() * size, r() * size, 3 + r() * 8, 2 + r() * 5, r() * 3, 0, Math.PI * 2); ctx.fill() }
-  grain(ctx, size, size, 0.06, 9)
-  return wrap(toTexture(canvas, { aniso: 8, wrap: true }))
-}
-
-/** acoustic foam: a grid of pyramids lit from the top-left */
-function foamTex(size: number) {
-  const { canvas, ctx } = makeCanvas(size, size)
-  const n = 8, c = size / n
-  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
-    const x = i * c, y = j * c
-    // four faces of the pyramid
-    const faces: [string, number[][]][] = [
-      ['#34353a', [[x, y], [x + c, y], [x + c / 2, y + c / 2]]],
-      ['#1c1c20', [[x + c, y], [x + c, y + c], [x + c / 2, y + c / 2]]],
-      ['#121214', [[x, y + c], [x + c, y + c], [x + c / 2, y + c / 2]]],
-      ['#26272b', [[x, y], [x, y + c], [x + c / 2, y + c / 2]]],
-    ]
-    for (const [col, pts] of faces) { ctx.fillStyle = col; ctx.beginPath(); pts.forEach(([px, py], k) => (k ? ctx.lineTo(px, py) : ctx.moveTo(px, py))); ctx.fill() }
-  }
-  stain(ctx, size, size, 14, 'rgba(255,255,255,0.025)', 3)
-  grain(ctx, size, size, 0.05, 2)
-  return wrap(toTexture(canvas, { aniso: 4, wrap: true }))
-}
-
-function fabricTex(size: number, base: string, thread: string, seed: number) {
-  const { canvas, ctx } = makeCanvas(size, size)
-  const r = rng(seed)
-  ctx.fillStyle = base
-  ctx.fillRect(0, 0, size, size)
-  ctx.strokeStyle = thread
-  for (let y = 0; y < size; y += 3) { ctx.globalAlpha = 0.18 + r() * 0.12; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(size, y); ctx.stroke() }
-  for (let x = 0; x < size; x += 3) { ctx.globalAlpha = 0.1 + r() * 0.1; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, size); ctx.stroke() }
-  ctx.globalAlpha = 1
-  stain(ctx, size, size, 18, 'rgba(0,0,0,0.12)', seed + 1)
-  grain(ctx, size, size, 0.05, seed + 2)
-  return wrap(toTexture(canvas, { aniso: 4, wrap: true }))
-}
-
-function woodTex(size: number) {
-  const { canvas, ctx } = makeCanvas(size, size)
-  const r = rng(31)
-  ctx.fillStyle = '#4b3524'
-  ctx.fillRect(0, 0, size, size)
-  for (let i = 0; i < 220; i++) { const y = r() * size; ctx.strokeStyle = `rgba(${20 + r() * 40},${10 + r() * 24},5,${0.1 + r() * 0.2})`; ctx.lineWidth = 0.6 + r() * 2.2; ctx.beginPath(); ctx.moveTo(0, y); for (let x = 0; x <= size; x += 32) ctx.lineTo(x, y + Math.sin(x * 0.012 + i) * 3 + (r() - 0.5) * 1.5); ctx.stroke() }
-  // wear: pale scratches and ring marks from mugs
-  for (let i = 0; i < 50; i++) { ctx.strokeStyle = `rgba(230,200,160,${0.04 + r() * 0.06})`; ctx.lineWidth = 1; ctx.beginPath(); const x = r() * size, y = r() * size; ctx.moveTo(x, y); ctx.lineTo(x + (r() - 0.5) * 120, y + (r() - 0.5) * 20); ctx.stroke() }
-  ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 3
-  ctx.beginPath(); ctx.arc(size * 0.72, size * 0.4, size * 0.04, 0, Math.PI * 2); ctx.stroke()
-  grain(ctx, size, size, 0.05, 3)
-  return wrap(toTexture(canvas, { aniso: 4, wrap: true }))
-}
 
 function keysTex() {
   const W = 1024, H = 192
@@ -212,14 +108,14 @@ function keysTex() {
 
 /** abstract arrangement view for the secondary DAW monitor — lanes and clips, no text, nothing readable to invent */
 function dawTex() {
-  const W = 512, H = 320
+  const W = 512, H = 288 // 16:9, like the panel it is shown on
   const { canvas, ctx } = makeCanvas(W, H)
   const r = rng(12)
   ctx.fillStyle = '#12151b'; ctx.fillRect(0, 0, W, H)
   ctx.fillStyle = '#1b2029'; ctx.fillRect(0, 0, W, 22)
   const cols = ['#3d8bd9', '#d9533d', '#e0a43a', '#4cbf8b', '#9a6ad6']
-  for (let l = 0; l < 9; l++) {
-    const y = 30 + l * 31
+  for (let l = 0; l < 8; l++) {
+    const y = 28 + l * 32
     ctx.fillStyle = 'rgba(255,255,255,0.04)'; ctx.fillRect(0, y - 2, W, 1)
     ctx.fillStyle = '#1a1f28'; ctx.fillRect(0, y, 60, 28)
     let x = 66 + r() * 20
@@ -288,11 +184,11 @@ export async function loadRoomShell() {
   if (RX.shellReady) return
   const s = S(1024)
   const steps: (() => void | Promise<void>)[] = [
-    () => { RX.wall = paintWall(s, 21, '#4a565a', '#2e373b') },
-    () => { RX.floor = floorTex(S(512)) },
-    () => { RX.foam = foamTex(S(256)) },
-    () => { RX.fabricRed = fabricTex(S(256), '#4a1a1c', '#7a2c2a', 41); RX.fabricSlate = fabricTex(S(256), '#252a31', '#46505c', 42) },
-    () => { RX.wood = woodTex(S(512)) },
+    () => { RX.wall = plasterTex(S(768)) },
+    () => { RX.floor = plankTex(S(1024)) },
+    () => { RX.grain = grainTex(128) },
+    () => { RX.fabric = weaveTex(S(256)); RX.rug = rugTex(S(512), S(384)) },
+    () => { RX.wood = woodGrainTex(S(512)); RX.probe = roomProbe() },
     () => { RX.keys = keysTex(); RX.daw = dawTex(); RX.phone = phoneTex(); RX.screenGlow = screenGlowTex(); RX.blob = blobTex() },
     async () => {
       const [p, l, sg, po] = await Promise.all([loadTex(roomMedia.portrait.lo), loadTex(roomMedia.live.lo), loadTex(roomMedia.signal.lo), loadTex(roomMedia.poster)])
