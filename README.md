@@ -323,6 +323,51 @@ Triangles are **higher** (window jambs, bevelled hardware): street p = 0.2 high 
 * Triangle count rose ~25 %; draw calls did not.
 * Everything above was judged on software-rendered captures. **Real Safari / iPhone / iPad testing (tier chosen, DPR reached, adaptive behaviour, WebKit texture upload of the swapped brick tiles, video texture) is still required.**
 
+## V3.5 notes — real-device performance stabilisation
+
+**Trigger.** V3.4 was tested on a real device and "can lag heavily". That is treated as a confirmed production issue. **Scope received for V3.5: this performance addendum only** — no further V3.5 visual brief / shadow-system brief arrived, so this pass is a performance-stabilisation pass: no new geometry, no shadow maps, no new volumetrics. (The addendum's rule for a future hybrid shadow system stays binding: no broad dynamic shadow maps; only important lights/objects, tightly fitted, minimal casters, disabled outside their world.)
+
+**Method.** Profile first, with tools in `scripts/` (headless software GL = **relative** numbers only; nothing here is a device FPS):
+`perf-frame.mjs` (wall frame-time distribution p50/p95/p99/worst, JS cost per `useFrame` callback and per `gl.render` submit, JS-heap allocation per frame, React commits via the DevTools hook), `perf-ablate.mjs` / `perf-ablate2.mjs` (hide one system at a time), `perf-alloc.mjs` (V8 sampling heap profiler), `perf-calls.mjs` (draw objects in view per material), `perf-wall.mjs` and `perf-compare.mjs` (interleaved A/B of render configurations in one session).
+
+**What the profile said (V3.4, balanced tier).**
+* **React/R3F re-renders: none** (0 R3F commits during steady state). **`useFrame` JS: negligible** — every scene callback 0.01–0.16 ms; the only large item is the PostFX callback = the scene render *submit* (≈5–8 ms for 160–240 draw calls).
+* **Allocation 160–200 KB/frame** is almost entirely three.js internals proportional to draw calls (`getParameters` ≈ 60, uniform setters ≈ 50, program-key joins ≈ 10 KB/frame) — not our code. Not the lag source (minor GCs), tracked with the draw-call count.
+* **Draw calls are already moderate** (≈130–170 objects in view, + the reflection pass every 2nd frame at balanced); triangles 60–110k. Not a GPU limit on a tablet-class device. Invisible worlds already cost nothing (`WorldGate` hides them; roof/DUALISMO are generated lazily).
+* **The cost is pixels.** Frame time scales with drawing-buffer area (internal scale 0.6 → ≈45 % less time in the proxy). A tablet at canvas DPR 1.75 draws ≈ 3 M pixels into an HDR half-float, **MSAA-2**, mip-chained target, and V3.4's adaptive manager needed ~20 s to settle and re-allocated every buffer on each DPR step (a hitch of its own). That combination — heavy start, slow reaction, destructive steps — is the best explanation of "lags heavily" and what V3.5 attacks.
+
+**Changes (in the order of the addendum's priority list).**
+1. *Per-frame CPU*: nothing material left in JS; the frame's main-thread time is now measured (`rt.cpuMs`) and used by the manager to tell CPU-bound from GPU-bound.
+2. *Re-renders*: none found; none added.
+3. *Culling invisible worlds*: verified (WorldGate, DistCull/FarGate); nothing further.
+4. *Transparent overdraw / shaders*: the haze sheets and light shafts (full-width overlapping layers) and the street surfaces now read one shared **baked tileable noise texture** (256², 1 fetch) instead of 15–20 sin/hash noise evaluations per fragment; the sky dome is drawn **last with a far-plane depth test**, so its fbm shader only runs for visible sky pixels instead of the whole screen. Visually unchanged (screenshots compared). **Honest note: the headless proxy could not resolve a gain from these three changes** (run-to-run noise ±15 %, texture fetches are expensive in software GL); they remove ALU/overdraw work on real GPUs but are *not measured*.
+5–6. *Instancing / LOD*: draw calls and triangles are not the bottleneck (above) → no geometry work; no detail was added in V3.5 (the addendum forbids buying realism with GPU load).
+7. *Reflections*: unchanged cadence/resolution (already per tier); the manager now moves to the lighter tier first when the main thread is the limit.
+8–10. *Particles / volumetrics / shadows*: unchanged. No shadow maps introduced.
+11. **Internal render scale** (the main lever): the scene is rendered into a *viewport* of the same HDR target and the post pass samples the matching region (`uScale`/`uMax`, bloom taps included) — **no re-allocation, effective on the next frame**. Quantised levels 1 · .9 · .82 · .75 · .68 · .62 · .56 · .5, floored so `canvas dpr × scale` never drops below the tier's `dprMin` (a 1.75-DPR tablet bottoms out at ≈1.0 effective density, i.e. never visibly "blurry-low"). Canvas DPR is now fixed per tier and changes only with a tier change.
+12. *Hero quality*: untouched. Pinning (`?quality=…`) still disables adaptation; `?scale=0.4–1` pins the scale for testing.
+* **MSAA** is off at a drawing-buffer density ≥ 1.5 device px per CSS px (stair-steps are not resolvable there; MSAA cost is real bandwidth), kept below that. The HDR target's **depth is no longer resolved** each frame (it is never sampled).
+
+**Adaptive manager (rewritten, `lib/adaptive.ts`).** 0.5 s windows; two bad windows (or one < 24 fps window) trigger a step; the step is proportional (`scale' = scale·√(16.7 ms / frame time)`, 1–3 levels); CPU-bound frames go straight to the tier; the tier drops only when the scale is at its floor; restoring is a *probe* (one level up after 10 s of calm; a failed probe is undone after one window and that level is locked out for 2× longer each time — no oscillation); sustained frames > 250 ms (a device at < 4 fps) now count as evidence (a lone one is still treated as a tab switch); touch devices start at scale 0.9 and ramp up once proven; a stable ~30 fps on a heavy device is accepted rather than flapped. `scripts/adaptive-sim.mjs` runs it closed-loop against synthetic devices (capable, borderline, too heavy, very heavy, hopeless, < 1 fps, CPU-bound, desktop): settles in 2.5–5 s, no flapping, 0 % jank after settling for the 60-fps-capable cases.
+
+**`?perf=1` HUD** now shows p95 / p99 / worst frame time, tier, canvas dpr and **render scale**, JS ms and CPU/GPU-bound, calls, triangles, drawing-buffer size and the *render* size, hitches, and the last adaptation events.
+
+**Measured (headless software GL, relative, interleaved A/B, median of 3 rounds; tablet-like 512×384 @2× → canvas dpr 1.75, buffer 896×672):**
+
+| configuration | street p=0.16 | tracks p=0.46 |
+|---|---|---|
+| V3.4 (MSAA 2, depth resolve, scale 1) | 100 % | 100 % |
+| V3.5 default at that density (no MSAA, no depth resolve, scale 1) | 77 % | 79 % |
+| V3.5 + scale 0.85 | 59 % | 59 % |
+| V3.5 + scale 0.75 (effective density 1.31) | 49 % | 50 % |
+| V3.5 + scale 0.6 | 36 % | 38 % |
+
+At canvas dpr 1 (desktop) MSAA is kept, so only the scale rows apply (0.85 → ≈ 66 %, 0.75 → ≈ 57 %, 0.6 → ≈ 47 % of scale 1 in the same run). **These are relative software-GL numbers. No real-device FPS is claimed.** The real-device comparison (the actual success criterion: smoother than V3.4 on the device that lagged) still has to be done on that device: open `?perf=1`, scroll the journey, and read p95/p99, scale and adaptation events.
+
+**Not changed / limits.** Safari/iPhone/iPad were not available; WebKit behaviour of the render-target viewport path is standard WebGL 2 but unverified. `rt.cpuMs` measures JS submit time; on a back-pressured GPU that can read as CPU-bound, so the manager falls back to scale steps when the lighter tier is exhausted.
+
+**Tests.** E2E 22/22, secrets 18/18, tracks 8/8, room-check 50/50 in desktop, touch and reduced-motion variants (production build, `quality` pinned where the suites pin it); `scripts/adaptive-sim.mjs` passes; static export under `/sito-hood/` re-verified (see below).
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
@@ -330,7 +375,7 @@ Triangles are **higher** (window jambs, bevelled hardware): street p = 0.2 high 
 The preview URL is then `https://<owner>.github.io/<repo>/`. Delete the Pages site (Settings → Pages) to take it down. Normal `npm run build && npm start` is unchanged.
 
 ## Performance & quality tiers
-* Renderer DPR clamped (`≤1.5` high / `1.25` medium / `1` low), MSAA on the HDR target only, adaptive tier drop (`PerfGovernor`) if frame time stays > ~26 ms.
+* Canvas DPR fixed per tier (caps in `lib/quality.ts`), MSAA on the HDR target only (off at density ≥ 1.5), **internal render scale** + tier adaptation by `PerfGovernor` / `lib/adaptive.ts` (see V3.5 notes).
 * Tiers also switch: planar reflections (real ↔ fake), reflection resolution, particles, steam, bloom, grain.
 * Draw calls: facades merged per material, windows/shutters/doors/decals instanced, one merged mesh for the tower field, 3 real lights hop between 8 lamps by distance (no popping).
 * Rooftop and Dualismo are separate JS chunks and are generated after ENTER during idle time, then shader-compiled by first sight.
