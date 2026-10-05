@@ -46,14 +46,15 @@ export default function ExperienceCanvas() {
       onPointerMissed={() => {
         if (useStore.getState().selected !== null) selectTrack(null)
       }}
-      onCreated={({ gl, camera, scene, raycaster }) => {
+      onCreated={(state) => {
+        const { gl, camera, scene, raycaster } = state
         gl.setClearColor('#000000', 1)
         camera.layers.enable(1) // layer 1 = main camera only (skipped by planar reflections)
         raycaster.layers.enable(1) // …but still pickable: interactive things may live on layer 1 (drawn once, not mirrored)
         rt.quality = SETTINGS[useStore.getState().tier]
         if (process.env.NODE_ENV !== 'production' || window.location.search.includes('debug')) {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          Object.assign(window as any, { __gl: gl, __rc: raycaster, __scene: scene, __camera: camera })
+          Object.assign(window as any, { __gl: gl, __rc: raycaster, __scene: scene, __camera: camera, __r3f: state })
         }
         // a lost context cannot be resumed mid-journey: recover by reloading
         gl.domElement.addEventListener('webglcontextlost', (e) => e.preventDefault())
