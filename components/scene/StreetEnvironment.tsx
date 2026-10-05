@@ -23,11 +23,6 @@ import { TrackOrbit } from './TrackOrbit'
 import { AltercoArtwork } from './AltercoArtwork'
 import { StudioDoor } from './street/StudioDoor'
 
-const SKIP = [
-  { side: -1 as const, z: 7, r: 3.2 }, { side: 1 as const, z: -15, r: 3.2 }, { side: -1 as const, z: -29, r: 3 },
-  { side: 1 as const, z: -49, r: 3 }, { side: -1 as const, z: -62, r: 2.8 }, { side: -1 as const, z: -50, r: 2.2 },
-]
-
 export function StreetEnvironment() {
   const root = useRef<THREE.Group>(null)
   useFrame(() => {
@@ -48,7 +43,7 @@ export function StreetEnvironment() {
     <group ref={root}>
       <Walls />
       <Windows />
-      <StreetLevel skip={SKIP} />
+      <StreetLevel />
       <GroundGate />
       <ContactShadows />
       <NoReflect><FireEscapes /></NoReflect>
