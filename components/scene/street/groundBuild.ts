@@ -76,7 +76,7 @@ export function buildGroundGeometry(mask: HTMLCanvasElement | null, fine = true)
   }
   for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
     const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1
-    idx.push(a, c, b, b, c, d)
+    idx.push(a, b, c, b, d, c)
   }
   const g = new THREE.BufferGeometry()
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3))

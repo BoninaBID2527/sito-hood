@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { GeoBuilder } from '@/lib/geo'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 import { rng } from '@/lib/math'
 import { streetMat } from './materials'
 import { DistCull } from './DistCull'
@@ -49,11 +50,13 @@ export function Props() {
 
     // ── dumpsters / bins / crates (kept clear of the camera lane x∈[-0.9, 0.9])
     const dumpsters: [number, number, number][] = [[-1, -9, 0.4], [1, -31, -0.3], [-1, -45, 0.2], [1, 9, 0.1], [-1, -57, 0]]
-    // a dumpster is a tapered body with ribs, two sloped lids, wheels and a handle bar — not a box
+    // a front-load dumpster, built the way it is made: a pressed-steel tub (rounded, tapering to the base) with vertical stiffening ribs,
+    // a rolled top rim, two thick plastic flip lids with a cross handle, fork pockets, a skirt and swivel casters
     const dumpster = (x: number, z: number, rot: number, body: GeoBuilder, scale = 1) => {
-      const g = new THREE.BoxGeometry(0.95 * scale, 1.1, 1.8 * scale)
+      const W = 0.95 * scale, H = 1.1, D = 1.8 * scale
+      const g = new RoundedBoxGeometry(W, H, D, 3, 0.05)
       const pa = g.attributes.position as THREE.BufferAttribute
-      for (let i = 0; i < pa.count; i++) { const k = pa.getY(i) > 0 ? 1 : 0.88; pa.setX(i, pa.getX(i) * k); pa.setZ(i, pa.getZ(i) * (pa.getY(i) > 0 ? 1 : 0.94)) }
+      for (let i = 0; i < pa.count; i++) { const k = pa.getY(i) > 0 ? 1 : 0.9; pa.setX(i, pa.getX(i) * k); pa.setZ(i, pa.getZ(i) * (pa.getY(i) > 0 ? 1 : 0.95)) }
       g.rotateY(rot)
       body.add(g, x, 0.72, z)
       const place = (geo: THREE.BufferGeometry, b: GeoBuilder, ox: number, oy: number, oz: number) => {
@@ -61,17 +64,31 @@ export function Props() {
         const c = Math.cos(rot), sn = Math.sin(rot)
         b.add(geo, x + ox * c + oz * sn, oy, z - ox * sn + oz * c)
       }
-      for (const y of [0.4, 0.72, 1.0]) for (const sx of [-1, 1]) place(new THREE.BoxGeometry(0.03, 0.06, 1.7 * scale), metal, sx * 0.49 * scale * (y > 0.9 ? 1 : 0.94), y + 0.12, 0)
+      const rb = (w: number, h: number, d: number, rr = 0.012) => new RoundedBoxGeometry(w, h, d, 2, Math.min(rr, Math.min(w, h, d) * 0.45))
+      // vertical stiffening ribs on both long sides and the ends
+      for (const sx of [-1, 1]) for (let k = -3; k <= 3; k++) place(rb(0.035, 0.84, 0.07, 0.012), body, sx * (W * 0.5 * 0.97 + 0.012), 0.7, k * 0.25 * scale)
+      for (const sz of [-1, 1]) for (let k = -1; k <= 1; k++) place(rb(0.07, 0.8, 0.035, 0.012), body, k * 0.26 * scale, 0.7, sz * (D * 0.5 * 0.96 + 0.012))
+      // rolled rim around the opening
+      for (const sx of [-1, 1]) place(rb(0.07, 0.07, D + 0.06, 0.03), metal, sx * (W * 0.5 + 0.005), 1.27, 0)
+      for (const sz of [-1, 1]) place(rb(W + 0.06, 0.07, 0.07, 0.03), metal, 0, 1.27, sz * (D * 0.5 + 0.005))
+      // two flip lids with real thickness, ribbed top, and a hinge bar + cross handle
       for (const sx of [-1, 1]) {
-        const lid = new THREE.BoxGeometry(0.52 * scale, 0.06, 1.86 * scale)
-        lid.rotateZ(sx * 0.16)
-        place(lid, rubber, sx * 0.25 * scale, 1.33, 0)
+        const lid = rb(W * 0.5 + 0.02, 0.06, D + 0.05, 0.02)
+        lid.rotateZ(sx * 0.14)
+        place(lid, rubber, sx * W * 0.25, 1.37, 0)
+        for (let k = -3; k <= 3; k++) { const rib = rb(W * 0.4, 0.02, 0.04, 0.008); rib.rotateZ(sx * 0.14); place(rib, rubber, sx * W * 0.25, 1.4, k * 0.26 * scale) }
       }
-      place(new THREE.BoxGeometry(0.1, 0.05, 1.7 * scale), rubber, 0, 1.42, 0)
-      for (const [wx, wz] of [[-0.38, -0.7], [0.38, -0.7], [-0.38, 0.7], [0.38, 0.7]] as const) {
-        const w = new THREE.CylinderGeometry(0.1, 0.1, 0.07, 10)
+      place(rb(0.1, 0.045, D * 0.94, 0.02), rubber, 0, 1.5, 0)
+      place(new THREE.CylinderGeometry(0.018, 0.018, W * 0.8, 8).rotateZ(Math.PI / 2), metal, 0, 1.46, D * 0.5 * 0.7)
+      // fork pockets + a dark skirt at the base
+      for (const sz of [-1, 1]) place(rb(W * 0.9, 0.12, 0.05, 0.01), metal, 0, 0.32, sz * D * 0.44)
+      place(rb(W * 0.82, 0.1, D * 0.9, 0.03), rubber, 0, 0.22, 0)
+      // swivel casters
+      for (const [wx, wz] of [[-0.36, -0.72], [0.36, -0.72], [-0.36, 0.72], [0.36, 0.72]] as const) {
+        place(new THREE.BoxGeometry(0.05, 0.12, 0.07), metal, wx * scale, 0.17, wz * scale)
+        const w = new THREE.CylinderGeometry(0.075, 0.075, 0.06, 12)
         w.rotateZ(Math.PI / 2)
-        place(w, rubber, wx * scale, 0.1, wz * scale)
+        place(w, rubber, wx * scale, 0.075, wz * scale)
       }
     }
     for (const [side, z, rot] of dumpsters) {

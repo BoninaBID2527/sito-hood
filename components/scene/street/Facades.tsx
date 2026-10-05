@@ -210,7 +210,7 @@ export function Walls() {
   return (
     <group>
       {merged.map((m, i) => (
-        <mesh key={i} geometry={m.geo} material={m.mat} />
+        <mesh key={i} geometry={m.geo} material={m.mat} castShadow receiveShadow />
       ))}
     </group>
   )
@@ -301,6 +301,8 @@ export function Windows() {
       mats.push(mat)
     }
     const sIm = new THREE.InstancedMesh(surroundGeo, surround, surrounds.length)
+    sIm.castShadow = true
+    sIm.receiveShadow = true
     surrounds.forEach((m, i) => sIm.setMatrixAt(i, m))
     sIm.instanceMatrix.needsUpdate = true
     sIm.frustumCulled = false

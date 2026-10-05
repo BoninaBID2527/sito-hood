@@ -58,7 +58,7 @@ export function Ground() {
     <group>
       <mesh geometry={groundGeo} material={mats.asphalt} receiveShadow />
       {walks.map((w) => (
-        <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.065, w.z]} />
+        <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.065, w.z]} receiveShadow />
       ))}
       {kerbs.stone && <mesh geometry={kerbs.stone} material={mats.kerb} receiveShadow />}
       {kerbs.iron && <mesh geometry={kerbs.iron} material={mats.iron} />}

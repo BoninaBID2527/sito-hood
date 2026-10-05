@@ -114,11 +114,11 @@ export function TrackObject({ i, faceGeo, faceMat, mats, onFace, twinMat, glassM
   useEffect(() => () => Object.values(built).forEach((g) => g?.dispose()), [built])
   return (
     <group>
-      <mesh geometry={faceGeo} material={faceMat} {...onFace} />
-      {built.metal && <mesh geometry={built.metal} material={mats.metal} />}
-      {built.paper && <mesh geometry={built.paper} material={mats.paper} />}
-      {built.tape && <mesh geometry={built.tape} material={mats.tape} />}
-      {built.body && <mesh geometry={built.body} material={i === 1 ? mats.lightbox : mats.body} />}
+      <mesh geometry={faceGeo} material={faceMat} castShadow {...onFace} />
+      {built.metal && <mesh geometry={built.metal} castShadow material={mats.metal} />}
+      {built.paper && <mesh geometry={built.paper} castShadow material={mats.paper} />}
+      {built.tape && <mesh geometry={built.tape} castShadow material={mats.tape} />}
+      {built.body && <mesh geometry={built.body} castShadow material={i === 1 ? mats.lightbox : mats.body} />}
       {built.lamp && <mesh geometry={built.lamp} material={mats.lamp} />}
       {i === 4 && <mesh geometry={mats.plane} material={glassMat} position={[0, 0, 0.07]} scale={[CARD_W + 0.1, CARD_H + 0.1, 1]} renderOrder={21} />}
       {i === 5 && twinMat && <mesh geometry={faceGeo} material={twinMat} position={[0.5, -0.32, -0.55]} scale={0.93} rotation={[0, 0.0, 0.03]} />}
