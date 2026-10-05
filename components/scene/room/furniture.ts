@@ -134,7 +134,7 @@ export function keyboard(c: Ctx) {
   if (c.level >= 1) {
     // physical keybed: 42 white keys, the black ones raised, across the front half of the body; the controller strip behind it is a textured plane
     const kw = 0.0233, nk = 42, kx0 = -0.49
-    for (let i = 0; i < nk; i++) c.satin.box(kw - 0.0016, 0.012, 0.15, x + kx0 + i * kw + kw / 2, T + 0.046, z + 0.075, '#d6d1c4', { r: 0.001, ao: 0, jit: 0.07 })
+    for (let i = 0; i < nk; i++) c.matte.box(kw - 0.0016, 0.012, 0.15, x + kx0 + i * kw + kw / 2, T + 0.046, z + 0.075, '#d6d1c4', { r: 0.001, ao: 0, jit: 0.07 })
     for (let i = 0; i < nk - 1; i++) {
       const o = i % 7
       if (o === 2 || o === 6) continue

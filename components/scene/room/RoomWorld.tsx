@@ -163,7 +163,7 @@ function makeKit(level: number, geo: RoomGeo) {
     walls: std({ map: RX.wall, vertexColors: true, roughness: 0.94 }),
     floor: bakedMaterial(bake, { map: RX.floor, roughness: 0.55, metalness: 0, envMap: probe, envMapIntensity: 0.25 }, 'roomFloorBake'),
     matte: std({ vertexColors: true, roughness: 0.88 }),
-    satin: std({ vertexColors: true, roughness: 0.42, envMap: probe, envMapIntensity: 0.22 }),
+    satin: std({ vertexColors: true, roughness: 0.52, envMap: probe, envMapIntensity: 0.22 }),
     metal: std({ vertexColors: true, roughness: 0.36, metalness: 0.85, envMap: probe, envMapIntensity: 0.75 }),
     wood: std({ map: RX.wood, vertexColors: true, roughness: 0.55, envMap: probe, envMapIntensity: 0.25 }),
     fabric: std({ map: RX.fabric, vertexColors: true, roughness: 1 }),
@@ -457,7 +457,7 @@ function Lighting({ level, kit }: { level: number; kit: RoomKit }) {
     if (wash.current) wash.current.intensity = 9 * d
     if (door.current) door.current.intensity = 3.2 * d
     // the video (lit) lights the desk, the keyboard, the wall around it
-    if (scr.current) scr.current.intensity = (0.7 + 2.2 * room.push) * (vid.live ? 1.4 : 1)
+    if (scr.current) scr.current.intensity = (0.4 + 2.0 * room.push) * (vid.live ? 1.4 : 1)
     const walls = kit.mats.walls as THREE.MeshStandardMaterial
     walls.color.setScalar(1 - 0.25 * room.dim)
   }, 0)
@@ -468,7 +468,7 @@ function Lighting({ level, kit }: { level: number; kit: RoomKit }) {
       <pointLight ref={lamp} position={[PLACE.lamp.x, PLACE.lamp.y - 0.06, PLACE.lamp.z]} color="#ffb070" intensity={2.4} distance={4.2} decay={2} />
       {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#3f6dff" intensity={3} distance={6} decay={2} />}
       {level >= 2 && <pointLight ref={red} position={[RED_LAMP.x, RED_LAMP.y - 0.05, RED_LAMP.z]} color="#ff3a2a" intensity={2.1} distance={4.5} decay={2} />}
-      {level >= 2 && <pointLight ref={scr} position={[PLACE.hero.x, PLACE.hero.y - 0.1, PLACE.hero.z + 0.45]} color="#bcd0ff" intensity={0.7} distance={2.6} decay={2} />}
+      {level >= 2 && <pointLight ref={scr} position={[PLACE.hero.x, PLACE.hero.y - 0.1, PLACE.hero.z + 0.65]} color="#bcd0ff" intensity={0.4} distance={2.6} decay={2} />}
     </>
   )
 }
