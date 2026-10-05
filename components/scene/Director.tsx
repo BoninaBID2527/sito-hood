@@ -161,6 +161,15 @@ export function Director() {
       cam.rotateZ(Math.sin(rt.time * 0.42) * 0.0012 * breathe)
     }
 
+    // QA only: an exact, repeatable pose (comparable before/after captures)
+    if (rt.camOverride) {
+      const o = rt.camOverride
+      cam.position.set(o.pos[0], o.pos[1], o.pos[2])
+      cam.up.set(0, 1, 0)
+      cam.lookAt(o.look[0], o.look[1], o.look[2])
+      if (o.fov) fov = o.fov
+    }
+
     // below the pool surface the alley is rendered as its own reflection
     rt.mirror = rt.world === 'alley' && cam.position.y < 0.02 && p > 0.6 ? 1 : 0
 
