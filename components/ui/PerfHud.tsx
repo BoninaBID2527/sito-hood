@@ -21,11 +21,15 @@ export function PerfHud() {
       const buf = cv ? `${cv.width}×${cv.height} for css ${cv.clientWidth}×${cv.clientHeight} (×${(cv.width / Math.max(1, cv.clientWidth)).toFixed(2)}, device ×${(window.devicePixelRatio || 1).toFixed(2)})` : '–'
       ref.current.textContent =
         `${p.fps.toFixed(0)} fps  ${p.ms.toFixed(1)} ms` +
-        `\ntier ${p.tier}${p.forced ? ' (pinned)' : ''}  dpr ${p.dpr.toFixed(2)}` +
+        `\np95 ${p.p95.toFixed(1)}  p99 ${p.p99.toFixed(1)}  worst ${p.worst.toFixed(0)} ms` +
+        `\ntier ${p.tier}${p.forced ? ' (pinned)' : ''}  dpr ${p.dpr.toFixed(2)}  scale ${rt.scale.toFixed(2)}` +
+        `\ncpu ${p.cpu.toFixed(1)} ms  bound ${p.bound}` +
         `\ncalls ${p.calls}  tris ${(p.tris / 1000).toFixed(0)}k` +
         `\ntex ${p.tex}  geo ${p.geo}` +
         `\nhitches ${p.hitches}  adapt ${p.changes}` +
         `\nbuffer ${buf}` +
+        `\nrender ${cv ? Math.floor(cv.width * rt.scale) : 0}×${cv ? Math.floor(cv.height * rt.scale) : 0}` +
+        (p.events.length ? `\n${p.events.slice(-4).join('\n')}` : '') +
         `\nworld ${rt.world}  p ${rt.smooth.toFixed(3)}`
     }, 400)
     return () => window.clearInterval(id)

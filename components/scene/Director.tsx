@@ -42,6 +42,7 @@ export function Director() {
   useEffect(() => () => void tl.kill(), [tl])
 
   useFrame((_, dtRaw) => {
+    rt.frameT0 = performance.now()
     const dt = Math.min(dtRaw, 0.05)
     rt.time += dt
     const store = useStore.getState()

@@ -8,6 +8,9 @@ import { rt } from '@/lib/runtime'
 import { A } from '@/lib/assets'
 import { useStore } from '@/lib/store'
 
+/** At a drawing-buffer density of ≥1.5 device pixels per CSS pixel the eye cannot resolve stair-steps: MSAA's resolve/bandwidth cost buys nothing visible. */
+const msaaFor = (n: number, dpr: number) => (dpr >= 1.5 ? 0 : n)
+
 /**
  * Takes over rendering: scene → HDR render target → one custom full-screen pass
  * (chromatic aberration, bloom-on-lights, liquid/tunnel transitions, grain, vignette, tone-map).
@@ -26,7 +29,9 @@ export function PostFX() {
     const target = new THREE.WebGLRenderTarget(4, 4, {
       type: half ? THREE.HalfFloatType : THREE.UnsignedByteType,
       depthBuffer: true,
-      samples: gl.capabilities.isWebGL2 ? rt.quality.msaa : 0,
+      samples: gl.capabilities.isWebGL2 ? msaaFor(rt.quality.msaa, rt.dpr) : 0,
+      // the depth buffer is never sampled: resolving it every frame is pure bandwidth
+      resolveDepthBuffer: false,
       colorSpace: THREE.LinearSRGBColorSpace,
       // mip chain = smooth, noise-free bloom (the glow of a lamp is a blurred copy, not a dithered ring)
       generateMipmaps: true,
@@ -44,6 +49,8 @@ export function PostFX() {
         tArt: { value: null },
         tArt2: { value: null },
         uRes: { value: new THREE.Vector2(1, 1) },
+        uScale: { value: new THREE.Vector2(1, 1) },
+        uMax: { value: new THREE.Vector2(1, 1) },
         uAspect: { value: 1 },
         uTime: { value: 0 },
         uRgb: { value: 0 },
@@ -83,7 +90,7 @@ export function PostFX() {
 
   // MSAA follows the (adaptive) tier: re-allocate the HDR target only when the sample count actually changes
   useEffect(() => {
-    const n = gl.capabilities.isWebGL2 ? rt.quality.msaa : 0
+    const n = gl.capabilities.isWebGL2 ? msaaFor(rt.quality.msaa, rt.dpr) : 0
     if (kit.target.samples !== n) {
       kit.target.samples = n
       kit.target.dispose()
@@ -126,6 +133,17 @@ export function PostFX() {
     u.uDim.value = f.focusDim
     u.uRipple.value.set(f.rippleX, f.rippleY, f.ripple)
 
+    // internal render scale: render into the lower-left part of the (full-size) target, no re-allocation, instant
+    const bw = kit.target.width, bh = kit.target.height
+    const sw = Math.max(2, Math.floor(bw * rt.scale)), sh = Math.max(2, Math.floor(bh * rt.scale))
+    const vp = kit.target.viewport
+    if (vp.z !== sw || vp.w !== sh) {
+      vp.set(0, 0, sw, sh)
+      kit.target.scissor.set(0, 0, sw, sh)
+      kit.target.scissorTest = true
+    }
+    u.uScale.value.set(sw / bw, sh / bh)
+    u.uMax.value.set(sw / bw - 0.5 / bw, sh / bh - 0.5 / bh)
     gl.info.autoReset = false
     gl.info.reset()
     rt.stats.refl = 0
@@ -136,6 +154,7 @@ export function PostFX() {
     rt.stats.calls = gl.info.render.calls
     rt.stats.tris = gl.info.render.triangles
     gl.render(kit.sc, kit.cam)
+    rt.cpuMs = performance.now() - rt.frameT0
   }, 1)
 
   return null

@@ -18,6 +18,9 @@ uniform sampler2D tScene;
 uniform sampler2D tArt;
 uniform sampler2D tArt2;
 uniform vec2 uRes;
+// internal render scale: the scene occupies [0,uScale] of the target; uMax keeps bilinear taps inside it
+uniform vec2 uScale;
+uniform vec2 uMax;
 uniform float uAspect;
 uniform float uTime;
 uniform float uRgb;
@@ -59,13 +62,14 @@ vec3 aces(vec3 x) {
 }
 
 // channel-split scene sample; 'off' is in uv units
+vec2 sUv(vec2 uv) { return min(clamp(uv, 0.0, 1.0) * uScale, uMax); }
 vec3 scene(vec2 uv, vec2 off) {
   // no aberration → one tap instead of three (most of the journey)
-  if (abs(off.x) + abs(off.y) < 0.00002) return textureLod(tScene, uv, 0.0).rgb;
+  if (abs(off.x) + abs(off.y) < 0.00002) return textureLod(tScene, sUv(uv), 0.0).rgb;
   return vec3(
-    textureLod(tScene, uv + off, 0.0).r,
-    textureLod(tScene, uv, 0.0).g,
-    textureLod(tScene, uv - off, 0.0).b
+    textureLod(tScene, sUv(uv + off), 0.0).r,
+    textureLod(tScene, sUv(uv), 0.0).g,
+    textureLod(tScene, sUv(uv - off), 0.0).b
   );
 }
 
@@ -161,8 +165,9 @@ void main() {
 
   // bloom — only genuinely emissive (HDR) pixels, read from the mip chain: smooth, structure-preserving, no ring artefacts
   if (uBloom > 0.01) {
-    vec3 b = max(textureLod(tScene, uv, 3.0).rgb - 0.85, 0.0) * 0.55
-           + max(textureLod(tScene, uv, 5.0).rgb - 0.45, 0.0) * 0.8;
+    vec2 bu = sUv(uv);
+    vec3 b = max(textureLod(tScene, bu, 3.0).rgb - 0.85, 0.0) * 0.55
+           + max(textureLod(tScene, bu, 5.0).rgb - 0.45, 0.0) * 0.8;
     col += b * uBloom * 0.9 * (1.0 - 0.35 * uDual);
   }
 
