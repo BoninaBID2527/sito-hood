@@ -160,13 +160,15 @@ void main() {
   float rough = (1.0 - m) * (0.35 + 0.65 * damp);
   float br = mix(0.0012, 0.017, rough);
   float ang = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853;
-  vec2 o1 = vec2(cos(ang), sin(ang)) * vec2(1.0, 2.6) * br;
-  vec2 o2 = vec2(-sin(ang), cos(ang)) * vec2(1.0, 2.6) * br;
-  c = texture2D(tDiffuse, uv).rgb * 0.28;
-  c += texture2D(tDiffuse, uv + o1).rgb * 0.18;
-  c += texture2D(tDiffuse, uv - o1).rgb * 0.18;
-  c += texture2D(tDiffuse, uv + o2).rgb * 0.18;
-  c += texture2D(tDiffuse, uv - o2).rgb * 0.18;
+  vec2 o1 = vec2(cos(ang), sin(ang)) * vec2(1.0, 1.9) * br;
+  vec2 o2 = vec2(-sin(ang), cos(ang)) * vec2(1.0, 1.9) * br;
+  // each tap is clamped: against the HDR-bright sky at the alley end a 5-tap noise kernel turns an edge into white fireflies (1-px speckle along the kerb lines)
+  const vec3 CL = vec3(2.6);
+  c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
+  c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv + o2).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv - o2).rgb, CL) * 0.18;
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
     c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);
