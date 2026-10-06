@@ -12,13 +12,15 @@ await page.addStyleTag({ content: '.overlay{display:none !important}' })
 const until = (fn, arg, to = 120000) => page.waitForFunction(fn, arg, { timeout: to, polling: 150 }).catch(() => {})
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 })
 const cp = CHECKPOINTS.find((c) => c.n === 3)
-const variants = {
-  base: () => {},
-  noShadow: () => { window.__hd.rt.quality.shadow = 0 },
-  noWater: () => { window.__scene.traverse((o) => { if (o.type === 'Mesh' && o.onBeforeRender && /reflector/i.test(o.onBeforeRender.toString().slice(0, 400))) o.visible = false }) },
-}
+const hideBy = (pred) => () => { window.__scene.traverse((o) => { if (o.isMesh && pred(o)) o.visible = false }) }
+const cands = await page.evaluate(() => { const l = []; window.__scene.traverse((o) => { if (o.isMesh && o.visible && (o.receiveShadow || (o.material && o.material.metalness === 0.3 && o.material.vertexColors))) l.push({ uuid: o.uuid, n: o.geometry.attributes.position.count, rs: o.receiveShadow, c: o.material.color && o.material.color.getHexString() }) }); return l })
+console.log(JSON.stringify(cands))
+const variants = { base: () => {} }
+cands.forEach((c, i) => { variants['hide' + i] = (u) => { window.__scene.traverse((o) => { if (o.uuid === u) o.visible = false }) } ; variants['hide' + i].arg = c.uuid })
 for (const [k, f] of Object.entries(variants)) {
-  await page.evaluate(f)
+  await page.evaluate(f, f.arg)
+  if (f.arg) { }
   await runCheckpoint(page, { ...cp, name: 'sp-' + k }, out, { until, settle, log: [] })
+  if (f.arg) await page.evaluate((u) => { window.__scene.traverse((o) => { if (o.uuid === u) o.visible = true }) }, f.arg)
 }
 await browser.close()
