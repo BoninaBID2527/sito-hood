@@ -81,6 +81,14 @@ export function buildGroundGeometry(_mask?: HTMLCanvasElement | null, _fine = tr
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
   g.setIndex(idx)
   g.computeVertexNormals()
+  // the crown/gutter slopes are a few degrees: honest geometry, but as SHADING normals they catch the low sun's glare along the converging gutter lines
+  // and the specular aliases into white stipple at distance. Shade mostly as flat asphalt (the micro normal map carries the surface), keep the form.
+  const nA = g.attributes.normal as THREE.BufferAttribute
+  for (let i = 0; i < nA.count; i++) {
+    const x = nA.getX(i) * 0.12, y = nA.getY(i) * 0.12 + 0.88, z = nA.getZ(i) * 0.12
+    const l = Math.hypot(x, y, z)
+    nA.setXYZ(i, x / l, y / l, z / l)
+  }
   return g
 }
 
