@@ -28,7 +28,7 @@ const WIN_H = 1.55
 function holesFor(side: -1 | 1, zNear: number, zFar: number): Hole[] {
   const holes: Hole[] = []
   for (const d of allWindows()) {
-    if (d.side !== side || d.z > zNear - 0.05 || d.z < zFar + 0.05) continue
+    if (d.face || d.side !== side || d.z > zNear - 0.05 || d.z < zFar + 0.05) continue
     const hh = (WIN_H * d.h) / 2
     holes.push({ z0: d.z + d.w / 2, z1: d.z - d.w / 2, y0: d.y - hh, y1: d.y + hh, depth: WIN_DEPTH })
   }
@@ -321,8 +321,9 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
       const im = new THREE.InstancedMesh(vg, mat, list.length)
       list.forEach((d, i) => {
         // the sash sits at the back of the shaft (WIN_DEPTH behind the wall face)
-        p.set(d.x + d.side * WIN_DEPTH, d.y, d.z)
-        q.setFromEuler(eu.set(0, rotFor(d.side), 0))
+        if (d.face === 'z') p.set(d.x, d.y, d.z - WIN_DEPTH)
+        else p.set(d.x + d.side * WIN_DEPTH, d.y, d.z)
+        q.setFromEuler(eu.set(0, d.face === 'z' ? 0 : rotFor(d.side), 0))
         s.set(d.w, d.h, 1)
         m4.compose(p, q, s)
         im.setMatrixAt(i, m4)

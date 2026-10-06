@@ -108,3 +108,18 @@ export function withWhite(g: THREE.BufferGeometry, v = 1) {
   g.setAttribute('color', new THREE.BufferAttribute(c, 3))
   return g
 }
+
+/**
+ * A wall that faces +z (the plaza's rear blocks): the x-facing builder rotated a quarter turn, so the openings, reveals and baked AO are the same
+ * code path. `x0 < x1`; holes are given in x (xa < xb) and y.
+ */
+export interface HoleX { xa: number; xb: number; y0: number; y1: number; depth: number }
+export function wallFaceZ(b: { x0: number; x1: number; z: number; h: number; holes: HoleX[]; tile?: number }): THREE.BufferGeometry {
+  const g = wallWithOpenings({
+    side: -1, x: 0, zNear: -b.x0, zFar: -b.x1, h: b.h, tile: b.tile,
+    holes: b.holes.map((h) => ({ z0: -h.xa, z1: -h.xb, y0: h.y0, y1: h.y1, depth: h.depth })),
+  })
+  g.rotateY(-Math.PI / 2) // normal +x → +z, along-wall z → x
+  g.translate(0, 0, b.z)
+  return g
+}

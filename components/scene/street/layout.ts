@@ -1,5 +1,6 @@
 import { rng } from '@/lib/math'
 import type { WindowVariant } from '@/lib/textures'
+import { plazaArchWindows } from './plazaLayout'
 
 export type BrickKind = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
 
@@ -59,6 +60,8 @@ export interface WinInst {
   h: number
   /** per-instance brightness (lit windows vary a lot) */
   tone?: number
+  /** V3.7: a window on a wall that faces +z (rear blocks); x/y/z is then the wall-face position */
+  face?: 'z'
 }
 
 /** Weighted table: most windows are dead or covered; a few are alive. */
@@ -115,6 +118,7 @@ export function allWindows(): WinInst[] {
       all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
     }
   }
+  all.push(...plazaArchWindows(pickWindow))
   _wins = all
   return all
 }
