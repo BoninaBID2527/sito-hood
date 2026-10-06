@@ -29,6 +29,9 @@ export function Ground() {
   // the road is a real surface: crown, gutter dish, plaza fall — in a few big faces (see groundBuild.ts for why not a dense grid)
   const groundGeo = useMemo(() => buildGroundGeometry(), [])
   const kerbs = useMemo(() => buildKerbs(), [])
+  const backing = useMemo(() => new THREE.PlaneGeometry(48, 160).rotateX(-Math.PI / 2), [])
+  const backingMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#0b0a0a' }), [])
+  useEffect(() => () => { backing.dispose(); backingMat.dispose() }, [backing, backingMat])
 
   // sidewalks follow each wall segment
   const walks = useMemo(() => {
@@ -57,6 +60,9 @@ export function Ground() {
   return (
     <group>
       <mesh geometry={groundGeo} material={mats.asphalt} receiveShadow />
+      {/* a dark under-layer: where two ground slabs meet at different kerb lines the rasteriser can leave hairline cracks at distance
+          (sky showed through as a white speckle); whatever shows through now is asphalt-dark instead */}
+      <mesh geometry={backing} material={backingMat} position={[0, -0.07, -48]} renderOrder={-1} />
       {walks.map((w) => (
         <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.065, w.z]} receiveShadow />
       ))}
