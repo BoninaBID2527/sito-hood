@@ -178,7 +178,7 @@ export function buildParamTimeline() {
   track('liquid', [[0, 0], [0.625, 0], [0.72, 1, 'power2.in'], [0.795, 0, 'power3.out'], [1, 0]])
   track('grain', [[0, 0.38], [0.6, 0.42], [1, 0.5]])
   track('vignette', [[0, 0.46], [0.35, 0.42], [0.72, 0.46], [0.8, 0.34], [1, 0.36]])
-  track('exposure', [[0, 0.9], [0.1, 1], [0.6, 1.02], [0.72, 1.1], [0.8, 1], [1, 1.05]])
+  track('exposure', [[0, 0.9], [0.1, 1], [0.6, 1.02], [0.72, 1.1], [0.8, 1.22], [0.9, 1.3], [1, 1.32]])
   track('blur', [[0, 0], [1, 0]])
   // the instant the camera breaks the surface of the pool
   track('cross', [[0, 0], [0.682, 0], [0.7, 1, 'power2.out'], [0.73, 0, 'sine.out'], [1, 0]])

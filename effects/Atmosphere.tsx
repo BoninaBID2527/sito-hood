@@ -8,6 +8,7 @@ import { rt } from '@/lib/runtime'
 import { room } from '@/lib/room'
 import { streetU } from '@/components/scene/street/materials'
 import { SkyDome } from './SkyDome'
+import { updateSunShadow } from './sunShadow'
 
 const ROOM_FOG = new THREE.Color('#100d0e')
 const ROOM_SKY = new THREE.Color('#8d94a3')
@@ -22,15 +23,25 @@ export function Atmosphere() {
   const bounceL = useRef<THREE.DirectionalLight>(null)
   const bounceR = useRef<THREE.DirectionalLight>(null)
 
+  const gl = useThree((s) => s.gl)
   useEffect(() => {
     scene.fog = new THREE.FogExp2('#8a7a6a', 0.016)
     scene.background = null
+    // the shadow map's filter type is fixed per session (changing it recompiles every material); its size / on-off follows the tier
+    gl.shadowMap.type = rt.quality.shadowSoft ? THREE.PCFShadowMap : THREE.BasicShadowMap
+    gl.shadowMap.enabled = rt.quality.shadow > 0
+    const light = sun.current
+    if (light) scene.add(light.target)
     return () => {
       scene.fog = null
+      if (light) scene.remove(light.target)
     }
-  }, [scene])
+  }, [scene, gl])
 
-  useFrame(() => {
+  useFrame(({ camera }) => {
+    const want = rt.quality.shadow > 0
+    if (gl.shadowMap.enabled !== want) gl.shadowMap.enabled = want
+    if (sun.current) updateSunShadow(sun.current, camera.position.z)
     const fog = scene.fog as THREE.FogExp2 | null
     const dual = rt.world === 'dualism'
     const inRoom = rt.world === 'room'
@@ -58,12 +69,12 @@ export function Atmosphere() {
       } else {
         hemi.current.color.copy(dual ? new THREE.Color('#7fa8ff') : palette.hemiSky)
         hemi.current.groundColor.copy(dual ? new THREE.Color('#2a1a58') : palette.hemiGround)
-        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 1.7 : 1.25)
+        hemi.current.intensity = dual ? 0.78 : palette.hemiI * (rt.world === 'roof' ? 2.2 : 1.25)
       }
     }
     if (sun.current) {
       sun.current.color.copy(palette.sun)
-      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42
+      sun.current.intensity = inRoom ? 0 : dual ? 0.4 : palette.sunI * 0.42 * (rt.world === 'roof' && rt.quality.shadow > 0 ? 3 : 1)
     }
     if (fill.current) {
       fill.current.color.copy(palette.hemiSky)
@@ -81,7 +92,7 @@ export function Atmosphere() {
     <>
       <SkyDome />
       <hemisphereLight ref={hemi} args={['#8fa4bf', '#3a2a28', 0.6]} />
-      <directionalLight ref={sun} position={[14, 10, -80]} intensity={2} />
+      <directionalLight ref={sun} position={[14, 10, -80]} intensity={2} castShadow />
       <directionalLight ref={fill} position={[-6, 8, 20]} intensity={0.3} />
       <directionalLight ref={bounceL} position={[-9, 5, 0]} intensity={0.3} />
       <directionalLight ref={bounceR} position={[9, 5, 0]} intensity={0.3} />

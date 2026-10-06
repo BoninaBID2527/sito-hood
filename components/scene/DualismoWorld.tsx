@@ -6,633 +6,573 @@ import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { A } from '@/lib/assets'
 import { dualismo } from '@/data/project'
-import { rng, smoothstep } from '@/lib/math'
+import { rng, smoothstep, clamp } from '@/lib/math'
 import { rt } from '@/lib/runtime'
 import { WORLD } from '@/lib/timeline'
 import { useStore } from '@/lib/store'
 import { exitDualism } from '@/lib/actions'
 import { createArtworkMaterial } from './ArtworkMaterial'
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js'
-import { palette } from '@/lib/timeOfDay'
-import { throttleReflector } from './street/reflectThrottle'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
+import {
+  domeVert, domeFrag, monoVert, monoFrag, floorVert, floorFrag, ringVert, ringFrag, coinVert, coinFrag, bezelFrag,
+  moteVert, moteFrag, shaftVert, shaftFrag, entryRingVert, entryRingFrag, doorFrag,
+} from './DualismoShaders'
 
 const D = WORLD.dualismX
+const FLOOR_Y = -2.6
 
-/* ───────────────────────── particles ───────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────────────────────
+   DUALISMO — "the impossible hall" (V3.6 rebuild)
 
-const pVert = /* glsl */ `
-attribute float aSeed;
-uniform float uTime;
-uniform vec3 uMouse;
-uniform float uSize;
-uniform float uArrive;
-varying float vA;
-varying vec3 vC;
-void main() {
-  vec3 p = position;
-  float t = uTime * 0.12;
-  p += vec3(sin(t + aSeed * 40.0), cos(t * 1.3 + aSeed * 23.0), sin(t * 0.7 + aSeed * 11.0)) * 0.9;
-  p *= 0.35 + 0.65 * uArrive;
-  // pointer repels
-  vec3 d = p - uMouse;
-  float dist = length(d);
-  p += normalize(d + 1e-4) * smoothstep(3.2, 0.0, dist) * 1.8;
-  vec4 mv = viewMatrix * vec4(p, 1.0);
-  gl_Position = projectionMatrix * mv;
-  gl_PointSize = uSize * (0.4 + aSeed) * 120.0 / max(0.5, -mv.z);
-  vA = (0.25 + 0.75 * aSeed) * smoothstep(0.0, 6.0, -mv.z) * (0.6 + 0.4 * sin(uTime + aSeed * 90.0));
-  vC = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + aSeed * 0.6 + uTime * 0.02));
+   Composition: one object matters. The official sleeve is inlaid in a levitating monolith of iron-glass over a black stone mirror;
+   it is the only real emitter, so the glass nearest to it, the floor below it and the haze around it are lit BY it.
+   Around it: an avenue of mirrored monoliths that grow and dissolve into the exact colour of the backdrop (near sharp, far gone),
+   a vast ring on the horizon that the floor completes into a full circle, and a lot of empty darkness (scale = what is NOT there).
+   Cost model: everything solid is opaque and writes depth (no stacked transparent glass). The transparent layers left are a few
+   small, depth-sorted additive sheets (shafts, a halo, two labels, motes) and they are not drawn into the planar reflection (layer 1).
+   ───────────────────────────────────────────────────────────────────────────────────────────── */
+
+/** shared, frame-updated uniforms (the same objects are referenced by every material of the world) */
+function makeShared() {
+  return {
+    uTime: { value: 0 },
+    uFade: { value: 0 },
+    uArtI: { value: 1 },
+    uArt: { value: new THREE.Vector3(D, 0.9, 1.4) },
+    uArtCol: { value: new THREE.Color(0.55, 0.62, 1.0) },
+  }
 }
-`
-const pFrag = /* glsl */ `
-precision highp float;
-varying float vA;
-varying vec3 vC;
-void main() {
-  float d = length(gl_PointCoord - 0.5) * 2.0;
-  float a = smoothstep(1.0, 0.0, d);
-  gl_FragColor = vec4(mix(vC, vec3(1.0), 0.35), a * a * vA * 0.7);
-}
-`
+type Shared = ReturnType<typeof makeShared>
 
-function Particles() {
+/** viewport-dependent layout (16:9 desktop → portrait phone). 1 = wide, smaller = narrower. */
+function fitFor(aspect: number) {
+  return clamp(aspect / 1.78, 0.42, 1)
+}
+
+/** one-line exposure hook for the shared artwork shader (so a track token can be dimmed without editing the artwork material) */
+function withExposure(m: THREE.ShaderMaterial, expo: number) {
+  m.uniforms.uExpo = { value: expo }
+  m.onBeforeCompile = (s) => {
+    s.fragmentShader = s.fragmentShader
+      .replace('uniform vec2 uTilt;', 'uniform vec2 uTilt;\nuniform float uExpo;')
+      .replace('gl_FragColor = vec4(col * (1.0 + uGlow * 0.15), a);', 'gl_FragColor = vec4(col * (1.0 + uGlow * 0.15) * uExpo, a);')
+  }
+  m.customProgramCacheKey = () => 'dual-expo'
+  return m
+}
+
+/** planar reflection throttle (same policy as the street: every N frames while moving, 4 Hz at rest) but with a far plane that keeps the gate */
+function throttleDualReflector(r: THREE.Mesh) {
+  const orig = (r as unknown as { onBeforeRender: (...a: unknown[]) => void }).onBeforeRender
+  let n = 0
+  let lastT = -10
+  const lastP = new THREE.Vector3(1e9, 0, 0)
+  const lastQ = new THREE.Quaternion()
+  ;(r as unknown as { onBeforeRender: (...a: unknown[]) => void }).onBeforeRender = function (this: unknown, renderer: unknown, scene: unknown, camera: unknown, ...rest: unknown[]) {
+    const cam = camera as THREE.PerspectiveCamera
+    const every = Math.max(1, rt.quality.reflectEvery)
+    const moved = cam.position.distanceToSquared(lastP) > 4e-6 || Math.abs(cam.quaternion.dot(lastQ)) < 0.9999995
+    const age = rt.time - lastT
+    n++
+    if (!moved && age < 0.25) return
+    if (moved && every > 1 && n % every !== 0 && age < 0.12) return
+    lastP.copy(cam.position)
+    lastQ.copy(cam.quaternion)
+    lastT = rt.time
+    const info = (renderer as THREE.WebGLRenderer).info
+    const c0 = info.render.calls
+    const far = cam.far
+    cam.far = Math.min(far, 430)
+    orig.call(this, renderer, scene, camera, ...rest)
+    cam.far = far
+    rt.stats.refl += info.render.calls - c0
+  }
+}
+
+/* ───────────────────────── backdrop dome ───────────────────────── */
+
+function Backdrop({ shared }: { shared: Shared }) {
+  const kit = useMemo(() => {
+    const geo = new THREE.SphereGeometry(380, 32, 16)
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: domeVert, fragmentShader: domeFrag, side: THREE.BackSide, depthWrite: false, depthTest: false, fog: false,
+      uniforms: { uFade: shared.uFade, uTime: shared.uTime },
+    })
+    const mesh = new THREE.Mesh(geo, mat)
+    mesh.renderOrder = -100
+    mesh.frustumCulled = false
+    return { geo, mat, mesh }
+  }, [shared])
+  const camera = useThree((s) => s.camera)
+  useWorldFrame('dualism', () => { kit.mesh.position.copy(camera.position) }, -0.6)
+  useEffect(() => () => { kit.geo.dispose(); kit.mat.dispose() }, [kit])
+  return <primitive object={kit.mesh} />
+}
+
+/* ───────────────────────── black stone mirror ───────────────────────── */
+
+function MirrorFloor({ shared }: { shared: Shared }) {
+  const real = rt.quality.reflector
+  const kit = useMemo(() => {
+    const geo = new THREE.PlaneGeometry(900, 900)
+    const uniforms = { color: { value: null }, tDiffuse: { value: null }, textureMatrix: { value: null }, uTime: { value: 0 }, uFade: { value: 0 }, uArtI: { value: 1 }, uArt: { value: new THREE.Vector3(D, 0.9, 1.4) }, uArtCol: { value: new THREE.Color(0.55, 0.62, 1.0) } }
+    let obj: THREE.Mesh
+    let mat: THREE.ShaderMaterial
+    if (real) {
+      const shader = { name: 'DualFloor', defines: { REAL: '' }, uniforms, vertexShader: floorVert, fragmentShader: floorFrag }
+      const rf = new Reflector(geo, { color: new THREE.Color(1, 1, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.level >= 2 ? 2 : 0, shader })
+      throttleDualReflector(rf)
+      mat = rf.material as THREE.ShaderMaterial
+      mat.defines = { REAL: '' }
+      obj = rf
+    } else {
+      mat = new THREE.ShaderMaterial({ vertexShader: floorVert, fragmentShader: floorFrag, uniforms })
+      obj = new THREE.Mesh(geo, mat)
+    }
+    obj.rotation.x = -Math.PI / 2
+    obj.position.set(D, FLOOR_Y, -60)
+    obj.renderOrder = -1
+    obj.frustumCulled = false
+    return { obj, mat, geo }
+  }, [real])
+  useWorldFrame('dualism', () => {
+    const u = kit.mat.uniforms
+    u.uTime.value = shared.uTime.value
+    u.uFade.value = shared.uFade.value
+    u.uArtI.value = shared.uArtI.value
+    u.uArt.value.copy(shared.uArt.value)
+    u.uArtCol.value.copy(shared.uArtCol.value)
+  }, -0.5)
+  useEffect(() => () => { ;(kit.obj as unknown as { dispose?: () => void }).dispose?.(); kit.geo.dispose(); kit.mat.dispose() }, [kit])
+  return <primitive object={kit.obj} />
+}
+
+/* ───────────────────────── monoliths: avenue + floating blades ───────────────────────── */
+
+function Monoliths({ shared, fit }: { shared: Shared; fit: number }) {
+  const kit = useMemo(() => {
+    const q = rt.quality
+    const rows = q.dualRows
+    const pairs = Math.max(3, Math.round(q.dualCrystals * 0.22))
+    const r = rng(1313)
+    const geo = new RoundedBoxGeometry(1, 1, 1, q.level >= 3 ? 2 : 1, 0.1) // 2 chamfer strips per edge is enough for 80 instances
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: monoVert, fragmentShader: monoFrag, fog: false, defines: rt.quality.level >= 2 ? { DISP: '' } : {},
+      uniforms: { uTime: shared.uTime, uFade: shared.uFade, uArtI: shared.uArtI, uArt: shared.uArt, uArtCol: shared.uArtCol, uSheen: { value: 0 } },
+    })
+    const m4 = new THREE.Matrix4(), qt = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(1, 1, 1), pv = new THREE.Vector3()
+    // avenue: strictly mirrored pairs; size grows with depth so the rows keep an even angular rhythm and the far ones are towers
+    const avenue = new THREE.InstancedMesh(geo, mat, rows * 2)
+    const dim = new Float32Array(rows * 2 * 3), misc = new Float32Array(rows * 2 * 4)
+    // sparse and large near the viewer, dense and dissolving far away: the six nearest rows are authored (they are the frame of the picture,
+    // whatever the tier), the rest are spread logarithmically toward the horizon (their number is the tier knob)
+    const NEAR = [16, 27, 44, 68, 100, 140], NEAR_ANG = [30, 24, 28, 22, 26, 23]
+    for (let i = 0; i < rows; i++) {
+      const far = i - NEAR.length
+      const dist = i < NEAR.length ? NEAR[i] : 190 * Math.pow(470 / 190, far / Math.max(1, rows - NEAR.length - 1))
+      const z = 9.5 - dist
+      const ang = (i < NEAR.length ? NEAR_ANG[i] : r.range(20, 34)) * (Math.PI / 180)
+      const x = Math.tan(ang) * dist * fit
+      const w = 1.0 + dist * 0.028 * (0.7 + r() * 0.6), h = 18 + dist * 0.32 + r() * 8, d = 1.1 + dist * 0.02 + r() * 1.4
+      const yaw = r.range(0.12, 0.55), cut = r() < 0.65 ? r.range(0.04, 0.16) : 0
+      const lean = r.range(0.02, 0.07) // the hall leans in: the vault never closes
+      const seed = r(), hover = i % 3 === 1 ? r.range(0.5, 1.6) : 0
+      const bevel = Math.min(0.1 + dist * 0.004, w * 0.3)
+      for (const sgn of [-1, 1]) {
+        const k = i * 2 + (sgn > 0 ? 1 : 0)
+        m4.compose(pv.set(D + sgn * x, FLOOR_Y + hover + h / 2, z), qt.setFromEuler(e.set(0, -sgn * yaw, -sgn * lean)), sc)
+        avenue.setMatrixAt(k, m4)
+        dim.set([w, h, d], k * 3)
+        misc.set([seed, sgn * cut, bevel, 0], k * 4)
+      }
+    }
+    avenue.geometry = geo.clone() // own geometry per mesh: attributes below differ in length
+    avenue.geometry.setAttribute('aDim', new THREE.InstancedBufferAttribute(dim, 3))
+    avenue.geometry.setAttribute('aMisc', new THREE.InstancedBufferAttribute(misc, 4))
+    avenue.frustumCulled = false
+    // blades: thin mineral shards hanging in the air at impossible angles, in mirrored pairs
+    const blades = new THREE.InstancedMesh(geo, mat, pairs * 2)
+    const bd = new Float32Array(pairs * 2 * 3), bm = new Float32Array(pairs * 2 * 4)
+    for (let i = 0; i < pairs; i++) {
+      const bz = r.range(-90, -6), bx = r.range(5.5, 10 + -bz * 0.12) * fit, by = r.range(0.4, 7 + -bz * 0.05)
+      const w = r.range(0.28, 0.6), h = r.range(3, 7) * (1 + -bz / 90), d = r.range(0.2, 0.45)
+      const yaw = r.range(0, Math.PI), roll = r.range(-0.5, 0.5), seed = r()
+      for (const sgn of [-1, 1]) {
+        const k = i * 2 + (sgn > 0 ? 1 : 0)
+        m4.compose(pv.set(D + sgn * bx, by, bz), qt.setFromEuler(e.set(0, sgn * yaw, -sgn * roll)), sc)
+        blades.setMatrixAt(k, m4)
+        bd.set([w, h, d], k * 3)
+        bm.set([seed, 0, Math.min(0.06, w * 0.25), 0], k * 4)
+      }
+    }
+    blades.geometry = geo.clone()
+    blades.geometry.setAttribute('aDim', new THREE.InstancedBufferAttribute(bd, 3))
+    blades.geometry.setAttribute('aMisc', new THREE.InstancedBufferAttribute(bm, 4))
+    blades.frustumCulled = false
+    return { geo, mat, avenue, blades, rows, pairs }
+  }, [shared, fit])
+  useWorldFrame('dualism', () => {
+    // the live tier can drop below the one the world was built for: draw fewer rows, never rebuild
+    kit.avenue.count = Math.min(kit.rows, rt.quality.dualRows) * 2
+    kit.blades.count = Math.min(kit.pairs, Math.max(3, Math.round(rt.quality.dualCrystals * 0.22))) * 2
+  }, -0.5)
+  useEffect(() => () => { kit.avenue.geometry.dispose(); kit.blades.geometry.dispose(); kit.geo.dispose(); kit.avenue.dispose(); kit.blades.dispose(); kit.mat.dispose() }, [kit])
+  return (
+    <group>
+      <primitive object={kit.avenue} />
+      <primitive object={kit.blades} />
+    </group>
+  )
+}
+
+/* ───────────────────────── the gate: a vast ring on the horizon, completed by the mirror ───────────────────────── */
+
+function Gate({ shared }: { shared: Shared }) {
+  const kit = useMemo(() => {
+    const geo = new THREE.TorusGeometry(100, 1.5, 6, 176)
+    const mat = new THREE.ShaderMaterial({ vertexShader: ringVert, fragmentShader: ringFrag, fog: false, uniforms: { uTime: shared.uTime, uFade: shared.uFade } })
+    const mesh = new THREE.InstancedMesh(geo, mat, 2)
+    const m4 = new THREE.Matrix4()
+    mesh.setMatrixAt(0, m4.makeTranslation(D, FLOOR_Y, -240))
+    mesh.setMatrixAt(1, m4.makeScale(0.84, 0.84, 0.84).setPosition(D, FLOOR_Y, -240))
+    mesh.frustumCulled = false
+    return { geo, mat, mesh }
+  }, [shared])
+  useEffect(() => () => { kit.geo.dispose(); kit.mat.dispose(); kit.mesh.dispose() }, [kit])
+  return <primitive object={kit.mesh} />
+}
+
+/* ───────────────────────── the sleeve, inlaid ───────────────────────── */
+
+const HERO = { y: 0.85, w: 4.5, h: 5.8, d: 0.7, cover: 3.4 }
+
+function Hero({ shared }: { shared: Shared }) {
+  const g = useRef<THREE.Group>(null)
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
+  const kit = useMemo(() => {
+    const geo = new RoundedBoxGeometry(1, 1, 1, 2, 0.1)
+    // the slab holds the emitter: it is not lit by it from the front, only its bevels pick up a little spill
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: monoVert, fragmentShader: monoFrag, fog: false, defines: rt.quality.level >= 2 ? { DISP: '' } : {},
+      uniforms: { uTime: shared.uTime, uFade: shared.uFade, uArtI: { value: 0.1 }, uArt: shared.uArt, uArtCol: shared.uArtCol, uSheen: { value: 1 } },
+    })
+    const slab = new THREE.InstancedMesh(geo, mat, 1)
+    slab.setMatrixAt(0, new THREE.Matrix4())
+    geo.setAttribute('aDim', new THREE.InstancedBufferAttribute(new Float32Array([HERO.w, HERO.h, HERO.d]), 3))
+    geo.setAttribute('aMisc', new THREE.InstancedBufferAttribute(new Float32Array([0.37, 0, 0.09, 0]), 4))
+    slab.frustumCulled = false
+    const cover = withExposure(createArtworkMaterial(A.covers.dualismo), 1.0)
+    cover.uniforms.uBulge.value = 0
+    cover.uniforms.uFlow.value = 0.22
+    cover.uniforms.uGrain.value = 0.45
+    const coverGeo = new THREE.PlaneGeometry(1, 1)
+    const bezelMat = new THREE.ShaderMaterial({
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+      fragmentShader: bezelFrag, uniforms: { uTime: shared.uTime, uFade: shared.uFade, uGlow: { value: 1 } },
+    })
+    const halo = new THREE.SpriteMaterial({ map: A.glow, color: '#6f8cff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.4, fog: false })
+    const haloSprite = new THREE.Sprite(halo)
+    haloSprite.layers.set(1) // not mirrored: the planar reflection already carries the real emitter
+    haloSprite.scale.set(10.5, 10.5, 1)
+    haloSprite.position.set(0, -0.2, -0.9)
+    haloSprite.renderOrder = 3
+    return { geo, mat, slab, cover, coverGeo, bezelMat, halo, haloSprite }
+  }, [shared])
+  useEffect(() => () => { kit.geo.dispose(); kit.slab.dispose(); kit.mat.dispose(); kit.cover.dispose(); kit.coverGeo.dispose(); kit.bezelMat.dispose(); kit.halo.dispose() }, [kit])
+  useWorldFrame('dualism', () => {
+    const o = g.current
+    if (!o) return
+    const arrive = rt.dual.t
+    const cu = kit.cover.uniforms
+    cu.uTime.value = rt.time
+    cu.uReveal.value = smoothstep(0, 0.7, arrive)
+    cu.uSplit.value = 0.0025 + 0.0015 * Math.sin(rt.time * 0.7)
+    cu.uGlow.value = 0.6
+    cu.uTilt.value.set(rt.px, rt.py)
+    // the emitter breathes, very slightly; everything lit by it follows
+    const br = 1 + Math.sin(rt.time * 0.9) * 0.05
+    shared.uArtI.value = br * smoothstep(0.1, 0.9, arrive)
+    kit.mat.uniforms.uArtI.value = 0.08 * br
+    kit.mat.uniforms.uSheen.value = br * smoothstep(0.1, 0.9, arrive)
+    kit.halo.opacity = (0.45 + 0.06 * Math.sin(rt.time * 0.9)) * arrive
+    const fit = clamp(camera.aspect * 0.8 * 9.27 / HERO.w, 0.5, 1) // keep the monolith inside the frame on narrow screens
+    o.scale.setScalar(fit)
+    o.position.set(D, HERO.y * fit + (1 - fit) * 0.2 + Math.sin(rt.time * 0.5) * 0.06, 0)
+    o.rotation.set(-rt.py * 0.05, 0.11 + rt.px * 0.09, 0)
+    shared.uArt.value.set(D, o.position.y, 1.4)
+  }, -0.4)
+  const z = HERO.d / 2
+  return (
+    <group ref={g}>
+      <primitive object={kit.slab} />
+      <mesh geometry={kit.coverGeo} material={kit.bezelMat} position={[0, 0, z + 0.0015]} scale={[HERO.cover / 0.905, HERO.cover / 0.905, 1]} />
+      <mesh geometry={kit.coverGeo} material={kit.cover} position={[0, 0, z + 0.0035]} scale={[HERO.cover, HERO.cover, 1]} />
+      <primitive object={kit.haloSprite} />
+    </group>
+  )
+}
+
+/* ───────────────────────── light shafts + motes ───────────────────────── */
+
+function Shafts({ shared }: { shared: Shared }) {
+  const kit = useMemo(() => {
+    const n = rt.quality.level >= 2 ? 3 : rt.quality.level === 1 ? 2 : 1
+    const geo = new THREE.PlaneGeometry(1, 1)
+    const spec = [
+      { x: -7.5, z: -9, w: 7, lean: 0.20, col: [0.32, 0.55, 0.95], seed: 0.3 },
+      { x: 8.5, z: -16, w: 9, lean: -0.22, col: [0.9, 0.38, 0.52], seed: 1.7 },
+      { x: -1.5, z: -34, w: 12, lean: 0.12, col: [0.48, 0.48, 0.95], seed: 2.9 },
+    ].slice(0, n)
+    const items = spec.map((s) => {
+      const mat = new THREE.ShaderMaterial({
+        vertexShader: shaftVert, fragmentShader: shaftFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false,
+        uniforms: { uTime: shared.uTime, uFade: shared.uFade, uSeed: { value: s.seed }, uColor: { value: new THREE.Color(s.col[0], s.col[1], s.col[2]) } },
+      })
+      const mesh = new THREE.Mesh(geo, mat)
+      mesh.scale.set(s.w, 46, 1)
+      mesh.position.set(D + s.x, FLOOR_Y + 20, s.z)
+      mesh.rotation.z = s.lean
+      mesh.layers.set(1)
+      mesh.renderOrder = 2
+      mesh.frustumCulled = false
+      return { mat, mesh }
+    })
+    return { geo, items }
+  }, [shared])
+  useEffect(() => () => { kit.geo.dispose(); kit.items.forEach((i) => i.mat.dispose()) }, [kit])
+  return (
+    <group>
+      {kit.items.map((i, k) => <primitive key={k} object={i.mesh} />)}
+    </group>
+  )
+}
+
+function Motes({ shared }: { shared: Shared }) {
   const camera = useThree((s) => s.camera)
   const kit = useMemo(() => {
     const s0 = rt.quality.particleScale
-    const n = Math.round(1100 * s0)
+    const n = Math.round(170 * s0)
     const g = new THREE.BufferGeometry()
     const pos = new Float32Array(n * 3)
     const seed = new Float32Array(n)
     const r = rng(42)
     for (let i = 0; i < n; i++) {
-      const rad = 3 + Math.pow(r(), 0.7) * 16
-      const th = r() * Math.PI * 2, ph = Math.acos(2 * r() - 1)
-      pos.set([D + rad * Math.sin(ph) * Math.cos(th), rad * Math.sin(ph) * Math.sin(th) * 0.7, rad * Math.cos(ph) * 0.8 - 2], i * 3)
+      pos.set([D + r.range(-13, 13), r.range(-2, 8), r.range(-34, 7)], i * 3)
       seed[i] = r()
     }
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
     g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1))
     const mat = new THREE.ShaderMaterial({
-      vertexShader: pVert,
-      fragmentShader: pFrag,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D, 0, 0) }, uSize: { value: rt.touch ? 0.7 : 1 }, uArrive: { value: 0 } },
+      vertexShader: moteVert, fragmentShader: moteFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      uniforms: { uTime: shared.uTime, uArrive: { value: 0 }, uPx: { value: 1 }, uMouse: { value: new THREE.Vector3(D, 0, 0) } },
     })
-    return { g, mat, n, s0, v2: new THREE.Vector2(), ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
-  }, [])
+    const pts = new THREE.Points(g, mat)
+    pts.layers.set(1)
+    pts.frustumCulled = false
+    pts.renderOrder = 5
+    return { g, mat, pts, n, s0, v2: new THREE.Vector2(), ray: new THREE.Raycaster(), plane: new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit: new THREE.Vector3() }
+  }, [shared])
   useWorldFrame('dualism', () => {
     const u = kit.mat.uniforms
-    u.uTime.value = rt.time
     u.uArrive.value = rt.dual.t
-    // particle count follows the live quality (draw range), never above what the device started with
+    u.uPx.value = rt.dpr
     kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0))))
     kit.ray.setFromCamera(kit.v2.set(rt.rx, rt.ry), camera)
     if (kit.ray.ray.intersectPlane(kit.plane, kit.hit)) u.uMouse.value.lerp(kit.hit, 0.15)
   }, -0.5)
   useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
-  return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
+  return <primitive object={kit.pts} />
 }
 
-/** Very distant, very slow specks: scale cues far beyond the visible geometry (parallax comes from the camera drift). */
-function FarDust() {
+/* ───────────────────────── entry tunnel (only while arriving) ───────────────────────── */
+
+const TUNNEL_N = 12
+function EntryTunnel() {
   const kit = useMemo(() => {
-    const s0 = rt.quality.particleScale
-    const n = Math.round(700 * s0)
-    const g = new THREE.BufferGeometry()
-    const pos = new Float32Array(n * 3)
-    const seed = new Float32Array(n)
-    const r = rng(77)
-    for (let i = 0; i < n; i++) {
-      pos.set([D + r.range(-140, 140), r.range(-40, 60), r.range(-30, -300)], i * 3)
-      seed[i] = r()
-    }
-    g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
-    g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1))
-    const mat = new THREE.ShaderMaterial({
-      vertexShader: pVert, fragmentShader: pFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uMouse: { value: new THREE.Vector3(D + 9999, 0, 0) }, uSize: { value: 2.2 }, uArrive: { value: 0 } },
-    })
-    return { g, mat, n, s0 }
-  }, [])
-  useWorldFrame('dualism', () => { kit.mat.uniforms.uTime.value = rt.time * 0.4; kit.mat.uniforms.uArrive.value = rt.dual.t; kit.g.setDrawRange(0, Math.max(1, Math.round(kit.n * Math.min(1, rt.quality.particleScale / kit.s0)))) }, -0.5)
-  useEffect(() => () => { kit.g.dispose(); kit.mat.dispose() }, [kit])
-  return <points geometry={kit.g} material={kit.mat} frustumCulled={false} renderOrder={5} />
-}
-
-/* ───────────────────────── tunnel rings ───────────────────────── */
-
-const rVert = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }'
-const rFrag = /* glsl */ `
-precision highp float;
-varying vec2 vUv;
-uniform float uTime, uSeed, uFade;
-void main() {
-  vec3 irid = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + vUv.x * 2.0 + uSeed + uTime * 0.05));
-  float a = (0.5 + 0.5 * sin(vUv.x * 40.0 + uTime * 0.6 + uSeed * 10.0)) * 0.55 + 0.1;
-  gl_FragColor = vec4(irid, a * uFade * 0.45);
-}
-`
-
-function TunnelRings() {
-  const kit = useMemo(() => {
-    const geo = new THREE.TorusGeometry(1, 0.012, 6, 96)
-    const rings = Array.from({ length: 16 }, (_, i) => ({
-      mat: new THREE.ShaderMaterial({ vertexShader: rVert, fragmentShader: rFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uTime: { value: 0 }, uSeed: { value: i * 0.13 }, uFade: { value: 0 } } }),
-      z: -2 - i * 2.4,
-    }))
-    return { geo, rings }
-  }, [])
-  const refs = useRef<(THREE.Mesh | null)[]>([])
-  useWorldFrame('dualism', () => {
-    kit.rings.forEach((r, i) => {
-      const m = refs.current[i]
-      if (!m) return
-      const t = rt.time * 0.5 + i * 0.4
-      const flow = ((rt.time * 1.6 + i * 2.4) % 38.4)
-      const z = -2 - flow + 4
-      m.position.set(D, 0, z)
-      const rad = 3.4 + Math.sin(i * 0.9) * 0.4 + (rt.fx.tunnel > 0 ? 0 : 0)
-      m.scale.setScalar(rad * (1 + Math.max(0, -z - 18) * 0.015))
-      m.rotation.z = t * 0.2
-      r.mat.uniforms.uTime.value = rt.time
-      r.mat.uniforms.uFade.value = smoothstep(0, 5, -z) * (1 - smoothstep(24, 36, -z)) * rt.dual.t
-    })
-  }, -0.5)
-  useEffect(() => () => { kit.geo.dispose(); kit.rings.forEach((r) => r.mat.dispose()) }, [kit])
-  return (
-    <group>
-      {kit.rings.map((r, i) => (
-        <mesh key={i} ref={(m) => { refs.current[i] = m }} geometry={kit.geo} material={r.mat} renderOrder={1} />
-      ))}
-    </group>
-  )
-}
-
-/* ───────────────────────── the impossible hall ─────────────────────────
-   ALTERCO is physical, dirty, tactile. DUALISMO is its opposite: symmetrical, translucent, iridescent, mirrored in every axis.
-   A black-glass floor mirrors the whole hall, glass monoliths recede to infinity, crystals float in mirrored pairs,
-   spectral light falls through haze. Nothing here is lit by the sun. */
-
-const glassVert = /* glsl */ `
-attribute float aPhase;
-attribute vec3 aDim;
-uniform float uTime;
-varying vec3 vN;
-varying vec3 vV;
-varying float vH;
-varying float vPh;
-varying float vDist;
-mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
-void main() {
-  vec3 p = position * aDim;
-  float spin = uTime * 0.12 * (0.4 + fract(aPhase * 7.0)) * (aDim.x < 0.8 ? 1.0 : 0.0);
-  p.xz = rot(spin + aPhase) * p.xz;
-  vec3 n = normal;
-  n.xz = rot(spin + aPhase) * n.xz;
-  vec4 w = instanceMatrix * vec4(p, 1.0);
-  w.y += sin(uTime * 0.35 + aPhase * 30.0) * 0.25;
-  vec4 mv = viewMatrix * modelMatrix * w;
-  vN = normalize(mat3(viewMatrix * modelMatrix) * mat3(instanceMatrix) * n);
-  vV = -mv.xyz;
-  vH = w.y;
-  vPh = aPhase;
-  vDist = length(mv.xyz);
-  gl_Position = projectionMatrix * mv;
-}
-`
-const glassFrag = /* glsl */ `
-precision highp float;
-varying vec3 vN;
-varying vec3 vV;
-varying float vH;
-varying float vPh;
-varying float vDist;
-uniform float uTime;
-uniform float uFade;
-uniform float uOpacity;
-void main() {
-  vec3 n = normalize(vN), v = normalize(vV);
-  float f = 1.0 - abs(dot(n, v));
-  float ff = pow(f, 2.2);
-  // thin-film: hue walks with view angle, height and time
-  vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + f * 1.3 + vH * 0.035 + vPh + uTime * 0.02));
-  float band = 0.5 + 0.5 * sin(vH * 2.2 + uTime * 0.3 + vPh * 20.0);
-  vec3 col = film * (0.25 + 1.4 * ff) + vec3(0.04, 0.06, 0.14);
-  // far structures dissolve into spectral haze: the hall never visibly ends
-  float far = 1.0 - smoothstep(70.0, 260.0, vDist);
-  float a = (0.05 + 0.6 * ff + 0.06 * band) * uOpacity * uFade * (0.25 + 0.75 * far);
-  col = mix(col, vec3(0.2, 0.26, 0.62), (1.0 - far) * 0.55);
-  gl_FragColor = vec4(col * a * 1.6, a);
-}
-`
-
-function GlassHall() {
-  const kit = useMemo(() => {
-    const rows = rt.quality.dualRows
-    const crystals = rt.quality.dualCrystals
-    const r = rng(1313)
-    const mat = new THREE.ShaderMaterial({
-      vertexShader: glassVert, fragmentShader: glassFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
-      uniforms: { uTime: { value: 0 }, uFade: { value: 0 }, uOpacity: { value: 0.75 } },
-    })
-    // slabs: strictly symmetric left/right pairs, same height & yaw mirrored
-    const slabs = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), mat, rows * 2)
-    const dim = new Float32Array(rows * 2 * 3), ph = new Float32Array(rows * 2)
-    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(1, 1, 1)
-    for (let i = 0; i < rows; i++) {
-      const z = 7 - i * 7.2 * (1 + 0.03 * i)
-      const w = (0.28 + r() * 0.12) * (1 + i * 0.03), h = r.range(8, 15) + i * 0.7, d = r.range(1.6, 3.0)
-      const x = 6.2 + i * 0.3
-      const yaw = r.range(0.12, 0.5)
-      const phase = r()
-      for (const sgn of [-1, 1]) {
-        const k = i * 2 + (sgn > 0 ? 1 : 0)
-        m4.compose(new THREE.Vector3(D + sgn * x, 0, z), q.setFromEuler(e.set(0, -sgn * yaw, 0)), sc)
-        slabs.setMatrixAt(k, m4)
-        dim.set([w, h, d], k * 3)
-        ph[k] = phase + (sgn > 0 ? 0.0 : 0.0) // identical phase = identical motion on both sides (symmetry)
-      }
-    }
-    slabs.geometry.setAttribute('aDim', new THREE.InstancedBufferAttribute(dim, 3))
-    slabs.geometry.setAttribute('aPhase', new THREE.InstancedBufferAttribute(ph, 1))
-    slabs.frustumCulled = false
-    slabs.renderOrder = 2
-    // crystals: octahedra, every one with a mirrored twin
-    const cr = new THREE.InstancedMesh(new THREE.OctahedronGeometry(1, 0), mat, crystals * 2)
-    const cd = new Float32Array(crystals * 2 * 3), cp = new Float32Array(crystals * 2)
-    for (let i = 0; i < crystals; i++) {
-      const z = r.range(-220, 6), x = r.range(1.8, 10 + (-z) * 0.08), y = r.range(0.4, 6.5 + (-z) * 0.05), s = r.range(0.25, 0.9) * (1 + (-z) / 55), phase = r()
-      for (const sgn of [-1, 1]) {
-        const k = i * 2 + (sgn > 0 ? 1 : 0)
-        m4.compose(new THREE.Vector3(D + sgn * x, y * sgn, z), q.setFromEuler(e.set(0, 0, 0)), sc)
-        cr.setMatrixAt(k, m4)
-        cd.set([s * 0.9, s * 1.6, s * 0.9], k * 3)
-        cp[k] = phase
-      }
-    }
-    cr.geometry.setAttribute('aDim', new THREE.InstancedBufferAttribute(cd, 3))
-    cr.geometry.setAttribute('aPhase', new THREE.InstancedBufferAttribute(cp, 1))
-    cr.frustumCulled = false
-    cr.renderOrder = 2
-    return { mat, slabs, cr }
+    const geo = new THREE.TorusGeometry(1, 0.014, 6, 80)
+    const seeds = new Float32Array(TUNNEL_N)
+    for (let i = 0; i < TUNNEL_N; i++) seeds[i] = i * 0.137
+    geo.setAttribute('aSeed', new THREE.InstancedBufferAttribute(seeds, 1))
+    const mat = new THREE.ShaderMaterial({ vertexShader: entryRingVert, fragmentShader: entryRingFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, uniforms: { uFade: { value: 0 }, uTime: { value: 0 } } })
+    const mesh = new THREE.InstancedMesh(geo, mat, TUNNEL_N)
+    mesh.frustumCulled = false
+    mesh.layers.set(1)
+    mesh.renderOrder = 1
+    return { geo, mat, mesh, m4: new THREE.Matrix4(), p: new THREE.Vector3(), s: new THREE.Vector3(), q: new THREE.Quaternion(), e: new THREE.Euler() }
   }, [])
   useWorldFrame('dualism', () => {
-    const u = kit.mat.uniforms
-    u.uTime.value = rt.time
-    u.uFade.value = rt.dual.t
-    kit.slabs.visible = kit.cr.visible = rt.world === 'dualism'
-  }, -0.5)
-  useEffect(() => () => { kit.slabs.geometry.dispose(); kit.cr.geometry.dispose(); kit.slabs.dispose(); kit.cr.dispose(); kit.mat.dispose() }, [kit])
-  return (
-    <group>
-      <primitive object={kit.slabs} />
-      <primitive object={kit.cr} />
-    </group>
-  )
-}
-
-/** Black-glass floor: the world above is mirrored below. Thin-film sheen creeps in at grazing angles. */
-function MirrorFloor() {
-  const real = rt.quality.reflector
-  const kit = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(160, 260)
-    const shader = {
-      name: 'DualFloor',
-      uniforms: { color: { value: null }, tDiffuse: { value: null }, textureMatrix: { value: null }, uTime: { value: 0 }, uFade: { value: 0 } },
-      vertexShader: 'uniform mat4 textureMatrix; varying vec4 vUv; varying vec3 vW; void main(){ vUv = textureMatrix*vec4(position,1.0); vW = (modelMatrix*vec4(position,1.0)).xyz; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-      fragmentShader: `
-        uniform vec3 color; uniform sampler2D tDiffuse; uniform float uTime; uniform float uFade;
-        varying vec4 vUv; varying vec3 vW;
-        void main(){
-          vec3 V = normalize(cameraPosition - vW);
-          float f = pow(1.0 - clamp(V.y, 0.0, 1.0), 3.0);
-          vec2 uv = vUv.xy / vUv.w;
-          uv += vec2(sin(vW.z * 0.9 + uTime * 0.4), cos(vW.x * 0.7 - uTime * 0.3)) * 0.0015;
-          float b = 0.004;
-          vec3 c = texture2D(tDiffuse, uv).rgb * 0.5 + texture2D(tDiffuse, uv + vec2(b, 0.0)).rgb * 0.25 + texture2D(tDiffuse, uv - vec2(b, 0.0)).rgb * 0.25;
-          vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + f * 1.2 + vW.z * 0.01 + uTime * 0.02));
-          c = c * (0.55 + 0.45 * (1.0 - f)) + film * f * 0.12;
-          // the floor fades into the haze with distance so the horizon is not a line
-          float dist = length(vW.xz - cameraPosition.xz);
-          float fade = 1.0 - smoothstep(40.0, 260.0, dist);
-          gl_FragColor = vec4(c * 0.95, (0.55 + 0.4 * f) * fade * uFade);
-        }`,
-    }
-    let obj: THREE.Mesh
-    let mat: THREE.ShaderMaterial
-    if (real) {
-      const rf = new Reflector(geo, { color: new THREE.Color(0.9, 0.95, 1), textureWidth: rt.quality.reflectorRes, textureHeight: Math.round(rt.quality.reflectorRes * 0.62), clipBias: 0.003, multisample: rt.quality.level >= 2 ? 2 : 0, shader })
-      throttleReflector(rf)
-      mat = rf.material as THREE.ShaderMaterial
-      obj = rf
-    } else {
-      mat = new THREE.ShaderMaterial({
-        vertexShader: shader.vertexShader.replace('vUv = textureMatrix*vec4(position,1.0);', 'vUv = vec4(0.0);'),
-        fragmentShader: `uniform float uTime; uniform float uFade; varying vec4 vUv; varying vec3 vW; void main(){ vec3 V = normalize(cameraPosition - vW); float f = pow(1.0 - clamp(V.y,0.0,1.0), 3.0); vec3 film = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + f * 1.2 + vW.z * 0.01 + uTime * 0.02)); gl_FragColor = vec4(vec3(0.02,0.03,0.08) + film * f * 0.18, 0.8 * uFade); }`,
-        uniforms: { uTime: { value: 0 }, uFade: { value: 0 } },
-      })
-      obj = new THREE.Mesh(geo, mat)
-    }
-    mat.transparent = true
-    mat.depthWrite = false
-    obj.rotation.x = -Math.PI / 2
-    obj.position.set(D, -2.6, -60)
-    obj.renderOrder = 1
-    return { obj, mat, geo }
-  }, [real])
-  useWorldFrame('dualism', () => {
+    const arrive = rt.dual.t
+    const on = arrive < 0.985
+    if (kit.mesh.visible !== on) kit.mesh.visible = on
+    if (!on) return
     kit.mat.uniforms.uTime.value = rt.time
-    kit.mat.uniforms.uFade.value = rt.dual.t
-    kit.obj.visible = rt.world === 'dualism'
+    kit.mat.uniforms.uFade.value = (1 - smoothstep(0.55, 0.98, arrive)) * smoothstep(0, 0.12, arrive)
+    for (let i = 0; i < TUNNEL_N; i++) {
+      const flow = (rt.time * 1.6 + i * 3.2) % (TUNNEL_N * 3.2)
+      const z = 2 - flow
+      const rad = (3.5 + Math.sin(i * 0.9) * 0.4) * (1 + Math.max(0, -z - 18) * 0.015)
+      kit.mesh.setMatrixAt(i, kit.m4.compose(kit.p.set(D, 0, z), kit.q.setFromEuler(kit.e.set(0, 0, rt.time * 0.1 + i)), kit.s.set(rad, rad, rad)))
+    }
+    kit.mesh.instanceMatrix.needsUpdate = true
   }, -0.5)
-  useEffect(() => () => { ;(kit.obj as any).dispose?.(); kit.geo.dispose(); kit.mat.dispose() }, [kit])
-  return <primitive object={kit.obj} />
+  useEffect(() => () => { kit.geo.dispose(); kit.mat.dispose(); kit.mesh.dispose() }, [kit])
+  return <primitive object={kit.mesh} />
 }
 
-/** Spectral light falling through haze + drifting haze sheets (depth, not fog on a wall). */
-function SpectralAir() {
-  const kit = useMemo(() => {
-    const vert = 'varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix*vec4(position,1.0); vW = w.xyz; gl_Position = projectionMatrix*viewMatrix*w; }'
-    const shaft = new THREE.ShaderMaterial({
-      vertexShader: vert, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
-      uniforms: { uTime: { value: 0 }, uFade: { value: 0 }, uHue: { value: 0 } },
-      fragmentShader: `
-        varying vec2 vUv; varying vec3 vW; uniform float uTime, uFade, uHue;
-        float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-        float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
-        void main(){
-          float across = pow(1.0 - abs(vUv.x - 0.5) * 2.0, 2.0);
-          float along = smoothstep(0.0, 0.2, vUv.y) * smoothstep(1.0, 0.5, vUv.y);
-          float st = 0.5 + 0.5 * n(vec2(vUv.x * 7.0 + uHue * 9.0, vUv.y * 1.4 - uTime * 0.05));
-          vec3 c = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + uHue + vUv.y * 0.35 + uTime * 0.01));
-          float near = smoothstep(2.0, 9.0, distance(cameraPosition, vW));
-          float a = across * along * st * near * uFade * 0.11;
-          gl_FragColor = vec4(c * a, a);
-        }`,
-    })
-    const haze = new THREE.ShaderMaterial({
-      vertexShader: vert, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-      uniforms: { uTime: { value: 0 }, uFade: { value: 0 } },
-      fragmentShader: `
-        varying vec2 vUv; varying vec3 vW; uniform float uTime, uFade;
-        float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-        float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
-        void main(){
-          vec2 p = vUv * vec2(3.0, 2.0) + vec2(uTime * 0.01 + vW.z * 0.3, vW.z * 0.7);
-          float d = (n(p) * 0.6 + n(p * 2.1 + 5.0) * 0.4);
-          float edge = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x) * smoothstep(0.0, 0.2, vUv.y) * smoothstep(1.0, 0.6, vUv.y);
-          float near = smoothstep(3.0, 12.0, distance(cameraPosition, vW));
-          vec3 c = mix(vec3(0.16, 0.2, 0.5), vec3(0.45, 0.25, 0.6), n(p * 0.7));
-          // keep the centre line clear: the artwork sits in clean air, the haze gathers toward the sides
-          float side = 0.3 + 0.7 * smoothstep(2.5, 15.0, abs(vW.x - ${D}.0));
-          float a = smoothstep(0.25, 0.8, d) * edge * near * uFade * 0.09 * side;
-          gl_FragColor = vec4(c * a, a);
-        }`,
-    })
-    const geo = new THREE.PlaneGeometry(1, 1)
-    const shafts = Array.from({ length: 9 }, (_, i) => ({ x: (i % 2 ? 1 : -1) * (2.2 + (i % 5) * 1.5), z: -4 - i * 9, w: 2.0 + (i % 3), h: 22, hue: i / 9 }))
-    const sheets = Array.from({ length: 12 }, (_, i) => ({ z: 4 - i * 17 - (i % 2) * 4, w: 40 + i * 6, h: 18 + i * 2 }))
-    return { shaft, haze, geo, shafts, sheets }
-  }, [])
-  useWorldFrame('dualism', () => {
-    const t = rt.time
-    kit.shaft.uniforms.uTime.value = t
-    kit.shaft.uniforms.uFade.value = rt.dual.t
-    kit.haze.uniforms.uTime.value = t
-    kit.haze.uniforms.uFade.value = rt.dual.t
-  }, -0.5)
-  useEffect(() => () => { kit.shaft.dispose(); kit.haze.dispose(); kit.geo.dispose() }, [kit])
-  return (
-    <group>
-      {kit.shafts.map((s, i) => (
-        <group key={'s' + i} position={[D + s.x, 4, s.z]}>
-          <ShaftMesh geo={kit.geo} base={kit.shaft} hue={s.hue} w={s.w} h={s.h} />
-          <ShaftMesh geo={kit.geo} base={kit.shaft} hue={s.hue} w={s.w} h={s.h} rotY={Math.PI / 2} />
-        </group>
-      ))}
-      {kit.sheets.map((s, i) => (
-        <mesh key={'h' + i} geometry={kit.geo} material={kit.haze} position={[D, 3, s.z]} scale={[s.w, s.h, 1]} renderOrder={3} />
-      ))}
-    </group>
-  )
-}
-function ShaftMesh({ geo, base, hue, w, h, rotY = 0 }: { geo: THREE.BufferGeometry; base: THREE.ShaderMaterial; hue: number; w: number; h: number; rotY?: number }) {
-  const mat = useMemo(() => {
-    const m = base.clone()
-    m.uniforms = { uTime: base.uniforms.uTime, uFade: base.uniforms.uFade, uHue: { value: hue } }
-    return m
-  }, [base, hue])
-  useEffect(() => () => mat.dispose(), [mat])
-  return <mesh geometry={geo} material={mat} scale={[w, h, 1]} rotation={[0, rotY, 0]} renderOrder={3} />
-}
+/* ───────────────────────── track tokens ───────────────────────── */
 
-/** Distortion halo around the official artwork: counter-rotating spectral arcs, never touching the artwork itself. */
-/** A soft dark pool of air behind the official artwork: local contrast, so it is the first thing the eye lands on. */
-function ArtworkContrast() {
-  const mat = useMemo(
-    () => new THREE.ShaderMaterial({
-      transparent: true, depthWrite: false, depthTest: true,
-      uniforms: { uFade: { value: 0 } },
-      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-      fragmentShader: 'varying vec2 vUv; uniform float uFade; void main(){ float r = length((vUv - 0.5) * 2.0); float a = smoothstep(1.0, 0.25, r); gl_FragColor = vec4(0.0, 0.0, 0.01, a * a * 0.4 * uFade); }',
-    }),
-    [],
-  )
-  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
-  useWorldFrame('dualism', () => { mat.uniforms.uFade.value = rt.dual.t }, -0.4)
-  useEffect(() => () => { mat.dispose(); geo.dispose() }, [mat, geo])
-  return <mesh geometry={geo} material={mat} position={[D, 0.1, -0.5]} scale={[15, 15, 1]} renderOrder={2} />
-}
+const coinProfile = [[0, 0.075], [0.5, 0.075], [0.575, 0.062], [0.605, 0.03], [0.605, -0.03], [0.575, -0.062], [0.5, -0.075], [0, -0.075]].map(([x, y]) => new THREE.Vector2(x, y))
 
-function LensHalo() {
-  const mat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
-        uniforms: { uTime: { value: 0 }, uFade: { value: 0 }, uDir: { value: 1 } },
-        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-        fragmentShader: `
-          varying vec2 vUv; uniform float uTime, uFade, uDir;
-          void main(){
-            vec2 p = (vUv - 0.5) * 2.0;
-            float r = length(p), a = atan(p.y, p.x) * uDir;
-            float wob = sin(a * 5.0 + uTime * 0.5) * 0.02 + sin(a * 11.0 - uTime * 0.7) * 0.008;
-            float ring = 0.0;
-            for (int i = 0; i < 4; i++) { float fi = float(i); float rr = 0.52 + fi * 0.11 + wob * (1.0 + fi); ring += smoothstep(0.006, 0.0, abs(r - rr)) * (0.45 - fi * 0.08) * (0.5 + 0.5 * sin(a * (3.0 + fi) + uTime * (0.3 + fi * 0.15))); }
-            vec3 c = 0.5 + 0.5 * cos(6.2831 * (vec3(0.0, 0.33, 0.67) + a * 0.16 + r * 1.5 + uTime * 0.03));
-            float glow = smoothstep(0.98, 0.5, r) * smoothstep(0.4, 0.62, r) * 0.22;
-            gl_FragColor = vec4(c * (ring + glow) * uFade, (ring + glow) * uFade);
-          }`,
-      }),
-    [],
-  )
-  const mat2 = useMemo(() => { const m = mat.clone(); m.uniforms = { uTime: mat.uniforms.uTime, uFade: mat.uniforms.uFade, uDir: { value: -1 } }; return m }, [mat])
-  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1), [])
+/** Two tokens, one per track, on one tilted orbit around the monolith (point-symmetric: when one is near and low the other is far and high).
+ *  Selecting a track lifts it out of the orbit onto a clear stage beside the sleeve, with its title ring facing the viewer. */
+function Orbiter({ index, shared }: { index: number; shared: Shared }) {
   const g = useRef<THREE.Group>(null)
-  useWorldFrame('dualism', () => {
-    mat.uniforms.uTime.value = rt.time
-    mat.uniforms.uFade.value = rt.dual.t
-    if (g.current) { g.current.visible = rt.world === 'dualism'; g.current.rotation.z = rt.time * 0.03 }
-  }, -0.4)
-  useEffect(() => () => { mat.dispose(); mat2.dispose(); geo.dispose() }, [mat, mat2, geo])
-  return (
-    <group ref={g} position={[D, 0.1, -0.05]}>
-      <mesh geometry={geo} material={mat} scale={[9.5, 9.5, 1]} renderOrder={4} />
-      <mesh geometry={geo} material={mat2} scale={[12.5, 12.5, 1]} rotation={[0, 0, 0.6]} renderOrder={4} />
-    </group>
-  )
-}
-
-/* ───────────────────────── track orbiters ───────────────────────── */
-
-function Orbiter({ index }: { index: number }) {
-  const g = useRef<THREE.Group>(null)
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
   const ringTex = A.dualLabels[index]
-  const discMat = useMemo(() => {
-    const m = createArtworkMaterial(A.covers.dualismo)
-    m.uniforms.uFlow.value = 0.6
-    return m
-  }, [])
-  const ringMat = useMemo(() => new THREE.MeshBasicMaterial({ map: ringTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.8, side: THREE.DoubleSide }), [ringTex])
-  const discGeo = useMemo(() => new THREE.CircleGeometry(0.72, 48), [])
-  const ringGeo = useMemo(() => new THREE.PlaneGeometry(2.7, 2.7), [])
-  const hov = useRef(0)
-  const flag = useRef(false)
-  useEffect(() => () => { discMat.dispose(); ringMat.dispose(); discGeo.dispose(); ringGeo.dispose() }, [discMat, ringMat, discGeo, ringGeo])
+  const kit = useMemo(() => {
+    const face = withExposure(createArtworkMaterial(A.covers.dualismo), index === 0 ? 1.0 : 0.5)
+    face.uniforms.uFlow.value = 0.2
+    face.uniforms.uBulge.value = 0
+    const coin = new THREE.ShaderMaterial({ vertexShader: coinVert, fragmentShader: coinFrag, fog: false, uniforms: { uTime: shared.uTime, uFade: shared.uFade, uGlow: { value: 0 }, uTint: { value: new THREE.Color(index === 0 ? '#5f9bff' : '#ff6f93') } } })
+    const ring = new THREE.MeshBasicMaterial({ map: ringTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.6, side: THREE.DoubleSide, fog: false })
+    const faceGeo = new THREE.CircleGeometry(0.56, 56)
+    const coinGeo = new THREE.LatheGeometry(coinProfile, 40)
+    coinGeo.rotateX(Math.PI / 2)
+    const ringGeo = new THREE.PlaneGeometry(2.0, 2.0)
+    return { face, coin, ring, faceGeo, coinGeo, ringGeo }
+  }, [ringTex, index, shared])
+  const st = useRef({ hov: 0, sel: 0, other: 0, flag: false })
+  useEffect(() => () => { kit.face.dispose(); kit.coin.dispose(); kit.ring.dispose(); kit.faceGeo.dispose(); kit.coinGeo.dispose(); kit.ringGeo.dispose() }, [kit])
 
   useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
-    const st = useStore.getState()
-    const sel = st.dualismoTrack === index
-    hov.current += ((flag.current || sel ? 1 : 0) - hov.current) * Math.min(1, dt * 6)
-    // two opposing poles on one point-symmetric orbit: when one is near, left, high and lit, the other is far, right, low and dark
-    const t = rt.time * 0.16 + index * Math.PI
+    const s = st.current
+    const picked = useStore.getState().dualismoTrack
+    const selected = picked === index
+    s.hov += ((s.flag ? 1 : 0) - s.hov) * Math.min(1, dt * 6)
+    s.sel += ((selected ? 1 : 0) - s.sel) * Math.min(1, dt * 2.6)
+    s.other += ((picked !== null && !selected ? 1 : 0) - s.other) * Math.min(1, dt * 2.6)
+    const aspect = camera.aspect
+    const wide = clamp((aspect - 1.0) / 0.5)
     const arrive = rt.dual.t
-    const R = (4.4 + Math.sin(rt.time * 0.4 + index) * 0.15) * (0.3 + 0.7 * arrive)
-    const x = -Math.cos(t) * R
-    const z = Math.sin(t) * R * 1.35 - 1.0
-    const y = 0.4 * Math.cos(t * 2.0) * (index === 0 ? 1 : -1) + (index === 0 ? 0.8 : -0.8) * (0.5 + 0.5 * Math.cos(t))
-    o.position.set(D + x, y, z)
-    // nearer = larger: depth is part of the opposition (near/far)
-    const near = 0.8 + 0.3 * (z + 5) / 10
-    const s = (1 + hov.current * 0.28 + (sel ? 0.15 : 0)) * smoothstep(0, 0.5, arrive) * near
-    o.scale.setScalar(s)
-    o.lookAt(D, 0.2, 14) // face the viewer's side
-    discMat.uniforms.uTime.value = rt.time
-    discMat.uniforms.uSplit.value = 0.002 + hov.current * 0.012
-    // positive / negative: Chirone burns bright, Messaggio is a dark mirror image of the same idea
-    discMat.uniforms.uGlow.value = hov.current + (index === 0 ? 0.55 : -0.25)
-    discMat.uniforms.uReveal.value = 1
-    ringMat.opacity = 0.55 + hov.current * 0.45
-    ringMat.map!.rotation = 0
-    const ring = o.children[1] as THREE.Mesh
-    ring.rotation.z = rt.time * 0.25 * (index === 0 ? 1 : -1)
-    o.visible = arrive > 0.02 && rt.world === 'dualism'
+    // orbit: ellipse tilted so the near pass is low (under the sleeve) and the far pass high (behind it)
+    const t = rt.time * 0.14 + index * Math.PI
+    const k = 0.3 + 0.7 * arrive
+    const ox = Math.cos(t) * 5.8 * clamp(aspect / 1.78, 0.3, 1) * k
+    const oz = Math.sin(t) * 2.8 * k - 0.7
+    const oy = 0.5 - Math.sin(t) * 1.95
+    // stage: right of the sleeve on a wide screen, under it on a tall one
+    const sx = wide * Math.min(4.5, 2.42 * aspect)
+    const sy = -0.2 * wide + -1.35 * (1 - wide)
+    const sz = 1.5 * wide + 3.8 * (1 - wide)
+    const w = s.sel * s.sel * (3 - 2 * s.sel)
+    // the other token steps back to the opposite side (high, far, small) so the chosen one has the stage to itself
+    const v = s.other * s.other * (3 - 2 * s.other) * wide
+    const ex = -sx * 0.95, ey = 1.5, ez = -2.2
+    const bx = ox + (sx - ox) * w, by = oy + (sy - oy) * w, bz = oz + (sz - oz) * w
+    o.position.set(D + bx + (ex - bx) * v, by + (ey - by) * v, bz + (ez - bz) * v)
+    const scale = (0.9 + s.hov * 0.2) * (1 + w * 0.75) * (1 - 0.25 * v) * smoothstep(0, 0.5, arrive)
+    o.scale.setScalar(scale)
+    o.lookAt(D, 0.3, 14)
+    const f = kit.face.uniforms
+    f.uTime.value = rt.time
+    f.uSplit.value = 0.002 + s.hov * 0.01
+    f.uGlow.value = 0.2 + s.hov * 0.5 + w * 0.5
+    f.uReveal.value = 1
+    kit.coin.uniforms.uGlow.value = s.hov + w
+    kit.ring.opacity = 0.5 + s.hov * 0.3 + w * 0.2
+    ;(o.children[2] as THREE.Mesh).rotation.z = rt.time * 0.22 * (index === 0 ? 1 : -1)
+    o.visible = arrive > 0.02
   }, -0.4)
 
   return (
     <group ref={g}>
+      <mesh geometry={kit.coinGeo} material={kit.coin} />
       <mesh
-        geometry={discGeo}
-        material={discMat}
-        onPointerOver={(e) => { e.stopPropagation(); flag.current = true; useStore.getState().setCursor('track', 'OPEN') }}
-        onPointerOut={() => { flag.current = false; useStore.getState().setCursor('default') }}
+        geometry={kit.faceGeo}
+        material={kit.face}
+        position={[0, 0, 0.078]}
+        onPointerOver={(e) => { e.stopPropagation(); st.current.flag = true; useStore.getState().setCursor('track', 'OPEN') }}
+        onPointerOut={() => { st.current.flag = false; useStore.getState().setCursor('default') }}
         onClick={(e) => { e.stopPropagation(); const s = useStore.getState(); s.set({ dualismoTrack: s.dualismoTrack === index ? null : index }) }}
       />
-      <mesh geometry={ringGeo} material={ringMat} position={[0, 0, -0.02]} />
+      <mesh geometry={kit.ringGeo} material={kit.ring} position={[0, 0, -0.03]} layers={1} renderOrder={4} />
     </group>
   )
 }
 
-/* ───────────────────────── central artwork + return rift ───────────────────────── */
+/* ───────────────────────── the way back ───────────────────────── */
 
-function Centerpiece() {
+function ReturnDoor() {
   const g = useRef<THREE.Group>(null)
-  const mat = useMemo(() => createArtworkMaterial(A.covers.dualismo), [])
-  const geo = useMemo(() => new THREE.PlaneGeometry(1, 1, 24, 24), [])
-  const halo = useMemo(() => new THREE.SpriteMaterial({ map: A.glow, color: '#7fb0ff', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.5, fog: false }), [])
-  useEffect(() => () => { mat.dispose(); geo.dispose(); halo.dispose() }, [mat, geo, halo])
-  useWorldFrame('dualism', () => {
-    const o = g.current
-    if (!o) return
-    const u = mat.uniforms
-    const arrive = rt.dual.t
-    u.uTime.value = rt.time
-    u.uReveal.value = smoothstep(0, 0.7, arrive)
-    u.uFlow.value = 0.5
-    u.uSplit.value = 0.003 + 0.002 * Math.sin(rt.time * 0.7)
-    u.uBulge.value = 4
-    u.uGlow.value = 0.5
-    u.uTilt.value.set(rt.px, rt.py)
-    // breathing: extremely subtle
-    const b = 1 + Math.sin(rt.time * 0.9) * 0.012
-    const s = 3.3 * b
-    o.scale.set(s, s, 1)
-    o.position.set(D, 0.1 + Math.sin(rt.time * 0.5) * 0.05, 0)
-    o.rotation.set(-rt.py * 0.06, rt.px * 0.1, 0)
-    halo.opacity = 0.35 * arrive + 0.1 * Math.sin(rt.time * 0.9)
-    o.visible = rt.world === 'dualism'
-  }, -0.4)
-  return (
-    <group ref={g}>
-      <mesh geometry={geo} material={mat} />
-      <sprite material={halo} scale={[3.2, 3.2, 1]} position={[0, 0, -0.2]} />
-    </group>
-  )
-}
-
-function ReturnRift() {
-  const g = useRef<THREE.Group>(null)
-  const mat = useMemo(() => new THREE.MeshBasicMaterial({ map: A.returnLabel, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.8, side: THREE.DoubleSide }), [])
-  const geo = useMemo(() => new THREE.PlaneGeometry(2.4, 2.4), [])
-  const core = useMemo(() => new THREE.SpriteMaterial({ map: A.glow, color: '#ffb27a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.7, fog: false }), [])
-  const hov = useRef(0)
-  const flag = useRef(false)
-  useEffect(() => () => { mat.dispose(); geo.dispose(); core.dispose() }, [mat, geo, core])
+  const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera
+  const kit = useMemo(() => {
+    const ring = new THREE.MeshBasicMaterial({ map: A.returnLabel, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.6, side: THREE.DoubleSide, fog: false })
+    const door = new THREE.ShaderMaterial({
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+      fragmentShader: doorFrag, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, uniforms: { uTime: { value: 0 }, uGlow: { value: 0 } },
+    })
+    const core = new THREE.SpriteMaterial({ map: A.glow, color: '#ffa860', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.4, fog: false })
+    return { ring, door, core, ringGeo: new THREE.PlaneGeometry(1.7, 1.7), doorGeo: new THREE.PlaneGeometry(0.4, 1.15) }
+  }, [])
+  const st = useRef({ hov: 0, flag: false })
+  useEffect(() => () => { kit.ring.dispose(); kit.door.dispose(); kit.core.dispose(); kit.ringGeo.dispose(); kit.doorGeo.dispose() }, [kit])
   useWorldFrame('dualism', (_, dt) => {
     const o = g.current
     if (!o) return
-    hov.current += ((flag.current ? 1 : 0) - hov.current) * Math.min(1, dt * 7)
-    o.position.set(D - 4.3, -2.3 + Math.sin(rt.time * 0.6) * 0.1, 3.2)
-    o.scale.setScalar((0.85 + hov.current * 0.3) * smoothstep(0.3, 1, rt.dual.t))
-    ;(o.children[0] as THREE.Mesh).rotation.z = rt.time * 0.18
-    mat.opacity = 0.45 + hov.current * 0.55
-    core.opacity = 0.35 + hov.current * 0.5
-    o.visible = rt.world === 'dualism'
+    const s = st.current
+    s.hov += ((s.flag ? 1 : 0) - s.hov) * Math.min(1, dt * 7)
+    const aspect = camera.aspect
+    const px = Math.min(3.4, 1.9 * aspect)
+    o.position.set(D - px, -1.35 + Math.sin(rt.time * 0.6) * 0.06, 4.4)
+    o.scale.setScalar((0.8 + s.hov * 0.2) * Math.min(1, 0.55 + aspect * 0.5) * smoothstep(0.3, 1, rt.dual.t))
+    ;(o.children[0] as THREE.Mesh).rotation.z = rt.time * 0.15
+    kit.ring.opacity = 0.42 + s.hov * 0.5
+    kit.core.opacity = 0.28 + s.hov * 0.4
+    kit.door.uniforms.uTime.value = rt.time
+    kit.door.uniforms.uGlow.value = s.hov
   }, -0.4)
   return (
     <group ref={g}>
       <mesh
-        geometry={geo}
-        material={mat}
-        onPointerOver={(e) => { e.stopPropagation(); flag.current = true; useStore.getState().setCursor('portal', 'RETURN') }}
-        onPointerOut={() => { flag.current = false; useStore.getState().setCursor('default') }}
+        geometry={kit.ringGeo}
+        material={kit.ring}
+        renderOrder={4}
+        onPointerOver={(e) => { e.stopPropagation(); st.current.flag = true; useStore.getState().setCursor('portal', 'RETURN') }}
+        onPointerOut={() => { st.current.flag = false; useStore.getState().setCursor('default') }}
         onClick={(e) => { e.stopPropagation(); exitDualism() }}
       />
-      <sprite material={core} scale={[1.6, 1.6, 1]} />
+      <mesh geometry={kit.doorGeo} material={kit.door} position={[0, 0, 0.01]} renderOrder={4} />
+      <sprite material={kit.core} scale={[1.7, 1.7, 1]} position={[0, 0, -0.02]} renderOrder={3} />
     </group>
   )
 }
 
 export function DualismoWorld() {
+  const shared = useMemo(makeShared, [])
+  const aspect = useThree((s) => s.size.width / Math.max(1, s.size.height))
+  // quantised so a window resize does not rebuild the instance buffers on every pixel
+  const fit = Math.round(fitFor(aspect) * 8) / 8
+  useWorldFrame('dualism', () => {
+    shared.uTime.value = rt.time
+    shared.uFade.value = smoothstep(0.0, 0.55, rt.dual.t)
+  }, -0.7)
   return (
     <group>
-      <MirrorFloor />
-      <GlassHall />
-      <FarDust />
-      <SpectralAir />
-      <ArtworkContrast />
-      <LensHalo />
-      <TunnelRings />
-      <Centerpiece />
+      <Backdrop shared={shared} />
+      <MirrorFloor shared={shared} />
+      <Gate shared={shared} />
+      <Monoliths shared={shared} fit={fit} />
+      <Shafts shared={shared} />
+      <Hero shared={shared} />
+      <EntryTunnel />
       {dualismo.tracks.map((t, i) => (
-        <Orbiter key={t.id} index={i} />
+        <Orbiter key={t.id} index={i} shared={shared} />
       ))}
-      <ReturnRift />
-      <Particles />
+      <ReturnDoor />
+      <Motes shared={shared} />
     </group>
   )
 }

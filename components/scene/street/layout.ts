@@ -94,3 +94,52 @@ export function windowsFor(seg: Seg, seed: number, skipZ: number[] = []): WinIns
   }
   return out
 }
+
+/** zones kept clear of doors / shutters (landmarks: studio door, fire-escape ladders, props) */
+export const STREET_SKIP = [
+  { side: -1 as const, z: 7, r: 3.2 }, { side: 1 as const, z: -15, r: 3.2 }, { side: -1 as const, z: -29, r: 3 },
+  { side: 1 as const, z: -49, r: 3 }, { side: -1 as const, z: -62, r: 2.8 }, { side: -1 as const, z: -50, r: 2.2 },
+]
+
+/** every window of the alley and the plaza, built once (the wall geometry needs the holes, the window meshes need the instances) */
+let _wins: WinInst[] | null = null
+export function allWindows(): WinInst[] {
+  if (_wins) return _wins
+  const all: WinInst[] = []
+  SEGS.forEach((s, i) => all.push(...windowsFor(s, 1000 + i * 7, [])))
+  for (const side of [-1, 1] as const) {
+    const r = rng(side === -1 ? 91 : 92)
+    for (let z = PLAZA.z0 - 2; z > PLAZA.z1 + 1; z -= 3.4) for (let k = 0; k < 5; k++) {
+      const y = 4.6 + k * 3.4
+      if (r() < 0.1) continue
+      all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
+    }
+  }
+  _wins = all
+  return all
+}
+
+/** ground-floor roller shutters (3 variants) and doors (3 variants), placed deterministically along each segment */
+export interface LevelItem { side: -1 | 1; z: number }
+let _level: { shutters: LevelItem[][]; doors: LevelItem[][] } | null = null
+export function streetLevelItems(skip = STREET_SKIP) {
+  if (_level && skip === STREET_SKIP) return _level
+  const r = rng(404)
+  const shutters: LevelItem[][] = [[], [], []]
+  const doors: LevelItem[][] = [[], [], []]
+  for (const s of SEGS) {
+    let z = s.z0 - 2.2
+    while (z > s.z1 + 2) {
+      const blocked = skip.some((k) => k.side === s.side && Math.abs(k.z - z) < k.r)
+      const roll = r()
+      if (!blocked) {
+        if (roll < 0.34) shutters[r.int(0, 2)].push({ side: s.side, z })
+        else if (roll < 0.62) doors[r.int(0, 2)].push({ side: s.side, z })
+      }
+      z -= r.range(3.6, 6.4)
+    }
+  }
+  const out = { shutters, doors }
+  if (skip === STREET_SKIP) _level = out
+  return out
+}

@@ -55,6 +55,7 @@ export function Director() {
     rt.py = damp(rt.py, clamp(rt.ry + rt.ty, -1, 1), 3.0, dt)
 
     // ── scroll: under-damped spring on top of Lenis' smoothing
+    if (rt.snapSpring !== null && Math.abs(rt.progress - rt.snapSpring) < 0.003) { spring.current.x = rt.progress; spring.current.v = 0; rt.snapSpring = null }
     const prev = spring.current.x
     if (!frozen) {
       if (rt.reducedMotion) spring.current.x = damp(spring.current.x, rt.progress, 7, dt)
@@ -159,6 +160,15 @@ export function Director() {
       cam.position.y += Math.sin(rt.time * 0.85) * 0.006 * breathe
       cam.position.x += Math.sin(rt.time * 0.55 + 1.3) * 0.004 * breathe
       cam.rotateZ(Math.sin(rt.time * 0.42) * 0.0012 * breathe)
+    }
+
+    // QA only: an exact, repeatable pose (comparable before/after captures)
+    if (rt.camOverride) {
+      const o = rt.camOverride
+      cam.position.set(o.pos[0], o.pos[1], o.pos[2])
+      cam.up.set(0, 1, 0)
+      cam.lookAt(o.look[0], o.look[1], o.look[2])
+      if (o.fov) fov = o.fov
     }
 
     // below the pool surface the alley is rendered as its own reflection

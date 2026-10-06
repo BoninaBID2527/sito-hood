@@ -368,7 +368,19 @@ ${
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
-  float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
+  // the sunlit band follows the REAL sun shadow where a shadow map exists: facades, cornices, fire escapes and roof structures
+  // cut their own shapes into the light; surfaces turned away from the sun keep only the sky-glow share of the band.
+  // Only sampled up in the band itself (walls never pay for the shadow lookup below it).
+  float sunVis_ = 1.0;
+#if defined( USE_SHADOWMAP ) && NUM_DIR_LIGHT_SHADOWS > 0
+  if (h_ > uSunY - 4.5 && uSunAmt > 0.01) {
+    DirectionalLightShadow dls_ = directionalLightShadows[ 0 ];
+    float shadowV_ = getShadow( directionalShadowMap[ 0 ], dls_.shadowMapSize, dls_.shadowIntensity, dls_.shadowBias, dls_.shadowRadius, vDirectionalShadowCoord[ 0 ] );
+    float facing_ = smoothstep( 0.0, 0.1, dot( normal, directionalLights[ 0 ].direction ) );
+    sunVis_ = mix( 0.62, 1.0, shadowV_ * facing_ );
+  }
+#endif
+  float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt * sunVis_;
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
 ${
   metal

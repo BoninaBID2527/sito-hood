@@ -8,3 +8,4 @@ next-env.d.ts
 shots*
 secrets-roof.png
 .next-export
+.claude/worktrees/
