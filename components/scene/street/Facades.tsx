@@ -9,7 +9,7 @@ import { tileUV, worldUV, GeoBuilder } from '@/lib/geo'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
-import { streetMat } from './materials'
+import { streetMat, streetU } from './materials'
 import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, streetLevelItems, type BrickKind } from './layout'
 import { wallWithOpenings, withWhite, type Hole } from './facadeBuild'
 import { FIRE_ESCAPES } from './FireEscapes'
@@ -263,6 +263,8 @@ export function Windows() {
       mat.onBeforeCompile = (sh) => {
         sh.uniforms.uWinT = winU.t
         sh.uniforms.uLate = winU.late
+        sh.uniforms.uSkyH = streetU.uSkyHor
+        sh.uniforms.uSkyT = streetU.uSkyTop
         sh.vertexShader = sh.vertexShader
           .replace('#include <common>', '#include <common>\nattribute vec2 aWin;\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;')
           .replace(
@@ -303,11 +305,22 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
     totalEmissiveRadiance *= mix(0.62, 1.2, clamp(lum_, 0.0, 1.2));
   }`
           : ''
+        // glass (V3.7): glazing reflects the sky, and it does so by Fresnel — barely face-on, strongly at grazing angles (looking up the façade). Each pane
+        // has its own dirt/streak so a row of windows is not a row of identical mirrors.
+        const glassRefl = `
+  {
+    vec3 vv_ = normalize(vViewPosition);
+    float fr_ = pow(1.0 - clamp(dot(normal, vv_), 0.0, 1.0), 3.0);
+    vec3 rd_ = inverseTransformDirection(reflect(-vv_, normal), viewMatrix);
+    vec3 env_ = mix(uSkyH, uSkyT, smoothstep(0.0, 0.9, rd_.y));
+    float st_ = 0.62 + 0.38 * sin(vLPos.x * 31.0 + vWin.y * 40.0) * sin(vLPos.y * 3.0 + vWin.x * 9.0);
+    totalEmissiveRadiance += env_ * (0.02 + 0.5 * fr_) * st_ * ${lit ? '0.35' : '0.9'};
+  }`
         sh.fragmentShader = sh.fragmentShader
-          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;\nuniform float uWinT;\nuniform float uLate;')
-          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);' + interior)
+          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;\nuniform float uWinT;\nuniform float uLate;\nuniform vec3 uSkyH;\nuniform vec3 uSkyT;')
+          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);' + interior + glassRefl)
       }
-      mat.customProgramCacheKey = () => 'win-emit3' + (lit ? 'i' : '')
+      mat.customProgramCacheKey = () => 'win-emit4' + (lit ? 'i' : '')
       const vg = plane.clone()
       geos.push(vg)
       const aWin = new Float32Array(list.length * 2)
