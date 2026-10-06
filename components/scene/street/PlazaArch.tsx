@@ -51,12 +51,19 @@ export function PlazaArch() {
       doorGeos.push(geo)
       return { geo, mat: doorMats.get(key)!, pos: [d.x, d.y, d.z] as [number, number, number] }
     })
-    return { meshes, doorMeshes, wallMats, mats, doorMats, doorGeos }
+    // light spill: soft additive halos around the practical lamps and the bridge's lit glazing — what a real lamp does to the air and the wall around it
+    const halo = new THREE.SpriteMaterial({ map: A.glow, color: '#ffb36a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.55, fog: false })
+    const lamps: { p: [number, number, number]; s: number; o: number }[] = [
+      { p: [-9.0, 4.2, -117.4], s: 3.4, o: 1 }, { p: [-6.0, 4.2, -117.4], s: 3.4, o: 1 }, { p: [4.0, 2.9, -117.55], s: 2.6, o: 0.8 },
+      { p: [-2.9, 2.8, -149.6], s: 2.6, o: 0.8 }, { p: [0, 7.8, -139], s: 4.2, o: 1.1 }, { p: [0, 8.5, -126.9], s: 6.5, o: 0.55 },
+    ]
+    return { meshes, doorMeshes, wallMats, mats, doorMats, doorGeos, halo, lamps }
   }, [])
 
   useFrame(() => {
     // the lamps: dusk-dependent but never fully off
     ;(kit.mats.glow as THREE.MeshStandardMaterial).emissiveIntensity = 0.9 + palette.windows * 1.6
+    kit.halo.opacity = 0.3 + palette.windows * 0.5
   }, -1)
 
   useEffect(
@@ -66,6 +73,7 @@ export function PlazaArch() {
       Object.values(kit.wallMats).forEach((m) => m.dispose())
       Object.values(kit.mats).forEach((m) => m.dispose())
       kit.doorMats.forEach((m) => m.dispose())
+      kit.halo.dispose()
     },
     [kit],
   )
@@ -74,6 +82,9 @@ export function PlazaArch() {
     <group>
       {kit.meshes.map((m, i) => (
         <mesh key={i} geometry={m.geo} material={m.mat} />
+      ))}
+      {kit.lamps.map((l, i) => (
+        <sprite key={`l${i}`} material={kit.halo} position={l.p} scale={[l.s, l.s, 1]} renderOrder={5} layers={1} />
       ))}
       {kit.doorMeshes.map((d, i) => (
         <mesh key={`d${i}`} geometry={d.geo} material={d.mat} position={d.pos} />

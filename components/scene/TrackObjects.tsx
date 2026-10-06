@@ -38,7 +38,7 @@ export const SPECS: ObjSpec[] = [
 ]
 
 function hardware(i: number) {
-  const metal = new GeoBuilder(), paper = new GeoBuilder(), tape = new GeoBuilder(), body = new GeoBuilder(), lamp = new GeoBuilder()
+  const metal = new GeoBuilder(), paper = new GeoBuilder(), tape = new GeoBuilder(), body = new GeoBuilder(), lamp = new GeoBuilder(), wood = new GeoBuilder()
   const hw = CARD_W / 2, hh = CARD_H / 2
   const frame = (t: number, z: number, d: number, b: GeoBuilder) => {
     const e = Math.min(0.014, t * 0.3)
@@ -50,6 +50,10 @@ function hardware(i: number) {
   switch (i) {
     case 0: {
       paper.box(CARD_W, CARD_H, 0.035, 0, 0, -0.022)
+      // seen from behind it is a pasted-up sheet on a plywood sheet: battens, hanging plates, shackles
+      wood.box(CARD_W + 0.06, CARD_H + 0.06, 0.035, 0, 0, -0.058)
+      wood.box(CARD_W, 0.1, 0.045, 0, hh * 0.58, -0.098); wood.box(CARD_W, 0.1, 0.045, 0, -hh * 0.58, -0.098); wood.box(0.1, CARD_H, 0.045, 0, 0, -0.098)
+      for (const sx of [-1, 1]) { metal.box(0.18, 0.22, 0.02, sx * (hw - 0.22), hh - 0.12, -0.13); metal.cyl(0.018, 0.018, 0.1, sx * (hw - 0.22), hh + 0.0, -0.13, 8, Math.PI / 2) }
       for (const [x, y, r] of [[-hw + 0.1, hh - 0.04, 0.5], [hw - 0.1, hh - 0.06, -0.4], [-hw + 0.06, -hh + 0.1, -0.6], [hw - 0.12, -hh + 0.05, 0.3]] as const) tape.box(0.5, 0.07, 0.01, x, y, 0.012, 0, 0, r)
       break
     }
@@ -94,7 +98,7 @@ function hardware(i: number) {
       break
     }
   }
-  return { metal, paper, tape, body, lamp }
+  return { metal, paper, tape, body, lamp, wood }
 }
 
 export function TrackObject({ i, faceGeo, faceMat, mats, onFace, twinMat, glassMat }: {
@@ -109,7 +113,7 @@ export function TrackObject({ i, faceGeo, faceMat, mats, onFace, twinMat, glassM
   const built = useMemo(() => {
     const h = hardware(i)
     const mk = (b: GeoBuilder) => (b.empty ? null : b.build())
-    return { metal: mk(h.metal), paper: mk(h.paper), tape: mk(h.tape), body: mk(h.body), lamp: mk(h.lamp) }
+    return { metal: mk(h.metal), paper: mk(h.paper), tape: mk(h.tape), body: mk(h.body), lamp: mk(h.lamp), wood: mk(h.wood) }
   }, [i])
   useEffect(() => () => Object.values(built).forEach((g) => g?.dispose()), [built])
   return (
@@ -120,6 +124,7 @@ export function TrackObject({ i, faceGeo, faceMat, mats, onFace, twinMat, glassM
       {built.tape && <mesh geometry={built.tape} castShadow material={mats.tape} />}
       {built.body && <mesh geometry={built.body} castShadow material={i === 1 ? mats.lightbox : mats.body} />}
       {built.lamp && <mesh geometry={built.lamp} material={mats.lamp} />}
+      {built.wood && <mesh geometry={built.wood} castShadow material={mats.wood} />}
       {i === 4 && <mesh geometry={mats.plane} material={glassMat} position={[0, 0, 0.07]} scale={[CARD_W + 0.1, CARD_H + 0.1, 1]} renderOrder={21} />}
       {i === 5 && twinMat && <mesh geometry={faceGeo} material={twinMat} position={[0.5, -0.32, -0.55]} scale={0.93} rotation={[0, 0.0, 0.03]} />}
     </group>
@@ -135,6 +140,7 @@ export function useObjectMats() {
       tape: new THREE.MeshStandardMaterial({ color: '#8f8467', roughness: 0.85, transparent: true, opacity: 0.8 }),
       lightbox: streetMat({ color: '#15161a', roughness: 0.55, metalness: 0.6, aoBase: 0.9, macro: 0.9, emissive: new THREE.Color('#ffc886'), emissiveIntensity: 0.0 }),
       lamp: new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 3.2, 2.2) }),
+      wood: streetMat({ color: '#6a5539', roughness: 0.93, aoBase: 0.85, macro: 1.0, seed: 4.4 }),
       plane: new THREE.PlaneGeometry(1, 1),
     }),
     [],
