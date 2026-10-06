@@ -253,8 +253,12 @@ ${
     float col2_ = floor(tuv_.x * 11.0 + 0.5 * mod(row2_, 2.0));
     vec2 bid_ = vec2(col2_, row2_) + floor(vMapUv) * 17.0 + ${seed};
     float b1_ = h21_(bid_), b2_ = h21_(bid_ + 7.7), b3_ = h21_(bid_ + 3.1);
-    vec3 bt_ = mix(vec3(0.80, 0.76, 0.78), vec3(1.16, 1.0, 0.88), b1_) * (0.78 + 0.44 * b2_);
-    diffuseColor.rgb *= mix(vec3(1.0), bt_, 0.8 * mac_ * (1.0 - pt_));
+    // V3.7: a wall is laid from kiln batches — neighbouring bricks share a tone and the change happens in patches (~5 × 4 bricks), with only a
+    // mild per-brick scatter on top. (Per-brick random tone alone reads as a mosaic of coloured pixels, not as masonry.)
+    vec3 bt_ = mix(vec3(0.88, 0.85, 0.87), vec3(1.10, 1.0, 0.92), b1_) * (0.88 + 0.24 * b2_);
+    float bb_ = h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + floor(vMapUv) * 5.0 + ${seed} * 3.3);
+    vec3 batch_ = mix(vec3(0.86, 0.84, 0.9), vec3(1.1, 1.0, 0.88), bb_) * (0.9 + 0.2 * h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + 17.0));
+    diffuseColor.rgb *= mix(vec3(1.0), bt_ * batch_, 0.72 * mac_ * (1.0 - pt_));
     diffuseColor.rgb *= mix(1.0, 0.5, step(0.94, b3_) * mac_);
     diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.25, 1.18, 1.05), step(b3_, 0.04) * mac_ * 0.7);
     brickRough_ = 0.82 + 0.3 * b2_;
@@ -363,7 +367,23 @@ ${
     float by_ = textureGrad(uBumpTex, tuv_ + ky_, kx_, ky_).r;
     normal = bumpN_(-vViewPosition, normal, vec2(bx_ - b0_, by_ - b0_) / ${bblur} * ${bumpAmt} * (1.0 - pt_ * 0.8) * (1.0 - puddle_ * 0.92) * (1.0 - smoothstep(0.0025, 0.011, max(length(gx_), length(gy_)))), faceDirection);
   }`
-          : '#include <normal_fragment_maps>',
+          : `#include <normal_fragment_maps>${
+              wet
+                ? `
+  {
+    // V3.7: aggregate. Real asphalt is a mosaic of 2–8 mm stones: near the camera the surface normal carries that grain (this is what makes a
+    // wet road glitter instead of shining like a sheet). Fades out with distance; puddles stay glassy.
+    float fdA_ = 1.0 - smoothstep(4.0, 17.0, length(vViewPosition));
+    if (fdA_ > 0.01 && uMicro > 0.5) {
+      vec2 qa_ = vWPos.xz * 46.0;
+      float a0_ = vn2_(qa_), ax_ = vn2_(qa_ + vec2(0.4, 0.0)), az_ = vn2_(qa_ + vec2(0.0, 0.4));
+      float b0_ = vn2_(qa_ * 2.3 + 7.0), bx_ = vn2_(qa_ * 2.3 + 7.0 + vec2(0.4, 0.0)), bz_ = vn2_(qa_ * 2.3 + 7.0 + vec2(0.0, 0.4));
+      vec3 pert_ = vec3(-(ax_ - a0_) - 0.6 * (bx_ - b0_), 0.0, -(az_ - a0_) - 0.6 * (bz_ - b0_)) * (2.2 * fdA_ * (1.0 - puddle_));
+      normal = normalize(normal + (viewMatrix * vec4(pert_, 0.0)).xyz);
+    }
+  }`
+                : ''
+            }`,
       )
       .replace(
         '#include <emissivemap_fragment>',
@@ -382,6 +402,28 @@ ${
 #endif
   float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt * sunVis_;
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
+  {
+    // ── indirect light (V3.7) ── an analytic, coloured approximation of what a real street does and a single sun + hemisphere light cannot:
+    //  (1) the sunlit band of the opposite wall bounces warm light onto the shaded wall at the same height;
+    //  (2) the road's glow lifts the foot of the walls (sky/sun tinted, falls off with height);
+    //  (3) shadows are filled with cool sky light instead of staying empty;
+    //  (4) the road itself picks up warm light from the sunlit walls along both kerbs.
+    // All restrained, albedo-multiplied, and independent of the contact AO (which still darkens crevices) — it fills open shadow, it does not flatten.
+    vec3 nw_ = inverseTransformDirection(normal, viewMatrix);
+    float wallK_ = 1.0 - smoothstep(0.35, 0.8, abs(nw_.y));
+    float oppBand_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
+    float shade_ = 1.0 - clamp(sun_ * 1.6, 0.0, 1.0);
+    vec3 warm_ = uSunCol * vec3(1.0, 0.68, 0.46);
+    vec3 ind_ = warm_ * oppBand_ * shade_ * wallK_ * 0.2;
+    ind_ += mix(uSkyHor, warm_, 0.35 * uSunAmt) * (1.0 - smoothstep(0.0, 5.5, h_)) * wallK_ * 0.075;
+    ind_ += mix(uSkyHor, uSkyTop, 0.55) * (0.55 + 0.45 * nw_.y) * shade_ * mix(0.35, 1.0, wallAO_) * 0.055;
+${
+  wet
+    ? `    ind_ += warm_ * smoothstep(1.0, 3.6, abs(vWPos.x)) * step(13.5, uWetBox.y) * uSunAmt * max(nw_.y, 0.0) * 0.07;`
+    : ''
+}
+    totalEmissiveRadiance += diffuseColor.rgb * ind_;
+  }
 ${
   metal
     ? `  {
@@ -401,7 +443,7 @@ ${
 }`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}7nz`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}7nz-v37`
   return m
 }
 
