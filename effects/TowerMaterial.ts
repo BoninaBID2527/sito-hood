@@ -96,6 +96,18 @@ void main() {
     // recessed look: the glass is darker toward its frame, brighter toward the middle
     float inset = smoothstep(0.0, 0.18, min(min(f.x - lo.x, hi.x - f.x), min(f.y - lo.y, hi.y - f.y)));
     wcol *= 0.55 + 0.45 * inset;
+    // reveal shadow under the lintel and a lit sill edge: the opening has depth
+    wcol *= 0.62 + 0.38 * smoothstep(hi.y - 0.2, hi.y - 0.06, hi.y - f.y + 0.0);
+    wcol += vec3(0.05, 0.045, 0.04) * smoothstep(lo.y + 0.1, lo.y, f.y) * win * (glassWall ? 0.0 : 1.0);
+    // facade structure: pilasters at the bay lines, a spandrel band under every opening, vertical weathering below sills
+    if (!glassWall) {
+      float pil = smoothstep(0.0, 0.07, min(f.x, 1.0 - f.x));
+      float spand = smoothstep(lo.y - 0.12, lo.y - 0.02, f.y) * (1.0 - smoothstep(lo.y - 0.02, lo.y, f.y)) * 0.0 + smoothstep(0.0, lo.y, f.y) * 0.18;
+      body *= mix(0.74, 1.04, pil) * (1.0 - spand + 0.18 * smoothstep(lo.y, hi.y, f.y));
+      body *= 1.0 - 0.3 * smoothstep(0.25, 0.9, vn(vec2(u * 3.1, y * 0.07) + seed * 7.0)) * (1.0 - smoothstep(0.0, 0.5, f.y));
+    } else {
+      body *= 0.8 + 0.2 * smoothstep(0.0, 0.1, min(f.y, 1.0 - f.y)); // slab edge line
+    }
     col = mix(body, wcol, win * roofCut);
     col *= 1.0 - slab;
     if (glassWall) col *= 1.0 - 0.45 * smoothstep(0.06, 0.0, abs(f.x - 0.5) - 0.0) * (1.0 - win * 0.0);

@@ -60,8 +60,10 @@ export function SkyDome() {
         vertexShader: vert,
         fragmentShader: frag,
         side: THREE.BackSide,
+        // V3.5: drawn LAST among the opaque objects, depth-tested at the far plane → the (fbm-heavy) sky shader only runs for the few pixels
+        // that are really sky instead of being shaded for the whole screen and then painted over by walls
         depthWrite: false,
-        depthTest: false,
+        depthTest: true,
         fog: false,
         toneMapped: false,
         uniforms: {
@@ -94,13 +96,13 @@ export function SkyDome() {
     u.uMirror.value = rt.mirror
     if (mesh.current) {
       mesh.current.position.copy(camera.position)
-      // the room is enclosed: no sky pass at all while inside
-      const show = rt.world !== 'room'
+      // the room is enclosed and DUALISMO paints its own backdrop (DualismoWorld): no sky pass at all in either
+      const show = rt.world !== 'room' && rt.world !== 'dualism'
       if (mesh.current.visible !== show) mesh.current.visible = show
     }
   }, -1)
   return (
-    <mesh ref={mesh} renderOrder={-100} frustumCulled={false} material={mat}>
+    <mesh ref={mesh} renderOrder={1000} frustumCulled={false} material={mat}>
       <sphereGeometry args={[400, 32, 16]} />
     </mesh>
   )

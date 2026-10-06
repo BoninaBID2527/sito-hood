@@ -72,10 +72,19 @@ export const rt = {
   /** last scene pass cost (draw calls / triangles, incl. reflection pass) — debugging aid */
   stats: { calls: 0, tris: 0, refl: 0 },
   quality: SETTINGS.balanced as QualitySettings,
-  /** current render DPR (the adaptive manager moves it inside the tier's range) */
+  /** canvas DPR (fixed per tier — changing it re-allocates every buffer, so it only moves on a tier change) */
   dpr: 1,
+  /** developer/QA only (set through window.__hd with ?debug): pins the camera to an exact pose for comparable captures */
+  /** QA only: the next frame resets the scroll spring to the raw progress (instant, no settling frames) */
+  snapSpring: null as number | null,
+  camOverride: null as null | { pos: [number, number, number]; look: [number, number, number]; fov?: number },
+  /** internal render scale 0.5..1 (fraction of the drawing buffer the scene is rendered into; the adaptive manager moves it instantly, no re-allocation) */
+  scale: 1,
+  /** main-thread ms of the last frame (first useFrame → end of the scene submit) and the frame's start time */
+  cpuMs: 0,
+  frameT0: 0,
   /** live diagnostics for ?perf=1 (written by PerfGovernor; never read by the scene) */
-  perf: { ms: 16.7, fps: 60, dpr: 1, tier: 'balanced' as string, hitches: 0, changes: 0, calls: 0, tris: 0, tex: 0, geo: 0, forced: false },
+  perf: { ms: 16.7, fps: 60, dpr: 1, scale: 1, p95: 16.7, p99: 16.7, worst: 16.7, cpu: 0, bound: '-' as string, tier: 'balanced' as string, hitches: 0, changes: 0, calls: 0, tris: 0, tex: 0, geo: 0, forced: false, events: [] as string[] },
 }
 
 export type Runtime = typeof rt

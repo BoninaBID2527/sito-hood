@@ -13,10 +13,7 @@ import { SEGS } from './layout'
 import { useStore } from '@/lib/store'
 import { audio } from '@/lib/audio'
 import { throttleReflector } from './reflectThrottle'
-
-const GROUND_W = 44
-const GROUND_L = 176
-const GROUND_CZ = -56
+import { buildGroundGeometry, buildKerbs } from './groundBuild'
 
 export function Ground() {
   const mats = useMemo(() => {
@@ -24,22 +21,23 @@ export function Ground() {
     const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: 0.8, bumpBlur: 6, wet: A.puddle, macro: 0.7 })
     A.sidewalk.repeat.set(1, 1)
     const walk = streetMat({ map: A.sidewalk, color: '#6f6a62', roughness: 0.9, aoBase: 0.6 })
-    return { asphalt, walk }
+    const kerb = streetMat({ map: A.sidewalk, color: '#86837e', roughness: 0.86, aoBase: 0.5, macro: 0.8, seed: 8.1, vertexColors: true })
+    const iron = streetMat({ color: '#17171a', roughness: 0.8, metalness: 0.3, aoBase: 0.6, vertexColors: true })
+    return { asphalt, walk, kerb, iron }
   }, [])
 
-  const groundGeo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(GROUND_W, GROUND_L)
-    tileUV(g, GROUND_W, GROUND_L, 4.2)
-    return g
-  }, [])
+  // the road is a real surface: crown, gutter dish, plaza fall — in a few big faces (see groundBuild.ts for why not a dense grid)
+  const groundGeo = useMemo(() => buildGroundGeometry(), [])
+  const kerbs = useMemo(() => buildKerbs(), [])
+  const backing = useMemo(() => new THREE.PlaneGeometry(48, 160).rotateX(-Math.PI / 2), [])
+  const backingMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#0b0a0a' }), [])
+  useEffect(() => () => { backing.dispose(); backingMat.dispose() }, [backing, backingMat])
 
   // sidewalks follow each wall segment
   const walks = useMemo(() => {
-    const b = new THREE.BufferGeometry()
-    void b
     return SEGS.map((s) => {
       const len = s.z0 - s.z1
-      const g = new THREE.BoxGeometry(0.95, 0.16, len)
+      const g = new THREE.BoxGeometry(0.95, 0.19, len)
       tileUV(g, 0.95 + len, 2, 3)
       return { geo: g, x: s.side * (s.hw - 0.475), z: (s.z0 + s.z1) / 2, key: `${s.side}${s.z0}` }
     })
@@ -48,19 +46,28 @@ export function Ground() {
   useEffect(
     () => () => {
       groundGeo.dispose()
+      kerbs.stone?.dispose()
+      kerbs.iron?.dispose()
       walks.forEach((w) => w.geo.dispose())
       mats.asphalt.dispose()
       mats.walk.dispose()
+      mats.kerb.dispose()
+      mats.iron.dispose()
     },
-    [groundGeo, walks, mats],
+    [groundGeo, kerbs, walks, mats],
   )
 
   return (
     <group>
-      <mesh geometry={groundGeo} material={mats.asphalt} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, GROUND_CZ]} receiveShadow />
+      <mesh geometry={groundGeo} material={mats.asphalt} receiveShadow />
+      {/* a dark under-layer: where two ground slabs meet at different kerb lines the rasteriser can leave hairline cracks at distance
+          (sky showed through as a white speckle); whatever shows through now is asphalt-dark instead */}
+      <mesh geometry={backing} material={backingMat} position={[0, -0.07, -48]} renderOrder={-1} />
       {walks.map((w) => (
-        <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.08, w.z]} />
+        <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.065, w.z]} receiveShadow />
       ))}
+      {kerbs.stone && <mesh geometry={kerbs.stone} material={mats.kerb} receiveShadow />}
+      {kerbs.iron && <mesh geometry={kerbs.iron} material={mats.iron} />}
       <PuddleLayer />
     </group>
   )
@@ -102,9 +109,13 @@ float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f); return mix
 void main() {
   vec3 wf = texture2D(tMask, vMask).rgb;
   vec2 pw = vWorld.xz;
-  float pn = vn(pw * 6.0) * 0.6 + vn(pw * 19.0) * 0.4;
+  // puddle edge noise is a ~20 cycles/m hash: past ~15 m it is sub-pixel and would only alias into scattered 1-px puddles (white speckle on a sunlit reflection),
+  // so with distance the noise relaxes to its mean and the edge widens (a distant puddle is a soft shape, not confetti)
+  float dd_ = length(cameraPosition - vWorld);
+  float far_ = smoothstep(10.0, 34.0, dd_);
+  float pn = mix(vn(pw * 6.0) * 0.6 + vn(pw * 19.0) * 0.4, 0.5, far_);
   float thr = mix(0.66, 0.2, uPud);
-  float m = smoothstep(thr - 0.06, thr + 0.03, wf.r + (pn - 0.5) * 0.16);
+  float m = smoothstep(thr - 0.06 - 0.18 * far_, thr + 0.03 + 0.18 * far_, wf.r + (pn - 0.5) * 0.16);
   float damp = clamp(wf.g + (pn - 0.5) * 0.4 - 0.12 + uPud * 0.18, 0.0, 1.0) * (0.55 + 0.45 * uWet);
   damp = max(damp, m);
   vec3 V = normalize(cameraPosition - vWorld);
@@ -113,7 +124,9 @@ void main() {
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
   // damp asphalt: reflection is broken up by micro-relief instead of mirror-clean
-  dist += (vec2(vn(p * 23.0), vn(p * 23.0 + 9.0)) - 0.5) * 0.02 * (1.0 - m) * damp;
+  // (fades out with distance: ~40 cycles per metre is far below one pixel past ~25 m, where it would only alias into per-pixel jitter = white speckle)
+  float reliefFade = 1.0 - smoothstep(5.0, 24.0, length(cameraPosition - vWorld));
+  dist += (vec2(vn(p * vec2(37.0, 11.0)), vn(p * vec2(41.0, 13.0) + 9.0)) - 0.5) * 0.006 * (1.0 - m) * damp * reliefFade;
   dist += vec2(sin(p.y * 3.0 + uTime * 1.2), cos(p.x * 3.0 - uTime)) * 0.012 * uContam;
   vec2 rp = p - uRip.xy;
   float rd = length(rp);
@@ -148,12 +161,26 @@ void main() {
   vec3 c;
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
-  float blur = mix(0.02, 0.0012, m);
-  c = texture2D(tDiffuse, uv).rgb * 0.36;
-  c += texture2D(tDiffuse, uv + vec2(blur, 0.0)).rgb * 0.16;
-  c += texture2D(tDiffuse, uv - vec2(blur, 0.0)).rgb * 0.16;
-  c += texture2D(tDiffuse, uv + vec2(0.0, blur * 1.6)).rgb * 0.16;
-  c += texture2D(tDiffuse, uv - vec2(0.0, blur * 1.6)).rgb * 0.16;
+  // reflection clarity follows the surface: still water is clear, damp asphalt is rough → the reflection is a vertical smear, never a mirror.
+  // 4 jittered taps (+ centre) on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
+  float rough = (1.0 - m) * (0.35 + 0.65 * damp);
+  float br = mix(0.0012, 0.017, rough);
+  // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
+  vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
+  vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
+  vec3 CL = vec3(mix(2.6, mix(1.1, 0.55, smoothstep(5.0, 16.0, dd_)), 1.0 - m));
+  c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
+  c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv + o2).rgb, CL) * 0.18;
+  c += min(texture2D(tDiffuse, uv - o2).rgb, CL) * 0.18;
+  // far field: the mirrored render's far horizon is where clipped kerb/sidewalk slivers alias against the bright sky behind them (1-px white speckle).
+  // Rough wet asphalt keeps no structure out there anyway, so beyond ~10 m (damp asphalt; real puddles keep theirs) the reflection relaxes to the analytic horizon/sky gradient (the cheap tier's colour).
+  {
+    float gF = smoothstep(-0.1, 1.0, V.y * 3.0);
+    vec3 cFar = mix(uHor, uSky, gF) * 0.55;
+    c = mix(c, cFar, smoothstep(5.0, 20.0, dd_) * (1.0 - m));
+  }
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
     c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);
@@ -181,11 +208,11 @@ void main() {
 `
 
 function PuddleLayer() {
-  return <WaterSheet mask={A.puddle} size={[28, 142]} position={[0, 0.02, -51]} interactive />
+  return <WaterSheet mask={A.puddle} size={[28, 142]} position={[0, 0.02, -51]} interactive rising />
 }
 
 /** Planar reflection + wetness-field water over a world-aligned mask (street puddles, rooftop ponds). */
-export function WaterSheet({ mask, size, position, interactive = false }: { mask: THREE.Texture; size: [number, number]; position: [number, number, number]; interactive?: boolean }) {
+export function WaterSheet({ mask, size, position, interactive = false, rising = false }: { mask: THREE.Texture; size: [number, number]; position: [number, number, number]; interactive?: boolean; rising?: boolean }) {
   const scene = useThree((s) => s.scene)
   const camera = useThree((s) => s.camera)
   // creation-time quality: the reflector's resolution / existence is fixed for the session; its update cadence adapts live
@@ -265,6 +292,7 @@ export function WaterSheet({ mask, size, position, interactive = false }: { mask
 
   useFrame((_, dt) => {
     obj.visible = !rt.mirror
+    void rising
     const u = mat.uniforms
     u.uTime.value = rt.time
     u.uContam.value = Math.max(rt.fx.contam, rt.fx.dissolve)

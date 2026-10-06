@@ -44,9 +44,9 @@ export const STATIONS: RoomStation[] = [
 ]
 
 /** hero close-up of the video monitor (explicit PLAY) */
-export const SCREEN = { cam: [0.5, 1.28, -7.05] as V3, look: [0.5, 1.2, -8.3] as V3, fov: 42 }
-/** where the vertical monitor stands (local) */
-export const MONITOR = { x: 0.5, y: 1.2, z: -8.28, w: 0.42, h: 0.7 }
+export const SCREEN = { cam: [0.5, 1.28, -7.05] as V3, look: [0.5, 1.22, -8.3] as V3, fov: 42 }
+/** where the vertical display stands (local): a 9:16 panel, ~29" (0.36 × 0.64 m) */
+export const MONITOR = { x: 0.5, y: 1.22, z: -8.28, w: 0.36, h: 0.64 }
 
 /** street-space poses around the door */
 const STAND = new THREE.Vector3(DOOR.x + 1.75, 1.62, DOOR.z)

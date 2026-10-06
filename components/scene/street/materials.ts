@@ -1,5 +1,37 @@
 import * as THREE from 'three'
 
+/**
+ * 256² tileable smooth value noise (32-cell lattice, smoothstep-interpolated at bake time). R and G are independent fields.
+ * The street shaders used to evaluate procedural hash noise 15–20 times per fragment; they now read this texture.
+ */
+function bakeNoise() {
+  const N = 256, C = 32, cell = N / C
+  const data = new Uint8Array(N * N * 4)
+  let a = 0x2f6e2b1
+  const rnd = () => ((a = (a + 0x6d2b79f5) | 0), (((t) => ((t ^ (t >>> 14)) >>> 0) / 4294967296)(Math.imul(a ^ (a >>> 15), 1 | a))))
+  for (let ch = 0; ch < 2; ch++) {
+    const lat = new Float32Array(C * C)
+    for (let i = 0; i < lat.length; i++) lat[i] = rnd()
+    for (let y = 0; y < N; y++) {
+      const v = y / cell, j = Math.floor(v), fy = v - j, sy = fy * fy * (3 - 2 * fy)
+      for (let x = 0; x < N; x++) {
+        const u = x / cell, i = Math.floor(u), fx = u - i, sx = fx * fx * (3 - 2 * fx)
+        const i1 = (i + 1) % C, j1 = (j + 1) % C
+        const l00 = lat[j * C + i], l10 = lat[j * C + i1], l01 = lat[j1 * C + i], l11 = lat[j1 * C + i1]
+        const val = l00 + (l10 - l00) * sx + (l01 - l00 + (l00 - l10 - l01 + l11) * sx) * sy
+        data[(y * N + x) * 4 + ch] = Math.round(val * 255)
+      }
+    }
+  }
+  for (let i = 0; i < N * N; i++) { data[i * 4 + 2] = 128; data[i * 4 + 3] = 255 }
+  const t = new THREE.DataTexture(data, N, N, THREE.RGBAFormat, THREE.UnsignedByteType)
+  t.wrapS = t.wrapT = THREE.RepeatWrapping
+  t.magFilter = t.minFilter = THREE.LinearFilter
+  t.generateMipmaps = false
+  t.needsUpdate = true
+  return t
+}
+
 /** Shared uniforms for every "street" surface (sunlit band, grime AO, wetness, ALTERCO contamination). */
 export const streetU = {
   uTime: { value: 0 },
@@ -18,17 +50,24 @@ export const streetU = {
   /** analytic sky used for metal / glossy reflections (written every frame by effects/Atmosphere) */
   uSkyTop: { value: new THREE.Color('#37406a') },
   uSkyHor: { value: new THREE.Color('#c88a62') },
+  /** baked tileable value-noise (R: 2D field, G: 3D layers) shared by every street surface */
+  uNz: { value: bakeNoise() as THREE.Texture },
 }
 
 const GLSL_UTIL = /* glsl */ `
 float h21_(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
 vec2  h22_(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973)); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.xx + p3.yz) * p3.zy); }
 float h31_(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
-float vn2_(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
-  return mix(mix(h21_(i), h21_(i+vec2(1,0)), f.x), mix(h21_(i+vec2(0,1)), h21_(i+vec2(1,1)), f.x), f.y); }
-float vn3_(vec3 p){ vec3 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
-  return mix(mix(mix(h31_(i), h31_(i+vec3(1,0,0)), f.x), mix(h31_(i+vec3(0,1,0)), h31_(i+vec3(1,1,0)), f.x), f.y),
-             mix(mix(h31_(i+vec3(0,0,1)), h31_(i+vec3(1,0,1)), f.x), mix(h31_(i+vec3(0,1,1)), h31_(i+vec3(1,1,1)), f.x), f.y), f.z); }
+// value noise is read from a baked, tileable texture (V3.5): one fetch instead of 4 (2D) / 8 (3D) hash evaluations per call.
+// vn3_ blends two independent layers along z (period 32 units, 256 px → 8 px per lattice cell, smooth-interpolated at bake time).
+float vn2_(vec2 p){ return textureLod(uNz, p * (1.0 / 32.0), 0.0).r; }
+float vn3_(vec3 p){
+  float iz = floor(p.z), fz = fract(p.z); fz = fz * fz * (3.0 - 2.0 * fz);
+  vec2 o = vec2(0.3173, 0.5411) * iz;
+  float a = textureLod(uNz, p.xy * (1.0 / 32.0) + o, 0.0).g;
+  float b = textureLod(uNz, p.xy * (1.0 / 32.0) + o + vec2(0.3173, 0.5411), 0.0).g;
+  return mix(a, b, fz);
+}
 vec3 bumpN_(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
   vec3 sx = dFdx(surf_pos), sy = dFdy(surf_pos);
   vec3 R1 = cross(sy, surf_norm), R2 = cross(surf_norm, sx);
@@ -129,6 +168,7 @@ uniform float uWet;
 uniform float uDissolve;
 uniform float uPud;
 uniform float uMicro;
+uniform sampler2D uNz;
 uniform vec3 uSunCol;
 uniform vec3 uSkyTop;
 uniform vec3 uSkyHor;
@@ -328,7 +368,19 @@ ${
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
-  float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
+  // the sunlit band follows the REAL sun shadow where a shadow map exists: facades, cornices, fire escapes and roof structures
+  // cut their own shapes into the light; surfaces turned away from the sun keep only the sky-glow share of the band.
+  // Only sampled up in the band itself (walls never pay for the shadow lookup below it).
+  float sunVis_ = 1.0;
+#if defined( USE_SHADOWMAP ) && NUM_DIR_LIGHT_SHADOWS > 0
+  if (h_ > uSunY - 4.5 && uSunAmt > 0.01) {
+    DirectionalLightShadow dls_ = directionalLightShadows[ 0 ];
+    float shadowV_ = getShadow( directionalShadowMap[ 0 ], dls_.shadowMapSize, dls_.shadowIntensity, dls_.shadowBias, dls_.shadowRadius, vDirectionalShadowCoord[ 0 ] );
+    float facing_ = smoothstep( 0.0, 0.1, dot( normal, directionalLights[ 0 ].direction ) );
+    sunVis_ = mix( 0.62, 1.0, shadowV_ * facing_ );
+  }
+#endif
+  float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt * sunVis_;
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
 ${
   metal
@@ -349,7 +401,7 @@ ${
 }`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}6`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}7nz`
   return m
 }
 
