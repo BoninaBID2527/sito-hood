@@ -13,7 +13,8 @@ const S = (pos, look, fov = 50) => ({ pos, look, fov })
 const rad = (d) => (d * Math.PI) / 180
 
 const plazaIn = (d, R = 8) => S([-Math.sin(rad(d)) * R, 2.3, C.z + Math.cos(rad(d)) * R], [C.x, 2.6, C.z], 56)
-const plazaOut = (d) => S([0, 2.1, C.z], [-Math.sin(rad(d)) * 30, 3.6, C.z + Math.cos(rad(d)) * 30], 62)
+// camera just OUTSIDE the installation (radius 9, clamped inside the plaza) looking OUT at the wall/background of direction d
+const plazaOut = (d) => S([Math.max(-10.5, Math.min(10.5, -Math.sin(rad(d)) * 9)), 2.2, Math.max(-114, Math.min(-82, C.z + Math.cos(rad(d)) * 9))], [-Math.sin(rad(d)) * 40, 3.8, C.z + Math.cos(rad(d)) * 40], 60)
 
 export const CHECKPOINTS = [
   // ── street journey (same poses as V3.6 so before/after stay comparable)
