@@ -168,12 +168,19 @@ void main() {
   // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
   vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
   vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
-  const vec3 CL = vec3(2.6);
+  vec3 CL = vec3(mix(2.6, 0.6, smoothstep(5.0, 16.0, dd_) * (1.0 - m)));
   c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
   c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
   c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
   c += min(texture2D(tDiffuse, uv + o2).rgb, CL) * 0.18;
   c += min(texture2D(tDiffuse, uv - o2).rgb, CL) * 0.18;
+  // far field: the mirrored render's far horizon is where clipped kerb/sidewalk slivers alias against the bright sky behind them (1-px white speckle).
+  // Rough wet asphalt keeps no structure out there anyway, so beyond ~10 m (damp asphalt; real puddles keep theirs) the reflection relaxes to the analytic horizon/sky gradient (the cheap tier's colour).
+  {
+    float gF = smoothstep(-0.1, 1.0, V.y * 3.0);
+    vec3 cFar = mix(uHor, uSky, gF) * 0.55;
+    c = mix(c, cFar, smoothstep(5.0, 20.0, dd_) * (1.0 - m));
+  }
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
     c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);
