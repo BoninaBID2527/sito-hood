@@ -35,9 +35,9 @@ export const CHECKPOINTS = [
   { n: 36, name: 'dualism-return', dual: 'return' },
 ]
 
-const st = (page) => page.evaluate(() => ({ mode: window.__hd.store.getState().mode, world: window.__hd.rt.world, roomNear: window.__hd.store.getState().roomNear, roomLoad: window.__hd.store.getState().roomLoad }))
+export const st = (page) => page.evaluate(() => ({ mode: window.__hd.store.getState().mode, world: window.__hd.rt.world, roomNear: window.__hd.store.getState().roomNear, roomLoad: window.__hd.store.getState().roomLoad }))
 
-async function toAlley(page, h) {
+export async function toAlley(page, h) {
   await page.evaluate(() => { window.__hd.rt.camOverride = null })
   let s = await st(page)
   if (s.mode === 'room' || s.mode === 'room-in' || s.mode === 'room-out') {
@@ -50,7 +50,7 @@ async function toAlley(page, h) {
     await h.until(() => window.__hd.store.getState().mode === 'alterco', null, 600000)
   }
 }
-async function toRoom(page, h) {
+export async function toRoom(page, h) {
   const s = await st(page)
   if (s.mode === 'room') return
   await toAlley(page, h)
