@@ -480,8 +480,8 @@ Honest summary: the street, window, door, kerb and ROOM checkpoints now read as 
 ### Tablet strategy
 Unchanged mechanism (PR #5): adaptive render scale first; tier last. V3.6 adds nothing that bypasses it: shadows are off on `mobile`, interior mapping is near-only, the ROOM/DUALISMO worlds are built lazily and cleaned up on exit. **No blurry-tablet regression is claimed or measured on a device.**
 
-### Tests (production build, software GL)
-See the Testing section; results recorded in the PR description.
+### Tests (production build, software GL, final V3.6 code)
+E2E **22/22**, secrets **18/18**, tracks **8/8**, room-check **56/56** desktop · **56/56** touch · **56/56** reduced-motion · **58/58** with `?roomvideo=dom` (DOM video fallback) — no console errors. Static export (`STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood`, served under `/sito-hood/`): smoke (loader → ENTER, canvas, no failed requests, no console errors) and room-check **58/58**. The 36 checkpoint captures were taken from the build immediately before the last reflection-clamp tweak; checkpoints 08 and 10 were re-shot after it. `scripts/perf-ab36.mjs` (interleavable relative frame-time probe) and `scripts/census36.mjs`/`qa36.mjs` are the tools used here.
 
 ### Limits
 Headless timings are relative; no Safari/iPhone/iPad/real-device FPS was measured; WebKit behaviour of the render-target viewport path is unverified; the ROOM video was exercised with a WebM re-encode (stock Chromium cannot decode H.264).
