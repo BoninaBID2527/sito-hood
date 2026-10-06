@@ -13,12 +13,14 @@ const until = (fn, arg, to = 120000) => page.waitForFunction(fn, arg, { timeout:
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 })
 const cp = CHECKPOINTS.find((c) => c.n === 3)
 const hideBy = (pred) => () => { window.__scene.traverse((o) => { if (o.isMesh && pred(o)) o.visible = false }) }
-const cands = await page.evaluate(() => { const l = []; window.__scene.traverse((o) => { if (o.isMesh && o.visible && (o.receiveShadow || (o.material && o.material.metalness === 0.3 && o.material.vertexColors))) l.push({ uuid: o.uuid, n: o.geometry.attributes.position.count, rs: o.receiveShadow, c: o.material.color && o.material.color.getHexString() }) }); return l })
-console.log(JSON.stringify(cands))
-const variants = { base: () => {} }
-cands.forEach((c, i) => { variants['hide' + i] = (u) => { window.__scene.traverse((o) => { if (o.uuid === u) o.visible = false }) } ; variants['hide' + i].arg = c.uuid })
+const variants = {
+  base: () => {},
+  noTransparent: () => { window.__scene.traverse((o) => { if ((o.isMesh || o.isPoints) && o.material && !Array.isArray(o.material) && o.material.transparent) o.visible = false }) },
+  noShader: () => { window.__scene.traverse((o) => { if (o.isMesh && o.material && o.material.isShaderMaterial) o.visible = false }) },
+  noPoints: () => { window.__scene.traverse((o) => { if (o.isPoints || o.isLine || o.isSprite) o.visible = false }) },
+}
 for (const [k, f] of Object.entries(variants)) {
-  await page.evaluate(f, f.arg)
+  await page.evaluate(f)
   if (f.arg) { }
   await runCheckpoint(page, { ...cp, name: 'sp-' + k }, out, { until, settle, log: [] })
   if (f.arg) await page.evaluate((u) => { window.__scene.traverse((o) => { if (o.uuid === u) o.visible = true }) }, f.arg)
