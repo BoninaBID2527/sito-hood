@@ -368,6 +368,125 @@ At canvas dpr 1 (desktop) MSAA is kept, so only the scale rows apply: measured w
 
 **Tests.** E2E 22/22, secrets 18/18, tracks 8/8, room-check 50/50 in desktop, touch and reduced-motion variants (production build, `quality` pinned where the suites pin it); `scripts/adaptive-sim.mjs` passes; static export under `/sito-hood/` re-verified (see below).
 
+## V3.6 notes — extreme photoreal hero-world rebuild
+
+**Dependency.** This work is stacked on PR #5 (V3.5 performance foundation, branch `claude/hooddino-v3-5-performance`). Everything V3.5 delivered is kept: HDR target with **internal render scale**, the fast quantised adaptive controller, MSAA density rule, no depth resolve, baked shader noise, sky-dome-last, `?perf=1`, `?scale=`. PR #6 targets the PR #5 branch so its diff is only V3.6; retarget to `main` after PR #5 merges. Nothing here was merged.
+
+**What this pass is.** Not a performance pass: the visual world was rebuilt towards photographic credibility (geometry, construction logic, contact, materials, light) while paying for it only where the camera actually looks.
+
+### Audit — what read as "CG" in V3.5 (and the cause)
+GEOMETRY/CONSTRUCTION: facades were flat planes with window pictures floating 5 cm in front; no reveals, piers, cornices, parapets. CONTACT: kerb absent (ground plane met the sidewalk box), no gutter/crown/drains. SILHOUETTE: stacked-box skyline, no plant, no setbacks. SHADOW: contact blobs only. MATERIAL/TEXTURE SCALE: brick tiled at a single scale (already partly broken up by V3.4 cell offsets). ROOM: unlit-looking shell, floating objects, no constructed furniture. DUALISMO: raw bloom on flat planes.
+**Colour / camera / post audit conclusion:** the pipeline is coherent (scene rendered into a linear half-float HDR target, one manual `pow(1/2.2)` encode in the post pass, bloom/grain applied there); the checkpoint cameras use a 42–50° vertical FOV, which is a normal-to-slightly-long lens. Only change: exposure keyframes for the roof (`lib/timeline.ts`) so the roof reads lit rather than crushed. **Post restraint was kept** — no new bloom was added to hide anything (DUALISMO in particular did *not* just gain bloom).
+
+### What was rebuilt
+* **Facades** (`street/facadeBuild.ts`, `Facades.tsx`): walls are built **with openings** — a wall surface with rectangular holes and four reveal faces per hole (vertex-colour AO: open at the face, closed at the back), so windows/doors are shafts cut into the wall with parallax and a shadowed inside. Brick piers every second bay with caps, belt courses and floor lines, a corbelled cornice, parapet + coping, chimneys, water tank, bulkhead, mast. Window surrounds (sill, lintel, two casing strips) are instanced plain boxes; sashes sit at depth; **lit windows use interior mapping** (a ray vs a virtual room box in window space) inside 24 m only. Street-level doors/shutters are recessed with thresholds.
+* **Ground as topography** (`street/groundBuild.ts`, `Ground.tsx`): crowned road falling into a shallow gutter dish at each kerb, plaza grading, **1.8 m stone kerb blocks** (chamfered edge, per-block tone, 1-in-4 chipped corner) and cast-iron storm drains; the ground is a handful of large slabs (see the performance lesson below). Water is a reflection sheet whose edge noise, far-field reflection and tap clamp are distance-relaxed.
+* **Props/utility**: front-load dumpster rebuilt (ribbed tub, rim, lids, fork pockets, casters), track-pole flanges, truss guy-cables with wall plates, eyebolts, turnbuckles.
+* **Skyline** (`street/cityBlocks.ts`, `effects/TowerMaterial.ts`): stepped towers with cornice bands, plant, tanks, masts; near/mid depth bands; one merged mesh/one draw call; tower material gained reveal shadow, sill highlight, pilasters/spandrel, slab-edge lines.
+* **Rooftop**: castShadow parapets/bulkhead/tank, deck receives the sun; exposure/hemi/sun retuned.
+* **ROOM** (`components/scene/room/*`, `lib/room*.ts`): dark identity kept; motivated entry light, constructed studio (baseboards, ceiling beams, acoustic panels, wood floor, desk with keyboard/monitors/speakers/headphones, flight case, sofa + rug), the video is a real monitor surface (still no autoplay), lazy build + full cleanup, DOM fallback intact.
+* **DUALISMO** (`DualismoWorld.tsx`, `DualismoShaders.ts`): rebuilt as a composed set — a framed artwork plinth, glass pylons with reflective floor, iridescent rings, atmospheric gradient (no bloom crutch); CHIRONE/MESSAGGIO labels remain readable; **official artwork untouched**. Draw calls at entry fell from 111 → 33.
+
+### Shadows — HYBRID, measured, small
+ONE `DirectionalLight` shadow map, `autoUpdate = false`, refreshed on demand with a **tightly fitted** ortho frustum per world (alley snapped to 12 m, plaza every 2 frames, roof ≈ every 20); map size by tier (high 1536 · ultra 2048 · balanced 1024 · **mobile 0 = none**); PCF 5-tap on high+, 1-tap on balanced. Receivers are limited to ground/sidewalk/kerb/roof deck (a `receiveShadow` fragment costs a per-pixel branch, so walls only *cast*); the wall sun-band samples the map manually and only above the sun line. Everything else keeps baked vertex AO and contact shading. **Measured cost ≈ 0** in the headless proxy (full 1198/1233 ms vs shadows-off 1186/1174 ms, 640×360 high); **honest visual value: modest** (a sun-pool edge and a few cast bars) — kept because it is free at its fit size and tier-gated, removable by setting `shadow: 0` in `lib/quality.ts`. No broad dynamic shadows; nothing enabled on mobile.
+
+### Performance (headless software GL: RELATIVE numbers only, never FPS)
+Street frame, interleaved A/B (A,B,A,B on the same machine, 960×540, high, alternating **PR #5 vs V3.6**), median frame ms: p=0.02 **1795 / 1759 vs 2186** (+23 %), p=0.16 **1718 / 1649 vs 2090** (+24 %), p=0.40 **1290 / 1569 vs 959** (noise exceeds the difference). Earlier at 640×360, p=0.16: 1067/1005 vs 1198/1233 (≈ +17 %). So the street costs roughly **+20 %** of pixel work in the proxy; the render-scale controller from PR #5 absorbs that on a device that cannot afford it. Triangles: street 79 k → 120 k, ROOM 3 k → 46 k, DUALISMO 36–44 k → 17–20 k (draw calls 111 → 33).
+
+Census (`scripts/census36.mjs`, production build, 960×540, scale 1; wall time is a single non-interleaved run → **noisy, indicative only**):
+
+
+### high
+| checkpoint | calls PR#5 → V3.6 | tris | textures | geometries | rel. headless ms |
+|---|---|---|---|---|---|
+| 1 opening-street | 191 → 189 | 79k → 120k | 72 → 74 | 133 → 132 | 1435 → 2547 (178 %) |
+| 10 mid-alley | 189 → 175 | 84k → 117k | 74 → 76 | 135 → 134 | 1555 → 2270 (146 %) |
+| 11 deep-alley | 177 → 135 | 82k → 99k | 80 → 81 | 156 → 150 | 1539 → 1706 (111 %) |
+| 13 track-plaza-wide | 205 → 143 | 72k → 90k | 82 → 84 | 169 → 170 | 1042 → 1030 (99 %) |
+| 14 track-01 | 171 → 138 | 58k → 89k | 82 → 84 | 170 → 171 | 985 → 975 (99 %) |
+| 23 rooftop-wide | 80 → 80 | 9k → 9k | 87 → 88 | 212 → 208 | 885 → 896 (101 %) |
+| 26 room-entry | 21 → 21 | 3k → 46k | 110 → 115 | 245 → 249 | 264 → 492 (186 %) |
+| 27 room-workstation | 16 → 16 | 3k → 46k | 110 → 115 | 245 → 249 | 306 → 494 (161 %) |
+| 30 room-video | 15 → 15 | 3k → 46k | 111 → 116 | 245 → 249 | 267 → 340 (128 %) |
+| 32 dualism-entry | 111 → 33 | 36k → 18k | 115 → 121 | 262 → 271 | 417 → 294 (70 %) |
+| 33 dualism-wide | 133 → 36 | 44k → 20k | 115 → 121 | 262 → 271 | 430 → 325 (76 %) |
+
+### balanced
+| checkpoint | calls PR#5 → V3.6 | tris | textures | geometries | rel. headless ms |
+|---|---|---|---|---|---|
+| 1 opening-street | 191 → 189 | 79k → 120k | 72 → 74 | 133 → 132 | 1247 → 1848 (148 %) |
+| 10 mid-alley | 189 → 175 | 84k → 117k | 74 → 76 | 135 → 134 | 1235 → 1876 (152 %) |
+| 11 deep-alley | 152 → 134 | 70k → 99k | 80 → 81 | 156 → 150 | 1140 → 1448 (127 %) |
+| 13 track-plaza-wide | 164 → 141 | 55k → 90k | 82 → 84 | 169 → 170 | 895 → 1020 (114 %) |
+| 14 track-01 | 158 → 137 | 53k → 89k | 82 → 84 | 170 → 171 | 823 → 870 (106 %) |
+| 23 rooftop-wide | 80 → 80 | 9k → 9k | 87 → 88 | 212 → 208 | 852 → 918 (108 %) |
+| 26 room-entry | 21 → 21 | 3k → 46k | 110 → 116 | 245 → 251 | 254 → 412 (162 %) |
+| 27 room-workstation | 16 → 16 | 3k → 46k | 110 → 116 | 245 → 251 | 311 → 440 (141 %) |
+| 30 room-video | 15 → 15 | 3k → 46k | 111 → 117 | 245 → 251 | 303 → 353 (116 %) |
+| 32 dualism-entry | 100 → 35 | 32k → 17k | 115 → 121 | 262 → 271 | 406 → 275 (68 %) |
+| 33 dualism-wide | 100 → 35 | 32k → 17k | 115 → 121 | 262 → 271 | 395 → 246 (62 %) |
+
+### mobile
+| checkpoint | calls PR#5 → V3.6 | tris | textures | geometries | rel. headless ms |
+|---|---|---|---|---|---|
+| 1 opening-street | 175 → 174 | 71k → 105k | 71 → 71 | 133 → 132 | 1465 → 684 (47 %) |
+| 10 mid-alley | 161 → 160 | 69k → 102k | 73 → 73 | 135 → 134 | 916 → 658 (72 %) |
+| 11 deep-alley | 123 → 121 | 58k → 87k | 79 → 78 | 153 → 150 | 889 → 1056 (119 %) |
+| 13 track-plaza-wide | 109 → 104 | 32k → 43k | 80 → 78 | 163 → 164 | 621 → 687 (111 %) |
+| 14 track-01 | 104 → 100 | 32k → 42k | 80 → 78 | 163 → 164 | 644 → 632 (98 %) |
+| 23 rooftop-wide | 69 → 69 | 8k → 8k | 84 → 81 | 209 → 198 | 678 → 677 (100 %) |
+| 26 room-entry | 19 → 20 | 2k → 32k | 107 → 106 | 240 → 240 | 166 → 138 (83 %) |
+| 27 room-workstation | 14 → 15 | 2k → 32k | 107 → 106 | 240 → 240 | 154 → 165 (107 %) |
+| 30 room-video | 14 → 15 | 2k → 32k | 108 → 107 | 240 → 240 | 159 → 183 (115 %) |
+| 32 dualism-entry | 67 → 24 | 21k → 10k | 110 → 109 | 257 → 260 | 187 → 195 (104 %) |
+| 33 dualism-wide | 67 → 24 | 21k → 10k | 110 → 109 | 257 → 260 | 148 → 157 (106 %) |
+
+**Lessons paid for in measurements (so they are not repeated):** (1) a dense displaced ground grid (26 k triangles) made the heavy asphalt shader run on sub-pixel quads and roughly doubled the street frame in the proxy → the ground is a few large slabs and topography lives in the kerb/gutter strips; (2) `RoundedBoxGeometry` is 300+ triangles — it must never be an instanced template (window surrounds are plain boxes; 530 k → 134 k triangles); (3) interior mapping is near-only (24 m) and the water reflection blur is 5 fixed taps; (4) headless SwiftShader is pixel-bound, so these are *pixel-cost* numbers; real GPUs will weigh triangles/draw calls differently.
+
+### Artefacts found by the final QA and fixed
+A white 1-px speckle appeared over the far wet road at the hero facade cameras (03/02/01). It was **not** the ground, kerbs, shadows or the water mask: the planar reflection render was aliasing bright sky against thin geometry at the mirrored horizon. Fix: damp-asphalt reflection relaxes to the analytic horizon colour with distance, taps are clamped (puddles keep their full reflection), and the sheet's edge noise/relief distortion fade with distance. (The dotted columns visible at 08/10 are the existing 01–07 number-trail particles, not a defect.)
+
+### Before/after — the 36 checkpoints (1280×720, high, same cameras; baseline = PR #5)
+Verdict key: ▲ clearly better · △ better · ≈ similar. "Reads as filmed?" = would I believe it was filmed, and what is still CG (cause).
+
+| # | checkpoint | verdict | still CG because |
+|---|---|---|---|
+| 1 | opening street | ▲ | TEXTURE SCALE (brick repeats), flat MATERIAL on doors/sheet metal |
+| 2 | facade near | ▲ | TEXTURE SCALE, laundry/pipes are simple GEOMETRY |
+| 3 | facade medium | ▲ | CONSTRUCTION of the far fire escapes; far ground now smooth |
+| 4 | hero window | ▲ | MATERIAL — sash has no glass reflection/dirt |
+| 5 | door threshold | ▲ | TEXTURE on the door; bin CONTACT |
+| 6 | fire-escape/utility | △ | GEOMETRY of signage/laundry |
+| 7 | wet asphalt | △ | TEXTURE SCALE of the asphalt grain, LIGHTING bounce |
+| 8 | kerb/gutter | ▲ | TEXTURE on kerb stone |
+| 9 | puddle | △ | REFLECTION is smooth-edged (no ripples/film) |
+| 10 | mid alley | ▲ | GEOMETRY of repeated windows |
+| 11 | deep alley | ▲ | ATMOSPHERE good; skyline still stylised |
+| 12 | room exterior | △ | silhouette of the entrance |
+| 13 | track plaza wide | △ | GROUND texture at plaza scale |
+| 14–20 | tracks 01–07 | ≈/△ | artwork billboards are *designed* objects; only lighting/ground changed |
+| 21 | ALTERCO transition | ≈ | transient effect (timing differs between runs) |
+| 22–25 | rooftop entry/wide/hero/skyline | △ | LIGHTING flat on deck; skyline detail is texture-light |
+| 26 | room entry | ▲ | constructed studio; MATERIAL of the floor planks is flat |
+| 27 | workstation | ▲ | still CG: soft shading on small props |
+| 28 | who is hooddino | △ | UI-forward by design |
+| 29 | live photo wall | ▲ | paper/tape fine; wall TEXTURE |
+| 30 | room video | ▲ | video is a real monitor surface; bezel detail simple |
+| 31 | dualism transition | ≈ | effect-driven |
+| 32–36 | DUALISMO entry/wide/CHIRONE/MESSAGGIO/return | ▲ | composed set with depth; still stylised by intent |
+
+Honest summary: the street, window, door, kerb and ROOM checkpoints now read as *constructed* spaces. They would not pass as filmed: the causes are TEXTURE SCALE/MATERIAL (flat diffuse response, one-pass grime) and the absence of area-light bounce — not geometry any more. DUALISMO is stylised by design.
+
+### Tablet strategy
+Unchanged mechanism (PR #5): adaptive render scale first; tier last. V3.6 adds nothing that bypasses it: shadows are off on `mobile`, interior mapping is near-only, the ROOM/DUALISMO worlds are built lazily and cleaned up on exit. **No blurry-tablet regression is claimed or measured on a device.**
+
+### Tests (production build, software GL)
+See the Testing section; results recorded in the PR description.
+
+### Limits
+Headless timings are relative; no Safari/iPhone/iPad/real-device FPS was measured; WebKit behaviour of the render-target viewport path is unverified; the ROOM video was exercised with a WebM re-encode (stock Chromium cannot decode H.264).
+
+
 ## Temporary public preview (static export)
 
 `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build` writes a fully static site to `.next-export/` (verified under a sub-path with `scripts/serve-sub.mjs` + `scripts/smoke.mjs`: no failed requests, no console errors).
