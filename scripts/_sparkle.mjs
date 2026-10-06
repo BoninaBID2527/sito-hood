@@ -32,11 +32,16 @@ const settleFrames = () => page.evaluate(() => new Promise((r) => { let k = 0; c
 const base = await bright()
 console.log('base bright px', base, 'candidates', cands.length)
 const set = (i, v) => page.evaluate(([i, v]) => { window.__scene.traverse((o) => { if (o.userData.__i === i) o.visible = v }) }, [i, v])
-for (const c of cands) {
+const sub = cands.filter((c) => c.m === 'ShaderMaterial' || c.tr || c.t === 'Points')
+console.log('subset', sub.length)
+const avg = async () => { let a = 0; for (let k = 0; k < 3; k++) { a += await bright(); await settleFrames() } return a / 3 }
+const base2 = await avg()
+console.log('base avg', base2)
+for (const c of sub) {
   await set(c.i, false); await settleFrames()
-  const b = await bright()
+  const b = await avg()
   await set(c.i, true)
-  if (b < base * 0.8) console.log('CULPRIT?', JSON.stringify(c), b)
+  if (b < base2 * 0.7) console.log('CULPRIT?', JSON.stringify(c), b)
 }
 console.log('done')
 await browser.close()
