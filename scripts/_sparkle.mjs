@@ -13,13 +13,12 @@ await page.addStyleTag({ content: '.overlay{display:none !important}' })
 const until = (fn, arg, to = 120000) => page.waitForFunction(fn, arg, { timeout: to, polling: 150 }).catch(() => {})
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 })
 const cp = CHECKPOINTS.find((c) => c.n === 3)
-const hideN = (n) => () => { window.__scene.traverse((o) => { if (o.isMesh && o.geometry.attributes.position.count === n) o.visible = false }) }
 const variants = {
   base: () => {},
-  walks: hideN(24), // sidewalk blocks
-  kerb: hideN(9996),
-  iron: hideN(1080),
-  ground: hideN(640),
+  walks: () => { window.__scene.traverse((o) => { if (o.isMesh && o.geometry.attributes.position.count === 24) o.visible = false }) },
+  kerb: () => { window.__scene.traverse((o) => { if (o.isMesh && o.geometry.attributes.position.count === 9996) o.visible = false }) },
+  iron: () => { window.__scene.traverse((o) => { if (o.isMesh && o.geometry.attributes.position.count === 1080) o.visible = false }) },
+  ground: () => { window.__scene.traverse((o) => { if (o.isMesh && o.geometry.attributes.position.count === 640) o.visible = false }) },
 }
 for (const [k, f] of Object.entries(variants)) {
   await page.evaluate(f)
