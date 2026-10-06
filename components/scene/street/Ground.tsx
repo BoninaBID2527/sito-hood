@@ -109,9 +109,13 @@ float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f); return mix
 void main() {
   vec3 wf = texture2D(tMask, vMask).rgb;
   vec2 pw = vWorld.xz;
-  float pn = vn(pw * 6.0) * 0.6 + vn(pw * 19.0) * 0.4;
+  // puddle edge noise is a ~20 cycles/m hash: past ~15 m it is sub-pixel and would only alias into scattered 1-px puddles (white speckle on a sunlit reflection),
+  // so with distance the noise relaxes to its mean and the edge widens (a distant puddle is a soft shape, not confetti)
+  float dd_ = length(cameraPosition - vWorld);
+  float far_ = smoothstep(10.0, 34.0, dd_);
+  float pn = mix(vn(pw * 6.0) * 0.6 + vn(pw * 19.0) * 0.4, 0.5, far_);
   float thr = mix(0.66, 0.2, uPud);
-  float m = smoothstep(thr - 0.06, thr + 0.03, wf.r + (pn - 0.5) * 0.16);
+  float m = smoothstep(thr - 0.06 - 0.18 * far_, thr + 0.03 + 0.18 * far_, wf.r + (pn - 0.5) * 0.16);
   float damp = clamp(wf.g + (pn - 0.5) * 0.4 - 0.12 + uPud * 0.18, 0.0, 1.0) * (0.55 + 0.45 * uWet);
   damp = max(damp, m);
   vec3 V = normalize(cameraPosition - vWorld);
@@ -120,7 +124,9 @@ void main() {
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
   // damp asphalt: reflection is broken up by micro-relief instead of mirror-clean
-  dist += (vec2(vn(p * vec2(37.0, 11.0)), vn(p * vec2(41.0, 13.0) + 9.0)) - 0.5) * 0.006 * (1.0 - m) * damp;
+  // (fades out with distance: ~40 cycles per metre is far below one pixel past ~25 m, where it would only alias into per-pixel jitter = white speckle)
+  float reliefFade = 1.0 - smoothstep(5.0, 24.0, length(cameraPosition - vWorld));
+  dist += (vec2(vn(p * vec2(37.0, 11.0)), vn(p * vec2(41.0, 13.0) + 9.0)) - 0.5) * 0.006 * (1.0 - m) * damp * reliefFade;
   dist += vec2(sin(p.y * 3.0 + uTime * 1.2), cos(p.x * 3.0 - uTime)) * 0.012 * uContam;
   vec2 rp = p - uRip.xy;
   float rd = length(rp);
@@ -159,10 +165,9 @@ void main() {
   // 4 jittered taps (+ centre) on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
   float rough = (1.0 - m) * (0.35 + 0.65 * damp);
   float br = mix(0.0012, 0.017, rough);
-  float ang = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853;
-  vec2 o1 = vec2(cos(ang), sin(ang)) * vec2(1.0, 1.9) * br;
-  vec2 o2 = vec2(-sin(ang), cos(ang)) * vec2(1.0, 1.9) * br;
-  // each tap is clamped: against the HDR-bright sky at the alley end a 5-tap noise kernel turns an edge into white fireflies (1-px speckle along the kerb lines)
+  // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
+  vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
+  vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
   const vec3 CL = vec3(2.6);
   c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
   c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;

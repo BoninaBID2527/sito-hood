@@ -16,21 +16,15 @@ const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.s
 const cp = CHECKPOINTS.find((c) => c.n === 3)
 await runCheckpoint(page, { ...cp, name: 'sp-base' }, out, { until, settle, log: [] })
 const settleFrames = () => page.evaluate(() => new Promise((r) => { let k = 0; const f = () => (++k > 8 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f) }))
-const bright = async () => {
-  const buf = await page.screenshot({ clip: { x: 700, y: 520, width: 500, height: 200 } })
-  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true })
-  let c = 0
-  for (let p = 0; p < data.length; p += info.channels) if (data[p] > 225 && data[p + 1] > 225 && data[p + 2] > 215) c++
-  return c
+await page.screenshot({ path: out + '/v0.png' })
+const setOut = async (name, expr) => {
+  const ok = await page.evaluate((expr) => { let n = 0; window.__scene.traverse((o) => { const m = o.material; if (m && m.uniforms && m.uniforms.tMask) { if (!m.userData.f0) m.userData.f0 = m.fragmentShader; m.fragmentShader = m.userData.f0.replace('gl_FragColor = vec4(c, a);', expr); m.needsUpdate = true; n++ } }); return n }, expr)
+  await settleFrames(); await settleFrames()
+  await page.screenshot({ path: out + '/' + name + '.png' })
+  console.log(name, ok)
 }
-const avg = async () => { let a = 0; for (let k = 0; k < 3; k++) { a += await bright(); await settleFrames() } return Math.round(a / 3) }
-console.log('base', await avg())
-const T = [
-  ['grain0', () => { window.__hd.rt.quality.grain = 0 }],
-  ['bloom0', () => { window.__hd.rt.quality.bloom = 0 }],
-  ['reflector off', () => { window.__hd.rt.quality.reflector = false }],
-  ['shadow0', () => { window.__hd.rt.quality.shadow = 0 }],
-]
-for (const [n, f] of T) { await page.evaluate(f); await settleFrames(); console.log(n, await avg()) }
-await page.screenshot({ path: out + '/after-all.png' })
+await setOut('alpha', 'gl_FragColor = vec4(vec3(a), 1.0);')
+await setOut('mask', 'gl_FragColor = vec4(vec3(m), 1.0);')
+await setOut('damp', 'gl_FragColor = vec4(vec3(damp), 1.0);')
+await setOut('color', 'gl_FragColor = vec4(c, 1.0);')
 await browser.close()
