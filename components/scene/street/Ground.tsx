@@ -26,8 +26,8 @@ export function Ground() {
     return { asphalt, walk, kerb, iron }
   }, [])
 
-  // the road is a real surface: crown, gutter channels, depressions where the water stays (see groundBuild.ts)
-  const groundGeo = useMemo(() => buildGroundGeometry(A.puddle.image as HTMLCanvasElement, rt.quality.level >= 2), [])
+  // the road is a real surface: crown, gutter dish, plaza fall — in a few big faces (see groundBuild.ts for why not a dense grid)
+  const groundGeo = useMemo(() => buildGroundGeometry(), [])
   const kerbs = useMemo(() => buildKerbs(), [])
 
   // sidewalks follow each wall segment
@@ -150,21 +150,17 @@ void main() {
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
   // reflection clarity follows the surface: still water is clear, damp asphalt is rough → the reflection is a vertical smear, never a mirror.
-  // 8 jittered taps on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
+  // 4 jittered taps (+ centre) on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
   float rough = (1.0 - m) * (0.35 + 0.65 * damp);
   float br = mix(0.0012, 0.017, rough);
   float ang = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853;
   vec2 o1 = vec2(cos(ang), sin(ang)) * vec2(1.0, 2.6) * br;
   vec2 o2 = vec2(-sin(ang), cos(ang)) * vec2(1.0, 2.6) * br;
-  c = texture2D(tDiffuse, uv).rgb * 0.2;
-  c += texture2D(tDiffuse, uv + o1).rgb * 0.1;
-  c += texture2D(tDiffuse, uv - o1).rgb * 0.1;
-  c += texture2D(tDiffuse, uv + o2).rgb * 0.1;
-  c += texture2D(tDiffuse, uv - o2).rgb * 0.1;
-  c += texture2D(tDiffuse, uv + (o1 + o2) * 0.7).rgb * 0.1;
-  c += texture2D(tDiffuse, uv - (o1 + o2) * 0.7).rgb * 0.1;
-  c += texture2D(tDiffuse, uv + (o1 - o2) * 0.7).rgb * 0.1;
-  c += texture2D(tDiffuse, uv - (o1 - o2) * 0.7).rgb * 0.1;
+  c = texture2D(tDiffuse, uv).rgb * 0.28;
+  c += texture2D(tDiffuse, uv + o1).rgb * 0.18;
+  c += texture2D(tDiffuse, uv - o1).rgb * 0.18;
+  c += texture2D(tDiffuse, uv + o2).rgb * 0.18;
+  c += texture2D(tDiffuse, uv - o2).rgb * 0.18;
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
     c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);

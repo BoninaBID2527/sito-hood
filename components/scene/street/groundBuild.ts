@@ -39,48 +39,46 @@ export function roadY(x: number, z: number, d: number): number {
   return y - 0.028 * d
 }
 
-export function buildGroundGeometry(mask: HTMLCanvasElement | null, fine = true): THREE.BufferGeometry {
-  // grid lines: fine in the alley, coarse behind the walls
-  const xs: number[] = []
-  const fx = fine ? 0.4 : 0.6
-  for (let x = -22; x < -12; x += 2) xs.push(x)
-  for (let x = -12; x < -7; x += 0.5) xs.push(x)
-  for (let x = -7; x < 7; x += fx) xs.push(Math.round(x * 1000) / 1000)
-  for (let x = 7; x < 12; x += 0.5) xs.push(x)
-  for (let x = 12; x <= 22.001; x += 2) xs.push(x)
-  const zs: number[] = []
-  const fz = fine ? 0.75 : 1.25
-  for (let z = GROUND.zNear; z >= GROUND.zFar - 0.001; z -= fz) zs.push(z)
-  const nx = xs.length, nz = zs.length
-  let img: ImageData | null = null
-  if (mask) { const c = mask.getContext('2d'); if (c) img = c.getImageData(0, 0, mask.width, mask.height) }
-  const R = (x: number, z: number) => {
-    if (!img) return 0
-    const u = (x + 14) / 28, v = (20 - z) / 142
-    if (u < 0 || u > 1 || v < 0 || v > 1) return 0
-    const px = Math.min(img.width - 1, Math.floor(u * img.width)), py = Math.min(img.height - 1, Math.floor(v * img.height))
-    return img.data[(py * img.width + px) * 4] / 255
+/**
+ * The road as a handful of large slabs (a few hundred triangles): crowned, falling to a shallow gutter dish beside each kerb, and a gentle
+ * fall across the plaza. A dense displaced grid (26 k triangles) was tried first — and measured: thousands of sub-pixel triangles make the
+ * heavy asphalt shader run on mostly-empty pixel quads (the whole street frame got ~2× slower in the headless proxy), so the topography that
+ * actually reads (crown, gutter, kerb) lives in few big faces and the puddle depressions stay in the water layer.
+ */
+export function buildGroundGeometry(_mask?: HTMLCanvasElement | null, _fine = true): THREE.BufferGeometry {
+  void _mask; void _fine
+  // row boundaries: every wall-segment break, the plaza start/end, then ≤ 12 m pieces
+  const br = new Set<number>([GROUND.zNear, GROUND.zFar, PLAZA.z0])
+  for (const sg of SEGS) { br.add(sg.z0); br.add(sg.z1) }
+  const zb = [...br].filter((z) => z <= GROUND.zNear && z >= GROUND.zFar).sort((a, b) => b - a)
+  const rows: [number, number][] = []
+  for (let i = 0; i < zb.length - 1; i++) {
+    const n = Math.max(1, Math.ceil((zb[i] - zb[i + 1]) / 12))
+    for (let k = 0; k < n; k++) rows.push([zb[i] - ((zb[i] - zb[i + 1]) * k) / n, zb[i] - ((zb[i] - zb[i + 1]) * (k + 1)) / n])
   }
-  const pos = new Float32Array(nx * nz * 3), uv = new Float32Array(nx * nz * 2)
-  const idx: number[] = []
+  const pos: number[] = [], uv: number[] = [], idx: number[] = []
   const T = 4.2
-  for (let j = 0; j < nz; j++) {
-    for (let i = 0; i < nx; i++) {
-      const x = xs[i], z = zs[j]
-      const d = smoothstep(0.38, 0.9, R(x, z))
-      const k = j * nx + i
-      pos[k * 3] = x; pos[k * 3 + 1] = roadY(x, z, d); pos[k * 3 + 2] = z
-      uv[k * 2] = (x + GROUND.w / 2) / T
-      uv[k * 2 + 1] = (32 - z) / T
+  let vi = 0
+  for (const [za0, zb0] of rows) {
+    const za = za0 + 0.01, zbb = zb0 // 1 cm overlap into the previous row hides T-junction cracks between rows with different kerb lines
+    const zm = (za0 + zb0) / 2
+    let xs: number[]
+    if (zm >= PLAZA.z0) {
+      const kl = kerbX(-1, zm), kr = kerbX(1, zm)
+      xs = [-22, -kl, -kl + 0.12, -kl + 0.5, 0, kr - 0.5, kr - 0.12, kr, 22]
+    } else xs = [-22, -12, -6, 0, 6, 12, 22]
+    const ys = xs.map((x) => (zm >= PLAZA.z0 ? roadY(Math.abs(x) > 15 ? (x < 0 ? -1 : 1) * 99 : x, zm, 0) : roadY(x, zm, 0)))
+    for (let i = 0; i < xs.length - 1; i++) {
+      const x0 = xs[i], x1 = xs[i + 1], y0 = ys[i], y1 = ys[i + 1]
+      const q = [[x0, y0, za], [x1, y1, za], [x1, y1, zbb], [x0, y0, zbb]]
+      for (const [x, y, z] of q) { pos.push(x, y, z); uv.push((x + GROUND.w / 2) / T, (32 - z) / T) }
+      idx.push(vi, vi + 1, vi + 3, vi + 1, vi + 2, vi + 3)
+      vi += 4
     }
   }
-  for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
-    const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1
-    idx.push(a, b, c, b, d, c)
-  }
   const g = new THREE.BufferGeometry()
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3))
-  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
   g.setIndex(idx)
   g.computeVertexNormals()
   return g

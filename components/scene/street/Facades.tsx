@@ -281,7 +281,7 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
         // view ray in the window's own space, so the glow shifts with the camera (parallax) instead of being a flat picture. Only lit variants pay for it.
         const interior = lit
           ? `
-  {
+  if (length(vViewPosition) < 24.0) {
     vec3 ro_ = vLPos;
     vec3 rd_ = normalize(vLPos - vLCam);
     float D_ = 1.5 + 1.4 * vWin.y;
