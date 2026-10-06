@@ -168,7 +168,7 @@ void main() {
   // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
   vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
   vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
-  vec3 CL = vec3(mix(2.6, 0.6, smoothstep(5.0, 16.0, dd_) * (1.0 - m)));
+  vec3 CL = vec3(mix(2.6, mix(1.1, 0.55, smoothstep(5.0, 16.0, dd_)), 1.0 - m));
   c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
   c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
   c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
