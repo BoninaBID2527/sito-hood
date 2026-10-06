@@ -16,6 +16,8 @@ const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.s
 const cp = CHECKPOINTS.find((c) => c.n === 3)
 await runCheckpoint(page, { ...cp, name: 'sp-base' }, out, { until, settle, log: [] })
 const settleFrames = () => page.evaluate(() => new Promise((r) => { let k = 0; const f = () => (++k > 8 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f) }))
+await page.evaluate((c) => { window.__hd.rt.camOverride = c }, cp.cam)
+await settleFrames()
 await page.screenshot({ path: out + '/v0.png' })
 const setOut = async (name, expr) => {
   const ok = await page.evaluate((expr) => { let n = 0; window.__scene.traverse((o) => { const m = o.material; if (m && m.uniforms && m.uniforms.tMask) { if (!m.userData.f0) m.userData.f0 = m.fragmentShader; m.fragmentShader = m.userData.f0.replace('gl_FragColor = vec4(c, a);', expr); m.needsUpdate = true; n++ } }); return n }, expr)
