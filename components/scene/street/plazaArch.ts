@@ -17,7 +17,9 @@ export interface PlazaParts {
   /** every other part, merged by material key */
   parts: Partial<Record<PlazaKey, THREE.BufferGeometry>>
   /** loading-dock shutters / doors on the rear façades: textured planes (variant index into A.shutters / A.doors) */
-  doors: { kind: 'shutter' | 'door'; variant: number; x: number; y: number; z: number; w: number; h: number }[]
+  doors: { kind: 'shutter' | 'door'; variant: number; x: number; y: number; z: number; w: number; h: number; ry?: number }[]
+  /** practical lamps (light spill halos are drawn around them) */
+  lamps: { p: [number, number, number]; s: number; o: number }[]
 }
 
 const faceZHoles = (pred: (d: ReturnType<typeof allWindows>[number]) => boolean): HoleX[] =>
@@ -253,6 +255,59 @@ export function buildPlazaArch(): PlazaParts {
     cap.cyl(0.098, 0.098, 0.16, x, 0.82, z, 10)
   }
 
+
+  // ── the plaza's side walls: dressing that makes a long brick plane a BUILT wall (kept ≤ 0.35 m proud: the rig camera passes 1.4 m from the west wall) ──
+  const lamps: PlazaParts['lamps'] = [
+    { p: [-9.0, 4.2, -117.4], s: 3.4, o: 1 }, { p: [-6.0, 4.2, -117.4], s: 3.4, o: 1 }, { p: [4.0, 2.9, -117.55], s: 2.6, o: 0.8 },
+    { p: [-2.9, 2.8, -149.6], s: 2.6, o: 0.8 }, { p: [0, 7.8, -139], s: 4.2, o: 1.1 }, { p: [0, 8.5, -126.9], s: 6.5, o: 0.55 },
+  ]
+  const rs = rng(7733)
+  const WX = 12
+  for (const side of [-1, 1] as const) {
+    const x = side * WX, n = -side // n: toward the plaza
+    const zA = -77, zB = -117.5, zc = (zA + zB) / 2, len = zA - zB
+    // plinth: a cast-stone base course with a chamfered top, so the brick has something to stand on
+    stone.box(0.26, 1.0, len, x + n * 0.13, 0.5, zc)
+    stone.box(0.3, 0.06, len, x + n * 0.15, 1.03, zc)
+    // drainpipes with brackets and a ground shoe
+    for (const z of side === -1 ? [-81.5, -95.5, -111.0] : [-84.0, -99.0, -113.5]) {
+      steel.cyl(0.055, 0.055, 19.6, x + n * 0.1, 9.9, z, 8)
+      for (let y = 2.0; y < 19; y += 2.4) steel.box(0.16, 0.05, 0.12, x + n * 0.07, y, z)
+      steel.box(0.16, 0.22, 0.2, x + n * 0.16, 0.3, z + 0.05)
+    }
+    // a cable tray with its bundle and clips, running the length of the wall under the first window row
+    steel.box(0.07, 0.1, len - 1, x + n * 0.05, 4.1, zc)
+    for (let k = 0; k < 3; k++) steel.cyl(0.016, 0.016, len - 1.2, x + n * 0.09, 4.12 + k * 0.012, zc - 0.03 + k * 0.03, 5, Math.PI / 2, 0, 0)
+    for (let z = zA - 1.5; z > zB + 1; z -= 2.2) steel.box(0.1, 0.07, 0.07, x + n * 0.07, 4.1, z)
+    // electrical meter cabinets with their riser pipes, wall lamps, AC condensers on brackets, louvred vents
+    const mz = side === -1 ? [-88.0, -108.5] : [-90.5, -112.0]
+    for (const z of mz) {
+      steel.box(0.5, 0.7, 0.18, x + n * 0.09 + 0.0, 1.55, z); steel.box(0.54, 0.05, 0.22, x + n * 0.09, 1.93, z)
+      cap.box(0.18, 0.28, 0.02, x + n * 0.19, 1.6, z) // its glazed window
+      steel.cyl(0.018, 0.018, 1.0, x + n * 0.07, 2.5, z, 5)
+    }
+    for (const z of side === -1 ? [-84.0, -92.0, -114.0] : [-87.0, -96.5, -115.0]) {
+      steel.box(0.12, 0.26, 0.3, x + n * 0.07, 3.4, z); glow.box(0.08, 0.1, 0.2, x + n * 0.15, 3.32, z)
+      lamps.push({ p: [x + n * 0.2, 3.3, z], s: 2.6, o: 0.8 })
+    }
+    for (const z of side === -1 ? [-90.0, -107.5] : [-93.0, -105.0]) {
+      steel.box(0.4, 0.06, 0.9, x + n * 0.18, 6.2, z) // bracket tray
+      steel.box(0.34, 0.62, 0.84, x + n * 0.23, 6.55, z) // condenser casing
+      cap.box(0.02, 0.5, 0.6, x + n * 0.42, 6.55, z) // fan grille
+      steel.cyl(0.012, 0.012, 2.4, x + n * 0.1, 5.0, z + 0.5, 4) // refrigerant line
+    }
+    for (const z of side === -1 ? [-86.0, -98.0, -112.5] : [-82.5, -95.0, -109.0]) {
+      rubber.box(0.1, 0.5, 0.9, x + n * 0.05, 2.5, z)
+      for (let k = 0; k < 6; k++) steel.box(0.04, 0.025, 0.86, x + n * 0.09, 2.3 + k * 0.075, z, 0.35, 0, 0)
+    }
+    // a surface-mounted service door in a cast surround (west: toward the rear; east: near the entrance) — clear of the cameras
+    const dz = side === -1 ? -80.2 : -116.2
+    stone.box(0.3, 0.26, 1.55, x + n * 0.15, 2.5, dz); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz + 0.68); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz - 0.68)
+    stone.box(0.45, 0.07, 1.5, x + n * 0.22, 0.1, dz) // threshold step
+    doors.push({ kind: 'door', variant: side === -1 ? 0 : 2, x: x + n * 0.1, y: 1.18, z: dz, w: 1.15, h: 2.35, ry: side === -1 ? Math.PI / 2 : -Math.PI / 2 })
+  }
+  void rs
+
   const out: PlazaParts['parts'] = {}
   const put = (k: PlazaKey, b: GeoBuilder) => { if (!b.empty) out[k] = withWhite(b.build()) }
   put('stone', stone); put('steel', steel); put('roof', roof); put('wood', wood); put('cap', cap); put('rubber', rubber); put('crate', crate); put('glow', glow)
@@ -263,5 +318,5 @@ export function buildPlazaArch(): PlazaParts {
   const brickOf = { rl: brickRL, rr: brickRR, end: brickEnd }
   for (const k of ['rl', 'rr', 'end'] as const) if (!brickOf[k].empty) walls.push({ key: k, geo: withWhite(brickOf[k].build()) })
   walls.forEach((w) => withWhite(w.geo))
-  return { walls, parts: out, doors }
+  return { walls, parts: out, doors, lamps }
 }
