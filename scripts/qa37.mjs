@@ -18,7 +18,7 @@ await page.goto(`http://localhost:${process.env.PORT || 3000}/?debug=1&quality=$
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
 await page.click('button:has-text("ENTER")', { force: true, timeout: 120000 })
 await page.waitForTimeout(6000)
-await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 240000, polling: 500 }).catch(() => console.log('brick upgrade not seen'))
+await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 600000, polling: 500 })
 await page.addStyleTag({ content: '.overlay,.cursor,nextjs-portal{display:none !important}' })
 if (process.env.NOPOST === '1') await page.evaluate(() => { window.__qaNoPost = true })
 const log = []

@@ -162,18 +162,21 @@ void main() {
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
   // reflection clarity follows the surface: still water is clear, damp asphalt is rough → the reflection is a vertical smear, never a mirror.
-  // 4 jittered taps (+ centre) on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
+  // Prefilter the projected footprint and surface roughness before sampling.
+  // A five-point unfiltered kernel duplicated clipped bright edges into a ladder
+  // of square highlights. Mips integrate those subpixel features continuously;
+  // three restrained vertical taps retain wet-asphalt streaks without ghost copies.
   float rough = (1.0 - m) * (0.35 + 0.65 * damp);
-  float br = mix(0.0012, 0.017, rough);
-  // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
-  vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
-  vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
+  vec2 texSize = vec2(textureSize(tDiffuse, 0));
+  vec2 dx = dFdx(vUv.xy / vUv.w) * texSize;
+  vec2 dy = dFdy(vUv.xy / vUv.w) * texSize;
+  float footprint = log2(max(1.0, max(length(dx), length(dy))));
+  float lod = max(0.65, footprint) + rough * 3.5;
+  vec2 streak = vec2(0.0, mix(0.0008, 0.009, rough));
   vec3 CL = vec3(mix(2.6, mix(1.1, 0.55, smoothstep(5.0, 16.0, dd_)), 1.0 - m));
-  c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
-  c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv + o2).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv - o2).rgb, CL) * 0.18;
+  c = min(textureLod(tDiffuse, uv, lod).rgb, CL) * 0.5;
+  c += min(textureLod(tDiffuse, uv + streak, lod).rgb, CL) * 0.25;
+  c += min(textureLod(tDiffuse, uv - streak, lod).rgb, CL) * 0.25;
   // far field: the mirrored render's far horizon is where clipped kerb/sidewalk slivers alias against the bright sky behind them (1-px white speckle).
   // Rough wet asphalt keeps no structure out there anyway, so beyond ~10 m (damp asphalt; real puddles keep theirs) the reflection relaxes to the analytic horizon/sky gradient (the cheap tier's colour).
   {
@@ -257,6 +260,11 @@ export function WaterSheet({ mask, size, position, interactive = false, rising =
         multisample: q.level >= 2 ? 2 : 0,
         shader,
       })
+      const reflectionTarget = r.getRenderTarget()
+      reflectionTarget.texture.generateMipmaps = true
+      reflectionTarget.texture.minFilter = THREE.LinearMipmapLinearFilter
+      // Reflection depth is never sampled: preserve the no-depth-resolve strategy.
+      reflectionTarget.resolveDepthBuffer = false
       throttleReflector(r)
       material = r.material as THREE.ShaderMaterial
       object = r

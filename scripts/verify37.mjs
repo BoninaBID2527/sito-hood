@@ -1,7 +1,7 @@
 // Serial software-GL verification. Each stage records its exact invocation and
 // exit code; failed stages remain failures and the final process exits nonzero.
 import {spawn} from 'node:child_process'
-import {mkdirSync,writeFileSync,createWriteStream} from 'node:fs'
+import {mkdirSync,writeFileSync,createWriteStream,readFileSync,existsSync} from 'node:fs'
 const out=process.argv[2]||'qa/v37';mkdirSync(`${out}/logs`,{recursive:true})
 const root=process.cwd(),base=process.env.BASELINE_DIR
 const stages=[
@@ -24,8 +24,9 @@ const stages=[
  ['static-smoke',['scripts/smoke.mjs','http://localhost:3002/sito-hood/?debug=1&quality=mobile','shots-static-smoke.png'],{EXTRA:'&scale=0.45'}],
  ['static-ROOM',['scripts/room-check.mjs','balanced','960x540'],{PORT:'3002',BASEPATH:'/sito-hood',EXTRA:'&scale=0.6'}],
 ]
-const results=[]
+const results=process.env.RESUME === '1' && existsSync(`${out}/results.json`) ? JSON.parse(readFileSync(`${out}/results.json`, 'utf8')) : []
 for(const [name,args,overrides,cwd=root] of stages){
+ if (results.some(r => r.name === name && r.exitCode === 0)) { console.log(`SKIP ${name}: previously passed`); continue }
  const started=new Date().toISOString();console.log(`START ${name} ${started}`)
  const stream=createWriteStream(`${out}/logs/${name}.log`)
  const code=await new Promise(resolve=>{const p=spawn(process.execPath,args,{cwd,env:{...process.env,...overrides},stdio:['ignore','pipe','pipe']});p.stdout.pipe(stream,{end:false});p.stderr.pipe(stream,{end:false});p.on('error',e=>{stream.write(String(e));resolve(-1)});p.on('close',resolve)})
