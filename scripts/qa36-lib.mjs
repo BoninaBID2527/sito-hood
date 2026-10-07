@@ -78,8 +78,8 @@ export async function runCheckpoint(page, cp, out, h) {
       return shot(1500)
     }
     await toRoom(page, h)
-    if (cp.room === 'entry') { await page.evaluate(() => window.__hd.act('goStation', 0)); await h.until(() => Math.abs(window.__hd.room.u) < 0.04); return shot(1500) }
-    if (cp.room === 'station') { await page.evaluate((i) => window.__hd.act('goStation', i), cp.i); await h.until((i) => Math.abs(window.__hd.room.u - i) < 0.04, cp.i); return shot(1500) }
+    if (cp.room === 'entry') { await page.evaluate(() => window.__hd.act('goStation', 0)); await h.until(() => Math.abs(window.__hd.room.u) < 0.04 && window.__hd.room.push < 0.001); return shot(1500) }
+    if (cp.room === 'station') { await page.evaluate((i) => window.__hd.act('goStation', i), cp.i); await h.until((i) => Math.abs(window.__hd.room.u - i) < 0.04 && window.__hd.room.push < 0.001, cp.i); return shot(1500) }
     if (cp.room === 'video') {
       await page.evaluate(() => window.__hd.act('goStation', 1)); await h.until(() => Math.abs(window.__hd.room.u - 1) < 0.04)
       await page.evaluate(() => window.__hd.act('focusVideo')); await h.until(() => window.__hd.room.push > 0.97)

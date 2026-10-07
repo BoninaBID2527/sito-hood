@@ -80,7 +80,7 @@ export async function runCheckpoint(page, cp, out, h) {
   }
   if (cp.roomCam) {
     await toRoom(page, h)
-    await page.evaluate(() => window.__hd.act('goStation', 1)); await h.until(() => Math.abs(window.__hd.room.u - 1) < 0.04)
+    await page.evaluate(() => window.__hd.act('goStation', 1)); await h.until(() => Math.abs(window.__hd.room.u - 1) < 0.04 && window.__hd.room.push < 0.001)
     await page.evaluate((c) => { window.__hd.rt.camOverride = c }, cp.roomCam)
     await shot(2000)
     await page.evaluate(() => { window.__hd.rt.camOverride = null })
