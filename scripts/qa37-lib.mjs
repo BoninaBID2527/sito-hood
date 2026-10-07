@@ -41,7 +41,7 @@ export const CHECKPOINTS = [
   { n: 37, name: 'skyline', p: 1.0, wait: 2200, cam: null },
   // ── ROOM (room-local poses; camera override works inside the room world)
   { n: 38, name: 'room-01-exterior', room: 'near' },
-  { n: 39, name: 'room-02-threshold', roomCam: rc([0, 1.55, -0.9], [0, 1.4, -4], 54) },
+  { n: 39, name: 'room-02-threshold', roomCam: rc([0.45, 1.5, -2.7], [0, 0.9, -1.25], 58) },
   { n: 40, name: 'room-03-entry', room: 'entry' },
   { n: 41, name: 'room-04-workstation-wide', room: 'station', i: 1 },
   { n: 42, name: 'room-05-workstation-medium', roomCam: rc([0.3, 1.4, -6.3], [0.3, 1.05, -8.4], 46) },

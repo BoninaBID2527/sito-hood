@@ -11,6 +11,8 @@ const buildId = readFileSync('.next/BUILD_ID', 'utf8').trim()
 const previous = process.env.RESUME_SHOTS === '1' && existsSync(`${out}/manifest.json`) ? JSON.parse(readFileSync(`${out}/manifest.json`, 'utf8')) : null
 if (previous && (previous.buildId !== buildId || previous.viewport !== vp || previous.quality !== quality || previous.noPost !== (process.env.NOPOST === '1') || Boolean(previous.noFog) !== (process.env.NOFOG === '1') || previous.errors.length)) throw new Error('Cannot resume a different build/configuration or failed console audit')
 const want = (n) => { if (!sel) return true; return sel.split(',').some((t) => { const [a, b] = t.split('-').map(Number); return b ? n >= a && n <= b : n === a }) }
+const recapture = new Set((process.env.RECAPTURE || '').split(',').filter(Boolean).map(Number))
+if (recapture.size && (!previous || [...recapture].some(n => !want(n) || !CHECKPOINTS.some(cp => cp.n === n)))) throw new Error('Recapture requires a matching resumed manifest and selected checkpoint numbers')
 const webm = process.env.WEBM ? readFileSync(process.env.WEBM) : null
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await (await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: Number(process.env.DSF || 1), hasTouch: process.env.TOUCH === '1', isMobile: process.env.TOUCH === '1' })).newPage()
@@ -27,9 +29,9 @@ await page.addStyleTag({ content: '.overlay,.cursor,nextjs-portal{display:none !
 if (process.env.NOPOST === '1') await page.evaluate(() => { window.__qaNoPost = true })
 if (process.env.NOFOG === '1') await page.evaluate(() => { window.__scene.fog = null })
 const log = []
-const captures = previous?.captures ?? []
+const captures = (previous?.captures ?? []).filter(c => !recapture.has(c.n))
 const resumedCaptures = captures.length
-const persist = () => writeFileSync(`${out}/manifest.json`, JSON.stringify({ buildId, viewport: vp, quality, noPost: process.env.NOPOST === '1', noFog: process.env.NOFOG === '1', resumedCaptures, captures, errors }, null, 2))
+const persist = () => writeFileSync(`${out}/manifest.json`, JSON.stringify({ buildId, viewport: vp, quality, noPost: process.env.NOPOST === '1', noFog: process.env.NOFOG === '1', resumedCaptures, recaptured: [...new Set([...(previous?.recaptured ?? []), ...recapture])], captures, errors }, null, 2))
 console.log('ready for capture')
 const until = (fn, arg, to = 600000) => page.waitForFunction(fn, arg, { timeout: to, polling: 150 })
 const settle = () => until(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0008 && Math.abs(r.velocity) < 0.001 && (r.world !== 'alley' || r.smooth < 0.375 || r.smooth > 0.635 || (Math.abs(r.orbit.err) < 0.02 && Math.abs(r.orbit.vel) < 0.06)) })

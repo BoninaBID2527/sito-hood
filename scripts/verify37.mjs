@@ -10,6 +10,7 @@ const stages=[
  ['e2e',['scripts/e2e.mjs','shots-e2e-final','960x540'],{EXTRA:'&scale=0.45'}],
  ['ROOM-desktop',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.45'}],
  ['photographic-final',['scripts/qa37.mjs','shots-final-v37','960x540','high'],{EXTRA:'&scale=0.75',REQUIRE_FINITE_REFLECTIONS:'1'}],
+ ['threshold-recapture',['scripts/qa37.mjs','shots-final-v37','960x540','high','39'],{EXTRA:'&scale=0.75',RESUME_SHOTS:'1',RECAPTURE:'39',REQUIRE_FINITE_REFLECTIONS:'1'}],
  ['post-disabled',['scripts/qa37.mjs','shots-nopost-v37','960x540','high','1,6,10,19,27,41,54,59'],{EXTRA:'&scale=0.75',NOPOST:'1',REQUIRE_FINITE_REFLECTIONS:'1'}],
  ['base-render-no-fog',['scripts/qa37.mjs','shots-base-v37','960x540','high','1,27,35,41,59'],{EXTRA:'&scale=0.75',NOPOST:'1',NOFOG:'1',REQUIRE_FINITE_REFLECTIONS:'1'}],
  ...(base?[
@@ -29,7 +30,7 @@ const stages=[
 ]
 // Compare performance and actual reflection contents before investing in the
 // no-post and complete photographic sweeps. All stages still run serially.
-const priority=['performance-V36','performance-V37','post-disabled','base-render-no-fog','photographic-final']
+const priority=['performance-V36','performance-V37','post-disabled','base-render-no-fog','photographic-final','threshold-recapture']
 stages.sort((a,b)=>(priority.includes(a[0])?priority.indexOf(a[0]):99)-(priority.includes(b[0])?priority.indexOf(b[0]):99))
 const results=process.env.RESUME === '1' && existsSync(`${out}/results.json`) ? JSON.parse(readFileSync(`${out}/results.json`, 'utf8')) : []
 for(const [name,args,overrides,cwd=root] of stages){
