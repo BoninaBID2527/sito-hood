@@ -5,8 +5,9 @@ import {mkdirSync,writeFileSync,createWriteStream,readFileSync,existsSync} from 
 const out=process.argv[2]||'qa/v37';mkdirSync(`${out}/logs`,{recursive:true})
 const root=process.cwd(),base=process.env.BASELINE_DIR
 const stages=[
+ ['adaptive-simulation',['scripts/adaptive-sim.mjs'],{}],
  ['e2e',['scripts/e2e.mjs','shots-e2e-final','960x540'],{EXTRA:'&scale=0.45'}],
- ['ROOM-desktop',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.6'}],
+ ['ROOM-desktop',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.45'}],
  ['photographic-final',['scripts/qa37.mjs','shots-final-v37','960x540','high'],{EXTRA:'&scale=0.75'}],
  ['post-disabled',['scripts/qa37.mjs','shots-nopost-v37','960x540','high','1,6,10,19,27,41,54,59'],{EXTRA:'&scale=0.75',NOPOST:'1'}],
  ...(base?[
@@ -19,10 +20,10 @@ const stages=[
  ['tracks',['scripts/tracks-check.mjs','http://localhost:3000/','balanced'],{EXTRA:'&scale=0.45'}],
  ['reduced-motion',['scripts/reduced.mjs','shots-reduced-final.png'],{EXTRA:'&scale=0.45'}],
  ['ROOM-touch',['scripts/room-check.mjs','balanced','820x1180'],{EXTRA:'&scale=0.45',TOUCH:'1'}],
- ['ROOM-reduced',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.6',REDUCED:'1'}],
- ['ROOM-DOM-video',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.6&roomvideo=dom'}],
+ ['ROOM-reduced',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.45',REDUCED:'1'}],
+ ['ROOM-DOM-video',['scripts/room-check.mjs','balanced','960x540'],{EXTRA:'&scale=0.45&roomvideo=dom'}],
  ['static-smoke',['scripts/smoke.mjs','http://localhost:3002/sito-hood/?debug=1&quality=mobile','shots-static-smoke.png'],{EXTRA:'&scale=0.45'}],
- ['static-ROOM',['scripts/room-check.mjs','balanced','960x540'],{PORT:'3002',BASEPATH:'/sito-hood',EXTRA:'&scale=0.6'}],
+ ['static-ROOM',['scripts/room-check.mjs','balanced','960x540'],{PORT:'3002',BASEPATH:'/sito-hood',EXTRA:'&scale=0.45'}],
 ]
 // Inspect the render first so visual defects are corrected before spending time on regressions.
 stages.sort((a, b) => Number(b[0] === 'photographic-final') - Number(a[0] === 'photographic-final'))

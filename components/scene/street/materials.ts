@@ -353,8 +353,8 @@ ${
   roughnessFactor = clamp(roughnessFactor + microR_, 0.15, 1.0);
   roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
   // Standing water has its own Fresnel/reflection sheet. The asphalt beneath
-  // it stays aggregate-rough: a second near-mirror BRDF made direct sunlight
-  // clip into a broad white stripe even when the planar reflection was filtered.
+  // it stays aggregate-rough, rather than adding a second near-mirror BRDF
+  // to the water layer's own reflected radiance.
   roughnessFactor = mix(roughnessFactor, 0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, dampG_ * 0.9);
   roughnessFactor = max(${wet ? '0.24' : '0.12'}, roughnessFactor - asphaltPolish_ * ${wet ? '0.08' : '0.14'});`,
       )

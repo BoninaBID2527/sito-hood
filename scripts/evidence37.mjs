@@ -4,10 +4,13 @@ import {readdirSync,mkdirSync,existsSync,readFileSync,writeFileSync} from 'node:
 import {join} from 'node:path'
 const root='qa/v37/images';mkdirSync(root,{recursive:true})
 for(const [version,dir] of [['v36','shots-final-v36'],['v37','shots-final-v37'],['nopost','shots-nopost-v37']]){
- if(!existsSync(dir))continue
+ const manifest=JSON.parse(readFileSync(join(dir,'manifest.json'),'utf8'))
+ const expected=version==='nopost'?[1,6,10,19,27,41,54,59]:Array.from({length:61},(_,i)=>i+1)
+ if(JSON.stringify(manifest.captures.map(c=>c.n))!==JSON.stringify(expected)||manifest.errors.length)throw new Error(`${version}: incomplete or failed capture sweep`)
+ if(manifest.captures.some(c=>c.masonryWidth!==1536))throw new Error(`${version}: high-tier texture upgrade missing`)
  const out=join(root,version);mkdirSync(out,{recursive:true})
- for(const name of readdirSync(dir).filter(n=>n.endsWith('.png'))){await sharp(join(dir,name)).webp({quality:94}).toFile(join(out,name.replace('.png','.webp')))}
- if(existsSync(join(dir,'manifest.json')))writeFileSync(join(root,version,'manifest.json'),readFileSync(join(dir,'manifest.json')))
+ for(const capture of manifest.captures){const name=`${String(capture.n).padStart(2,'0')}-${capture.name}.png`;await sharp(join(dir,name)).webp({quality:94}).toFile(join(out,name.replace('.png','.webp')))}
+ writeFileSync(join(root,version,'manifest.json'),readFileSync(join(dir,'manifest.json')))
 }
 async function sheet(name,version,nums,cols=3){
  const dir=join(root,version);if(!existsSync(dir))return

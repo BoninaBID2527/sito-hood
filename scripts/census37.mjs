@@ -16,11 +16,14 @@ const rows=[],log=[]
 const sample=async(name)=>{
   const data=await page.evaluate(async()=>{
     const cost=[],calls=[],tris=[];let last=performance.now()
+    const progressStart=window.__hd.rt.smooth
     for(let i=0;i<14;i++) {await new Promise(requestAnimationFrame);const t=performance.now();if(i>=4){cost.push(t-last);calls.push(window.__hd.rt.stats.calls);tris.push(window.__hd.rt.stats.tris)}last=t}
     const med=a=>a.sort((x,y)=>x-y)[Math.floor(a.length/2)]
     const r=window.__hd.rt,g=window.__gl
-    return{medianMs:med(cost),samplesMs:cost,calls:med(calls),triangles:med(tris),textures:g.info.memory.textures,geometries:g.info.memory.geometries,scale:r.scale,tier:r.quality.tier,world:r.world,masonryWidth:window.__hd.A.brick.concrete.map.image.width,buffer:[g.domElement.width,g.domElement.height]}
-  });rows.push({name,...data});writeFileSync(out,JSON.stringify({port,tier,vp,rows,errors},null,2));console.log(name,JSON.stringify(data))
+    return{medianMs:med(cost),samplesMs:cost,calls:med(calls),triangles:med(tris),textures:g.info.memory.textures,geometries:g.info.memory.geometries,scale:r.scale,tier:r.quality.tier,world:r.world,masonryWidth:window.__hd.A.brick.concrete.map.image.width,buffer:[g.domElement.width,g.domElement.height],progressStart,progressEnd:r.smooth}
+  });
+  if(name==='tracks-moving' && Math.abs(data.progressEnd-data.progressStart)<.001)throw new Error('Moving probe did not observe journey motion')
+  rows.push({name,...data});writeFileSync(out,JSON.stringify({port,tier,vp,rows,errors},null,2));console.log(name,JSON.stringify(data))
 }
 try {
  await page.goto(`http://localhost:${port}/?debug=1&quality=${tier}&scale=0.6`)
@@ -32,6 +35,6 @@ try {
  for(const cp of checkpoints)await runCheckpoint(page,{...cp,n:0,wait:300},'.',{until,settle,log,onShot:()=>sample(cp.name)})
  await page.evaluate(()=>window.__hd.act('exitDualism'));await until(()=>window.__hd.store.getState().mode==='alterco')
  await page.evaluate(()=>{window.__hd.jump(.41);window.__hd.rt.snapSpring=.41});await settle()
- await page.evaluate(()=>{window.__hd.jump(.595);window.__hd.rt.snapSpring=.595});await sample('tracks-moving')
+ await page.evaluate(()=>window.__hd.jump(.595));await sample('tracks-moving')
  if(errors.length)throw new Error(errors.join('\n'))
 }finally{await browser.close()}

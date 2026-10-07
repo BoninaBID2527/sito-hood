@@ -120,7 +120,9 @@ void main() {
   damp = max(damp, m);
   vec3 V = normalize(cameraPosition - vWorld);
   float ndv = clamp(V.y, 0.0, 1.0);
-  float fres = 0.05 + 0.95 * pow(1.0 - ndv, 4.0);
+  // Air/water IOR 1.333 → F0 ≈ 0.0204. Reflection grows only at grazing angles;
+  // boosting it 3.5× made shallow street puddles read as clipped white paint.
+  float fres = 0.0204 + 0.9796 * pow(1.0 - ndv, 5.0);
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
   // damp asphalt: reflection is broken up by micro-relief instead of mirror-clean
@@ -203,7 +205,7 @@ void main() {
   float eggEdge = exp(-length(vWorld.xz - vec2(0.2, -41.0)) * 0.55) * uMem * smoothstep(0.02, 0.5, m) * (1.0 - smoothstep(0.75, 1.0, m));
   c += film * eggEdge * 0.35;
   float damped = (1.0 - m) * damp;
-  float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * mix(0.35, 1.0, clamp(fres * 3.5, 0.0, 1.0));
+  float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * fres;
   // puddle darkening so the water reads as depth, not paint
   c *= color * mix(0.62, 0.95, m);
   gl_FragColor = vec4(c, a);
@@ -352,4 +354,3 @@ export function WaterSheet({ mask, size, position, interactive = false, rising =
     </group>
   )
 }
-
