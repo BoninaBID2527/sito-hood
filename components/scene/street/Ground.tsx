@@ -121,7 +121,7 @@ void main() {
   vec3 V = normalize(cameraPosition - vWorld);
   float ndv = clamp(V.y, 0.0, 1.0);
   // Air/water IOR 1.333 → F0 ≈ 0.0204. Reflection grows only at grazing angles;
-  // boosting it 3.5× made shallow street puddles read as clipped white paint.
+  // no artistic gain is applied to the physical reflection weight.
   float fres = 0.0204 + 0.9796 * pow(1.0 - ndv, 5.0);
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
@@ -188,8 +188,8 @@ void main() {
   }
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
-    c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);
-    c.b = mix(c.b, texture2D(tDiffuse, uv - vec2(s, 0.0)).b, 0.8);
+    c.r = mix(c.r, min(textureLod(tDiffuse, uv + vec2(s, 0.0), lod).r, CL.r), 0.8);
+    c.b = mix(c.b, min(textureLod(tDiffuse, uv - vec2(s, 0.0), lod).b, CL.b), 0.8);
   }
   ` : `
   float g = smoothstep(-0.1, 1.0, V.y * 3.0);

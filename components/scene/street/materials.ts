@@ -445,8 +445,16 @@ ${
     : ''
 }`,
       )
+      .replace(
+        '#include <opaque_fragment>',
+        `// Thin/clipped fragments can produce non-finite radiance on software GL.
+  // Do not let an undefined surface sample contaminate HDR reflection mips;
+  // discarding it retains the valid geometry already rendered behind it.
+  if (any(isnan(outgoingLight)) || any(isinf(outgoingLight))) discard;
+  #include <opaque_fragment>`,
+      )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}8nz-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}9nz-v37`
   return m
 }
 
