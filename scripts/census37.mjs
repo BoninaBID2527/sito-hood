@@ -3,6 +3,7 @@
 import {chromium} from './browser.mjs'
 import {writeFileSync} from 'node:fs'
 import {runCheckpoint} from './qa37-lib.mjs'
+import {reflectionHealth} from './reflection-health.mjs'
 const [port='3000',out='census37.json',tier='balanced',vp='640x360']=process.argv.slice(2)
 const [width,height]=vp.split('x').map(Number)
 const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--use-angle=swiftshader','--use-gl=angle','--enable-unsafe-swiftshader','--ignore-gpu-blocklist','--no-sandbox']})
@@ -23,7 +24,9 @@ const sample=async(name)=>{
     return{medianMs:med(cost),samplesMs:cost,calls:med(calls),triangles:med(tris),textures:g.info.memory.textures,geometries:g.info.memory.geometries,scale:r.scale,tier:r.quality.tier,world:r.world,masonryWidth:window.__hd.A.brick.concrete.map.image.width,buffer:[g.domElement.width,g.domElement.height],progressStart,progressEnd:r.smooth}
   });
   if(name==='tracks-moving' && Math.abs(data.progressEnd-data.progressStart)<.001)throw new Error('Moving probe did not observe journey motion')
-  rows.push({name,...data});writeFileSync(out,JSON.stringify({port,tier,vp,rows,errors},null,2));console.log(name,JSON.stringify(data))
+  const reflections=await reflectionHealth(page);
+  if(process.env.REQUIRE_FINITE_REFLECTIONS==='1' && reflections.some(r=>r.nonfinite))throw new Error(`${name}: non-finite reflection radiance`);
+  rows.push({name,...data,reflections});writeFileSync(out,JSON.stringify({port,tier,vp,rows,errors},null,2));console.log(name,JSON.stringify(data))
 }
 try {
  await page.goto(`http://localhost:${port}/?debug=1&quality=${tier}&scale=0.6`)

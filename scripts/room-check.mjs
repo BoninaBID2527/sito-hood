@@ -81,6 +81,25 @@ await page.keyboard.press('ArrowLeft'); await until(() => Math.abs(window.__hd.r
 ok(await hd(() => window.__hd.store.getState().roomStation) === 3, 'ArrowLeft → previous station')
 ok(await hd(() => [...document.querySelectorAll('.room-chip')].some((a) => a.href === 'https://www.instagram.com/hoodddddddd')), 'LIVE DATES chip links to Instagram')
 
+// Actual touch input in the emulated touch viewport, in addition to keyboard checks.
+if (touch) {
+  await page.tap('button[aria-label="WORKSTATION"]')
+  ok(await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch tap selects workstation')
+  const input = await ctx.newCDPSession(page)
+  const swipe = async (from, to) => {
+    await input.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: w * from, y: h * 0.2 }] })
+    await input.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: w * to, y: h * 0.2 }] })
+    await input.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+  }
+  await swipe(0.72, 0.28)
+  ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch swipe left selects next station')
+  await swipe(0.28, 0.72)
+  ok(await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch swipe right selects previous station')
+  await input.detach()
+  await page.tap('button[aria-label="WHO IS HOODDINO?"]')
+  ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch tap selects biography')
+}
+
 // ── bio station: text on the wall (texture exists) and DOM caption on narrow screens
 await page.click('button[aria-label="WHO IS HOODDINO?"]'); await until(() => Math.abs(window.__hd.room.u - 2) < 0.06)
 ok(await hd(() => !!window.__hd.rt && true), 'bio station reachable by the dot selector')

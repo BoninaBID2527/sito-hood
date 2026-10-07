@@ -3,9 +3,9 @@ import sharp from 'sharp'
 import {readdirSync,mkdirSync,existsSync,readFileSync,writeFileSync} from 'node:fs'
 import {join} from 'node:path'
 const root='qa/v37/images';mkdirSync(root,{recursive:true})
-for(const [version,dir] of [['v36','shots-final-v36'],['v37','shots-final-v37'],['nopost','shots-nopost-v37']]){
+for(const [version,dir] of [['v36','shots-final-v36'],['v37','shots-final-v37'],['nopost','shots-nopost-v37'],['nofog','shots-base-v37']]){
  const manifest=JSON.parse(readFileSync(join(dir,'manifest.json'),'utf8'))
- const expected=version==='nopost'?[1,6,10,19,27,41,54,59]:Array.from({length:61},(_,i)=>i+1)
+ const expected=version==='nofog'?[1,27,35,41,59]:version==='nopost'?[1,6,10,19,27,41,54,59]:Array.from({length:61},(_,i)=>i+1)
  if(JSON.stringify(manifest.captures.map(c=>c.n))!==JSON.stringify(expected)||manifest.errors.length)throw new Error(`${version}: incomplete or failed capture sweep`)
  if(manifest.captures.some(c=>c.masonryWidth!==1536))throw new Error(`${version}: high-tier texture upgrade missing`)
  const out=join(root,version);mkdirSync(out,{recursive:true})
@@ -30,3 +30,11 @@ await sheet('plaza-out-360','v37',[19,20,21,22,23,24,25,26],2)
 await sheet('tracks','v37',[28,29,30,31,32,33,34],2)
 await sheet('room-sweep','v37',Array.from({length:20},(_,i)=>38+i),3)
 for(const version of ['v36','v37'])await sheet('hero-'+version,version,[1,8,10,19,23,27,28,35,38,41,53,59],3)
+
+await sheet('plaza-in-360-v36','v36',[11,12,13,14,15,16,17,18],2)
+await sheet('plaza-out-360-v36','v36',[19,20,21,22,23,24,25,26],2)
+await sheet('room-sweep-v36','v36',Array.from({length:20},(_,i)=>38+i),3)
+await sheet('base-render-nopost','nopost',[1,6,10,19,27,41,54,59],2)
+for(const version of ['v36','v37'])await sheet('room-hero-'+version,version,[40,41,43,45,50,51,52,54,55],3)
+
+await sheet('base-render-no-fog','nofog',[1,27,35,41,59],2)

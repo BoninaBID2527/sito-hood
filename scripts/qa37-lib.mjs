@@ -31,7 +31,9 @@ export const CHECKPOINTS = [
   { n: 10, name: 'plaza-front', p: 0.42 },
   ...[0, 45, 90, 135, 180, 225, 270, 315].map((d, i) => ({ n: 11 + i, name: `plaza-in-${String(d).padStart(3, '0')}`, plaza: plazaIn(d) })),
   ...[0, 45, 90, 135, 180, 225, 270, 315].map((d, i) => ({ n: 19 + i, name: `plaza-out-${String(d).padStart(3, '0')}`, plaza: plazaOut(d) })),
-  { n: 27, name: 'plaza-far-ahead', plaza: S([0, 2.7, -89], [0, 5.5, -140], 50) },
+  // Stand behind the installation, inside the passage mouth: the artwork must
+  // not occlude the background this checkpoint exists to inspect.
+  { n: 27, name: 'plaza-far-ahead', plaza: S([2.8, 2.7, -111], [0, 5.5, -146], 50) },
   ...[0, 1, 2, 3, 4, 5, 6].map((i) => ({ n: 28 + i, name: `track-0${i + 1}`, p: P(i), wait: 2600 })),
   // ── roof, skyline
   { n: 35, name: 'roof-wide', p: 0.87, wait: 2200 },
