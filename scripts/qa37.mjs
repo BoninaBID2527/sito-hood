@@ -37,7 +37,7 @@ try {
   for (const cp of CHECKPOINTS) {
     if (!want(cp.n) || captures.some(c => c.n === cp.n)) continue
     await runCheckpoint(page, cp, out, { until, settle, log })
-    const state = await page.evaluate(() => ({ world: window.__hd.rt.world, tier: window.__hd.rt.quality.tier, scale: window.__hd.rt.scale,
+    const state = await page.evaluate(() => ({ camera: { position: window.__camera.position.toArray(), quaternion: window.__camera.quaternion.toArray(), fov: window.__camera.fov }, roomStation: window.__hd.room?.u, world: window.__hd.rt.world, tier: window.__hd.rt.quality.tier, scale: window.__hd.rt.scale,
       calls: window.__hd.rt.stats.calls, triangles: window.__hd.rt.stats.tris, textures: window.__gl.info.memory.textures,
       geometries: window.__gl.info.memory.geometries, masonryWidth: window.__hd.A.brick.concrete.map.image.width,
       video: window.__hd.store.getState().video, videoTime: window.__hd.vid.el?.currentTime ?? null }))
