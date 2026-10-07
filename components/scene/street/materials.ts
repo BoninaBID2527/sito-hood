@@ -68,10 +68,10 @@ float vn3_(vec3 p){
   float b = textureLod(uNz, p.xy * (1.0 / 32.0) + o + vec2(0.3173, 0.5411), 0.0).g;
   return mix(a, b, fz);
 }
-vec3 bumpN_(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
-  vec3 sx = dFdx(surf_pos), sy = dFdy(surf_pos);
+vec3 bumpN_(vec3 sx, vec3 sy, vec3 surf_norm, vec2 dHdxy, float faceDirection){
   vec3 R1 = cross(sy, surf_norm), R2 = cross(surf_norm, sx);
   float fDet = dot(sx, R1) * faceDirection;
+  if (fDet == 0.0) return surf_norm;
   vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
   return normalize(abs(fDet) * surf_norm - vGrad);
 }
@@ -364,11 +364,19 @@ ${
         bump
           ? `#include <normal_fragment_maps>
   {
+    // Derivatives stay outside the varying LOD branch; only explicit-gradient
+    // samples and normal arithmetic are gated by the already existing filter.
+    vec3 bumpDx_ = dFdx(-vViewPosition), bumpDy_ = dFdy(-vViewPosition);
+    float bumpFade_ = 1.0 - smoothstep(0.0025, 0.011, max(length(gx_), length(gy_)));
+    // A fully filtered-out surface contributes no relief. Skip its texture
+    // gradients and derivative normal rather than computing undefined zero relief.
+    if (bumpFade_ > 0.0) {
     vec2 kx_ = gx_ * ${bblur}, ky_ = gy_ * ${bblur};
     float b0_ = textureGrad(uBumpTex, tuv_, kx_, ky_).r;
     float bx_ = textureGrad(uBumpTex, tuv_ + kx_, kx_, ky_).r;
     float by_ = textureGrad(uBumpTex, tuv_ + ky_, kx_, ky_).r;
-    normal = bumpN_(-vViewPosition, normal, vec2(bx_ - b0_, by_ - b0_) / ${bblur} * ${bumpAmt} * (1.0 - pt_ * 0.8) * (1.0 - puddle_ * 0.92) * (1.0 - smoothstep(0.0025, 0.011, max(length(gx_), length(gy_)))), faceDirection);
+    normal = bumpN_(bumpDx_, bumpDy_, normal, vec2(bx_ - b0_, by_ - b0_) / ${bblur} * ${bumpAmt} * (1.0 - pt_ * 0.8) * (1.0 - puddle_ * 0.92) * bumpFade_, faceDirection);
+    }
   }`
           : `#include <normal_fragment_maps>${
               wet
@@ -458,7 +466,7 @@ ${
   #include <opaque_fragment>`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}10finite-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}11filtered-v37`
   return m
 }
 

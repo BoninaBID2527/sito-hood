@@ -27,9 +27,9 @@ const stages=[
  ['static-smoke',['scripts/smoke.mjs','http://localhost:3002/sito-hood/?debug=1&quality=mobile','shots-static-smoke.png'],{EXTRA:'&scale=0.45'}],
  ['static-ROOM',['scripts/room-check.mjs','balanced','960x540'],{PORT:'3002',BASEPATH:'/sito-hood',EXTRA:'&scale=0.45'}],
 ]
-// Verify the render without narrative post, then compare performance before
-// investing in the complete sweep. All stages still run serially.
-const priority=['post-disabled','base-render-no-fog','performance-V36','performance-V37','photographic-final']
+// Compare performance and actual reflection contents before investing in the
+// no-post and complete photographic sweeps. All stages still run serially.
+const priority=['performance-V36','performance-V37','post-disabled','base-render-no-fog','photographic-final']
 stages.sort((a,b)=>(priority.includes(a[0])?priority.indexOf(a[0]):99)-(priority.includes(b[0])?priority.indexOf(b[0]):99))
 const results=process.env.RESUME === '1' && existsSync(`${out}/results.json`) ? JSON.parse(readFileSync(`${out}/results.json`, 'utf8')) : []
 for(const [name,args,overrides,cwd=root] of stages){
