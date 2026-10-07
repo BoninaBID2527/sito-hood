@@ -52,9 +52,29 @@ export function PlazaArch() {
       return { geo, mat: doorMats.get(key)!, pos: [d.x, d.y, d.z] as [number, number, number], ry: d.ry ?? 0 }
     })
     // light spill: soft additive halos around the practical lamps and the bridge's lit glazing — what a real lamp does to the air and the wall around it
-    const halo = new THREE.SpriteMaterial({ map: A.glow, color: '#ffb36a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.55, fog: false })
-    const lamps = built.lamps
-    return { meshes, doorMeshes, wallMats, mats, doorMats, doorGeos, halo, lamps }
+    // Same camera-facing practical halos, one instanced draw instead of one per lamp.
+    const halo = new THREE.MeshBasicMaterial({ map: A.glow, color: '#ffb36a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.55, fog: false })
+    halo.onBeforeCompile = sh => {
+      sh.vertexShader = sh.vertexShader.replace('#include <project_vertex>', `
+        vec2 haloSize = vec2(length(instanceMatrix[0].xyz), length(instanceMatrix[1].xyz));
+        vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(0., 0., 0., 1.);
+        mvPosition.xy += transformed.xy * haloSize;
+        gl_Position = projectionMatrix * mvPosition;
+      `)
+    }
+    halo.customProgramCacheKey = () => 'plaza-practical-billboards-v37'
+    const haloGeo = new THREE.PlaneGeometry(1, 1)
+    const haloMesh = new THREE.InstancedMesh(haloGeo, halo, built.lamps.length)
+    const matrix = new THREE.Matrix4()
+    built.lamps.forEach((lamp, i) => {
+      matrix.makeScale(lamp.s, lamp.s, 1).setPosition(...lamp.p)
+      haloMesh.setMatrixAt(i, matrix)
+    })
+    haloMesh.instanceMatrix.needsUpdate = true
+    haloMesh.computeBoundingSphere()
+    haloMesh.layers.set(1)
+    haloMesh.renderOrder = 5
+    return { meshes, doorMeshes, wallMats, mats, doorMats, doorGeos, halo, haloGeo, haloMesh }
   }, [])
 
   useWorldFrame('alley', () => {
@@ -70,6 +90,8 @@ export function PlazaArch() {
       Object.values(kit.wallMats).forEach((m) => m.dispose())
       Object.values(kit.mats).forEach((m) => m.dispose())
       kit.doorMats.forEach((m) => m.dispose())
+      kit.haloMesh.dispose()
+      kit.haloGeo.dispose()
       kit.halo.dispose()
     },
     [kit],
@@ -80,9 +102,7 @@ export function PlazaArch() {
       {kit.meshes.map((m, i) => (
         <mesh key={i} geometry={m.geo} material={m.mat} />
       ))}
-      {kit.lamps.map((l, i) => (
-        <sprite key={`l${i}`} material={kit.halo} position={l.p} scale={[l.s, l.s, 1]} renderOrder={5} layers={1} />
-      ))}
+      <primitive object={kit.haloMesh} />
       {kit.doorMeshes.map((d, i) => (
         <mesh key={`d${i}`} geometry={d.geo} material={d.mat} position={d.pos} rotation={[0, d.ry, 0]} />
       ))}
