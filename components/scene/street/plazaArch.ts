@@ -3,7 +3,7 @@ import { rng } from '@/lib/math'
 import { GeoBuilder, worldUV } from '@/lib/geo'
 import { wallFaceZ, wallWithOpenings, withWhite, type Hole, type HoleX } from './facadeBuild'
 import { PA } from './plazaLayout'
-import { allWindows, PLAZA } from './layout'
+import { allWindows, PLAZA, plazaServiceDoors } from './layout'
 import { roadY } from './groundBuild'
 
 /** matches Facades.tsx (sash depth behind the wall face, unit window height) */
@@ -280,9 +280,18 @@ export function buildPlazaArch(): PlazaParts {
   for (const side of [-1, 1] as const) {
     const x = side * WX, n = -side // n: toward the plaza
     const zA = -77, zB = -117.5, zc = (zA + zB) / 2, len = zA - zB
-    // plinth: a cast-stone base course with a chamfered top, so the brick has something to stand on
-    stone.box(0.26, 1.0, len, x + n * 0.13, 0.5, zc)
-    stone.box(0.3, 0.06, len, x + n * 0.15, 1.03, zc)
+    // The base course must stop at actual door openings, not cover their lower half.
+    const serviceDoors = plazaServiceDoors(side).sort((a, b) => b - a)
+    let near = zA
+    for (const far of [...serviceDoors.map(z => z + 0.72), zB]) {
+      const span = near - far
+      if (span > 0) {
+        stone.box(0.26, 1.0, span, x + n * 0.13, 0.5, (near + far) / 2)
+        stone.box(0.3, 0.06, span, x + n * 0.15, 1.03, (near + far) / 2)
+      }
+      const door = serviceDoors.find(z => z + 0.72 === far)
+      if (door !== undefined) near = door - 0.72
+    }
     // drainpipes with brackets and a ground shoe
     for (const z of side === -1 ? [-81.5, -95.5, -111.0] : [-84.0, -99.0, -113.5]) {
       steel.cyl(0.055, 0.055, 19.6, x + n * 0.1, 9.9, z, 8)
@@ -294,11 +303,11 @@ export function buildPlazaArch(): PlazaParts {
     for (let k = 0; k < 3; k++) steel.cyl(0.016, 0.016, len - 1.2, x + n * 0.09, 4.12 + k * 0.012, zc - 0.03 + k * 0.03, 5, Math.PI / 2, 0, 0)
     for (let z = zA - 1.5; z > zB + 1; z -= 2.2) steel.box(0.1, 0.07, 0.07, x + n * 0.07, 4.1, z)
     // electrical meter cabinets with their riser pipes, wall lamps, AC condensers on brackets, louvred vents
-    const mz = side === -1 ? [-88.0, -108.5] : [-90.5, -112.0]
+    const mz = side === -1 ? [-88.0, -103.35, -108.5] : [-90.5, -103.35, -112.0]
     for (const z of mz) {
-      steel.box(0.5, 0.7, 0.18, x + n * 0.09 + 0.0, 1.55, z); steel.box(0.54, 0.05, 0.22, x + n * 0.09, 1.93, z)
-      cap.box(0.18, 0.28, 0.02, x + n * 0.19, 1.6, z) // its glazed window
-      steel.cyl(0.018, 0.018, 1.0, x + n * 0.07, 2.5, z, 5)
+      steel.box(0.18, 0.7, 0.5, x + n * 0.09, 1.55, z); steel.box(0.22, 0.05, 0.54, x + n * 0.09, 1.93, z)
+      cap.box(0.02, 0.28, 0.18, x + n * 0.19, 1.6, z) // glazing faces into the plaza
+      steel.cyl(0.018, 0.018, 2.2, x + n * 0.07, 3.0, z, 5) // continuous riser to the tray
     }
     for (const z of side === -1 ? [-84.0, -92.0, -114.0] : [-87.0, -96.5, -115.0]) {
       steel.box(0.12, 0.26, 0.3, x + n * 0.07, 3.4, z); glow.box(0.08, 0.1, 0.2, x + n * 0.15, 3.32, z)
@@ -314,11 +323,15 @@ export function buildPlazaArch(): PlazaParts {
       rubber.box(0.1, 0.5, 0.9, x + n * 0.05, 2.5, z)
       for (let k = 0; k < 6; k++) steel.box(0.04, 0.025, 0.86, x + n * 0.09, 2.3 + k * 0.075, z, 0.35, 0, 0)
     }
-    // a surface-mounted service door in a cast surround (west: toward the rear; east: near the entrance) — clear of the cameras
-    const dz = side === -1 ? -80.2 : -116.2
-    stone.box(0.3, 0.26, 1.55, x + n * 0.15, 2.5, dz); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz + 0.68); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz - 0.68)
-    stone.box(0.45, 0.07, 1.5, x + n * 0.22, 0.1, dz) // threshold step
-    doors.push({ kind: 'door', variant: side === -1 ? 0 : 2, x: x + n * 0.1, y: 1.18, z: dz, w: 1.15, h: 2.35, ry: side === -1 ? Math.PI / 2 : -Math.PI / 2 })
+    // Shared instanced doors sit 0.22 m behind true masonry reveals (Facades).
+    for (const dz of serviceDoors) {
+      stone.box(0.3, 0.26, 1.55, x + n * 0.15, 2.5, dz); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz + 0.68); stone.box(0.3, 2.4, 0.18, x + n * 0.15, 1.2, dz - 0.68)
+      stone.box(0.7, 0.07, 1.5, x + n * 0.02, 0.07, dz)
+      for (const y of [0.45, 1.9]) steel.box(0.06, 0.12, 0.05, x - n * 0.19, y, dz - 0.51)
+      steel.box(0.045, 0.16, 0.1, x - n * 0.185, 1.0, dz + 0.43)
+      steel.cyl(0.014, 0.014, 0.07, x - n * 0.14, 1.0, dz + 0.43, 6, 0, 0, Math.PI / 2)
+      steel.cyl(0.014, 0.014, 0.16, x - n * 0.1, 1.0, dz + 0.36, 6, Math.PI / 2, 0, 0)
+    }
   }
   void rs
 

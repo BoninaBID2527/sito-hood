@@ -10,7 +10,7 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { streetMat, streetU } from './materials'
-import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, streetLevelItems, type BrickKind } from './layout'
+import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, wallX, streetLevelItems, type BrickKind } from './layout'
 import { wallWithOpenings, wallFaceZ, withWhite, type Hole } from './facadeBuild'
 import { FIRE_ESCAPES } from './FireEscapes'
 import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
@@ -411,7 +411,7 @@ export function StreetLevel() {
       const mat = streetMat({ map: tex, roughness: 0.55, metalness: 0.55, color: '#ffffff', aoBase: 0.55 })
       const im = new THREE.InstancedMesh(geo, mat, list.length)
       list.forEach((t, i) => {
-        const x = segAt(t.side, t.z).hw
+        const x = Math.abs(wallX(t.side, t.z))
         p.set(t.side * (x + depth), y, t.z)
         q.setFromEuler(eu.set(0, rotFor(t.side), 0))
         m4.compose(p, q, sc)
@@ -436,7 +436,7 @@ export function StreetLevel() {
       if (!flat.length) return
       const im = new THREE.InstancedMesh(geo, frame, flat.length)
       flat.forEach((t, i) => {
-        const x = segAt(t.side, t.z).hw
+        const x = Math.abs(wallX(t.side, t.z))
         p.set(t.side * x - t.side * off, y, t.z)
         q.setFromEuler(eu.set(0, 0, 0))
         m4.compose(p, q, sc)

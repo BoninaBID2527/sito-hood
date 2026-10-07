@@ -49,6 +49,9 @@ export const PLAZA = {
   hw: 12,
 }
 
+/** Installed service access: corner entries and the central track-power bays. */
+export const plazaServiceDoors = (side: -1 | 1) => [side === -1 ? -80.2 : -116.2, -102]
+
 /** Window grid per wall segment, deterministic. */
 export interface WinInst {
   side: -1 | 1
@@ -143,6 +146,7 @@ export function streetLevelItems(skip = STREET_SKIP) {
       z -= r.range(3.6, 6.4)
     }
   }
+  for (const side of [-1, 1] as const) for (const z of plazaServiceDoors(side)) doors[side === -1 ? 0 : 2].push({ side, z })
   const out = { shutters, doors }
   if (skip === STREET_SKIP) _level = out
   return out
