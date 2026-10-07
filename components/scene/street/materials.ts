@@ -352,8 +352,11 @@ ${
   roughnessFactor *= brickRough_;
   roughnessFactor = clamp(roughnessFactor + microR_, 0.15, 1.0);
   roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
-  roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, 0.04, puddle_), dampG_ * 0.9);
-  roughnessFactor = max(0.12, roughnessFactor - asphaltPolish_ * 0.14);`,
+  // Standing water has its own Fresnel/reflection sheet. The asphalt beneath
+  // it stays aggregate-rough: a second near-mirror BRDF made direct sunlight
+  // clip into a broad white stripe even when the planar reflection was filtered.
+  roughnessFactor = mix(roughnessFactor, 0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, dampG_ * 0.9);
+  roughnessFactor = max(${wet ? '0.24' : '0.12'}, roughnessFactor - asphaltPolish_ * ${wet ? '0.08' : '0.14'});`,
       )
       .replace('#include <metalnessmap_fragment>', '#include <metalnessmap_fragment>\n  metalnessFactor *= 1.0 - rustM_ * 0.85;')
       .replace(
@@ -443,7 +446,7 @@ ${
 }`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}7nz-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}8nz-v37`
   return m
 }
 

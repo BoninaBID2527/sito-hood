@@ -24,6 +24,8 @@ const stages=[
  ['static-smoke',['scripts/smoke.mjs','http://localhost:3002/sito-hood/?debug=1&quality=mobile','shots-static-smoke.png'],{EXTRA:'&scale=0.45'}],
  ['static-ROOM',['scripts/room-check.mjs','balanced','960x540'],{PORT:'3002',BASEPATH:'/sito-hood',EXTRA:'&scale=0.6'}],
 ]
+// Inspect the render first so visual defects are corrected before spending time on regressions.
+stages.sort((a, b) => Number(b[0] === 'photographic-final') - Number(a[0] === 'photographic-final'))
 const results=process.env.RESUME === '1' && existsSync(`${out}/results.json`) ? JSON.parse(readFileSync(`${out}/results.json`, 'utf8')) : []
 for(const [name,args,overrides,cwd=root] of stages){
  if (results.some(r => r.name === name && r.exitCode === 0)) { console.log(`SKIP ${name}: previously passed`); continue }
