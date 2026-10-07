@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useWorldFrame } from '@/hooks/useWorldFrame'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { A } from '@/lib/assets'
@@ -57,7 +57,7 @@ export function PlazaArch() {
     return { meshes, doorMeshes, wallMats, mats, doorMats, doorGeos, halo, lamps }
   }, [])
 
-  useFrame(() => {
+  useWorldFrame('alley', () => {
     // the lamps: dusk-dependent but never fully off
     ;(kit.mats.glow as THREE.MeshStandardMaterial).emissiveIntensity = 0.9 + palette.windows * 1.6
     kit.halo.opacity = 0.3 + palette.windows * 0.5

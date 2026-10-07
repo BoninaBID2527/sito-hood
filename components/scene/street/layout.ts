@@ -61,7 +61,7 @@ export interface WinInst {
   /** per-instance brightness (lit windows vary a lot) */
   tone?: number
   /** V3.7: a window on a wall that faces +z (rear blocks); x/y/z is then the wall-face position */
-  face?: 'z'
+  face?: 'z' | 'back'
 }
 
 /** Weighted table: most windows are dead or covered; a few are alive. */

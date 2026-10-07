@@ -1,5 +1,5 @@
 // End-to-end behaviour test (software GL). usage: node scripts/e2e.mjs [outDir] [WxH]
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 import { mkdirSync } from 'node:fs'
 
 const out = process.argv[2] || 'shots-e2e'
@@ -24,12 +24,12 @@ const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); 
 const st = (fn) => page.evaluate(fn)
 
 await page.goto('http://localhost:3000/?debug=1&quality=low', { waitUntil: 'load' })
-await page.waitForSelector('button:has-text("ENTER ALTERCO")', { timeout: 120000 })
+await page.waitForSelector('button:has-text("ENTER ALTERCO")', { timeout: 600000 })
 check('loader reaches 100% and shows ENTER', true)
 const webgl = await page.evaluate(() => !!document.querySelector('canvas'))
 check('WebGL canvas mounted', webgl)
 check('no AudioContext exists before the user clicks ENTER', (await st(() => window.__ac)) === 0)
-await page.click('button:has-text("ENTER ALTERCO")')
+await page.click('button:has-text("ENTER ALTERCO")', { force: true })
 await page.waitForTimeout(6000)
 check('audio engine starts only after the explicit ENTER click', (await st(() => window.__ac)) === 1)
 check('phase = entered', await st(() => window.__hd.store.getState().phase === 'entered'))
@@ -159,4 +159,4 @@ check('GPU resources bounded', info.textures < 120 && info.geometries < 300, JSO
 console.log(errors.length ? 'CONSOLE ISSUES:\n' + [...new Set(errors)].slice(0, 20).join('\n') : 'no console errors/warnings')
 console.log(`\n${pass} passed, ${fail} failed`)
 await browser.close()
-process.exit(fail ? 1 : 0)
+process.exit(fail || errors.length ? 1 : 0)

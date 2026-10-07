@@ -20,6 +20,7 @@ export const PA = {
   END: { x0: -4.0, x1: 4.0, h: 23 },
   dockY: 1.15,
   dockDepth: 2.4,
+  frontZ: -76,
   /** bridge across the passage */
   bridge: { z: -128, y: 8.4, w: 1.9, h: 2.5 },
 } as const
@@ -30,6 +31,11 @@ export function plazaArchWindows(pick: (r: () => number) => WinInst['variant']):
   const out: WinInst[] = []
   const r = rng(7707)
   const tone = () => 0.28 + Math.pow(r(), 1.4) * 1.1
+  // Returns at the alley mouth face INTO the plaza (-z), including the views
+  // looking back out of the installation. They share the instanced sash system.
+  for (const side of [-1, 1] as const) for (const x of [6.4, 8.6, 10.8]) for (const y of [4.7, 8.0, 11.3, 14.6, 17.9, 21.2]) {
+    out.push({ side, face: 'back', x: side * x, y, z: PA.frontZ, variant: pick(r), w: 1.05, h: 1.05, tone: tone() })
+  }
   // ── rear-left (industrial): big steel windows, three floors above the dock level
   for (const x of [-11.2, -8.2, -5.2]) for (const y of [6.2, 9.6, 13.0]) {
     if (r() < 0.12) continue

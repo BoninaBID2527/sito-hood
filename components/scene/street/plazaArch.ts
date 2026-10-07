@@ -3,7 +3,7 @@ import { rng } from '@/lib/math'
 import { GeoBuilder, worldUV } from '@/lib/geo'
 import { wallFaceZ, wallWithOpenings, withWhite, type Hole, type HoleX } from './facadeBuild'
 import { PA } from './plazaLayout'
-import { allWindows } from './layout'
+import { allWindows, PLAZA } from './layout'
 import { roadY } from './groundBuild'
 
 /** matches Facades.tsx (sash depth behind the wall face, unit window height) */
@@ -79,6 +79,20 @@ export function buildPlazaArch(): PlazaParts {
     stone.box(len + 0.1, 0.08, 0.48, xc, y + 0.99, z - 0.12) // coping
   }
   const belt = (x0: number, x1: number, y: number, z: number, d = 0.16) => stone.box(x1 - x0, 0.24, d, (x0 + x1) / 2, y, z + d / 2 - 0.02)
+  // Physical relief for the alley-mouth returns, facing into the plaza.
+  for (const side of [-1, 1] as const) {
+    const inner = side < 0 ? 4.8 : 4.3;
+    const width = PLAZA.hw - inner, cx = side * (inner + width / 2);
+    const height = side < 0 ? 24 : 25;
+    stone.box(width, .38, .20, cx, .19, PA.frontZ - .08);
+    stone.box(width + .1, .14, .44, cx, height + .07, PA.frontZ);
+    for (const y of [3.3, 9.5, 16.1]) stone.box(width, .12, .12, cx, y, PA.frontZ - .05);
+    for (const x of [side * (inner + .3), side * (PLAZA.hw - .3)]) {
+      stone.box(.26, height, .15, x, height / 2, PA.frontZ - .055);
+      steel.cyl(.055, .055, height - .4, x - side * .23, height / 2, PA.frontZ - .20, 8);
+      for (let y = 1.1; y < height; y += 2.5) steel.box(.18, .04, .10, x - side * .23, y, PA.frontZ - .15);
+    }
+  }
   // RL
   cornice(brickRL, PA.RL.x0, PA.RL.x1, PA.RL.h, Z)
   for (const y of [4.9, 8.0, 11.4, 14.8]) belt(PA.RL.x0, PA.RL.x1, y, Z, y === 4.9 ? 0.2 : 0.12)

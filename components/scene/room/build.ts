@@ -10,8 +10,8 @@ import { PLACE, type Ctx } from './furniture'
 
 /**
  * Static geometry of THE HOODDINO ROOM (room-local frame, see lib/room.ts), merged per material: a handful of draw calls for hundreds of
- * constructed parts. Contact / corner occlusion and the footprint of the practical lights are baked into vertex colours (walls, ceiling,
- * furniture) and one small multiply texture (floor) — there are no shadow maps.
+ * constructed parts. Contact / corner occlusion is retained in vertex colours and a small floor multiply texture.
+ * Installed practical-light footprints use a separate irradiance attribute — there are no shadow maps.
  */
 
 export interface RoomGeo {
@@ -25,7 +25,7 @@ export interface RoomGeo {
   foam: THREE.BufferGeometry
   glow: THREE.BufferGeometry
   rug: THREE.BufferGeometry | null
-  /** floor multiply-bake canvas (contact shadows under furniture, corner occlusion, the light pools): neutral = 0.5 */
+  /** floor multiply-bake canvas (contact shadows under furniture and corner occlusion): neutral = 0.5 */
   floorBake: HTMLCanvasElement
 }
 
@@ -51,7 +51,7 @@ function occluders(level: number): Occluder[] {
 function bakes(level: number): Bake[] {
   const b: Bake[] = [
     // the LED strip's wash on the ceiling and back wall
-    { x: 0, y: L.h - 0.12, z: L.zb + 0.1, color: new THREE.Color('#3a6bff'), i: 2.4, r: 0.9 },
+    { x: 0, y: L.h - 0.12, z: L.zb + 0.1, color: new THREE.Color('#a2b5d1'), i: 0.55, r: 0.9 },
     // picture light over the ALTERCO frame (warm wedge on the wall)
     { x: L.x0 + 0.2, y: 1.93, z: PLACE.alterco.z, color: new THREE.Color('#ffa24d'), i: 2.6, r: 0.55, dir: [-0.5, -0.86, 0], cone: 0.55, soft: 0.4 },
     // two track spots on the wall behind the monitors
@@ -65,7 +65,7 @@ function bakes(level: number): Bake[] {
   return level >= 1 ? b : b.slice(1, 2)
 }
 
-/** floor multiply map: 0.5 = neutral (shader multiplies by 2). Soft footprints of everything standing on / over the floor, wall-edge occlusion, light pools. */
+/** floor multiply map: 0.5 = neutral (shader multiplies by 2). Soft footprints of everything standing on / over the floor and wall-edge occlusion. */
 function floorBake(size: number, list: Occluder[]) {
   const { canvas, ctx } = makeCanvas(size, size)
   const W = L.x1 - L.x0, D = L.zf - L.zb
@@ -73,15 +73,6 @@ function floorBake(size: number, list: Occluder[]) {
   const mx = size / W // pixels per metre (x); z is stretched slightly, fine for soft blobs
   ctx.fillStyle = 'rgb(128,128,128)'
   ctx.fillRect(0, 0, size, size)
-  // warm pool from the doorway + the dusk through the aperture (additive)
-  ctx.globalCompositeOperation = 'lighter'
-  let g = ctx.createRadialGradient(px(0), py(L.zf), 0, px(0), py(L.zf), mx * 2.7)
-  g.addColorStop(0, 'rgba(40,24,10,0.9)'); g.addColorStop(1, 'rgba(0,0,0,0)')
-  ctx.fillStyle = g; ctx.fillRect(0, 0, size, size)
-  // the red under-desk strip washing the boards in front of the desk
-  g = ctx.createLinearGradient(0, py(-7.7), 0, py(-6.7))
-  g.addColorStop(0, 'rgba(78,12,8,0.9)'); g.addColorStop(1, 'rgba(0,0,0,0)')
-  ctx.fillStyle = g; ctx.fillRect(px(-1.1), py(-7.7), px(1.5) - px(-1.1), py(-6.7) - py(-7.7))
   ctx.globalCompositeOperation = 'source-over'
   // wall-edge occlusion
   const e = mx * 0.45
@@ -132,6 +123,7 @@ export function buildRoomGeometry(level: number): RoomGeo {
   F.desk(c)
   F.display(c, PLACE.hero.x, PLACE.hero.y, PLACE.hero.z, PLACE.hero.w, PLACE.hero.h, { foot: 0.26, neck: 0.2 })
   F.display(c, PLACE.daw.x, PLACE.daw.y, PLACE.daw.z, PLACE.daw.w, PLACE.daw.h, { foot: 0.22, neck: 0.18 })
+  F.studioHardware(c)
   F.keyboard(c)
   F.deskObjects(c)
   F.speaker(c, PLACE.spkL.x, PLACE.spkL.z, PLACE.spkL.ry)
@@ -196,6 +188,9 @@ export function buildRoomGeometry(level: number): RoomGeo {
     glow: sealed(glow),
     rug: rugG,
     floorBake: floorBake(level >= 2 ? 512 : 256, occl),
+  }
+  for (const g of Object.values(geo)) {
+    if (g instanceof THREE.BufferGeometry && !g.hasAttribute('roomBake')) g.setAttribute('roomBake', new THREE.Float32BufferAttribute(new Float32Array(g.attributes.position.count * 3), 3))
   }
   void DOOR
   return geo

@@ -13,6 +13,7 @@ import { vid, videoTexture, videoMode } from '@/lib/roomVideo'
 import { focusVideo, openLink, roomScene } from '@/lib/roomActions'
 import { doorLeafTexture } from '@/lib/roomDoor'
 import { makeCanvas, toTexture } from '@/lib/paint'
+import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { buildRoomGeometry, type RoomGeo } from './build'
 import { PLACE, RED_LAMP } from './furniture'
@@ -24,6 +25,9 @@ import type { RoomLinkId } from '@/data/room'
  * Draw-call budget: one merged mesh per material (walls, floor, matte, satin, metal, wood, fabric, foam, glow, rug), the displays, the
  * pictures and one decal atlas. Contact / occlusion is baked (see build.ts) — no shadow maps.
  */
+
+// Loaded with the ROOM chunk; shared LTC textures are renderer-wide, never rebuilt per visit.
+RectAreaLightUniformsLib.init()
 
 const PRINT = { portrait: { w: 0.96, h: 1.16 }, live: { w: 0.946, h: 1.14 }, art: 0.62 }
 
@@ -98,10 +102,12 @@ precision highp float;
 varying vec2 vUv; varying vec3 vN; varying vec3 vV;
 uniform sampler2D uMap;
 uniform vec2 uFit;
-uniform float uBright, uGlass, uDim;
+uniform float uBright, uGlass, uDim, uVideo;
 void main(){
   vec2 uv = (vUv - .5) * uFit + .5;
   vec3 col = texture2D(uMap, uv).rgb;
+  // VideoTexture uses RGBA8; supplied still images are already decoded by their sRGB texture format.
+  if (uVideo > .5) col = mix(col / 12.92, pow((col + .055) / 1.055, vec3(2.4)), step(vec3(.04045), col));
   if (uv.x < 0. || uv.x > 1. || uv.y < 0. || uv.y > 1.) col = vec3(.010, .011, .013); // the bars: a lit-but-black LCD
   col *= uBright;
   vec3 N = normalize(vN), V = normalize(vV);
@@ -119,10 +125,10 @@ void main(){
 function makeDisplay(map: THREE.Texture, screenAspect: number, contentAspect: number, bright: number) {
   const r = contentAspect / screenAspect
   const fit = r >= 1 ? new THREE.Vector2(1, r) : new THREE.Vector2(1 / r, 1)
-  return new THREE.ShaderMaterial({ vertexShader: dispVert, fragmentShader: dispFrag, uniforms: { uMap: { value: map }, uFit: { value: fit }, uBright: { value: bright }, uGlass: { value: 1 }, uDim: { value: 1 } }, toneMapped: false })
+  return new THREE.ShaderMaterial({ vertexShader: dispVert, fragmentShader: dispFrag, uniforms: { uMap: { value: map }, uVideo: { value: 0 }, uFit: { value: fit }, uBright: { value: bright }, uGlass: { value: 1 }, uDim: { value: 1 } }, toneMapped: false })
 }
 
-/** floor material: boards + the baked multiply map (contact shadows, corner occlusion, light pools) — sampled with the floor's own position, no second UV set */
+/** floor material: boards + the baked multiply map (contact shadows and corner occlusion) — sampled with the floor's own position, no second UV set */
 function bakedMaterial(bake: THREE.Texture, params: THREE.MeshStandardMaterialParameters, key: string) {
   const m = new THREE.MeshStandardMaterial(params)
   m.onBeforeCompile = (sh) => {
@@ -140,12 +146,45 @@ function bakedMaterial(bake: THREE.Texture, params: THREE.MeshStandardMaterialPa
   return m
 }
 
+
+/** Low-frequency room irradiance from installed sources, evaluated separately from albedo.
+ * The monitor lobe is directed into the room; warm desk/door bounce and neutral ceiling
+ * fill remain local. Existing contact bakes retain occlusion. No realtime GI or extra pass. */
+function roomIrradiance(m: THREE.MeshStandardMaterial, strength = 1) {
+  const prior = m.onBeforeCompile.bind(m)
+  m.onBeforeCompile = (sh, renderer) => {
+    prior(sh, renderer)
+    sh.uniforms.uRoomBounce = { value: strength }
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 roomBake; varying vec3 vRoomPosition; varying vec3 vRoomBake;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRoomPosition = position; vRoomBake = roomBake;')
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vRoomPosition; varying vec3 vRoomBake; uniform float uRoomBounce;')
+      .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor = clamp(roughnessFactor + .045*sin(vRoomPosition.x*2.1 + vRoomPosition.z*.8), .18, 1.);')
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+        vec3 rp = vRoomPosition;
+        vec3 wn = inverseTransformDirection(normal, viewMatrix);
+        vec3 rn = vec3(-wn.z, wn.y, wn.x);
+        float deskPool = exp(-dot((rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7), (rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7)));
+        float screenPool = exp(-dot((rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7), (rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7)));
+        float doorwayPool = exp(-dot((rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5), (rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5)));
+        vec3 irradianceRoom = vec3(.11,.12,.14)*(.4+.6*max(rn.y,0.));
+        irradianceRoom += vec3(.33,.19,.095)*deskPool;
+        irradianceRoom += vec3(.11,.15,.21)*screenPool*(.35+.65*max(-rn.z,0.));
+        irradianceRoom += vec3(.23,.16,.105)*doorwayPool;
+        reflectedLight.indirectDiffuse += (irradianceRoom + .6*vRoomBake) * uRoomBounce * material.diffuseColor * (1.0 / 3.14159265);
+      `)
+  }
+  const oldKey = m.customProgramCacheKey.bind(m)
+  const key = oldKey()
+  m.customProgramCacheKey = () => key + '/room-irradiance-v37'
+  return m
+}
+
 const HERO_ASPECT = MONITOR.w / MONITOR.h
 const VIDEO_ASPECT = 512 / 854 // the supplied clip and its poster
 
 function makeKit(level: number, geo: RoomGeo) {
   const probe = level >= 1 ? RX.probe : null
-  const std = (o: THREE.MeshStandardMaterialParameters) => new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0, ...o })
+  const std = (o: THREE.MeshStandardMaterialParameters) => roomIrradiance(new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0, ...o }))
   const apertureTex = (() => {
     const { canvas, ctx } = makeCanvas(4, 128)
     const g = ctx.createLinearGradient(0, 0, 0, 128)
@@ -160,13 +199,13 @@ function makeKit(level: number, geo: RoomGeo) {
   bake.generateMipmaps = false
   bake.minFilter = bake.magFilter = THREE.LinearFilter
   const mats = {
-    walls: std({ map: RX.wall, vertexColors: true, roughness: 0.94 }),
-    floor: bakedMaterial(bake, { map: RX.floor, roughness: 0.55, metalness: 0, envMap: probe, envMapIntensity: 0.25 }, 'roomFloorBake'),
+    walls: std({ map: RX.wall, bumpMap: RX.wall, bumpScale: 0.00065, vertexColors: true, roughness: 0.94 }),
+    floor: roomIrradiance(bakedMaterial(bake, { map: RX.floor, bumpMap: RX.floor, bumpScale: 0.0012, roughness: 0.72, metalness: 0, envMap: probe, envMapIntensity: 0.25 }, 'roomFloorBake')),
     matte: std({ vertexColors: true, roughness: 0.88 }),
     satin: std({ vertexColors: true, roughness: 0.52, envMap: probe, envMapIntensity: 0.22 }),
     metal: std({ vertexColors: true, roughness: 0.36, metalness: 0.85, envMap: probe, envMapIntensity: 0.75 }),
-    wood: std({ map: RX.wood, vertexColors: true, roughness: 0.55, envMap: probe, envMapIntensity: 0.25 }),
-    fabric: std({ map: RX.fabric, vertexColors: true, roughness: 1 }),
+    wood: std({ map: RX.wood, bumpMap: RX.wood, bumpScale: 0.0008, vertexColors: true, roughness: 0.64, envMap: probe, envMapIntensity: 0.25 }),
+    fabric: std({ map: RX.fabric, bumpMap: RX.fabric, bumpScale: 0.0004, vertexColors: true, roughness: 1 }),
     foam: std({ map: RX.grain, vertexColors: true, roughness: 1 }),
     glow: new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false }),
     rug: bakedMaterial(bake, { map: RX.rug, roughness: 1 }, 'roomRugBake'),
@@ -307,6 +346,7 @@ function Workstation({ kit, level }: { kit: RoomKit; level: number }) {
       s.live = wantLive
       const t = wantLive ? videoTexture() : null
       hero.uniforms.uMap.value = t ?? RX.posterPlay ?? RX.poster
+      hero.uniforms.uVideo.value = t?.isVideoTexture ? 1 : 0
     }
     // idle: a dim, low-cost poster; the focused monitor lights the room instead
     const k = s.live ? 1 : 0.62 + 0.2 * hover.video
@@ -446,29 +486,29 @@ function Lighting({ level, kit }: { level: number; kit: RoomKit }) {
   const lamp = useRef<THREE.PointLight>(null)
   const blue = useRef<THREE.PointLight>(null)
   const red = useRef<THREE.PointLight>(null)
-  const wash = useRef<THREE.PointLight>(null)
+  const wash = useRef<THREE.RectAreaLight>(null)
   const door = useRef<THREE.PointLight>(null)
-  const scr = useRef<THREE.PointLight>(null)
+  const scr = useRef<THREE.RectAreaLight>(null)
   useWorldFrame('room', () => {
     const d = 1 - 0.55 * room.dim
     if (lamp.current) lamp.current.intensity = 2.4 * (1 - 0.35 * room.dim)
-    if (blue.current) blue.current.intensity = 3.0 * d
-    if (red.current) red.current.intensity = 2.1 * d
-    if (wash.current) wash.current.intensity = 9 * d
+    if (blue.current) blue.current.intensity = 0.65 * d
+    if (red.current) red.current.intensity = 0.7 * d
+    if (wash.current) wash.current.intensity = 55 * d
     if (door.current) door.current.intensity = 3.2 * d
     // the video (lit) lights the desk, the keyboard, the wall around it
-    if (scr.current) scr.current.intensity = (0.4 + 2.0 * room.push) * (vid.live ? 1.4 : 1)
+    if (scr.current) scr.current.intensity = (1.2 + 1.8 * room.push) * (vid.live ? 1.15 : 1)
     const walls = kit.mats.walls as THREE.MeshStandardMaterial
     walls.color.setScalar(1 - 0.25 * room.dim)
   }, 0)
   return (
     <>
-      {level >= 1 && <pointLight ref={wash} position={[0.2, 2.25, -4.4]} color="#cfe0ff" intensity={9} distance={9} decay={2} />}
+      {level >= 1 && <rectAreaLight ref={wash} position={[0.2, L.h - 0.077, -3.6]} rotation={[-Math.PI / 2, 0, 0]} color="#d8dfe5" intensity={55} width={0.075} height={1.14} />}
       <pointLight ref={door} position={[0, 2.0, -1.7]} color="#ffb27c" intensity={3.2} distance={6.5} decay={2} />
       <pointLight ref={lamp} position={[PLACE.lamp.x, PLACE.lamp.y - 0.06, PLACE.lamp.z]} color="#ffb070" intensity={2.4} distance={4.2} decay={2} />
-      {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#3f6dff" intensity={3} distance={6} decay={2} />}
-      {level >= 2 && <pointLight ref={red} position={[RED_LAMP.x, RED_LAMP.y - 0.05, RED_LAMP.z]} color="#ff3a2a" intensity={2.1} distance={4.5} decay={2} />}
-      {level >= 2 && <pointLight ref={scr} position={[PLACE.hero.x, PLACE.hero.y - 0.1, PLACE.hero.z + 0.65]} color="#bcd0ff" intensity={0.4} distance={2.6} decay={2} />}
+      {level >= 1 && <pointLight ref={blue} position={[-1.8, 2.5, -7.6]} color="#a2b5d1" intensity={0.65} distance={6} decay={2} />}
+      {level >= 2 && <pointLight ref={red} position={[RED_LAMP.x, RED_LAMP.y - 0.05, RED_LAMP.z]} color="#ffc09a" intensity={0.7} distance={4.5} decay={2} />}
+      {level >= 2 && <rectAreaLight ref={scr} position={[PLACE.hero.x, PLACE.hero.y, PLACE.hero.z + 0.018]} rotation={[0, Math.PI, 0]} color="#bcd0ff" intensity={1.2} width={PLACE.hero.w} height={PLACE.hero.h} />}
     </>
   )
 }

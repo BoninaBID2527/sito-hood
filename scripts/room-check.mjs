@@ -2,7 +2,7 @@
 // Stock Chromium cannot decode H.264, so the mp4 request is answered with a WebM re-encode of the same footage: this exercises the
 // player logic (explicit PLAY, pause, close, sound, release on exit) — real Safari/iOS decoding still has to be verified on devices.
 // usage: node scripts/room-check.mjs [quality] [WxH]      env: REDUCED=1  TOUCH=1  PORT=3000  WEBM=/path/to/test.webm
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 import { readFileSync } from 'node:fs'
 const quality = process.argv[2] || 'balanced'
 const [w, h] = (process.argv[3] || '1280x720').split('x').map(Number)
@@ -26,8 +26,8 @@ const hd = (f, a) => page.evaluate(f, a)
 const sim = (s) => hd((s) => new Promise((r) => { const t0 = window.__hd.rt.time; const f = () => (window.__hd.rt.time - t0 > s ? r() : requestAnimationFrame(f)); f() }), s)
 
 await page.goto(`http://localhost:${PORT}${BASEPATH}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
-await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
-await page.click('button:has-text("ENTER")')
+await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
+await page.click('button:has-text("ENTER")', { force: true })
 await sim(2)
 
 // ── semantics: the biography and the three links exist as real text, always

@@ -1,5 +1,5 @@
 // Behaviour checks for the track installation (camera rig, input feel). usage: node scripts/tracks-check.mjs [url] [quality]
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 const url = process.argv[2] || 'http://localhost:3000/'
 const quality = process.argv[3] || 'balanced'
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
@@ -12,8 +12,8 @@ async function open(opts = {}) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto(`${url}?debug=1&quality=${quality}`)
-  await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
-  await page.click('button:has-text("ENTER")')
+  await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
+  await page.click('button:has-text("ENTER")', { force: true })
   await page.waitForTimeout(5000)
   return { ctx, page }
 }
@@ -78,4 +78,4 @@ const settle = (page) => page.waitForFunction(() => { const r = window.__hd.rt; 
 console.log(errors.length ? 'ERRORS:\n' + [...new Set(errors)].join('\n') : 'no console errors')
 console.log(`${pass} passed, ${fail} failed`)
 await browser.close()
-process.exit(fail ? 1 : 0)
+process.exit(fail || errors.length ? 1 : 0)

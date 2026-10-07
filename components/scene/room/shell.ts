@@ -6,7 +6,7 @@ import { type Bake, type Occluder, bakeLights, fbm3, occlusionAt, ticks } from '
 
 /**
  * The room's envelope: subdivided wall / ceiling planes whose vertex colours carry the paint, corner + furniture occlusion, grime and the
- * baked footprint of the practical lights, plus the trim that makes the junctions read as built (baseboard, dado rail, crown, door casing).
+ * separate irradiance attribute for installed practical lights, plus the trim that makes the junctions read as built (baseboard, dado rail, crown, door casing).
  */
 
 export const PAINT = { upper: '#686d68', lower: '#323a3c', ceiling: '#202226' }
@@ -21,7 +21,7 @@ interface Env { occ: Occluder[]; bakes: Bake[] }
 function grid(face: Face, fixed: number, a0: number, a1: number, b0: number, b1: number, env: Env, paint: (x: number, y: number, z: number, nx: number, ny: number, nz: number) => [number, number, number], tile: number, extraA: number[] = [], extraB: number[] = [], step = 0.4) {
   const A = ticks(a0, a1, step, undefined, extraA), B = ticks(b0, b1, step, undefined, extraB)
   const nA = A.length, nB = B.length
-  const pos: number[] = [], nor: number[] = [], uv: number[] = [], col: number[] = [], idx: number[] = []
+  const pos: number[] = [], nor: number[] = [], uv: number[] = [], col: number[] = [], bounce: number[] = [], idx: number[] = []
   const N: [number, number, number] = face === '+x' ? [1, 0, 0] : face === '-x' ? [-1, 0, 0] : face === '+z' ? [0, 0, 1] : face === '-z' ? [0, 0, -1] : face === '+y' ? [0, 1, 0] : [0, -1, 0]
   for (let j = 0; j < nB; j++) for (let i = 0; i < nA; i++) {
     const a = A[i], b = B[j]
@@ -34,7 +34,8 @@ function grid(face: Face, fixed: number, a0: number, a1: number, b0: number, b1:
     const o = occlusionAt(x, y, z, N[0], N[1], N[2], env.occ)
     const add: [number, number, number] = [0, 0, 0]
     bakeLights(x, y, z, N[0], N[1], N[2], env.bakes, add)
-    col.push(c[0] * o * (1 + add[0]), c[1] * o * (1 + add[1]), c[2] * o * (1 + add[2]))
+    col.push(c[0] * o, c[1] * o, c[2] * o)
+    bounce.push(add[0] * o, add[1] * o, add[2] * o)
   }
   for (let j = 0; j < nB - 1; j++) for (let i = 0; i < nA - 1; i++) {
     const p = j * nA + i
@@ -45,6 +46,7 @@ function grid(face: Face, fixed: number, a0: number, a1: number, b0: number, b1:
   g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3))
   g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2))
   g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3))
+  g.setAttribute('roomBake', new THREE.Float32BufferAttribute(bounce, 3))
   g.setIndex(idx)
   // winding: make the first triangle face along N
   const a = new THREE.Vector3().fromArray(pos, idx[0] * 3), b = new THREE.Vector3().fromArray(pos, idx[1] * 3), c = new THREE.Vector3().fromArray(pos, idx[2] * 3)

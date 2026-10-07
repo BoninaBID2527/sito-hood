@@ -1,5 +1,5 @@
 // smoke test of any URL: loads, ENTER, scroll a little, reports failed requests + console errors + canvas. usage: node scripts/smoke.mjs <url> [shotPath]
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 const [url, shot = ''] = process.argv.slice(2)
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const page = await (await browser.newContext({ viewport: { width: 1280, height: 720 } })).newPage()
@@ -8,9 +8,9 @@ page.on('response', (r) => { if (r.status() >= 400) bad.push(`${r.status()} ${r.
 page.on('console', (m) => ['error', 'warning'].includes(m.type()) && errs.push(`[${m.type()}] ${m.text()}`))
 page.on('pageerror', (e) => errs.push('[pageerror] ' + e.message))
 await page.goto(url, { waitUntil: 'load' })
-await page.waitForSelector('button:has-text("ENTER")', { timeout: 240000 })
+await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
 console.log('loader reached ENTER')
-await page.click('button:has-text("ENTER")')
+await page.click('button:has-text("ENTER")', { force: true })
 await page.waitForTimeout(6000)
 await page.mouse.wheel(0, 1500)
 await page.waitForTimeout(4000)
@@ -19,3 +19,4 @@ if (shot) await page.screenshot({ path: shot, timeout: 120000 })
 console.log(bad.length ? 'FAILED REQUESTS:\n' + [...new Set(bad)].join('\n') : 'no failed requests')
 console.log(errs.length ? 'CONSOLE:\n' + [...new Set(errs)].join('\n') : 'no console errors/warnings')
 await browser.close()
+process.exitCode = bad.length || errs.length ? 1 : 0

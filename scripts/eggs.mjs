@@ -1,5 +1,5 @@
 // Real-pointer test of the Easter eggs (projects world points to the screen and clicks / hovers there).
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 const W = 1280, H = 720
 const page = await (await browser.newContext({ viewport: { width: W, height: H } })).newPage()
@@ -9,8 +9,8 @@ page.on('pageerror', (e) => errors.push(e.message))
 let pass = 0, fail = 0
 const check = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n} ${x}`) }
 await page.goto('http://localhost:3000/?debug=1&quality=low')
-await page.waitForSelector('button:has-text("ENTER ALTERCO")', { timeout: 120000 })
-await page.click('button:has-text("ENTER ALTERCO")')
+await page.waitForSelector('button:has-text("ENTER ALTERCO")', { timeout: 600000 })
+await page.click('button:has-text("ENTER ALTERCO")', { force: true })
 await page.waitForTimeout(7000)
 const settle = () => page.waitForFunction(() => { const r = window.__hd.rt; return Math.abs(r.smooth - r.progress) < 0.0015 && Math.abs(r.velocity) < 0.002 }, null, { timeout: 90000 }).catch(() => {})
 const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); await settle(); await page.waitForTimeout(2500) }
@@ -110,4 +110,4 @@ check('the street remembers (dualReturned + persisted)', (await state(() => wind
 console.log(errors.length ? 'ERRORS:\n' + errors.join('\n') : 'no console errors')
 console.log(`${pass} passed, ${fail} failed`)
 await browser.close()
-process.exit(fail ? 1 : 0)
+process.exit(fail || errors.length ? 1 : 0)

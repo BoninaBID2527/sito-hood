@@ -54,7 +54,7 @@ export async function toRoom(page, h) {
   const s = await st(page)
   if (s.mode === 'room') return
   await toAlley(page, h)
-  await page.evaluate((p) => window.__hd.jump(p), 0.327); await h.settle()
+  await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, 0.327); await h.settle()
   await h.until(() => window.__hd.store.getState().roomNear && window.__hd.store.getState().roomLoad >= 1)
   await page.evaluate(() => window.__hd.act('enterRoom'))
   await h.until(() => window.__hd.store.getState().mode === 'room', null, 300000)
@@ -73,7 +73,7 @@ export async function runCheckpoint(page, cp, out, h) {
   if (cp.room) {
     if (cp.room === 'near') {
       await toAlley(page, h)
-      await page.evaluate((p) => window.__hd.jump(p), 0.327); await h.settle()
+      await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, 0.327); await h.settle()
       await h.until(() => window.__hd.store.getState().roomNear && window.__hd.store.getState().roomLoad >= 1)
       return shot(1500)
     }
@@ -83,7 +83,13 @@ export async function runCheckpoint(page, cp, out, h) {
     if (cp.room === 'video') {
       await page.evaluate(() => window.__hd.act('goStation', 1)); await h.until(() => Math.abs(window.__hd.room.u - 1) < 0.04)
       await page.evaluate(() => window.__hd.act('focusVideo')); await h.until(() => window.__hd.room.push > 0.97)
-      return shot(2500)
+      await page.evaluate(() => document.querySelector('[aria-label="Play video"]')?.click())
+      await h.until(() => window.__hd.vid.el?.readyState >= 3 && window.__hd.vid.live && !window.__hd.vid.el.paused)
+      await page.evaluate(() => { window.__hd.vid.el.currentTime = 4 })
+      await h.until(() => window.__hd.vid.el.currentTime >= 4 && !window.__hd.vid.el.seeking)
+      await shot(1500)
+      await page.evaluate(() => window.__hd.act('closeFocus'))
+      return
     }
   }
   if (cp.dual) {

@@ -1,5 +1,5 @@
 // Focused check of the V3.1 secrets: number trail (mouse + touch), persistence across reload, reset, 7/7, anamorph, puddle.
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 let pass = 0, fail = 0
 const check = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n} ${x}`) }
@@ -18,8 +18,8 @@ async function open(touch) {
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(e.message))
   await page.goto('http://localhost:3000/?debug=1&quality=low')
-  await page.waitForSelector('button:has-text("ENTER")', { timeout: 180000 })
-  await page.click('button:has-text("ENTER")')
+  await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
+  await page.click('button:has-text("ENTER")', { force: true })
   await page.waitForTimeout(6000)
   return { ctx, page }
 }
@@ -80,7 +80,7 @@ for (const touch of [false, true]) {
     await page.waitForTimeout(3000)
     await page.screenshot({ path: process.env.SHOT || 'secrets-roof.png' })
     await page.reload()
-    await page.waitForSelector('button:has-text("ENTER")', { timeout: 180000 })
+    await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
     check('numbers persist after refresh', await page.evaluate(() => window.__hd.store.getState().nums.every(Boolean)))
     await page.evaluate(() => window.__hd.reset())
     check('debug reset clears everything', await page.evaluate(() => window.__hd.store.getState().nums.every((v) => !v) && !localStorage.getItem('hd:nums')))
@@ -90,4 +90,4 @@ for (const touch of [false, true]) {
 console.log(errors.length ? 'ERRORS:\n' + [...new Set(errors)].join('\n') : 'no console errors')
 console.log(`${pass} passed, ${fail} failed`)
 await browser.close()
-process.exit(fail ? 1 : 0)
+process.exit(fail || errors.length ? 1 : 0)

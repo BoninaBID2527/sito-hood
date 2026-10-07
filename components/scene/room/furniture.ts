@@ -76,7 +76,7 @@ export function desk(c: Ctx) {
   c.glow.box(0.008, 0.008, 0.002, 0.16, T - th - 0.061, zb + 0.191, '#ff6a40', { i: 1.4, ao: 0 })
   // the red under-desk glow: an aluminium channel screwed to the underside, the LED recessed in it
   c.metal.ab(x0 + 0.04, x1 - 0.04, T - th - 0.012, T - th, zf - 0.075, zf - 0.052, '#6b6f76', { ao: 0 })
-  c.glow.ab(x0 + 0.05, x1 - 0.05, T - th - 0.016, T - th - 0.012, zf - 0.069, zf - 0.058, '#ff3524', { i: 1.9, ao: 0 })
+  c.glow.ab(x0 + 0.05, x1 - 0.05, T - th - 0.016, T - th - 0.012, zf - 0.069, zf - 0.058, '#cf6550', { i: 0.8, ao: 0 })
 }
 
 /* ───────────────────────── a display: housing, bezel, stand ───────────────────────── */
@@ -465,14 +465,35 @@ export function ceiling(c: Ctx) {
   }
   // blue LED strip in an aluminium channel at the top of the back wall (washes the ceiling)
   c.metal.ab(x0 + 0.15, x1 - 0.15, h - 0.075, h - 0.045, zb, zb + 0.032, '#4a4d53', { ao: 0 })
-  c.glow.ab(x0 + 0.17, x1 - 0.17, h - 0.068, h - 0.057, zb + 0.012, zb + 0.032, '#3a6bff', { i: 1.6, ao: 0 })
+  c.glow.ab(x0 + 0.17, x1 - 0.17, h - 0.068, h - 0.057, zb + 0.012, zb + 0.032, '#a2b5d1', { i: 0.65, ao: 0 })
   // the red work lamp: a caged bulb hung on its cord from the ceiling, by the bio wall
   const rl = { x: 2.3, y: 2.35, z: -2.9 }
   c.matte.rod([rl.x, h, rl.z], [rl.x, rl.y + 0.1, rl.z], 0.004, '#0b0b0c', { n: 5, ao: 0 })
   c.metal.cyl(0.03, 0.03, 0.04, rl.x, rl.y + 0.085, rl.z, '#2a2c30', { n: 10, ao: 0 })
-  c.glow.geo(new THREE.SphereGeometry(0.04, 12, 10), '#ff3a2a', rl.x, rl.y, rl.z, { i: 1.6, ao: 0 })
+  c.glow.geo(new THREE.SphereGeometry(0.04, 12, 10), '#ffc09a', rl.x, rl.y, rl.z, { i: 1.1, ao: 0 })
   for (const k of [0, 1, 2]) c.metal.geo(new THREE.TorusGeometry(0.056, 0.0016, 4, 18), '#6a6d73', rl.x, rl.y + 0.014 - k * 0.032, rl.z, { rx: Math.PI / 2, ao: 0 })
   for (let k = 0; k < 6; k++) { const a = (k / 6) * Math.PI * 2; c.metal.rod([rl.x + Math.cos(a) * 0.056, rl.y + 0.045, rl.z + Math.sin(a) * 0.056], [rl.x + Math.cos(a) * 0.03, rl.y - 0.07, rl.z + Math.sin(a) * 0.03], 0.0016, '#6a6d73', { n: 4, ao: 0 }) }
 }
 
 export const RED_LAMP = { x: 2.3, y: 2.35, z: -2.9 }
+
+
+/** Connected existing interface, displays, and suspended broadband absorbers.
+ * All parts join the existing material batches; dimensions are in metres. */
+export function studioHardware(c: Ctx) {
+  const T = PLACE.deskTop;
+  if (c.level >= 1) {
+    for (const z of [-6.1,-4.9]) {
+      c.wood.box(1.5,.09,.85,.2,2.56,z,'#4b4134',{r:.008,ao:0});
+      c.fabric.box(1.48,.085,.83,.2,2.55,z,'#706f65',{r:.016,rs:1,ao:0,tile:.35});
+      for (const x of [-.43,.83]) for (const dz of [-.30,.30]) {
+        c.metal.rod([x,2.61,z+dz],[x,L.h-.025,z+dz],.0025,'#878988',{n:5,ao:0});
+        c.metal.box(.025,.008,.025,x,L.h-.02,z+dz,'#6f7478',{ao:0});
+      }
+    }
+    for (const display of [PLACE.hero,PLACE.daw]) {
+      c.matte.tube([new THREE.Vector3(display.x,display.y-.08,display.z-.054),new THREE.Vector3(display.x+.04,.86,display.z-.10),new THREE.Vector3(display.x+.06,.70,-8.49)],.0035,'#161719',{ao:0});
+    }
+    c.matte.tube([new THREE.Vector3(-.90,T+.035,-7.95),new THREE.Vector3(-.84,T+.006,-7.90),new THREE.Vector3(-.79,T+.005,-8.42),new THREE.Vector3(-.70,.68,-8.49)],.003,'#191a1b',{ao:0});
+  }
+}

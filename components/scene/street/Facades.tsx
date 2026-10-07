@@ -11,7 +11,7 @@ import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
 import { streetMat, streetU } from './materials'
 import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, streetLevelItems, type BrickKind } from './layout'
-import { wallWithOpenings, withWhite, type Hole } from './facadeBuild'
+import { wallWithOpenings, wallFaceZ, withWhite, type Hole } from './facadeBuild'
 import { FIRE_ESCAPES } from './FireEscapes'
 import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
 
@@ -93,10 +93,15 @@ export function Walls() {
     for (const side of [-1, 1] as const) {
       const last = SEGS.filter((s) => s.side === side).sort((a, b) => a.z1 - b.z1)[0]
       push(wallWithOpenings({ side, x: side * PLAZA.hw, zNear: PLAZA.z0, zFar: PLAZA.z1, h: 20, holes: holesFor(side, PLAZA.z0, PLAZA.z1) }), mats[side === -1 ? 'dark' : 'weathered'])
-      const dx = PLAZA.hw - last.hw
-      const g2 = new THREE.PlaneGeometry(dx, last.h)
-      tileUV(g2, dx, last.h, 2.4)
-      push(g2, tintMat(last.kind, last.tint), [side * (last.hw + dx / 2), last.h / 2, last.z1])
+      const xa = side < 0 ? -PLAZA.hw : last.hw, xb = side < 0 ? -last.hw : PLAZA.hw
+      const holes = allWindows().filter((d) => d.face === 'back' && d.side === side).map((d) => ({
+        xa: -d.x - d.w / 2, xb: -d.x + d.w / 2,
+        y0: d.y - WIN_H * d.h / 2, y1: d.y + WIN_H * d.h / 2, depth: WIN_DEPTH,
+      }))
+      const g2 = wallFaceZ({ x0: -xb, x1: -xa, z: 0, h: last.h, holes })
+      g2.rotateY(Math.PI)
+      g2.translate(0, 0, last.z1)
+      push(g2, tintMat(last.kind, last.tint))
     }
     // back of the alley (behind the camera start) so pointer parallax never reveals the void
     const back = new THREE.PlaneGeometry(8, 24)
@@ -335,8 +340,9 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
       list.forEach((d, i) => {
         // the sash sits at the back of the shaft (WIN_DEPTH behind the wall face)
         if (d.face === 'z') p.set(d.x, d.y, d.z - WIN_DEPTH)
+        else if (d.face === 'back') p.set(d.x, d.y, d.z + WIN_DEPTH)
         else p.set(d.x + d.side * WIN_DEPTH, d.y, d.z)
-        q.setFromEuler(eu.set(0, d.face === 'z' ? 0 : rotFor(d.side), 0))
+        q.setFromEuler(eu.set(0, d.face === 'z' ? 0 : d.face === 'back' ? Math.PI : rotFor(d.side), 0))
         s.set(d.w, d.h, 1)
         m4.compose(p, q, s)
         im.setMatrixAt(i, m4)
@@ -454,4 +460,3 @@ export function StreetLevel() {
     </group>
   )
 }
-
