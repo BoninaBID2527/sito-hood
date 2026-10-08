@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "3882a72535e7824e83d2dc99ef48461ea92584de",
+  "v36": {
+    "javascriptFiles": 23,
+    "bytes": 2257173,
+    "gzipBytes": 674125
+  },
+  "v37": {
+    "javascriptFiles": 23,
+    "bytes": 2533925,
+    "gzipBytes": 787978
+  },
+  "note": "Sum of emitted production JS chunks, not bytes transferred on initial navigation; shared route/lazy chunks included. gzip level 9, mtime 0.",
+  "delta": {
+    "bytes": 276752,
+    "gzipBytes": 113853
+  }
+}

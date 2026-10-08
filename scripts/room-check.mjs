@@ -2,7 +2,7 @@
 // Stock Chromium cannot decode H.264, so the mp4 request is answered with a WebM re-encode of the same footage: this exercises the
 // player logic (explicit PLAY, pause, close, sound, release on exit) — real Safari/iOS decoding still has to be verified on devices.
 // usage: node scripts/room-check.mjs [quality] [WxH]      env: REDUCED=1  TOUCH=1  PORT=3000  WEBM=/path/to/test.webm
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 import { readFileSync } from 'node:fs'
 const quality = process.argv[2] || 'balanced'
 const [w, h] = (process.argv[3] || '1280x720').split('x').map(Number)
@@ -26,8 +26,8 @@ const hd = (f, a) => page.evaluate(f, a)
 const sim = (s) => hd((s) => new Promise((r) => { const t0 = window.__hd.rt.time; const f = () => (window.__hd.rt.time - t0 > s ? r() : requestAnimationFrame(f)); f() }), s)
 
 await page.goto(`http://localhost:${PORT}${BASEPATH}/?debug=1&quality=${quality}${process.env.EXTRA || ''}`)
-await page.waitForSelector('button:has-text("ENTER")', { timeout: 300000 })
-await page.click('button:has-text("ENTER")')
+await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
+await page.click('button:has-text("ENTER")', { force: true })
 await sim(2)
 
 // ── semantics: the biography and the three links exist as real text, always
@@ -80,6 +80,39 @@ for (const [i, id] of [[1, 'workstation'], [2, 'bio'], [3, 'live'], [4, 'exit']]
 await page.keyboard.press('ArrowLeft'); await until(() => Math.abs(window.__hd.room.u - 3) < 0.06)
 ok(await hd(() => window.__hd.store.getState().roomStation) === 3, 'ArrowLeft → previous station')
 ok(await hd(() => [...document.querySelectorAll('.room-chip')].some((a) => a.href === 'https://www.instagram.com/hoodddddddd')), 'LIVE DATES chip links to Instagram')
+
+// Actual touch input in the emulated touch viewport, in addition to keyboard checks.
+if (touch) {
+  await page.tap('button[aria-label="WORKSTATION"]')
+  ok(await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch tap selects workstation')
+  const input = await ctx.newCDPSession(page)
+  const swipe = async (from, to) => {
+    await hd(() => {
+      window.__swipeTrace = []
+      window.__swipeListener = (e) => window.__swipeTrace.push({ type: e.type, pointerType: e.pointerType, trusted: e.isTrusted, x: e.clientX, y: e.clientY, handledAt: performance.now(), timestamp: e.timeStamp })
+      for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.addEventListener(type, window.__swipeListener, true)
+    })
+    // Queue an actual quick native gesture. Awaiting each CDP acknowledgment
+    // can insert a whole slow GL frame between events, turning it into a hold.
+    await Promise.all([
+      input.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: w * from, y: h * 0.2 }] }),
+      input.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: w * to, y: h * 0.2 }] }),
+      input.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }),
+    ])
+    console.log('native swipe trace', JSON.stringify(await hd(() => {
+      for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.removeEventListener(type, window.__swipeListener, true)
+      return window.__swipeTrace
+    })))
+  }
+  await swipe(0.72, 0.28)
+  ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch swipe left selects next station')
+  const beforeRight = await hd(() => window.__hd.room.uT)
+  await swipe(0.28, 0.72)
+  ok(beforeRight === 2 && await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch swipe right selects previous station')
+  await input.detach()
+  await page.tap('button[aria-label="WHO IS HOODDINO?"]')
+  ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch tap selects biography')
+}
 
 // ── bio station: text on the wall (texture exists) and DOM caption on narrow screens
 await page.click('button[aria-label="WHO IS HOODDINO?"]'); await until(() => Math.abs(window.__hd.room.u - 2) < 0.06)

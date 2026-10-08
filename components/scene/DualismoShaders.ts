@@ -259,6 +259,13 @@ void main() {
   float F = 0.05 + 0.95 * pow(inv, 5.0);
   float dd = length(vW.xz - cameraPosition.xz);
   float rough = smoothstep(6.0, 110.0, dd);
+  // V3.7: polished stone is never uniformly polished — broad patches wear duller (the reflection smears more there) and a faint scratch grain
+  // runs across the slabs. Both are low-contrast: the floor stays a premium dark mirror, not a flat one.
+  vec2 pc_ = floor(vW.xz * 0.13 + 3.0), pf_ = fract(vW.xz * 0.13 + 3.0); pf_ = pf_ * pf_ * (3.0 - 2.0 * pf_);
+  float polish = mix(mix(dhash(vec3(pc_, 1.0)), dhash(vec3(pc_ + vec2(1.0, 0.0), 1.0)), pf_.x), mix(dhash(vec3(pc_ + vec2(0.0, 1.0), 1.0)), dhash(vec3(pc_ + vec2(1.0, 1.0), 1.0)), pf_.x), pf_.y);
+  vec2 sc_ = vec2(vW.x * 9.0, vW.z * 0.6); vec2 si_ = floor(sc_), sf_ = fract(sc_);
+  float scratch = mix(dhash(vec3(si_, 7.0)), dhash(vec3(si_ + vec2(1.0, 0.0), 7.0)), sf_.x);
+  rough = clamp(rough + (polish - 0.5) * 0.28 * (1.0 - rough), 0.0, 1.0);
 
   #ifdef REAL
   vec2 uv = vUv.xy / vUv.w;
@@ -266,7 +273,7 @@ void main() {
   vec2 w = vec2(sin(vW.z * 0.55 + uTime * 0.35) + sin(vW.x * 0.8 - uTime * 0.27), cos(vW.x * 0.5 + uTime * 0.31) + sin(vW.z * 0.9 - uTime * 0.22));
   uv += w * 0.00035 * (1.0 - rough * 0.6);
   // polished stone, not a flat mirror: the smear grows with distance and is vertical (anisotropic)
-  float b = 0.0015 + 0.012 * rough;
+  float b = 0.0015 + 0.012 * rough + 0.0035 * polish;
   vec3 refl = texture2D(tDiffuse, uv).rgb * 0.34
             + (texture2D(tDiffuse, uv + vec2(0.0, b)).rgb + texture2D(tDiffuse, uv - vec2(0.0, b)).rgb) * 0.20
             + (texture2D(tDiffuse, uv + vec2(0.0, 2.0 * b)).rgb + texture2D(tDiffuse, uv - vec2(0.0, 2.0 * b)).rgb) * 0.13;
@@ -278,7 +285,7 @@ void main() {
   #endif
 
   // reflectivity: dielectric Fresnel on near-black glass, boosted toward grazing, relaxed by roughness at distance
-  float R = (0.17 + 0.9 * F) * (1.0 - 0.72 * rough);
+  float R = (0.17 + 0.9 * F) * (1.0 - 0.72 * rough) * (0.9 + 0.2 * polish) * (0.93 + 0.1 * scratch);
 
   // the artwork spills light forward onto the floor (cool left, rose right: the two poles of the artwork)
   vec2 dp = vW.xz - uArt.xz - vec2(0.0, 2.6);

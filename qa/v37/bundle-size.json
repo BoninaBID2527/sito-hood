@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "method": "All emitted browser JS chunks, not initial-navigation transfer",
+  "versions": [
+    {
+      "name": "v36",
+      "files": 20,
+      "bytes": 2256778,
+      "gzipBytes": 673844
+    },
+    {
+      "name": "v37",
+      "files": 21,
+      "bytes": 2561460,
+      "gzipBytes": 797710
+    }
+  ]
+}

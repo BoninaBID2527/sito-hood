@@ -1,5 +1,6 @@
 import { rng } from '@/lib/math'
 import type { WindowVariant } from '@/lib/textures'
+import { plazaArchWindows } from './plazaLayout'
 
 export type BrickKind = 'red' | 'dark' | 'weathered' | 'plaster' | 'concrete'
 
@@ -48,6 +49,9 @@ export const PLAZA = {
   hw: 12,
 }
 
+/** Installed service access: corner entries and the central track-power bays. */
+export const plazaServiceDoors = (side: -1 | 1) => [side === -1 ? -80.2 : -116.2, -102]
+
 /** Window grid per wall segment, deterministic. */
 export interface WinInst {
   side: -1 | 1
@@ -59,6 +63,8 @@ export interface WinInst {
   h: number
   /** per-instance brightness (lit windows vary a lot) */
   tone?: number
+  /** V3.7: a window on a wall that faces +z (rear blocks); x/y/z is then the wall-face position */
+  face?: 'z' | 'back'
 }
 
 /** Weighted table: most windows are dead or covered; a few are alive. */
@@ -115,6 +121,7 @@ export function allWindows(): WinInst[] {
       all.push({ side, x: side * PLAZA.hw, y, z: z + (r() - 0.5) * 0.6, variant: pickWindow(r), w: 0.9 + r() * 0.28, h: 0.92 + r() * 0.3, tone: 0.28 + Math.pow(r(), 1.4) * 1.1 })
     }
   }
+  all.push(...plazaArchWindows(pickWindow))
   _wins = all
   return all
 }
@@ -139,6 +146,7 @@ export function streetLevelItems(skip = STREET_SKIP) {
       z -= r.range(3.6, 6.4)
     }
   }
+  for (const side of [-1, 1] as const) for (const z of plazaServiceDoors(side)) doors[side === -1 ? 0 : 2].push({ side, z })
   const out = { shutters, doors }
   if (skip === STREET_SKIP) _level = out
   return out

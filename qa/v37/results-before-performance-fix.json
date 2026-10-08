@@ -1,0 +1,108 @@
+[
+  {
+    "name": "post-disabled",
+    "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+    "status": "interrupted",
+    "exitCode": null,
+    "reason": "Execution environment restart: server and verifier processes no longer running; completed checkpoint 1 retained under same build ID",
+    "observed": "2026-10-07T16:43:14.011574+00:00"
+  },
+  {
+    "name": "post-disabled",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-nopost-v37",
+      "960x540",
+      "high",
+      "1,6,10,19,27,41,54,59"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "NOPOST": "1",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-07T16:44:35.862Z",
+    "finished": "2026-10-07T16:44:37.288Z",
+    "exitCode": 1
+  },
+  {
+    "name": "performance-V36",
+    "status": "interrupted",
+    "exitCode": null,
+    "reason": "Background command ended with its execution sandbox; restarted using a maintained foreground session",
+    "observed": "2026-10-07T16:48:24.263241+00:00"
+  },
+  {
+    "name": "post-disabled",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-nopost-v37",
+      "960x540",
+      "high",
+      "1,6,10,19,27,41,54,59"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "NOPOST": "1",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-07T16:48:47.283Z",
+    "finished": "2026-10-07T17:06:08.384Z",
+    "exitCode": 0
+  },
+  {
+    "name": "base-render-no-fog",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-base-v37",
+      "960x540",
+      "high",
+      "1,27,35,41,59"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "NOPOST": "1",
+      "NOFOG": "1",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-07T17:13:00.186Z",
+    "finished": "2026-10-07T17:29:16.479Z",
+    "exitCode": 0
+  },
+  {
+    "name": "performance-V36",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3001",
+      "/workspace/sito-hood/qa/v37/performance-v36.json"
+    ],
+    "cwd": "/workspace/hood-v36",
+    "overrides": {
+      "EXTRA": ""
+    },
+    "started": "2026-10-07T17:32:37.024Z",
+    "finished": "2026-10-07T17:39:44.530Z",
+    "exitCode": 0
+  },
+  {
+    "name": "performance-V37",
+    "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3000",
+      "qa/v37/performance-v37.json"
+    ],
+    "started": "2026-10-07T17:39:44.531Z",
+    "finished": "2026-10-07T17:50:10.415796+00:00",
+    "exitCode": 0,
+    "exitEvidence": "Child PID 894 /proc/stat zombie wait status 0; nine rows and no browser errors. Orchestrator paused before final photographic sweep for a performance correction."
+  }
+]

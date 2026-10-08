@@ -37,7 +37,7 @@ export function RooftopEnvironment() {
     // deck
     const deckGeo = keep(new THREE.PlaneGeometry(44, 64))
     tileUV(deckGeo, 44, 64, 3.4)
-    const deckMat = keep(streetMat({ map: A.roofDeck, color: '#d6d9e0', roughness: 0.82, aoBase: 0.7, bump: A.roofDeck, bumpAmt: 0.9, bumpBlur: 4, wet: A.roofWet, wetBox: [R + 3, 13, 12, -24], macro: 0.8 }))
+    const deckMat = keep(streetMat({ map: A.roofDeck, color: '#d6d9e0', roughness: 0.82, aoBase: 0.7, bump: A.roofDeck, bumpAmt: .006, bumpBlur: 4, wet: A.roofWet, wetBox: [R + 3, 13, 12, -24], macro: 0.8 }))
 
     // parapets
     const concrete = keep(brickMat('concrete', '#cfcac2'))

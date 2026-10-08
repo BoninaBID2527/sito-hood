@@ -1,0 +1,385 @@
+{
+  "port": "3000",
+  "tier": "balanced",
+  "vp": "640x360",
+  "rows": [
+    {
+      "name": "opening-street",
+      "medianMs": 1967.4000000003725,
+      "samplesMs": [
+        1795.199999999255,
+        1807.0999999996275,
+        1846.5,
+        1856.699999999255,
+        1878.2999999988824,
+        1967.4000000003725,
+        1975.5,
+        2000.300000000745,
+        2814.4000000003725,
+        2814.800000000745
+      ],
+      "calls": 194,
+      "triangles": 127472,
+      "textures": 74,
+      "geometries": 152,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0,
+      "progressEnd": 0,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "deep-street",
+      "medianMs": 1460.7000000011176,
+      "samplesMs": [
+        226.39999999850988,
+        1247,
+        1405.5,
+        1440,
+        1449.9000000003725,
+        1460.7000000011176,
+        1603,
+        1785.699999999255,
+        2062.199999999255,
+        2914.2000000011176
+      ],
+      "calls": 142,
+      "triangles": 107836,
+      "textures": 80,
+      "geometries": 168,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.3,
+      "progressEnd": 0.3,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "plaza-front",
+      "medianMs": 1017.1000000014901,
+      "samplesMs": [
+        966.8000000007451,
+        987,
+        992.9000000003725,
+        995.5999999996275,
+        996.7999999988824,
+        1017.1000000014901,
+        1144.5,
+        1292.699999999255,
+        1410.4000000003725,
+        1506.0999999996275
+      ],
+      "calls": 159,
+      "triangles": 122850,
+      "textures": 83,
+      "geometries": 191,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.42,
+      "progressEnd": 0.42,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "plaza-rear",
+      "medianMs": 988.9000000003725,
+      "samplesMs": [
+        810,
+        924.0999999996275,
+        932.5999999996275,
+        934.0999999996275,
+        944.7000000011176,
+        988.9000000003725,
+        993.4000000003725,
+        1055.5999999996275,
+        1103.699999999255,
+        1119.4000000003725
+      ],
+      "calls": 104,
+      "triangles": 111886,
+      "textures": 84,
+      "geometries": 195,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.45,
+      "progressEnd": 0.45,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "tracks-idle",
+      "medianMs": 991.6999999992549,
+      "samplesMs": [
+        922.6000000014901,
+        936.4000000003725,
+        959.9000000003725,
+        980,
+        991.2999999988824,
+        991.6999999992549,
+        993.1999999992549,
+        1172.5,
+        1208.800000000745,
+        1244
+      ],
+      "calls": 159,
+      "triangles": 122850,
+      "textures": 84,
+      "geometries": 195,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.41,
+      "progressEnd": 0.41,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "rooftop",
+      "medianMs": 578,
+      "samplesMs": [
+        8.400000000372529,
+        221.90000000037253,
+        452.30000000074506,
+        535.9000000003725,
+        577.5,
+        578,
+        644.5,
+        809.8999999985099,
+        997.8000000007451,
+        1181.5
+      ],
+      "calls": 69,
+      "triangles": 8004,
+      "textures": 88,
+      "geometries": 232,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "roof",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.87,
+      "progressEnd": 0.87,
+      "reflections": [
+        {
+          "position": [
+            3,
+            0.02,
+            -6
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "ROOM",
+      "medianMs": 462.30000000074506,
+      "samplesMs": [
+        74.20000000111759,
+        395.7999999988824,
+        432.30000000074506,
+        433.09999999962747,
+        442.2999999988824,
+        462.30000000074506,
+        467.30000000074506,
+        469.3999999985099,
+        470.30000000074506,
+        1231.5999999996275
+      ],
+      "calls": 16,
+      "triangles": 47492,
+      "textures": 117,
+      "geometries": 270,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "room",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.3269444444444444,
+      "progressEnd": 0.3269444444444444,
+      "reflections": []
+    },
+    {
+      "name": "DUALISMO",
+      "medianMs": 229.2999999988824,
+      "samplesMs": [
+        217.2000000011176,
+        219.19999999925494,
+        223.2999999988824,
+        225.19999999925494,
+        228.90000000037253,
+        229.2999999988824,
+        271.30000000074506,
+        276.40000000037253,
+        278.5,
+        292.40000000037253
+      ],
+      "calls": 44,
+      "triangles": 22368,
+      "textures": 122,
+      "geometries": 290,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "dualism",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.29978262071181716,
+      "progressEnd": 0.29978262071181716,
+      "reflections": []
+    },
+    {
+      "name": "tracks-moving",
+      "medianMs": 1120.9000000003725,
+      "samplesMs": [
+        952.2999999988824,
+        995.5,
+        1062.300000000745,
+        1078.8999999985099,
+        1099,
+        1120.9000000003725,
+        1121.800000000745,
+        1205.300000000745,
+        1297.5,
+        2026.199999999255
+      ],
+      "calls": 216,
+      "triangles": 150238,
+      "textures": 122,
+      "geometries": 290,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0.41,
+      "progressEnd": 0.5864243462171116,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

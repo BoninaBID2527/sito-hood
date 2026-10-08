@@ -1,0 +1,2558 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "key": {
+    "A": "Plausibly photographic",
+    "B": "Close but detectable CG",
+    "C": "Clearly CG"
+  },
+  "status": "All 135 frames actually inspected; all 19 required verification stages have a passing latest attempt. Photographic acceptance remains unmet.",
+  "reviewed": [
+    {
+      "n": 1,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Brick courses and broad ageing remain regular after millimetre relief calibration"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Scooter body and small street props remain simplified"
+        },
+        {
+          "category": "post-processing",
+          "reason": "Narrative particles and grain remain visibly stylized"
+        }
+      ],
+      "reflectionHealth": "No white clipped strip observed; zero non-finite reflected values in final manifest"
+    },
+    {
+      "n": 2,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Peeling plaster forms repeated broad patch patterns"
+        },
+        {
+          "category": "reflection",
+          "reason": "Windows retain simplified warm interior planes"
+        },
+        {
+          "category": "construction",
+          "reason": "Facade fittings and distant buildings have simplified small detail"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Plaster exposure and facade ageing repeat broad motifs"
+        },
+        {
+          "category": "reflection",
+          "reason": "Warm windows have simplified flat interior light"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Uniform haze and floating particles remain stylized"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Window sill/reveal and wall-mounted light retain simple sharp forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Window glass lacks convincing reflected exterior and interior depth"
+        },
+        {
+          "category": "tiling",
+          "reason": "Repeated peeled-plaster areas remain detectable"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Door/wall wear repeats broad procedural patches"
+        },
+        {
+          "category": "construction",
+          "reason": "Bin and pipe fittings have simplified geometry"
+        },
+        {
+          "category": "post-processing",
+          "reason": "Floating narrative particles cross the close doorway"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "wetness",
+          "reason": "Warm lamp reflection pools remain smoother than the surrounding road"
+        },
+        {
+          "category": "texture scale",
+          "reason": "Broad aggregate/repair variation remains relatively uniform"
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Manhole and curb edge have very regular simple forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Asphalt grain and repair patches remain repetitive"
+        },
+        {
+          "category": "reflection",
+          "reason": "Low-angle lamp reflection remains broad and soft"
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Long brick walls and weathering repeat regular bands"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Purple haze and particle layers remain intentionally stylized"
+        },
+        {
+          "category": "construction",
+          "reason": "Boxes and street fittings retain simplified sharp forms"
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Practical lamp pools and luminous plaza beam are graphic shapes"
+        },
+        {
+          "category": "construction",
+          "reason": "Track cards and large floating type read as a digital installation"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Near haze and particles reduce photographic plausibility"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Track card/type and very regular facade bays remain a visibly designed CG installation"
+        },
+        {
+          "category": "direct light",
+          "reason": "Broad warm and magenta pools retain theatrical light response"
+        },
+        {
+          "category": "post-processing",
+          "reason": "Narrative particles and heavy grain remain apparent"
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "grade": "C",
+      "constructedBackground": "Camera-visible surrounding facades, service openings/windows, utility routes and depth architecture observed; no empty void in this frame",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Installation card supports and facade details remain sharply simplified"
+        },
+        {
+          "category": "direct light",
+          "reason": "Spotlight cones and warm/magenta pools are visibly theatrical"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative haze/particles remain prominent"
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "grade": "C",
+      "constructedBackground": "Camera-visible surrounding facades, service openings/windows, utility routes and depth architecture observed; no empty void in this frame",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Artwork card edges and repeated window bays retain simple shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Card and ground response remain too uniform"
+        },
+        {
+          "category": "post-processing",
+          "reason": "Heavy grain remains visible across the installation"
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "grade": "C",
+      "constructedBackground": "Camera-visible surrounding facades, service openings/windows, utility routes and depth architecture observed; no empty void in this frame",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Floating type and card stand geometry retain a stylized installed-object appearance"
+        },
+        {
+          "category": "direct light",
+          "reason": "Visible spotlight beams remain graphic triangles"
+        },
+        {
+          "category": "tiling",
+          "reason": "Rear facade courses and windows repeat regularly"
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "grade": "C",
+      "constructedBackground": "Camera-visible surrounding facades, service openings/windows, utility routes and depth architecture observed; no empty void in this frame",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Card backs and equipment mounts retain simple planar forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Paper fronts show uniform coarse response"
+        },
+        {
+          "category": "direct light",
+          "reason": "Pools and spotlight beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "grade": "C",
+      "constructedBackground": "Alley returns or side facades and rear city/service architecture remain present behind the installation; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Card rear hardware and typography remain simple"
+        },
+        {
+          "category": "tiling",
+          "reason": "Distant window rows and masonry repeat regularly"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Magenta particle/haze layers remain stylized"
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "grade": "C",
+      "constructedBackground": "Alley returns or side facades and rear city/service architecture remain present behind the installation; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Vent and mounting plate have very regular sharp shapes"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Card backs retain broad flat illumination"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Haze and grain remain apparent"
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "grade": "C",
+      "constructedBackground": "Alley returns or side facades and rear city/service architecture remain present behind the installation; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Card back, mounts and window rows retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Large beams and flat warm rear fill are visibly stylized"
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "grade": "C",
+      "constructedBackground": "Alley returns or side facades and rear city/service architecture remain present behind the installation; no empty void observed",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Four spotlight cones remain graphic triangles"
+        },
+        {
+          "category": "construction",
+          "reason": "Artwork card edges and surrounding bays remain simplified"
+        },
+        {
+          "category": "roughness",
+          "reason": "Card/ground highlights retain uniform response"
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "grade": "C",
+      "constructedBackground": "Inward-facing alley returns, windows, street utility routes and distant street are present; no empty void observed",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Opposite facade windows and wall courses repeat regularly"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Violet sky and particles remain stylized"
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "grade": "C",
+      "constructedBackground": "Side wall, central recessed access, electrical service, dumpster and alley-return facade are present; no empty void observed",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Brick units and facade bay spacing remain regular"
+        },
+        {
+          "category": "construction",
+          "reason": "Wall fittings and bins have simplified sharp forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Lamp pools and luminous window squares remain broad"
+        }
+      ]
+    },
+    {
+      "n": 21,
+      "grade": "C",
+      "constructedBackground": "Central recessed door, brick piers, wall courses, cabinet and continuous cable/pipe routes are visible; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Recessed access and utility enclosure retain very simple sharp forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Masonry and door wear remain regular"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Low wall/threshold remains broadly underlit"
+        }
+      ]
+    },
+    {
+      "n": 22,
+      "grade": "C",
+      "constructedBackground": "Corner service access, loading/utility structure, lamps and rear facade continuation are present; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Loading dock/rail and service openings retain simplified edge detail"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installed lamps retain broad graphic halos"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Dock undercuts have limited bounced-light information"
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "grade": "C",
+      "constructedBackground": "Rear blocks flank a service passage with bridge and terminal building; no empty void observed",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Bridge light and reflected strip remain broad graphic highlights"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Terminal buildings/windows retain simple rectangular forms"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Service passage lower walls retain broad dark response"
+        }
+      ]
+    },
+    {
+      "n": 24,
+      "grade": "C",
+      "constructedBackground": "Side service bay, corner facade, access hardware, lamp and dumpster are visible; no empty void observed",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Wall courses and weathering repeat regularly"
+        },
+        {
+          "category": "construction",
+          "reason": "Bin and roof trim retain simple sharp forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Strong warm window/lamp contribution remains broad"
+        }
+      ]
+    },
+    {
+      "n": 25,
+      "grade": "C",
+      "constructedBackground": "Recessed central access, reveal, cabinet, courses and overhead utilities are present; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Door/cabinet hardware remains simple at close inspection"
+        },
+        {
+          "category": "tiling",
+          "reason": "Masonry units and door stains retain repeating variation"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Threshold and low wall have limited light information"
+        }
+      ]
+    },
+    {
+      "n": 26,
+      "grade": "C",
+      "constructedBackground": "Side facade, vents, utility conduits, bins and alley return form a continuous perimeter; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Bins and repeated facade windows retain simplified shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Brick/paint wear remains relatively uniform"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Floating particles remain prominent"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "grade": "C",
+      "constructedBackground": "Unobscured 32-metre service passage, connecting bridge, utilities and terminal facade provide constructed depth; no empty void observed",
+      "remaining": [
+        {
+          "category": "silhouette",
+          "reason": "Passage terminal and rooflines retain simple geometric forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Bridge lamp and adjacent practical halos remain graphic"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Distant lower service architecture retains broad dark fill"
+        }
+      ]
+    },
+    {
+      "n": 28,
+      "grade": "C",
+      "constructedBackground": "Native track pose shows constructed surrounding facades/accesses and city depth; no empty background observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed card, supports and detached title remain visibly stylized"
+        },
+        {
+          "category": "direct light",
+          "reason": "Warm/magenta floor pools and beams retain theatrical lighting"
+        },
+        {
+          "category": "tiling",
+          "reason": "Surrounding masonry/windows remain regular"
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "grade": "C",
+      "constructedBackground": "Native track pose shows constructed surrounding facades/accesses and city depth; no empty background observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Card support/title hardware retains simplified sharp forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Printed front and metal support remain uniform"
+        },
+        {
+          "category": "direct light",
+          "reason": "Spotlight cones remain graphic shapes"
+        }
+      ]
+    },
+    {
+      "n": 30,
+      "grade": "C",
+      "constructedBackground": "Native track pose shows constructed surrounding facades/accesses and city depth; no empty background observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Track title/card edges and supports retain simplified geometry"
+        },
+        {
+          "category": "direct light",
+          "reason": "Spotlight beams and cool ground fill remain graphic"
+        },
+        {
+          "category": "tiling",
+          "reason": "Rear facade bays and masonry repeat regularly"
+        }
+      ]
+    },
+    {
+      "n": 31,
+      "grade": "C",
+      "constructedBackground": "Native track pose shows constructed perimeter, utility/service details and street/city depth; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Large title/card plane and small fittings retain simple sharp forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Broad warm/magenta floor and spotlight beams remain theatrical"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles, haze and grain remain apparent"
+        }
+      ]
+    },
+    {
+      "n": 32,
+      "grade": "C",
+      "constructedBackground": "Native track pose shows constructed perimeter, utility/service details and street/city depth; no empty void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Card/number supports and repeated facade fittings retain simple forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Printed front and surrounding painted surfaces remain uniform"
+        },
+        {
+          "category": "direct light",
+          "reason": "Broad colored pools and visible cones retain theatrical response"
+        }
+      ]
+    },
+    {
+      "n": 33,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Track card and detached lettering retain simple planar/edge forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Broad colored ground pools and spotlight cones remain graphic"
+        },
+        {
+          "category": "tiling",
+          "reason": "Surrounding bays and wall variation repeat regularly"
+        }
+      ],
+      "constructedBackground": "Native track pose shows continuous surrounding architecture and city/service continuation; no empty background observed"
+    },
+    {
+      "n": 34,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Track card/title and simplified posts retain sharp CG forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Spot beams and colored floor fill remain theatrical"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative grain/particles remain prominent"
+        }
+      ],
+      "constructedBackground": "Native track pose shows continuous surrounding architecture and city/service continuation; no empty background observed"
+    },
+    {
+      "n": 35,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Building/window grids and rooftop fittings retain simple box-like forms"
+        },
+        {
+          "category": "wetness",
+          "reason": "Broad roof water retains uniform gloss response"
+        },
+        {
+          "category": "direct light",
+          "reason": "Purple/blue fixtures and sky retain stylized lighting"
+        }
+      ]
+    },
+    {
+      "n": 36,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "silhouette",
+          "reason": "Buildings retain box-like silhouettes and repetitive window grids"
+        },
+        {
+          "category": "roughness",
+          "reason": "Roof coating and window response remain uniform"
+        },
+        {
+          "category": "direct light",
+          "reason": "Billboard/roof fixtures retain stylized blue lighting"
+        }
+      ]
+    },
+    {
+      "n": 37,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "silhouette",
+          "reason": "Near and distant tower grids remain similarly sharp/regular"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "City layers have limited subtle photographic depth"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue parapet lettering/fixture highlights remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 38,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Door outline and simplified facade details retain graphic forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Long brick/weathering bands remain regular"
+        },
+        {
+          "category": "direct light",
+          "reason": "Orange/red wet-ground pool and particle layers remain stylized"
+        }
+      ]
+    },
+    {
+      "n": 39,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Threshold/casing and door hardware retain simple sharp geometry"
+        },
+        {
+          "category": "roughness",
+          "reason": "Padded door surface and passage finish have uniform response"
+        },
+        {
+          "category": "tiling",
+          "reason": "Opposite real alley masonry remains repetitive"
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Equipment, acoustic profiles and cabinet fittings retain simplified forms"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Entrance/workstation lighting remains broad with weak information under clouds"
+        },
+        {
+          "category": "roughness",
+          "reason": "Wall, desk edges and equipment response remain relatively uniform"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Speakers, keyboard and cabinet fittings retain simplified shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Desk edge and equipment plastics retain uniform response"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Local fill remains broad compared with photographed studio bounce"
+        }
+      ]
+    },
+    {
+      "n": 42,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Keyboard/controller controls and screen stands remain sharp simple forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Desk edge and equipment highlights remain uniform"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Workstation key/fill has limited complex secondary illumination"
+        }
+      ]
+    },
+    {
+      "n": 43,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Portrait monitor glass has weak reflected environment"
+        },
+        {
+          "category": "construction",
+          "reason": "Monitor foot/bracket and desk edge retain simple sharp geometry"
+        },
+        {
+          "category": "tiling",
+          "reason": "Wall grain and broad wear remain regular"
+        }
+      ]
+    },
+    {
+      "n": 44,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Monitor glass lacks subtle room reflection and layered surface response"
+        },
+        {
+          "category": "construction",
+          "reason": "Thin bezel/wall presentation remains geometrically simple"
+        }
+      ]
+    },
+    {
+      "n": 45,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Playing monitor lacks subtle room reflections and glass depth"
+        },
+        {
+          "category": "construction",
+          "reason": "Monitor stand/headphones and bezel retain simplified forms"
+        }
+      ]
+    },
+    {
+      "n": 46,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Speaker cones and controller knobs retain very simple geometry"
+        },
+        {
+          "category": "roughness",
+          "reason": "Speaker cabinet/plastic highlights remain uniform"
+        },
+        {
+          "category": "tiling",
+          "reason": "Wood/fabric variation repeats regularly"
+        }
+      ]
+    },
+    {
+      "n": 47,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Foam pattern and fabric grain are highly regular"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Ceiling-side treatment retains broad underlit response"
+        },
+        {
+          "category": "construction",
+          "reason": "Treatment profiles/edges have simplified sharp forms"
+        }
+      ]
+    },
+    {
+      "n": 48,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Under-desk wiring and support interiors retain limited readable light"
+        },
+        {
+          "category": "tiling",
+          "reason": "Floor boards repeat broad wood-grain patterns"
+        },
+        {
+          "category": "construction",
+          "reason": "Drawer hardware and supports remain simple"
+        }
+      ]
+    },
+    {
+      "n": 49,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Cables and underside remain weakly separated in shadow"
+        },
+        {
+          "category": "construction",
+          "reason": "Desk underside and wall mounts retain simple geometry"
+        }
+      ]
+    },
+    {
+      "n": 50,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Large detached title and clean print presentation retain graphic styling"
+        },
+        {
+          "category": "roughness",
+          "reason": "Paper/frame/wall response remains uniform"
+        },
+        {
+          "category": "camera/composition",
+          "reason": "Biography is integrated but still resembles a graphic board more than an inhabited studio wall"
+        }
+      ]
+    },
+    {
+      "n": 51,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Prints and wall fixtures retain clean graphic shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Sofa fabric and frame/paper surfaces remain uniform"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Side-wall lighting remains broad with limited material separation"
+        }
+      ]
+    },
+    {
+      "n": 52,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Sofa, table and studio fittings retain simplified forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Floor and acoustic fabric patterns remain regular"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Ceiling absorbers and side wall retain broad fill rather than complex bounce"
+        }
+      ]
+    },
+    {
+      "n": 53,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Equipment and ceiling supports retain simple forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Wall/fabric/equipment highlights remain uniform"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Cloud undersides and workstation shadows have limited secondary light information"
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Ceiling fabric undersides still retain limited light information"
+        },
+        {
+          "category": "tiling",
+          "reason": "Cloud fabric grain remains coarse and repetitive"
+        },
+        {
+          "category": "construction",
+          "reason": "Panel profiles and small ceiling fixtures retain simple geometry"
+        }
+      ]
+    },
+    {
+      "n": 55,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Floor boards repeat regular broad grain and tonal bands"
+        },
+        {
+          "category": "roughness",
+          "reason": "Floor response remains relatively uniform near furniture contacts"
+        }
+      ]
+    },
+    {
+      "n": 56,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Door casing and mounted title/paper retain simplified sharp forms"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Entrance/opposite-alley continuation uses broad simplified illumination"
+        },
+        {
+          "category": "tiling",
+          "reason": "Opposite masonry and room floor repeat regularly"
+        }
+      ]
+    },
+    {
+      "n": 57,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Actual opposite-alley brick variation remains regular"
+        },
+        {
+          "category": "roughness",
+          "reason": "Padded door and passage finishes have uniform response"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Passage/exterior lighting remains a broad baked approximation"
+        }
+      ]
+    },
+    {
+      "n": 58,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Obsidian/glass and floor retain clean synthetic environmental response"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous rings and beams remain stylized"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles and smooth horizon gradient remain overtly rendered"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Mirror floor and framing retain uniform clean reflection"
+        },
+        {
+          "category": "construction",
+          "reason": "Impossible framed installation/lettering remains visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and beams remain apparent"
+        }
+      ]
+    },
+    {
+      "n": 60,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Track orb and floor response retain clean synthetic highlights"
+        },
+        {
+          "category": "construction",
+          "reason": "Circular title/card presentation remains graphic"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous outlines retain stylized emission"
+        }
+      ]
+    },
+    {
+      "n": 61,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Floor and glass retain clean uniform synthetic reflections"
+        },
+        {
+          "category": "construction",
+          "reason": "Orb/title and framed impossible installation remain graphic"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles and beam/horizon layers remain stylized"
+        }
+      ]
+    }
+  ],
+  "noPostReviewed": [
+    {
+      "n": 1,
+      "grade": "C",
+      "reflectionHealth": "Production source3882: zero non-finite values, nonempty reflected scene, clipped white strip absent",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Brick bands and repeated ageing remain regular despite reduced relief"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Scooter and small fixtures have simplified geometry"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Wet reflection retains smooth stylized lamp pools"
+        },
+        {
+          "category": "texture scale",
+          "reason": "Asphalt patches have a coarse uniform grain"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Track typography/cards and very regular bays retain a designed CG appearance"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Broad warm fill is approximate rather than complex urban irradiance"
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "grade": "C",
+      "constructedBackground": "Inward-facing alley returns, recessed windows, utility routes and city continuation are visible; no empty sky void observed",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Window rows and repeated facade bays remain uniform"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles and purple narrative sky remain visibly stylized"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "grade": "C",
+      "constructedBackground": "Unobscured service passage, bridge, terminal facade and utility routes form depth; no empty void observed",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Bridge lighting creates a broad graphic highlight"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Terminal buildings and windows remain simplified despite constructed depth"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Speaker cones and keyboard controls retain simplified shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Desk edge and equipment surfaces remain too uniform"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Studio returns are readable but spatially broad"
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Ceiling cloud retains weak spatial illumination"
+        },
+        {
+          "category": "roughness",
+          "reason": "Fabric relief reads as repeated coarse texture"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Floor and glass reflections retain stylized clarity"
+        },
+        {
+          "category": "construction",
+          "reason": "Impossible luminous installation remains distinctly rendered"
+        }
+      ]
+    }
+  ],
+  "noFogReviewed": [
+    {
+      "n": 1,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated masonry/weathering remains detectable without post or global fog"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Simplified scooter and fixtures retain CG forms"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "silhouette",
+          "reason": "Passage terminal, rooflines and windows have simplified geometric forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Bridge practicals and lamp highlights remain broad graphic shapes"
+        }
+      ],
+      "constructedBackground": "Passage, bridge, utilities and terminal building visible without global fog; no empty void observed"
+    },
+    {
+      "n": 35,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Near/far towers have highly regular boxy window grids"
+        },
+        {
+          "category": "wetness",
+          "reason": "Roof water remains a broad uniformly glossy layer"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue/purple fixtures and particles retain theatrical lighting"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Speaker cones, keyboard and cabinet fittings remain simplified at the full workstation view"
+        },
+        {
+          "category": "roughness",
+          "reason": "Equipment plastics and desk edges retain uniform highlight response"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Practical/monitor fill remains broad compared with a photographed studio"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Mirror floor and obsidian retain clean synthetic environmental response"
+        },
+        {
+          "category": "construction",
+          "reason": "Luminous framed artwork and impossible pillars read as a rendered installation"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "World particles and beams remain stylized after post/global fog removal"
+        }
+      ]
+    }
+  ],
+  "previousReview": "visual-review-before-performance-fix.json",
+  "plazaAudit": {
+    "inwardDirectionsDegrees": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "outwardDirectionsDegrees": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "nativeTrackCheckpoints": [
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "farPassageCheckpoint": 27,
+    "allReviewed": true,
+    "visuallyConstructed360": true,
+    "cameraReachableEmptyBackgroundObserved": false,
+    "photographicVerdict": "NO \u2014 all reviewed plaza frames clearly CG; geometry completeness is separate from photographic plausibility"
+  },
+  "inspectionPoseCorrections": [
+    {
+      "checkpoint": 39,
+      "reason": "Original camera was outside the room front wall/airlock after entry and yielded a featureless wall close-up, not usable threshold evidence",
+      "oldRoomLocalPosition": [
+        0,
+        1.55,
+        -0.9
+      ],
+      "newRoomLocalPosition": [
+        0.45,
+        1.5,
+        -2.7
+      ],
+      "newRoomLocalLook": [
+        0,
+        0.9,
+        -1.25
+      ],
+      "status": "Corrected final39 recaptured in a passing separate stage and actually viewed; matching baseline39 already viewed. Other60 final captures retained under matching build/configuration guards."
+    }
+  ],
+  "verdicts": {
+    "streetPassAsFilmed": false,
+    "studioPassAsPhotographedRealStudio": false,
+    "plaza360VisuallyConstructed": true,
+    "cameraReachableEmptyPlazaBackgroundObserved": false,
+    "studioLimitations": [
+      "Simplified equipment and uniform glass/plastic/fabric response",
+      "Limited ceiling-cloud underside and under-desk light information",
+      "Broad approximated passage/exterior lighting; former flat proxy and closed passage are corrected"
+    ],
+    "photographicAcceptance": "Not achieved; no gradeA in reviewed final frames"
+  },
+  "baselineSourceCommit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+  "baselineReviewed": [
+    {
+      "n": 1,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Bright invalid reflected pixels form a conspicuous white column in this SwiftShader capture"
+        },
+        {
+          "category": "tiling",
+          "reason": "Near masonry relief and broad ageing repeat regularly"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Scooter and small props retain simplified shapes"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Masonry relief and broad weathering repeat regularly"
+        },
+        {
+          "category": "reflection",
+          "reason": "Window panes have limited interior/reflection depth"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and haze remain stylized"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Brick relief and broad weathering bands remain regular"
+        },
+        {
+          "category": "direct light",
+          "reason": "Window luminance is uniformly warm with little interior detail"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Distant haze remains stylized"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Main pane reads as an evenly luminous opaque surface"
+        },
+        {
+          "category": "tiling",
+          "reason": "Brick-unit highlights and relief are regular"
+        },
+        {
+          "category": "normal response",
+          "reason": "Grazing edges appear exaggerated"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "albedo",
+          "reason": "Door corrosion remains a broad soft patch"
+        },
+        {
+          "category": "construction",
+          "reason": "Door/bin hardware and surface forms remain simplified"
+        },
+        {
+          "category": "tiling",
+          "reason": "Masonry repeats regularly"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "roughness",
+          "reason": "Road aggregate/sheen remain visibly procedural"
+        },
+        {
+          "category": "tiling",
+          "reason": "Facade units and edge response repeat regularly"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Distant glow and haze remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Invalid bright reflected pixels remain visible in this SwiftShader frame"
+        },
+        {
+          "category": "roughness",
+          "reason": "Road sheen/grain looks procedural"
+        },
+        {
+          "category": "construction",
+          "reason": "Dumpster shape and surface response remain simplified"
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Distant plaza continuation reads as bright unconstructed horizon"
+        },
+        {
+          "category": "tiling",
+          "reason": "Street masonry relief and weathering remain regular"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles/haze remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear midground continuation behind the installation remains underbuilt"
+        },
+        {
+          "category": "direct light",
+          "reason": "Coloured ground pools and installation beams remain theatrical"
+        },
+        {
+          "category": "construction",
+          "reason": "Printed installation forms remain simplified"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear installation view exposes luminous sky gaps and disconnected background building forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography/floor light remains theatrical"
+        },
+        {
+          "category": "construction",
+          "reason": "Printed card front and supports remain simplified"
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 12,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 13,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Side facade masonry and window units remain conspicuously regular"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect broad high-contrast surfaces too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and cones remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 14,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 15,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 16,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 17,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Side facade masonry and window units remain conspicuously regular"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect broad high-contrast surfaces too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and cones remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 18,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Rear continuation or back-facing alley returns expose sky voids/disconnected building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddle response remains too mirror-like"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 20,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 21,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "missing geometry",
+          "reason": "Central service bay remains a bare brick/graffiti field without the final recessed access and electrical service"
+        },
+        {
+          "category": "tiling",
+          "reason": "Brick-unit relief remains conspicuously repetitive"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Lower wall and ground have little shadow information"
+        }
+      ]
+    },
+    {
+      "n": 22,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 23,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 24,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 25,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "missing geometry",
+          "reason": "Central service bay remains a bare brick/graffiti field without the final recessed access and electrical service"
+        },
+        {
+          "category": "tiling",
+          "reason": "Brick-unit relief remains conspicuously repetitive"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Lower wall and ground have little shadow information"
+        }
+      ]
+    },
+    {
+      "n": 26,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Back-facing alley returns or rear city continuation expose sky voids and ungrounded distant building forms"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor puddles reflect disconnected background forms too cleanly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Visible wall/window units remain repetitive"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Plaza floor terminates before a bright sky gap with ungrounded far building forms"
+        },
+        {
+          "category": "construction",
+          "reason": "Near background facades remain box-like repeated panels"
+        },
+        {
+          "category": "reflection",
+          "reason": "Floor reflects the missing continuation/high horizon"
+        }
+      ]
+    },
+    {
+      "n": 28,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes sky voids or ungrounded rear/return architecture"
+        },
+        {
+          "category": "construction",
+          "reason": "Printed card and support forms remain simplified"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 29,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Floor puddles remain unusually clean/high contrast"
+        },
+        {
+          "category": "construction",
+          "reason": "Printed card and support forms remain simplified"
+        },
+        {
+          "category": "tiling",
+          "reason": "Perimeter masonry repeats regularly"
+        }
+      ]
+    },
+    {
+      "n": 30,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes sky voids or ungrounded rear/return architecture"
+        },
+        {
+          "category": "construction",
+          "reason": "Printed card and support forms remain simplified"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 31,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes unconstructed perimeter/sky gaps or ungrounded distant buildings"
+        },
+        {
+          "category": "reflection",
+          "reason": "Puddles reflect the bright missing horizon too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and installation beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 32,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes unconstructed perimeter/sky gaps or ungrounded distant buildings"
+        },
+        {
+          "category": "reflection",
+          "reason": "Puddles reflect the bright missing horizon too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and installation beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 33,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes unconstructed perimeter/sky gaps or ungrounded distant buildings"
+        },
+        {
+          "category": "reflection",
+          "reason": "Puddles reflect the bright missing horizon too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and installation beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 34,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Native track pose exposes unconstructed perimeter/sky gaps or ungrounded distant buildings"
+        },
+        {
+          "category": "reflection",
+          "reason": "Puddles reflect the bright missing horizon too cleanly"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous typography and installation beams remain theatrical"
+        }
+      ]
+    },
+    {
+      "n": 35,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Skyline panels/window units remain box-like and repetitive"
+        },
+        {
+          "category": "reflection",
+          "reason": "Roof puddles retain broad mirror-like reflection and pedestal emission"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 36,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Skyline panels/window units remain box-like and repetitive"
+        },
+        {
+          "category": "reflection",
+          "reason": "Roof puddles retain broad mirror-like reflection and pedestal emission"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 37,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Skyline panels/window units remain box-like and repetitive"
+        },
+        {
+          "category": "reflection",
+          "reason": "Roof puddles retain broad mirror-like reflection and pedestal emission"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 38,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "empty background",
+          "reason": "Plaza continuation at the end of the street remains unconstructed"
+        },
+        {
+          "category": "reflection",
+          "reason": "Street puddles retain overly clear broad reflection"
+        },
+        {
+          "category": "tiling",
+          "reason": "Near masonry/weathering remains regular"
+        }
+      ]
+    },
+    {
+      "n": 39,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Airlock/exterior opening reads as a featureless proxy"
+        },
+        {
+          "category": "albedo",
+          "reason": "Door padding and threshold material response remains simplified"
+        }
+      ]
+    },
+    {
+      "n": 40,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Furniture and workstation device forms remain simplified"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue ceiling/practical spill remains stylized"
+        },
+        {
+          "category": "roughness",
+          "reason": "Broad wall/equipment response remains uniform"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Workstation devices retain simplified close-range forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Equipment response remains uniform"
+        },
+        {
+          "category": "direct light",
+          "reason": "Fabric/wall regions retain obvious coloured baked/practical influence"
+        }
+      ]
+    },
+    {
+      "n": 42,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Keyboard, headphone and peripheral cases remain simplified"
+        },
+        {
+          "category": "tiling",
+          "reason": "Desk grain and fabric units repeat regularly"
+        },
+        {
+          "category": "roughness",
+          "reason": "Equipment response remains uniform"
+        }
+      ]
+    },
+    {
+      "n": 43,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Monitor base/bezel and peripheral hardware retain simple forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Wood grain remains uniform"
+        },
+        {
+          "category": "reflection",
+          "reason": "Screen glass lacks convincing environment response"
+        }
+      ]
+    },
+    {
+      "n": 44,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Display glass/bezel response remains simplified"
+        },
+        {
+          "category": "albedo",
+          "reason": "Nearby wall/plaster response is visibly procedural"
+        }
+      ]
+    },
+    {
+      "n": 45,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "exposure",
+          "reason": "Playing footage appears washed out from incorrect custom-video colour handling"
+        },
+        {
+          "category": "reflection",
+          "reason": "Screen glass/bezel lacks convincing environment response"
+        },
+        {
+          "category": "construction",
+          "reason": "Display support remains simplified"
+        }
+      ]
+    },
+    {
+      "n": 46,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Speaker cone/enclosure response and geometry remain simplified"
+        },
+        {
+          "category": "roughness",
+          "reason": "Speaker/plastic surfaces react uniformly"
+        },
+        {
+          "category": "tiling",
+          "reason": "Acoustic foam and wood grain remain regular"
+        }
+      ]
+    },
+    {
+      "n": 47,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Pyramidal foam units repeat conspicuously"
+        },
+        {
+          "category": "direct light",
+          "reason": "Upper acoustic/wall detail has strong blue influence"
+        },
+        {
+          "category": "normal response",
+          "reason": "Fabric remains a broad procedural patch"
+        }
+      ]
+    },
+    {
+      "n": 48,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Under-desk wall/connections remain underlit"
+        },
+        {
+          "category": "roughness",
+          "reason": "Floor/wood response remains uniform"
+        },
+        {
+          "category": "contact",
+          "reason": "Broad baked contact remains recognizable"
+        }
+      ]
+    },
+    {
+      "n": 49,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Cables/connection points remain dark"
+        },
+        {
+          "category": "construction",
+          "reason": "Cable connector/routing detail remains simplified"
+        }
+      ]
+    },
+    {
+      "n": 50,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Biography/typography reads as a flat graphic installation"
+        },
+        {
+          "category": "direct light",
+          "reason": "Red/blue wall influence remains strong and unmotivated by the print"
+        },
+        {
+          "category": "roughness",
+          "reason": "Wall/fabric response remains uniform"
+        }
+      ]
+    },
+    {
+      "n": 51,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Photo/poster mounts and edge contacts remain simplified"
+        },
+        {
+          "category": "roughness",
+          "reason": "Sofa/paint/fabric response lacks convincing differentiation"
+        },
+        {
+          "category": "indirect light",
+          "reason": "Lower wall/sofa remains underlit"
+        }
+      ]
+    },
+    {
+      "n": 52,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Furniture and equipment shapes remain simple"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue/red ceiling influence remains stylized"
+        },
+        {
+          "category": "roughness",
+          "reason": "Wall/floor response remains uniform"
+        }
+      ]
+    },
+    {
+      "n": 53,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Furniture/workstation retains simplified forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue ceiling/wall spill remains stylized"
+        },
+        {
+          "category": "roughness",
+          "reason": "Wall/floor response remains uniform"
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Ceiling has limited physical treatment detail"
+        },
+        {
+          "category": "direct light",
+          "reason": "Blue spill and bright fixture remain stylized"
+        },
+        {
+          "category": "normal response",
+          "reason": "Ceiling material remains a broad smooth patch"
+        }
+      ]
+    },
+    {
+      "n": 55,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "roughness",
+          "reason": "Wood grain/board response remains procedural"
+        },
+        {
+          "category": "construction",
+          "reason": "Furniture/flightcase shapes retain simplified forms"
+        }
+      ]
+    },
+    {
+      "n": 56,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Airlock opening reads as a featureless exterior proxy"
+        },
+        {
+          "category": "direct light",
+          "reason": "Red ceiling/wall influence remains conspicuous"
+        },
+        {
+          "category": "tiling",
+          "reason": "Floor/wall variation remains regular"
+        }
+      ]
+    },
+    {
+      "n": 57,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Exit opening remains a flat airlock proxy"
+        },
+        {
+          "category": "albedo",
+          "reason": "Door padding and front-wall response remain simplified"
+        },
+        {
+          "category": "camera/composition",
+          "reason": "Close exit framing reveals little physical threshold detail"
+        }
+      ]
+    },
+    {
+      "n": 58,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Pillar and floor response remains recognizably synthetic"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous artwork/typography remains stylized"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Pillar and floor response remains recognizably synthetic"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous artwork/typography remains stylized"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 60,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Pillar and floor response remains recognizably synthetic"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous artwork/typography remains stylized"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 61,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Pillar and floor response remains recognizably synthetic"
+        },
+        {
+          "category": "direct light",
+          "reason": "Luminous artwork/typography remains stylized"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles remain conspicuous"
+        }
+      ]
+    }
+  ],
+  "currentCandidateReview": {
+    "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+    "inspected": {
+      "noPost": [
+        1,
+        6,
+        10,
+        19,
+        27,
+        41,
+        54,
+        59
+      ],
+      "noFog": [
+        1,
+        27,
+        35,
+        41,
+        59
+      ],
+      "normal": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    "plazaRotationInspected": true,
+    "emptyPlazaBackgroundObserved": false,
+    "allTrackPosesInspected": true,
+    "thresholdFinalRecaptureInspected": true,
+    "allRoomDirectionsInspected": true
+  }
+}

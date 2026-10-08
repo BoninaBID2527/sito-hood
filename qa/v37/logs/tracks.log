@@ -1,0 +1,10 @@
+PASS  violent scroll flick does not teleport: camera travel rate stays limited max 2.10 stations/s (limit 2.1 + overshoot)
+PASS  …and it still arrives at track 07 u=6.00
+PASS  …passing through the intermediate tracks 7 stations visited
+PASS  magnetic snap: resting between tracks settles on one u=2.00
+PASS  vertical gesture does not drag the installation (belongs to page scroll) Δ=0.000
+PASS  horizontal swipe moves the camera on to the next track(s) u=5.00
+PASS  opening a track moves the CAMERA toward it (not just the object) moved 16.58 m
+PASS  reduced motion: tracks stay reachable and the travel is short (simulation time) 0.72 s
+no console errors
+8 passed, 0 failed

@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-08T10:00:07.157306+00:00",
+  "implementationCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "asset": "public/room/hooddino-studio-arrangiamento.mp4",
+  "sha256": "02def5f45a5b97d770fd995f47193e4ec21865b941366719bebf6d43208d7949",
+  "staticExportByteIdentical": true,
+  "realMP4ServedWithoutWebMRoute": {
+    "root": {
+      "status": 200,
+      "mime": "video/mp4",
+      "bytes": 4860666
+    },
+    "sitoHood": {
+      "status": 200,
+      "mime": "video/mp4",
+      "bytes": 4860666
+    }
+  },
+  "nativeDecodeVerified": false
+}

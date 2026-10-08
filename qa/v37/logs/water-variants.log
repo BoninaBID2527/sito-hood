@@ -1,0 +1,18 @@
+[
+  {
+    "uniforms": {
+      "uContam": 0,
+      "uWet": 0.3,
+      "uPud": 0
+    },
+    "fx": {
+      "contam": 0,
+      "dissolve": 0,
+      "exposure": 1
+    }
+  }
+]
+captured original
+captured transparent
+captured no-contam
+captured filtered-contam

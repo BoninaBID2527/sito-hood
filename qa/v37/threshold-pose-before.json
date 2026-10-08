@@ -1,0 +1,51 @@
+{
+  "sourceCommit": "3882a72535e7824e83d2dc99ef48461ea92584de",
+  "buildId": "8ZY_fGJm-Di0JD9zVCaxu",
+  "originalCheckpoint": {
+    "reflections": [],
+    "n": 39,
+    "name": "room-02-threshold",
+    "inspectionCamera": {
+      "pos": [
+        1199.1,
+        1.55,
+        -67
+      ],
+      "look": [
+        1196,
+        1.4,
+        -67
+      ],
+      "fov": 54
+    },
+    "camera": {
+      "position": [
+        1199.1,
+        1.55,
+        -67
+      ],
+      "quaternion": [
+        -0.017092424623205652,
+        0.7069001690624356,
+        0.017092424623205652,
+        0.7069001690624356
+      ],
+      "fov": 54
+    },
+    "roomStation": 0.9827472712213942,
+    "roomFocusPush": 0,
+    "world": "room",
+    "tier": "high",
+    "scale": 0.75,
+    "calls": 26,
+    "triangles": 47714,
+    "textures": 114,
+    "geometries": 257,
+    "masonryWidth": 1536,
+    "video": "idle",
+    "videoTime": 0
+  },
+  "reason": "Airlock pose before the front wall, after entry, fills the frame with a featureless proxy rather than inspecting threshold construction",
+  "replacement": "Inside-room view toward doorway casing and floor threshold; product navigation and airlock are unchanged",
+  "originalImageBackup": "/workspace/scratch/threshold-invalid-original.png"
+}

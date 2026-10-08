@@ -1,0 +1,25 @@
+PASS  lamp: cursor becomes LAMP on hover {"sx":533.8670960180154,"sy":294.6062372844675,"behind":false}
+PASS  lamp: click switches it off 
+PASS  lamp: click again switches it on 
+PASS  number 05 (fire-escape tag): resting the pointer on it registers it silently 
+PASS  puddle: the impossible puddle answers (no toast) 
+PASS  graffiti letters: hovering a hidden tag registers it 
+hover aim {"name":"01 stencil on the utility box","aim":0,"projected":{"sx":909.0709729911503,"sy":392.5488460376317,"behind":false},"after":{"sx":881.0387434095296,"sy":389.9939148741914,"behind":false},"found":true}
+PASS  number 01 stencil on the utility box {"sx":909.0709729911503,"sy":392.5488460376317,"behind":false}
+hover aim {"name":"03 number painted on the door","aim":0,"projected":{"sx":798.5531291474979,"sy":448.2559528047671,"behind":false},"after":{"sx":797.0841316680663,"sy":442.1673361856195,"behind":false},"found":true}
+PASS  number 03 number painted on the door {"sx":798.5531291474979,"sy":448.2559528047671,"behind":false}
+PASS  numbers persist in localStorage 
+PASS  anamorphic ALTERCO: aligning with the scroll camera registers it (no popup) 
+PASS  credits poster: cursor is READ on hover {"sx":994.8502305797672,"sy":377.5733652585043,"behind":false}
+PASS  credits poster: click opens the credits 
+PASS  HOODDINO wordmark ×7 triggers the surprise 
+PASS  grazing glyph: PORTAL cursor from far down the wall {"sx":570.7817365788491,"sy":489.94201401633654,"behind":false}
+FAIL  grazing glyph: click registers the egg 
+PASS  portal poster: cursor becomes PORTAL {"sx":520.6481450531064,"sy":366.7323697905871,"behind":false}
+PASS  portal poster: click pulls the camera into DUALISMO 
+PASS  DUALISMO is remembered (nav unlocks) 
+PASS  return rift: hover shows RETURN {"sx":173.14347428584887,"sy":649.7310630385199,"behind":false}
+PASS  return rift: click goes back to ALTERCO 
+PASS  the street remembers (dualReturned + persisted) 
+no console errors
+20 passed, 1 failed

@@ -1,0 +1,24 @@
+{
+  "url": "http://localhost:3000/?debug=1&quality=balanced&scale=0.45",
+  "found": [
+    {
+      "centre": [
+        -2.9,
+        1.2,
+        -33.4
+      ],
+      "dimensions": [
+        0.9,
+        0.9
+      ],
+      "visibility": 1
+    }
+  ],
+  "recordedAt": "2026-10-08T11:31:45.361Z",
+  "oldAim": [
+    -2.95,
+    1.2,
+    -33.4
+  ],
+  "note": "Old aim is 5 cm behind the actual glyph plane; at a grazing angle it targets near the edge rather than the centre. Read-only inspection of existing geometry."
+}

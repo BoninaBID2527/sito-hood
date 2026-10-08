@@ -73,6 +73,7 @@ export class Batch {
       col[i * 3] = this.c.r * k * (pre ? pre.getX(i) : 1); col[i * 3 + 1] = this.c.g * k * (pre ? pre.getY(i) : 1); col[i * 3 + 2] = this.c.b * k * (pre ? pre.getZ(i) : 1)
     }
     g.setAttribute('color', new THREE.BufferAttribute(col, 3))
+    g.setAttribute('roomBake', new THREE.BufferAttribute(new Float32Array(n * 3), 3))
     const tile = o.tile ?? this.tile
     if (tile > 0) {
       worldUV(g, tile)

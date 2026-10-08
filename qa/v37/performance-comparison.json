@@ -1,0 +1,204 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "method": "Serial relative software-GL wall-frame proxy; not hardware FPS",
+  "rows": [
+    {
+      "view": "opening-street",
+      "baselineMs": 1935.5,
+      "finalMs": 1888.9000000059605,
+      "changePercent": -2.407646602637026,
+      "calls": [
+        175,
+        194
+      ],
+      "triangles": [
+        108058,
+        127472
+      ],
+      "textures": [
+        74,
+        74
+      ],
+      "geometries": [
+        133,
+        152
+      ]
+    },
+    {
+      "view": "deep-street",
+      "baselineMs": 1252,
+      "finalMs": 1199,
+      "changePercent": -4.2332268370607,
+      "calls": [
+        123,
+        142
+      ],
+      "triangles": [
+        88422,
+        107836
+      ],
+      "textures": [
+        80,
+        80
+      ],
+      "geometries": [
+        149,
+        168
+      ]
+    },
+    {
+      "view": "plaza-front",
+      "baselineMs": 757.2000000029802,
+      "finalMs": 801.1000000014901,
+      "changePercent": 5.797675646901368,
+      "calls": [
+        136,
+        159
+      ],
+      "triangles": [
+        97210,
+        122850
+      ],
+      "textures": [
+        83,
+        83
+      ],
+      "geometries": [
+        170,
+        191
+      ]
+    },
+    {
+      "view": "plaza-rear",
+      "baselineMs": 441.29999999701977,
+      "finalMs": 589.2000000029802,
+      "changePercent": 33.51461590912288,
+      "calls": [
+        84,
+        104
+      ],
+      "triangles": [
+        86396,
+        111886
+      ],
+      "textures": [
+        84,
+        84
+      ],
+      "geometries": [
+        174,
+        195
+      ]
+    },
+    {
+      "view": "tracks-idle",
+      "baselineMs": 794.5,
+      "finalMs": 832.6999999955297,
+      "changePercent": 4.808055380179943,
+      "calls": [
+        136,
+        159
+      ],
+      "triangles": [
+        97210,
+        122850
+      ],
+      "textures": [
+        84,
+        84
+      ],
+      "geometries": [
+        174,
+        195
+      ]
+    },
+    {
+      "view": "rooftop",
+      "baselineMs": 571.6000000014901,
+      "finalMs": 863.8000000044703,
+      "changePercent": 51.119664101157895,
+      "calls": [
+        69,
+        69
+      ],
+      "triangles": [
+        8004,
+        8004
+      ],
+      "textures": [
+        88,
+        88
+      ],
+      "geometries": [
+        211,
+        232
+      ]
+    },
+    {
+      "view": "ROOM",
+      "baselineMs": 478.6000000014901,
+      "finalMs": 511.80000000447035,
+      "changePercent": 6.936899290195742,
+      "calls": [
+        16,
+        16
+      ],
+      "triangles": [
+        46004,
+        48098
+      ],
+      "textures": [
+        114,
+        118
+      ],
+      "geometries": [
+        247,
+        272
+      ]
+    },
+    {
+      "view": "DUALISMO",
+      "baselineMs": 276.59999999403954,
+      "finalMs": 285.70000000298023,
+      "changePercent": 3.289949388697333,
+      "calls": [
+        44,
+        44
+      ],
+      "triangles": [
+        22368,
+        22368
+      ],
+      "textures": [
+        120,
+        123
+      ],
+      "geometries": [
+        269,
+        295
+      ]
+    },
+    {
+      "view": "tracks-moving",
+      "baselineMs": 799,
+      "finalMs": 806.9000000059605,
+      "changePercent": 0.9887359206458557,
+      "calls": [
+        182,
+        216
+      ],
+      "triangles": [
+        113660,
+        150238
+      ],
+      "textures": [
+        120,
+        123
+      ],
+      "geometries": [
+        269,
+        295
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "name": "performance-V36",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3001",
+      "/workspace/sito-hood/qa/v37/performance-v36.json"
+    ],
+    "cwd": "/workspace/hood-v36",
+    "overrides": {
+      "EXTRA": ""
+    },
+    "started": "2026-10-07T17:32:37.024Z",
+    "finished": "2026-10-07T17:39:44.530Z",
+    "exitCode": 0
+  },
+  {
+    "name": "performance-V37",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3000",
+      "qa/v37/performance-v37.json"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-07T20:09:30.525Z",
+    "finished": "2026-10-07T20:17:40.174Z",
+    "exitCode": 0
+  }
+]

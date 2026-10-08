@@ -133,6 +133,11 @@ export function PostFX() {
     u.uDim.value = f.focusDim
     u.uRipple.value.set(f.rippleX, f.rippleY, f.ripple)
 
+    // Debug inspection preserves exposure/tone mapping while disabling narrative effects.
+    if (typeof window !== 'undefined' && (window as unknown as { __qaNoPost?: boolean }).__qaNoPost && window.location.search.includes('debug')) {
+      for (const key of ['uBloom', 'uGrain', 'uVig', 'uRgb', 'uLiquid', 'uCross', 'uTunnel', 'uContam', 'uGlitch', 'uNeg']) u[key].value = 0
+    }
+
     // internal render scale: render into the lower-left part of the (full-size) target, no re-allocation, instant
     const bw = kit.target.width, bh = kit.target.height
     const sw = Math.max(2, Math.floor(bw * rt.scale)), sh = Math.max(2, Math.floor(bh * rt.scale))

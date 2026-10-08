@@ -11,7 +11,7 @@ import { withWhite } from './facadeBuild'
  *    the journey, so a puddle edge is where the water meets the ground — not where a texture ends)
  *  · stone kerb blocks (1.8 m, tiny joints, uneven height, chipped top edges) and storm-drain grates in the gutter
  */
-export const GROUND = { w: 44, zNear: 28, zFar: -124, cz: -48 }
+export const GROUND = { w: 44, zNear: 28, zFar: -152, cz: -62 }
 
 /** road half-width (wall to kerb inner face) at depth z, per side */
 export function kerbX(side: -1 | 1, z: number): number {

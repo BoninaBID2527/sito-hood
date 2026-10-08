@@ -1,6 +1,6 @@
 // V3.6 — performance census over the checkpoint set: draw calls / triangles / textures / geometries / drawing buffer / render scale / relative
 // headless wall time (software GL: relative only, NEVER device FPS). usage: node scripts/census36.mjs <port> <tier> <out.json> [WxH] [cps]
-import { chromium } from 'playwright-core'
+import { chromium } from './browser.mjs'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { runCheckpoint, CHECKPOINTS } from './qa36-lib.mjs'
 const [port = '3000', tier = 'high', outFile = 'census.json', vp = '960x540', cpl = '1,10,11,13,14,23,26,27,30,32,33'] = process.argv.slice(2)
@@ -12,7 +12,7 @@ const page = await (await browser.newContext({ viewport: { width: W, height: H }
 if (webm) await page.route('**/hooddino-studio-arrangiamento.mp4', (r) => r.fulfill({ status: 200, body: webm, headers: { 'content-type': 'video/webm', 'accept-ranges': 'none' } }))
 await page.goto(`http://localhost:${port}/?debug=1&quality=${tier}`)
 await page.waitForSelector('button:has-text("ENTER")', { timeout: 600000 })
-await page.click('button:has-text("ENTER")')
+await page.click('button:has-text("ENTER")', { force: true })
 await page.waitForTimeout(6000)
 await page.waitForFunction(() => window.__hd.A.brick.concrete.map.image.width >= 1280 || window.__hd.rt.quality.level === 0, null, { timeout: 300000, polling: 500 }).catch(() => {})
 await page.addStyleTag({ content: '.overlay{display:none !important}' })

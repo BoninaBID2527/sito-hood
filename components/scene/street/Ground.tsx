@@ -18,7 +18,7 @@ import { buildGroundGeometry, buildKerbs } from './groundBuild'
 export function Ground() {
   const mats = useMemo(() => {
     A.asphalt.repeat.set(1, 1)
-    const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: 0.8, bumpBlur: 6, wet: A.puddle, macro: 0.7 })
+    const asphalt = streetMat({ map: A.asphalt, color: '#6c6c76', roughness: 0.82, metalness: 0, aoBase: 0.7, bump: A.asphalt, bumpAmt: .012, bumpBlur: 6, wet: A.puddle, macro: 0.7 })
     A.sidewalk.repeat.set(1, 1)
     const walk = streetMat({ map: A.sidewalk, color: '#6f6a62', roughness: 0.9, aoBase: 0.6 })
     const kerb = streetMat({ map: A.sidewalk, color: '#86837e', roughness: 0.86, aoBase: 0.5, macro: 0.8, seed: 8.1, vertexColors: true })
@@ -29,7 +29,7 @@ export function Ground() {
   // the road is a real surface: crown, gutter dish, plaza fall — in a few big faces (see groundBuild.ts for why not a dense grid)
   const groundGeo = useMemo(() => buildGroundGeometry(), [])
   const kerbs = useMemo(() => buildKerbs(), [])
-  const backing = useMemo(() => new THREE.PlaneGeometry(48, 160).rotateX(-Math.PI / 2), [])
+  const backing = useMemo(() => new THREE.PlaneGeometry(48, 190).rotateX(-Math.PI / 2), [])
   const backingMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#0b0a0a' }), [])
   useEffect(() => () => { backing.dispose(); backingMat.dispose() }, [backing, backingMat])
 
@@ -62,7 +62,7 @@ export function Ground() {
       <mesh geometry={groundGeo} material={mats.asphalt} receiveShadow />
       {/* a dark under-layer: where two ground slabs meet at different kerb lines the rasteriser can leave hairline cracks at distance
           (sky showed through as a white speckle); whatever shows through now is asphalt-dark instead */}
-      <mesh geometry={backing} material={backingMat} position={[0, -0.07, -48]} renderOrder={-1} />
+      <mesh geometry={backing} material={backingMat} position={[0, -0.07, -62]} renderOrder={-1} />
       {walks.map((w) => (
         <mesh key={w.key} geometry={w.geo} material={mats.walk} position={[w.x, 0.065, w.z]} receiveShadow />
       ))}
@@ -120,7 +120,9 @@ void main() {
   damp = max(damp, m);
   vec3 V = normalize(cameraPosition - vWorld);
   float ndv = clamp(V.y, 0.0, 1.0);
-  float fres = 0.05 + 0.95 * pow(1.0 - ndv, 4.0);
+  // Air/water IOR 1.333 → F0 ≈ 0.0204. Reflection grows only at grazing angles;
+  // no artistic gain is applied to the physical reflection weight.
+  float fres = 0.0204 + 0.9796 * pow(1.0 - ndv, 5.0);
   vec2 p = vWorld.xz;
   vec2 dist = vec2(sin(p.x * 9.0 + uTime * 1.4) * sin(p.y * 7.0 - uTime * 1.1), cos(p.x * 5.0 + p.y * 6.0 + uTime)) * 0.002 * (0.3 + m);
   // damp asphalt: reflection is broken up by micro-relief instead of mirror-clean
@@ -162,18 +164,21 @@ void main() {
   ${real ? `
   vec2 uv = vUv.xy / vUv.w + dist;
   // reflection clarity follows the surface: still water is clear, damp asphalt is rough → the reflection is a vertical smear, never a mirror.
-  // 4 jittered taps (+ centre) on a per-pixel rotated, vertically stretched kernel (noise instead of a visible tap pattern)
+  // Prefilter the projected footprint and surface roughness before sampling.
+  // A five-point unfiltered kernel duplicated clipped bright edges into a ladder
+  // of square highlights. Mips integrate those subpixel features continuously;
+  // three restrained vertical taps retain wet-asphalt streaks without ghost copies.
   float rough = (1.0 - m) * (0.35 + 0.65 * damp);
-  float br = mix(0.0012, 0.017, rough);
-  // a FIXED vertical smear (wet asphalt streaks light vertically); a per-pixel rotated noise kernel turned every bright-edge reflection into 1-px white speckle
-  vec2 o1 = vec2(0.0, 1.0) * br * 1.9;
-  vec2 o2 = vec2(0.85, 0.35) * br * 1.9;
+  vec2 texSize = vec2(textureSize(tDiffuse, 0));
+  vec2 dx = dFdx(vUv.xy / vUv.w) * texSize;
+  vec2 dy = dFdy(vUv.xy / vUv.w) * texSize;
+  float footprint = log2(max(1.0, max(length(dx), length(dy))));
+  float lod = max(0.65, footprint) + rough * 3.5;
+  vec2 streak = vec2(0.0, mix(0.0008, 0.009, rough));
   vec3 CL = vec3(mix(2.6, mix(1.1, 0.55, smoothstep(5.0, 16.0, dd_)), 1.0 - m));
-  c = min(texture2D(tDiffuse, uv).rgb, CL) * 0.28;
-  c += min(texture2D(tDiffuse, uv + o1).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv - o1).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv + o2).rgb, CL) * 0.18;
-  c += min(texture2D(tDiffuse, uv - o2).rgb, CL) * 0.18;
+  c = min(textureLod(tDiffuse, uv, lod).rgb, CL) * 0.5;
+  c += min(textureLod(tDiffuse, uv + streak, lod).rgb, CL) * 0.25;
+  c += min(textureLod(tDiffuse, uv - streak, lod).rgb, CL) * 0.25;
   // far field: the mirrored render's far horizon is where clipped kerb/sidewalk slivers alias against the bright sky behind them (1-px white speckle).
   // Rough wet asphalt keeps no structure out there anyway, so beyond ~10 m (damp asphalt; real puddles keep theirs) the reflection relaxes to the analytic horizon/sky gradient (the cheap tier's colour).
   {
@@ -183,8 +188,8 @@ void main() {
   }
   if (uContam > 0.04) {
     float s = 0.008 * uContam;
-    c.r = mix(c.r, texture2D(tDiffuse, uv + vec2(s, 0.0)).r, 0.8);
-    c.b = mix(c.b, texture2D(tDiffuse, uv - vec2(s, 0.0)).b, 0.8);
+    c.r = mix(c.r, min(textureLod(tDiffuse, uv + vec2(s, 0.0), lod).r, CL.r), 0.8);
+    c.b = mix(c.b, min(textureLod(tDiffuse, uv - vec2(s, 0.0), lod).b, CL.b), 0.8);
   }
   ` : `
   float g = smoothstep(-0.1, 1.0, V.y * 3.0);
@@ -200,7 +205,7 @@ void main() {
   float eggEdge = exp(-length(vWorld.xz - vec2(0.2, -41.0)) * 0.55) * uMem * smoothstep(0.02, 0.5, m) * (1.0 - smoothstep(0.75, 1.0, m));
   c += film * eggEdge * 0.35;
   float damped = (1.0 - m) * damp;
-  float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * mix(0.35, 1.0, clamp(fres * 3.5, 0.0, 1.0));
+  float a = clamp(m * 0.96 + damped * 0.30, 0.0, 1.0) * fres;
   // puddle darkening so the water reads as depth, not paint
   c *= color * mix(0.62, 0.95, m);
   gl_FragColor = vec4(c, a);
@@ -257,6 +262,11 @@ export function WaterSheet({ mask, size, position, interactive = false, rising =
         multisample: q.level >= 2 ? 2 : 0,
         shader,
       })
+      const reflectionTarget = r.getRenderTarget()
+      reflectionTarget.texture.generateMipmaps = true
+      reflectionTarget.texture.minFilter = THREE.LinearMipmapLinearFilter
+      // Reflection depth is never sampled: preserve the no-depth-resolve strategy.
+      reflectionTarget.resolveDepthBuffer = false
       throttleReflector(r)
       material = r.material as THREE.ShaderMaterial
       object = r
@@ -344,4 +354,3 @@ export function WaterSheet({ mask, size, position, interactive = false, rising =
     </group>
   )
 }
-

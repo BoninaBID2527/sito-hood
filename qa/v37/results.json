@@ -1,0 +1,335 @@
+[
+  {
+    "name": "photographic-baseline",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "/workspace/sito-hood/shots-final-v36",
+      "960x540",
+      "high"
+    ],
+    "cwd": "/workspace/hood-v36",
+    "overrides": {
+      "PORT": "3001",
+      "EXTRA": "&scale=0.75"
+    },
+    "started": "2026-10-07T21:55:33.342Z",
+    "finished": "2026-10-07T22:35:41.523Z",
+    "exitCode": 0
+  },
+  {
+    "name": "performance-V36",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3001",
+      "/workspace/sito-hood/qa/v37/performance-v36.json"
+    ],
+    "cwd": "/workspace/hood-v36",
+    "overrides": {
+      "EXTRA": ""
+    },
+    "started": "2026-10-08T07:48:47.128Z",
+    "finished": "2026-10-08T07:56:07.221Z",
+    "exitCode": 0
+  },
+  {
+    "name": "performance-V37",
+    "command": [
+      "node",
+      "scripts/census37.mjs",
+      "3000",
+      "qa/v37/performance-v37.json"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-08T09:12:24.426Z",
+    "finished": "2026-10-08T09:19:30.718Z",
+    "exitCode": 0
+  },
+  {
+    "name": "post-disabled",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-nopost-v37",
+      "960x540",
+      "high",
+      "1,6,10,19,27,41,54,59"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "NOPOST": "1",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-08T09:19:30.727Z",
+    "finished": "2026-10-08T09:31:33.117Z",
+    "exitCode": 0
+  },
+  {
+    "name": "base-render-no-fog",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-base-v37",
+      "960x540",
+      "high",
+      "1,27,35,41,59"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "NOPOST": "1",
+      "NOFOG": "1",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-08T09:31:33.120Z",
+    "finished": "2026-10-08T09:42:34.722Z",
+    "exitCode": 0
+  },
+  {
+    "name": "photographic-final",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-final-v37",
+      "960x540",
+      "high"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-08T09:42:34.736Z",
+    "finished": "2026-10-08T10:33:24.737Z",
+    "exitCode": 0
+  },
+  {
+    "name": "threshold-recapture",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-final-v37",
+      "960x540",
+      "high",
+      "39"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75",
+      "RESUME_SHOTS": "1",
+      "RECAPTURE": "39",
+      "REQUIRE_FINITE_REFLECTIONS": "1"
+    },
+    "started": "2026-10-08T10:33:24.744Z",
+    "finished": "2026-10-08T10:40:39.970Z",
+    "exitCode": 0
+  },
+  {
+    "name": "adaptive-simulation",
+    "command": [
+      "node",
+      "scripts/adaptive-sim.mjs"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {},
+    "started": "2026-10-08T10:40:40.016Z",
+    "finished": "2026-10-08T10:40:40.564Z",
+    "exitCode": 0
+  },
+  {
+    "name": "e2e",
+    "command": [
+      "node",
+      "scripts/e2e.mjs",
+      "shots-e2e-final",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T10:40:40.565Z",
+    "finished": "2026-10-08T10:45:50.168Z",
+    "exitCode": 0
+  },
+  {
+    "name": "ROOM-desktop",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T10:45:50.170Z",
+    "finished": "2026-10-08T10:56:49.322Z",
+    "exitCode": 0
+  },
+  {
+    "name": "secrets",
+    "command": [
+      "node",
+      "scripts/secrets.mjs"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T10:56:49.332Z",
+    "finished": "2026-10-08T11:17:10.530Z",
+    "exitCode": 0
+  },
+  {
+    "name": "easter-eggs",
+    "command": [
+      "node",
+      "scripts/eggs.mjs"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T11:17:10.544Z",
+    "finished": "2026-10-08T11:27:31.564Z",
+    "exitCode": 1,
+    "archivedLog": "qa/v37/logs/easter-eggs-attempt1-2026-10-08T11-17-10-544Z.log"
+  },
+  {
+    "name": "tracks",
+    "command": [
+      "node",
+      "scripts/tracks-check.mjs",
+      "http://localhost:3000/",
+      "balanced"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T11:27:31.579Z",
+    "finished": "2026-10-08T11:54:50.218Z",
+    "exitCode": 0
+  },
+  {
+    "name": "reduced-motion",
+    "command": [
+      "node",
+      "scripts/reduced.mjs",
+      "shots-reduced-final.png"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T11:54:50.226Z",
+    "finished": "2026-10-08T11:56:02.160Z",
+    "exitCode": 0
+  },
+  {
+    "name": "ROOM-touch",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "820x1180"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45",
+      "TOUCH": "1"
+    },
+    "started": "2026-10-08T11:56:02.171Z",
+    "finished": "2026-10-08T12:17:21.325Z",
+    "exitCode": 0
+  },
+  {
+    "name": "ROOM-reduced",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45",
+      "REDUCED": "1"
+    },
+    "started": "2026-10-08T12:17:21.335Z",
+    "finished": "2026-10-08T12:25:16.917Z",
+    "exitCode": 0
+  },
+  {
+    "name": "ROOM-DOM-video",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45&roomvideo=dom"
+    },
+    "started": "2026-10-08T12:25:16.923Z",
+    "finished": "2026-10-08T12:36:36.217Z",
+    "exitCode": 0
+  },
+  {
+    "name": "static-smoke",
+    "command": [
+      "node",
+      "scripts/smoke.mjs",
+      "http://localhost:3002/sito-hood/?debug=1&quality=mobile",
+      "shots-static-smoke.png"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T12:36:36.326Z",
+    "finished": "2026-10-08T12:37:55.815Z",
+    "exitCode": 0
+  },
+  {
+    "name": "static-ROOM",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "PORT": "3002",
+      "BASEPATH": "/sito-hood",
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T12:37:55.816Z",
+    "finished": "2026-10-08T12:50:10.128Z",
+    "exitCode": 0
+  },
+  {
+    "name": "easter-eggs",
+    "command": [
+      "node",
+      "scripts/eggs.mjs"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-08T12:50:12.876Z",
+    "finished": "2026-10-08T13:04:04.845Z",
+    "exitCode": 0
+  }
+]

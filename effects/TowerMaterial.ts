@@ -63,9 +63,22 @@ void main() {
     float fl = floor(y / floorH), bay = floor(u / bayW);
     vec2 f = vec2(fract(u / bayW), fract(y / floorH));
     bool glassWall = style > 0.67;
-    vec2 lo = glassWall ? vec2(0.04, 0.1) : vec2(0.2, 0.24);
-    vec2 hi = glassWall ? vec2(0.96, 0.92) : vec2(0.8, 0.8);
-    float win = step(lo.x, f.x) * step(f.x, hi.x) * step(lo.y, f.y) * step(f.y, hi.y);
+    // V3.7: every building has its own window architecture — punched openings of different proportions, or continuous ribbon windows between
+    // piers every third bay — so a skyline is not one grid repeated at different heights
+    float ws = h3(vec3(floor(seed * 97.0), 3.0, 4.0));
+    bool ribbon = !glassWall && ws > 0.6;
+    vec2 lo = glassWall ? vec2(0.04, 0.1) : (ribbon ? vec2(0.0, 0.3) : vec2(0.14 + 0.1 * ws, 0.2 + 0.08 * ws));
+    vec2 hi = glassWall ? vec2(0.96, 0.92) : (ribbon ? vec2(1.0, 0.72) : vec2(0.86 - 0.1 * ws, 0.82 - 0.06 * ws));
+    float pierR = ribbon ? step(mod(bay, 3.0), 0.5) : 0.0;
+    float win = step(lo.x, f.x) * step(f.x, hi.x) * step(lo.y, f.y) * step(f.y, hi.y) * (1.0 - pierR);
+    vec2 wf = (f - lo) / (hi - lo);
+    // frame: a centre mullion and a transom (curtain walls: a fine centre mullion only)
+    float mull = 0.0;
+    if (win > 0.5) {
+      float vm = step(abs(wf.x - 0.5), glassWall ? 0.02 : 0.028);
+      float hm = glassWall ? 0.0 : step(abs(wf.y - 0.7), 0.026);
+      mull = max(vm, hm);
+    }
     float hh = h3(vec3(bay, fl, seed * 31.0));
     float hb = h3(vec3(bay + 7.0, fl + 3.0, seed * 17.0));
     float floorLit = step(0.935, h3(vec3(fl, seed * 53.0, 5.0)));
@@ -90,7 +103,10 @@ void main() {
     // blinds: partial occlusion of lit windows
     float blinds = step(0.55, hb) * step(0.62, hh);
     lit *= mix(1.0, 0.45 + 0.55 * step(0.35, fract(f.y * 7.0 + hb * 3.0)), blinds);
+    glassCol *= 0.82 + 0.36 * vn(vec2(u * 11.0, y * 0.5) + seed * 3.0); // streaky, dirty glass
+    lit *= 0.72 + 0.55 * smoothstep(0.0, 1.0, wf.y);                      // the room's ceiling light: brighter high in the opening
     vec3 wcol = glassCol + lit * lv * uWin * 2.4 * (0.6 + 0.8 * hb);
+    wcol = mix(wcol, body * (glassWall ? 0.6 : 0.5), mull * 0.85);
     // sills, mullions, slab line
     float slab = smoothstep(0.1, 0.0, f.y) * 0.5;
     // recessed look: the glass is darker toward its frame, brighter toward the middle

@@ -64,11 +64,11 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number, detail
       for (let c = 0; c <= per; c++) {
         const x = c * bw + off
         const y = row * bh
-        const v = r.range(-0.22, 0.2)
-        const burnt = r() < 0.07 ? r.range(0.45, 0.7) : 1
+        const v = r.range(-0.12, 0.12)
+        const burnt = r() < 0.015 ? r.range(0.72, 0.85) : 1
         const tint = r.range(-8, 8)
         const col = rgb(b0[0] * (1 + v) * burnt + tint, b0[1] * (1 + v * 0.9) * burnt, b0[2] * (1 + v * 0.8) * burnt - tint * 0.5)
-        const bumpV = 150 + r() * 90
+        const bumpV = 204 + r() * 12
         // per-brick surface life, drawn identically on both wrap copies so the tile stays seamless
         const gradA = r.range(0.04, 0.12), gradB = r.range(0.06, 0.16)
         const specks = detail ? Array.from({ length: Math.round((bw * bh) / (70 * k * k)) }, () => [r(), r(), r() < 0.5, r()] as const) : []
@@ -92,11 +92,8 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number, detail
             ctx.fillStyle = light ? `rgba(235,200,160,${0.08 + sa * 0.14})` : `rgba(20,10,8,${0.10 + sa * 0.2})`
             ctx.fillRect(gx + sx * gw, gy + sy * gh, (0.8 + sa * 1.4) * k, (0.8 + sa * 1.2) * k)
           }
-          // lit top edge / dark bottom edge
-          ctx.fillStyle = 'rgba(255,230,200,0.10)'
-          ctx.fillRect(gx + k, gy, gw - 2 * k, 2 * k)
-          ctx.fillStyle = 'rgba(0,0,0,0.18)'
-          ctx.fillRect(gx + k, gy + gh - 2 * k, gw - 2 * k, 2 * k)
+          // Bevel/mortar lighting belongs to the height map and renderer.
+          // The albedo deliberately has no repeated lit top / shaded bottom.
           // a chipped corner shows the pale core of the brick
           if (chip) {
             const cs = chip.s * gh
@@ -129,13 +126,23 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number, detail
       ctx.fillStyle = r() < 0.5 ? 'rgba(210,210,205,0.06)' : 'rgba(0,0,0,0.10)'
       ctx.fillRect(r() * W, r() * H, 1 + r() * 2.2 * k, 1 + r() * 2.2 * k)
     }
-    for (let i = 0; detail && i < 70; i++) { ctx.fillStyle = 'rgba(20,20,22,0.45)'; ctx.beginPath(); ctx.arc(r() * W, r() * H, (0.8 + r() * 2.4) * k, 0, Math.PI * 2); ctx.fill() }
-    if (detail) for (const fx of [W * 0.25, W * 0.75]) for (const fy of [H * 0.25, H * 0.75]) { ctx.fillStyle = 'rgba(30,30,32,0.5)'; ctx.beginPath(); ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); ctx.fill() }
     bump.ctx.fillStyle = '#9a9a9a'
     bump.ctx.fillRect(0, 0, W, H)
+    for (let i = 0; detail && i < 70; i++) {
+      const x = r() * W, y = r() * H, radius = (0.8 + r() * 2.4) * k
+      ctx.fillStyle = 'rgba(45,45,47,0.25)'; ctx.beginPath(); ctx.arc(x, y, radius, 0, Math.PI * 2); ctx.fill()
+      bump.ctx.fillStyle = '#787878'; bump.ctx.beginPath(); bump.ctx.arc(x, y, radius, 0, Math.PI * 2); bump.ctx.fill()
+    }
+    if (detail) for (const fx of [W * .25, W * .75]) for (const fy of [H * .25, H * .75]) {
+      ctx.fillStyle = 'rgba(50,50,52,0.25)'; ctx.beginPath(); ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); ctx.fill()
+      bump.ctx.fillStyle = '#686868'; bump.ctx.beginPath(); bump.ctx.arc(fx, fy, 5 * k, 0, Math.PI * 2); bump.ctx.fill()
+    }
     ctx.fillStyle = 'rgba(0,0,0,0.5)'
     for (const y of [0, H / 2]) ctx.fillRect(0, y, W, 3 * k)
     for (const x of [0, W / 2]) ctx.fillRect(x, 0, 3 * k, H)
+    bump.ctx.fillStyle = '#555555'
+    for (const y of [0, H / 2]) bump.ctx.fillRect(0, y, W, 3 * k)
+    for (const x of [0, W / 2]) bump.ctx.fillRect(x, 0, 3 * k, H)
   }
 
   if (variant === 'plaster') {
@@ -164,10 +171,14 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number, detail
       if (cx < 250 * k) { p.ctx.save(); p.ctx.translate(W, 0); p.ctx.fill(); p.ctx.restore() }
     }
     ctx.drawImage(p.canvas, 0, 0)
-    bump.ctx.globalAlpha = 0.5
-    bump.ctx.fillStyle = '#b0b0b0'
-    bump.ctx.fillRect(0, 0, W, H)
-    bump.ctx.globalAlpha = 1
+    // Only exposed masonry retains mortar relief. A uniform translucent
+    // height overlay made intact plaster show the entire underlying brick grid.
+    const plasterHeight = makeCanvas(W, H)
+    plasterHeight.ctx.drawImage(p.canvas, 0, 0)
+    plasterHeight.ctx.globalCompositeOperation = 'source-in'
+    plasterHeight.ctx.fillStyle = '#f0f0f0'
+    plasterHeight.ctx.fillRect(0, 0, W, H)
+    bump.ctx.drawImage(plasterHeight.canvas, 0, 0)
   }
 
   // grime + pixel grain

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { backgroundMaterial } from './backgroundMaterial'
 
 /**
  * 256² tileable smooth value noise (32-cell lattice, smoothstep-interpolated at bake time). R and G are independent fields.
@@ -68,10 +69,10 @@ float vn3_(vec3 p){
   float b = textureLod(uNz, p.xy * (1.0 / 32.0) + o + vec2(0.3173, 0.5411), 0.0).g;
   return mix(a, b, fz);
 }
-vec3 bumpN_(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
-  vec3 sx = dFdx(surf_pos), sy = dFdy(surf_pos);
+vec3 bumpN_(vec3 sx, vec3 sy, vec3 surf_norm, vec2 dHdxy, float faceDirection){
   vec3 R1 = cross(sy, surf_norm), R2 = cross(surf_norm, sx);
   float fDet = dot(sx, R1) * faceDirection;
+  if (fDet == 0.0) return surf_norm;
   vec3 vGrad = sign(fDet) * (dHdxy.x * R1 + dHdxy.y * R2);
   return normalize(abs(fDet) * surf_norm - vGrad);
 }
@@ -79,10 +80,14 @@ vec3 bumpN_(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
 
 export interface StreetOpts {
   aoBase?: number
+  /** Mid/background architecture: projected baked noise, no invisible micrograin.
+   * Keeps PBR, masonry relief, practical bounce and narrative deformation. */
+  background?: boolean
   /** brick-like tiling surface: per-cell bond offsets (breaks the 2.4 m repeat), patched masonry, painted-over panels */
   brick?: boolean
   /** height texture sampled with the same (offset) uv → screen-space bump */
   bump?: THREE.Texture
+  /** Full height-map range in metres; view-position derivatives use world units. */
   bumpAmt?: number
   /** widen the height-sample footprint (suppresses glitter on fine-grain textures like asphalt) */
   bumpBlur?: number
@@ -102,6 +107,7 @@ export interface StreetOpts {
 }
 
 export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}) {
+  if (opts.background) return backgroundMaterial(m, streetU, opts)
   const ao = (opts.aoBase ?? 0.5).toFixed(2)
   const macro = (opts.macro ?? 1).toFixed(2)
   const seed = (opts.seed ?? 0).toFixed(1)
@@ -112,7 +118,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const atlas = !!opts.atlas
   const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
-  const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
+  const bumpAmt = (opts.bumpAmt ?? .008).toFixed(5)
   const bblur = (opts.bumpBlur ?? 1).toFixed(2)
   m.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, streetU)
@@ -253,10 +259,16 @@ ${
     float col2_ = floor(tuv_.x * 11.0 + 0.5 * mod(row2_, 2.0));
     vec2 bid_ = vec2(col2_, row2_) + floor(vMapUv) * 17.0 + ${seed};
     float b1_ = h21_(bid_), b2_ = h21_(bid_ + 7.7), b3_ = h21_(bid_ + 3.1);
-    vec3 bt_ = mix(vec3(0.80, 0.76, 0.78), vec3(1.16, 1.0, 0.88), b1_) * (0.78 + 0.44 * b2_);
-    diffuseColor.rgb *= mix(vec3(1.0), bt_, 0.8 * mac_ * (1.0 - pt_));
-    diffuseColor.rgb *= mix(1.0, 0.5, step(0.94, b3_) * mac_);
-    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.25, 1.18, 1.05), step(b3_, 0.04) * mac_ * 0.7);
+    // V3.7: a wall is laid from kiln batches — neighbouring bricks share a tone and the change happens in patches (~5 × 4 bricks), with only a
+    // mild per-brick scatter on top. (Per-brick random tone alone reads as a mosaic of coloured pixels, not as masonry.)
+    vec3 bt_ = mix(vec3(0.88, 0.85, 0.87), vec3(1.10, 1.0, 0.92), b1_) * (0.88 + 0.24 * b2_);
+    float bb_ = h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + floor(vMapUv) * 5.0 + ${seed} * 3.3);
+    vec3 batch_ = mix(vec3(0.86, 0.84, 0.9), vec3(1.1, 1.0, 0.88), bb_) * (0.9 + 0.2 * h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + 17.0));
+    // Restrained unit scatter: large neighbouring kiln lots carry the colour,
+    // rather than isolated black/white bricks repeating as a checkerboard.
+    diffuseColor.rgb *= mix(vec3(1.0), mix(vec3(1.0), bt_, .42) * batch_, 0.64 * mac_ * (1.0 - pt_));
+    diffuseColor.rgb *= mix(1.0, 0.78, step(0.985, b3_) * mac_);
+    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.12, 1.08, 1.03), step(b3_, 0.018) * mac_ * 0.5);
     brickRough_ = 0.82 + 0.3 * b2_;
     // efflorescence / salt bloom low on the wall, pale mineral stains
     float salt_ = smoothstep(0.55, 0.82, vn3_(vWPos * vec3(1.6, 0.7, 1.6) + 9.0)) * (1.0 - smoothstep(0.3, 2.6, h_));
@@ -348,8 +360,11 @@ ${
   roughnessFactor *= brickRough_;
   roughnessFactor = clamp(roughnessFactor + microR_, 0.15, 1.0);
   roughnessFactor = clamp(roughnessFactor + rustM_ * 0.3, 0.2, 1.0);
-  roughnessFactor = mix(roughnessFactor, mix(0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, 0.04, puddle_), dampG_ * 0.9);
-  roughnessFactor = max(0.12, roughnessFactor - asphaltPolish_ * 0.14);`,
+  // Standing water has its own Fresnel/reflection sheet. The asphalt beneath
+  // it stays aggregate-rough, rather than adding a second near-mirror BRDF
+  // to the water layer's own reflected radiance.
+  roughnessFactor = mix(roughnessFactor, 0.26 + nM_ * 0.2 + asphaltCrack_ * 0.3, dampG_ * 0.9);
+  roughnessFactor = max(${wet ? '0.24' : '0.12'}, roughnessFactor - asphaltPolish_ * ${wet ? '0.08' : '0.14'});`,
       )
       .replace('#include <metalnessmap_fragment>', '#include <metalnessmap_fragment>\n  metalnessFactor *= 1.0 - rustM_ * 0.85;')
       .replace(
@@ -357,17 +372,42 @@ ${
         bump
           ? `#include <normal_fragment_maps>
   {
+    // Derivatives stay outside the varying LOD branch; only explicit-gradient
+    // samples and normal arithmetic are gated by the already existing filter.
+    vec3 bumpDx_ = dFdx(-vViewPosition), bumpDy_ = dFdy(-vViewPosition);
+    float bumpFade_ = 1.0 - smoothstep(0.0025, 0.011, max(length(gx_), length(gy_)));
+    // A fully filtered-out surface contributes no relief. Skip its texture
+    // gradients and derivative normal rather than computing undefined zero relief.
+    if (bumpFade_ > 0.0) {
     vec2 kx_ = gx_ * ${bblur}, ky_ = gy_ * ${bblur};
     float b0_ = textureGrad(uBumpTex, tuv_, kx_, ky_).r;
     float bx_ = textureGrad(uBumpTex, tuv_ + kx_, kx_, ky_).r;
     float by_ = textureGrad(uBumpTex, tuv_ + ky_, kx_, ky_).r;
-    normal = bumpN_(-vViewPosition, normal, vec2(bx_ - b0_, by_ - b0_) / ${bblur} * ${bumpAmt} * (1.0 - pt_ * 0.8) * (1.0 - puddle_ * 0.92) * (1.0 - smoothstep(0.0025, 0.011, max(length(gx_), length(gy_)))), faceDirection);
+    normal = bumpN_(bumpDx_, bumpDy_, normal, vec2(bx_ - b0_, by_ - b0_) / ${bblur} * ${bumpAmt} * (1.0 - pt_ * 0.8) * (1.0 - puddle_ * 0.92) * bumpFade_, faceDirection);
+    }
   }`
-          : '#include <normal_fragment_maps>',
+          : `#include <normal_fragment_maps>${
+              wet
+                ? `
+  {
+    // V3.7: aggregate. Real asphalt is a mosaic of 2–8 mm stones: near the camera the surface normal carries that grain (this is what makes a
+    // wet road glitter instead of shining like a sheet). Fades out with distance; puddles stay glassy.
+    float fdA_ = 1.0 - smoothstep(4.0, 17.0, length(vViewPosition));
+    if (fdA_ > 0.01 && uMicro > 0.5) {
+      vec2 qa_ = vWPos.xz * 46.0;
+      float a0_ = vn2_(qa_), ax_ = vn2_(qa_ + vec2(0.4, 0.0)), az_ = vn2_(qa_ + vec2(0.0, 0.4));
+      float b0_ = vn2_(qa_ * 2.3 + 7.0), bx_ = vn2_(qa_ * 2.3 + 7.0 + vec2(0.4, 0.0)), bz_ = vn2_(qa_ * 2.3 + 7.0 + vec2(0.0, 0.4));
+      vec3 pert_ = vec3(-(ax_ - a0_) - 0.6 * (bx_ - b0_), 0.0, -(az_ - a0_) - 0.6 * (bz_ - b0_)) * (2.2 * fdA_ * (1.0 - puddle_));
+      normal = normalize(normal + (viewMatrix * vec4(pert_, 0.0)).xyz);
+    }
+  }`
+                : ''
+            }`,
       )
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
+  vec3 streetIrradiance_ = vec3(0.);
   // the sunlit band follows the REAL sun shadow where a shadow map exists: facades, cornices, fire escapes and roof structures
   // cut their own shapes into the light; surfaces turned away from the sun keep only the sky-glow share of the band.
   // Only sampled up in the band itself (walls never pay for the shadow lookup below it).
@@ -382,6 +422,30 @@ ${
 #endif
   float sun_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt * sunVis_;
   totalEmissiveRadiance += diffuseColor.rgb * uSunCol * sun_ * 1.5;
+  {
+    // ── indirect light (V3.7) ── an analytic, coloured approximation of what a real street does and a single sun + hemisphere light cannot:
+    //  (1) the sunlit band of the opposite wall bounces warm light onto the shaded wall at the same height;
+    //  (2) the road's glow lifts the foot of the walls (sky/sun tinted, falls off with height);
+    //  (3) shadows are filled with cool sky light instead of staying empty;
+    //  (4) the road itself picks up warm light from the sunlit walls along both kerbs.
+    // All restrained, albedo-multiplied, and independent of the contact AO (which still darkens crevices) — it fills open shadow, it does not flatten.
+    vec3 nw_ = inverseTransformDirection(normal, viewMatrix);
+    float wallK_ = 1.0 - smoothstep(0.35, 0.8, abs(nw_.y));
+    float oppBand_ = smoothstep(uSunY - 3.5, uSunY + 1.0, h_) * uSunAmt;
+    float shade_ = 1.0 - clamp(sun_ * 1.6, 0.0, 1.0);
+    vec3 warm_ = uSunCol * vec3(1.0, 0.68, 0.46);
+    vec3 ind_ = warm_ * oppBand_ * shade_ * wallK_ * 0.2;
+    ind_ += mix(uSkyHor, warm_, 0.35 * uSunAmt) * (1.0 - smoothstep(0.0, 5.5, h_)) * wallK_ * 0.075;
+    ind_ += mix(uSkyHor, uSkyTop, 0.55) * (0.55 + 0.45 * nw_.y) * shade_ * mix(0.35, 1.0, wallAO_) * 0.055;
+${
+  wet
+    ? `    ind_ += warm_ * smoothstep(1.0, 3.6, abs(vWPos.x)) * step(13.5, uWetBox.y) * uSunAmt * max(nw_.y, 0.0) * 0.07;`
+    : ''
+}
+    // Existing values are calibrated as outgoing diffuse radiance. Convert
+    // to irradiance here, then let the PBR diffuse term apply its BRDF below.
+    streetIrradiance_ = ind_ * 3.14159265;
+  }
 ${
   metal
     ? `  {
@@ -400,14 +464,30 @@ ${
     : ''
 }`,
       )
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  // Bounce is reflected diffuse light, not self-emission. In particular bare
+  // metal cannot acquire diffuse coloured glow from the environment fill.
+  reflectedLight.indirectDiffuse += streetIrradiance_ * material.diffuseColor * (1.0 / 3.14159265);`)
+      .replace(
+        '#include <opaque_fragment>',
+        `// Preserve valid illumination when a degenerate lighting term is undefined.
+  // Avoid discard: opaque depth rejection must remain available for urban layers.
+  if (any(isnan(outgoingLight)) || any(isinf(outgoingLight))) {
+    outgoingLight = vec3(0.);
+    if (!any(isnan(totalDiffuse)) && !any(isinf(totalDiffuse))) outgoingLight += totalDiffuse;
+    if (!any(isnan(totalSpecular)) && !any(isinf(totalSpecular))) outgoingLight += totalSpecular;
+    if (!any(isnan(totalEmissiveRadiance)) && !any(isinf(totalEmissiveRadiance))) outgoingLight += totalEmissiveRadiance;
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}7nz`
+  #include <opaque_fragment>`,
+      )
+  }
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}13irradiance-v37`
   return m
 }
 
 export function streetMat(params: THREE.MeshStandardMaterialParameters & StreetOpts) {
-  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas, ...rest } = params
-  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas })
+  const { aoBase, background, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas, ...rest } = params
+  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, background, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas })
 }
 
 /** Gentle sway for cables / hanging objects. Amplitude fades toward the fixed ends (uv.x 0..1). */

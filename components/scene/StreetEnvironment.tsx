@@ -16,6 +16,7 @@ import { Steam, Cables, AirLayers } from './street/Atmos'
 import { Foreground } from './street/Foreground'
 import { ContactShadows } from './street/ContactShadows'
 import { NoReflect } from './street/NoReflect'
+import { PlazaArch } from './street/PlazaArch'
 import { FarGate, DistCull } from './street/DistCull'
 import { WallDetail } from './street/WallDetail'
 import { Backdrop } from './street/Backdrop'
@@ -43,6 +44,7 @@ export function StreetEnvironment() {
     <group ref={root}>
       <Walls />
       <Windows />
+      <PlazaArch />
       <StreetLevel />
       <GroundGate />
       <ContactShadows />

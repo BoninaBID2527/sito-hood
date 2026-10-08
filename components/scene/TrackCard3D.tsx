@@ -40,7 +40,11 @@ void main() {
   vec3 col = t.rgb;
   if (!gl_FrontFacing) {
     // seen from behind: the paper shows the print faintly through
-    col = texture2D(map, vec2(1.0 - uv.x, uv.y), 2.0).rgb * 0.2 + 0.03;
+    // V3.7: the back of a printed sheet / banner is lit by the same dusk as everything else: the print shows through the paper, the paper
+    // takes the ambient (fog) colour, and a fine fibre grain keeps it from being a flat black slab
+    vec3 pr_ = texture2D(map, vec2(1.0 - uv.x, uv.y), 2.0).rgb;
+    float fib_ = hash(floor(uv * vec2(420.0, 300.0))) * 0.5 + hash(floor(uv * vec2(52.0, 38.0)) + 3.1) * 0.5;
+    col = (pr_ * 0.34 + vec3(0.05, 0.045, 0.04)) * (0.78 + 0.34 * fib_) + uFog * 0.16;
   }
   float sheen = pow(max(0.0, 1.0 - distance(uv, uSheen) * 1.5), 2.5);
   col += sheen * uHover * 0.22 * vec3(1.0, 0.92, 0.8);

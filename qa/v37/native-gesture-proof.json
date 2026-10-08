@@ -1,0 +1,77 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "viewport": "820x1180",
+  "scale": 0.45,
+  "input": "Native CDP events in Chromium touch emulation; not an iPad/iPhone device test",
+  "log": "logs/ROOM-touch.log",
+  "gestures": [
+    {
+      "name": "left: workstation1 to biography2",
+      "handlerSpanMs": 8.299999997019768,
+      "eventSpanMs": 3.1000000089406967,
+      "trace": [
+        {
+          "type": "pointerdown",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 896867.1999999955,
+          "timestamp": 894485.9999999925
+        },
+        {
+          "type": "pointermove",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 896870.9999999925,
+          "timestamp": 894488.8000000045
+        },
+        {
+          "type": "pointerup",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 896875.4999999925,
+          "timestamp": 894489.1000000015
+        }
+      ]
+    },
+    {
+      "name": "right: biography2 to workstation1",
+      "handlerSpanMs": 1.2000000029802322,
+      "eventSpanMs": 0.7000000029802322,
+      "trace": [
+        {
+          "type": "pointerdown",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 926025.8999999985,
+          "timestamp": 923995.8999999985
+        },
+        {
+          "type": "pointermove",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 926026.6000000015,
+          "timestamp": 923996.4999999925
+        },
+        {
+          "type": "pointerup",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 926027.1000000015,
+          "timestamp": 923996.6000000015
+        }
+      ]
+    }
+  ]
+}

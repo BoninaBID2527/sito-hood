@@ -9,9 +9,9 @@ import { tileUV, worldUV, GeoBuilder } from '@/lib/geo'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { palette } from '@/lib/timeOfDay'
 import { rt } from '@/lib/runtime'
-import { streetMat } from './materials'
-import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, streetLevelItems, type BrickKind } from './layout'
-import { wallWithOpenings, withWhite, type Hole } from './facadeBuild'
+import { streetMat, streetU } from './materials'
+import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, wallX, streetLevelItems, type BrickKind } from './layout'
+import { wallWithOpenings, wallFaceZ, withWhite, type Hole } from './facadeBuild'
 import { FIRE_ESCAPES } from './FireEscapes'
 import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
 
@@ -28,7 +28,7 @@ const WIN_H = 1.55
 function holesFor(side: -1 | 1, zNear: number, zFar: number): Hole[] {
   const holes: Hole[] = []
   for (const d of allWindows()) {
-    if (d.side !== side || d.z > zNear - 0.05 || d.z < zFar + 0.05) continue
+    if (d.face || d.side !== side || d.z > zNear - 0.05 || d.z < zFar + 0.05) continue
     const hh = (WIN_H * d.h) / 2
     holes.push({ z0: d.z + d.w / 2, z1: d.z - d.w / 2, y0: d.y - hh, y1: d.y + hh, depth: WIN_DEPTH })
   }
@@ -55,7 +55,7 @@ export function Walls() {
     const mats: Record<string, THREE.MeshStandardMaterial> = {}
     const kinds: BrickKind[] = ['red', 'dark', 'weathered', 'plaster', 'concrete']
     const wallMat = (k: BrickKind, tint: string, seed: number) =>
-      streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: k === 'concrete' ? 0.4 : 1.4, seed, vertexColors: true })
+      streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: k !== 'concrete' && k !== 'plaster', bump: A.brick[k].bump, bumpAmt: k === 'concrete' ? .01 : k === 'plaster' ? .012 : .008, seed, vertexColors: true })
     for (const k of kinds) mats[k] = wallMat(k, '#ffffff', kinds.indexOf(k) * 3.7)
     const tintMat = (k: BrickKind, tint: string) => {
       const key = `${k}-${tint}`
@@ -93,10 +93,15 @@ export function Walls() {
     for (const side of [-1, 1] as const) {
       const last = SEGS.filter((s) => s.side === side).sort((a, b) => a.z1 - b.z1)[0]
       push(wallWithOpenings({ side, x: side * PLAZA.hw, zNear: PLAZA.z0, zFar: PLAZA.z1, h: 20, holes: holesFor(side, PLAZA.z0, PLAZA.z1) }), mats[side === -1 ? 'dark' : 'weathered'])
-      const dx = PLAZA.hw - last.hw
-      const g2 = new THREE.PlaneGeometry(dx, last.h)
-      tileUV(g2, dx, last.h, 2.4)
-      push(g2, tintMat(last.kind, last.tint), [side * (last.hw + dx / 2), last.h / 2, last.z1])
+      const xa = side < 0 ? -PLAZA.hw : last.hw, xb = side < 0 ? -last.hw : PLAZA.hw
+      const holes = allWindows().filter((d) => d.face === 'back' && d.side === side).map((d) => ({
+        xa: -d.x - d.w / 2, xb: -d.x + d.w / 2,
+        y0: d.y - WIN_H * d.h / 2, y1: d.y + WIN_H * d.h / 2, depth: WIN_DEPTH,
+      }))
+      const g2 = wallFaceZ({ x0: -xb, x1: -xa, z: 0, h: last.h, holes })
+      g2.rotateY(Math.PI)
+      g2.translate(0, 0, last.z1)
+      push(g2, tintMat(last.kind, last.tint))
     }
     // back of the alley (behind the camera start) so pointer parallax never reveals the void
     const back = new THREE.PlaneGeometry(8, 24)
@@ -263,6 +268,8 @@ export function Windows() {
       mat.onBeforeCompile = (sh) => {
         sh.uniforms.uWinT = winU.t
         sh.uniforms.uLate = winU.late
+        sh.uniforms.uSkyH = streetU.uSkyHor
+        sh.uniforms.uSkyT = streetU.uSkyTop
         sh.vertexShader = sh.vertexShader
           .replace('#include <common>', '#include <common>\nattribute vec2 aWin;\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;')
           .replace(
@@ -303,11 +310,22 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
     totalEmissiveRadiance *= mix(0.62, 1.2, clamp(lum_, 0.0, 1.2));
   }`
           : ''
+        // glass (V3.7): glazing reflects the sky, and it does so by Fresnel — barely face-on, strongly at grazing angles (looking up the façade). Each pane
+        // has its own dirt/streak so a row of windows is not a row of identical mirrors.
+        const glassRefl = `
+  {
+    vec3 vv_ = normalize(vViewPosition);
+    float fr_ = pow(1.0 - clamp(dot(normal, vv_), 0.0, 1.0), 3.0);
+    vec3 rd_ = inverseTransformDirection(reflect(-vv_, normal), viewMatrix);
+    vec3 env_ = mix(uSkyH, uSkyT, smoothstep(0.0, 0.9, rd_.y));
+    float st_ = 0.62 + 0.38 * sin(vLPos.x * 31.0 + vWin.y * 40.0) * sin(vLPos.y * 3.0 + vWin.x * 9.0);
+    totalEmissiveRadiance += env_ * (0.02 + 0.5 * fr_) * st_ * ${lit ? '0.35' : '0.9'};
+  }`
         sh.fragmentShader = sh.fragmentShader
-          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;\nuniform float uWinT;\nuniform float uLate;')
-          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);' + interior)
+          .replace('#include <common>', '#include <common>\nvarying vec2 vWin;\nvarying vec3 vLPos;\nvarying vec3 vLCam;\nuniform float uWinT;\nuniform float uLate;\nuniform vec3 uSkyH;\nuniform vec3 uSkyT;')
+          .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n  totalEmissiveRadiance *= vColor.rgb;\n#endif\n  totalEmissiveRadiance *= mix(0.4, 1.0, smoothstep(vWin.x - 0.05, vWin.x + 0.05, uWinT)) * (1.0 - uLate * step(vWin.y, 0.16) * 0.88);' + interior + glassRefl)
       }
-      mat.customProgramCacheKey = () => 'win-emit3' + (lit ? 'i' : '')
+      mat.customProgramCacheKey = () => 'win-emit4' + (lit ? 'i' : '')
       const vg = plane.clone()
       geos.push(vg)
       const aWin = new Float32Array(list.length * 2)
@@ -321,8 +339,10 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
       const im = new THREE.InstancedMesh(vg, mat, list.length)
       list.forEach((d, i) => {
         // the sash sits at the back of the shaft (WIN_DEPTH behind the wall face)
-        p.set(d.x + d.side * WIN_DEPTH, d.y, d.z)
-        q.setFromEuler(eu.set(0, rotFor(d.side), 0))
+        if (d.face === 'z') p.set(d.x, d.y, d.z - WIN_DEPTH)
+        else if (d.face === 'back') p.set(d.x, d.y, d.z + WIN_DEPTH)
+        else p.set(d.x + d.side * WIN_DEPTH, d.y, d.z)
+        q.setFromEuler(eu.set(0, d.face === 'z' ? 0 : d.face === 'back' ? Math.PI : rotFor(d.side), 0))
         s.set(d.w, d.h, 1)
         m4.compose(p, q, s)
         im.setMatrixAt(i, m4)
@@ -391,7 +411,7 @@ export function StreetLevel() {
       const mat = streetMat({ map: tex, roughness: 0.55, metalness: 0.55, color: '#ffffff', aoBase: 0.55 })
       const im = new THREE.InstancedMesh(geo, mat, list.length)
       list.forEach((t, i) => {
-        const x = segAt(t.side, t.z).hw
+        const x = Math.abs(wallX(t.side, t.z))
         p.set(t.side * (x + depth), y, t.z)
         q.setFromEuler(eu.set(0, rotFor(t.side), 0))
         m4.compose(p, q, sc)
@@ -416,7 +436,7 @@ export function StreetLevel() {
       if (!flat.length) return
       const im = new THREE.InstancedMesh(geo, frame, flat.length)
       flat.forEach((t, i) => {
-        const x = segAt(t.side, t.z).hw
+        const x = Math.abs(wallX(t.side, t.z))
         p.set(t.side * x - t.side * off, y, t.z)
         q.setFromEuler(eu.set(0, 0, 0))
         m4.compose(p, q, sc)
@@ -440,4 +460,3 @@ export function StreetLevel() {
     </group>
   )
 }
-

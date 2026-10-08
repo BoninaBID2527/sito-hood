@@ -35,9 +35,9 @@ export const CHECKPOINTS = [
   { n: 36, name: 'dualism-return', dual: 'return' },
 ]
 
-const st = (page) => page.evaluate(() => ({ mode: window.__hd.store.getState().mode, world: window.__hd.rt.world, roomNear: window.__hd.store.getState().roomNear, roomLoad: window.__hd.store.getState().roomLoad }))
+export const st = (page) => page.evaluate(() => ({ mode: window.__hd.store.getState().mode, world: window.__hd.rt.world, roomNear: window.__hd.store.getState().roomNear, roomLoad: window.__hd.store.getState().roomLoad }))
 
-async function toAlley(page, h) {
+export async function toAlley(page, h) {
   await page.evaluate(() => { window.__hd.rt.camOverride = null })
   let s = await st(page)
   if (s.mode === 'room' || s.mode === 'room-in' || s.mode === 'room-out') {
@@ -50,11 +50,11 @@ async function toAlley(page, h) {
     await h.until(() => window.__hd.store.getState().mode === 'alterco', null, 600000)
   }
 }
-async function toRoom(page, h) {
+export async function toRoom(page, h) {
   const s = await st(page)
   if (s.mode === 'room') return
   await toAlley(page, h)
-  await page.evaluate((p) => window.__hd.jump(p), 0.327); await h.settle()
+  await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, 0.327); await h.settle()
   await h.until(() => window.__hd.store.getState().roomNear && window.__hd.store.getState().roomLoad >= 1)
   await page.evaluate(() => window.__hd.act('enterRoom'))
   await h.until(() => window.__hd.store.getState().mode === 'room', null, 300000)
@@ -73,17 +73,23 @@ export async function runCheckpoint(page, cp, out, h) {
   if (cp.room) {
     if (cp.room === 'near') {
       await toAlley(page, h)
-      await page.evaluate((p) => window.__hd.jump(p), 0.327); await h.settle()
+      await page.evaluate((p) => { window.__hd.jump(p); window.__hd.rt.snapSpring = p }, 0.327); await h.settle()
       await h.until(() => window.__hd.store.getState().roomNear && window.__hd.store.getState().roomLoad >= 1)
       return shot(1500)
     }
     await toRoom(page, h)
-    if (cp.room === 'entry') { await page.evaluate(() => window.__hd.act('goStation', 0)); await h.until(() => Math.abs(window.__hd.room.u) < 0.04); return shot(1500) }
-    if (cp.room === 'station') { await page.evaluate((i) => window.__hd.act('goStation', i), cp.i); await h.until((i) => Math.abs(window.__hd.room.u - i) < 0.04, cp.i); return shot(1500) }
+    if (cp.room === 'entry') { await page.evaluate(() => window.__hd.act('goStation', 0)); await h.until(() => Math.abs(window.__hd.room.u) < 0.04 && window.__hd.room.push < 0.001); return shot(1500) }
+    if (cp.room === 'station') { await page.evaluate((i) => window.__hd.act('goStation', i), cp.i); await h.until((i) => Math.abs(window.__hd.room.u - i) < 0.04 && window.__hd.room.push < 0.001, cp.i); return shot(1500) }
     if (cp.room === 'video') {
       await page.evaluate(() => window.__hd.act('goStation', 1)); await h.until(() => Math.abs(window.__hd.room.u - 1) < 0.04)
       await page.evaluate(() => window.__hd.act('focusVideo')); await h.until(() => window.__hd.room.push > 0.97)
-      return shot(2500)
+      await page.evaluate(() => document.querySelector('[aria-label="Play video"]')?.click())
+      await h.until(() => window.__hd.vid.el?.readyState >= 3 && window.__hd.vid.live && !window.__hd.vid.el.paused)
+      await page.evaluate(() => { window.__hd.vid.el.currentTime = 4 })
+      await h.until(() => window.__hd.vid.el.currentTime >= 4 && !window.__hd.vid.el.seeking)
+      await shot(1500)
+      await page.evaluate(() => window.__hd.act('closeFocus'))
+      return
     }
   }
   if (cp.dual) {

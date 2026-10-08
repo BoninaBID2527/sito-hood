@@ -1,0 +1,81 @@
+{
+  "sourceCommit": "3882a72535e7824e83d2dc99ef48461ea92584de",
+  "node": "24.19.0",
+  "browser": {
+    "executable": "/usr/bin/chromium",
+    "version": "151.0.7922.173",
+    "args": [
+      "--use-angle=swiftshader",
+      "--use-gl=angle",
+      "--enable-unsafe-swiftshader",
+      "--ignore-gpu-blocklist",
+      "--no-sandbox",
+      "--remote-debugging-port=9333"
+    ],
+    "persistentLaunchServer": true,
+    "isolatedContexts": true
+  },
+  "targets": {
+    "production": "http://localhost:3000/",
+    "baseline": "http://localhost:3001/",
+    "staticExport": "http://localhost:3002/sito-hood/"
+  },
+  "photographic": {
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "uiHidden": true,
+    "textureUpgradeRequired": true,
+    "settlementTimeoutMs": 600000,
+    "resumeGuard": "Same production build ID, viewport, tier and post configuration; no console errors",
+    "finiteReflectionRequired": true,
+    "baseRenderChecks": {
+      "postDisabled": [
+        1,
+        6,
+        10,
+        19,
+        27,
+        41,
+        54,
+        59
+      ],
+      "postAndGlobalFogDisabled": [
+        1,
+        27,
+        35,
+        41,
+        59
+      ],
+      "worldParticlesAndVolumetricGeometryRetained": true
+    }
+  },
+  "performance": {
+    "viewport": "640x360",
+    "tier": "balanced",
+    "scale": 0.6,
+    "samples": 10,
+    "warmupFrames": 4,
+    "softwareGL": true,
+    "interleaved": false,
+    "finiteReflectionRequiredForV37": true,
+    "reflectionReadbackOutsideMeasuredSamples": true
+  },
+  "regression": {
+    "internalRenderScale": 0.45,
+    "desktopViewport": "960x540",
+    "touchViewport": "820x1180",
+    "touchEmulated": true,
+    "touchInputs": "Chromium touchscreen tap plus CDP horizontal swipe, with existing keyboard checks retained",
+    "tracksViewport": "1280x720"
+  },
+  "videoTest": {
+    "route": "**/hooddino-studio-arrangiamento.mp4",
+    "source": "public/room/hooddino-studio-arrangiamento.mp4",
+    "transcode": "VP9/Opus WebM, same complete source, 56.066 seconds",
+    "nativeH264Verified": false,
+    "currentTranscodeBytes": 5095557,
+    "currentTranscodeSettings": "ffmpeg libvpx-vp9, 500k, realtime cpu-used 8; libopus"
+  },
+  "infrastructure": "Container replacements at 17:08/17:31 and 21:22 UTC interrupted processes. Persistent builds/results remained under /workspace; runs resumed only with matching build/configuration. Chromium version and two-core/8GiB limits rechecked unchanged. Detailed events: infrastructure-events.json. Revision56 restart at 00:05 UTC interrupted ROOM-DOM-video before completion; required foreground processes restored with the same builds and hardware limits. Single19-stage resume skips completed checks and retests missing/failed stages."
+}
