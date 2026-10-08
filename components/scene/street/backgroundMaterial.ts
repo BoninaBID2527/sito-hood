@@ -13,6 +13,19 @@ export function backgroundMaterial(
   const seed = (opts.seed ?? 0).toFixed(2), macro = (opts.macro ?? 1).toFixed(2)
   const metal = m.metalness > .25
   m.userData.background = true
+  // Background keeps the primary sun, directional sky fill and hemisphere.
+  // Additional directional bounces and local light loops are represented by
+  // the low-frequency irradiance fields below, not evaluated as full BRDFs.
+  let lights = THREE.ShaderChunk.lights_fragment_begin.replace(
+    /#if \( NUM_(POINT|SPOT|RECT_AREA)_LIGHTS > 0 \) && defined\( RE_Direct(?:_RectArea)? \)/g,
+    '#if 0',
+  )
+  const start = lights.indexOf('#if ( NUM_DIR_LIGHTS > 0 )')
+  const end = lights.indexOf('#if 0', start)
+  const directional = lights.slice(start, end)
+    .replace('for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {', 'for ( int i = 0; i < NUM_DIR_LIGHTS; i ++ ) {\n #if ( UNROLLED_LOOP_INDEX < 2 )')
+    .replace('\n\t}\n\t#pragma unroll_loop_end', '\n #endif\n\t}\n\t#pragma unroll_loop_end')
+  lights = lights.slice(0, start) + directional + lights.slice(end)
   m.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, uniforms)
     sh.vertexShader = sh.vertexShader
@@ -40,8 +53,8 @@ export function backgroundMaterial(
         uniform vec3 uSunCol, uSkyTop, uSkyHor;`)
       .replace('#include <color_fragment>', `#include <color_fragment>
         vec3 bp = vBackgroundPosition;
-        vec2 broad = texture2D(uNz, (bp.xy + bp.z*vec2(.3173,.5411))*.009 + ${seed}).rg;
-        vec2 meso = texture2D(uNz, vec2(bp.x+bp.z, bp.y)*vec2(.055,.008) + ${seed}*.17).rg;
+        vec2 broad = textureLod(uNz, (bp.xy + bp.z*vec2(.3173,.5411))*.009 + ${seed}, 0.).rg;
+        vec2 meso = textureLod(uNz, vec2(bp.x+bp.z, bp.y)*vec2(.055,.008) + ${seed}*.17, 0.).rg;
         float damp = (1. - smoothstep(.1, 1.3, bp.y)) * uWet;
         diffuseColor.rgb *= mix(vec3(1.), mix(vec3(.91,.94,1.02), vec3(1.06,1.,.92), broad.r), ${macro});
         diffuseColor.rgb *= 1. + (meso.r-.5)*.14*${macro};
@@ -55,6 +68,7 @@ export function backgroundMaterial(
         .replace('normalize( dFdx( surf_pos.xyz ) )', 'dFdx( surf_pos.xyz )')
         .replace('normalize( dFdy( surf_pos.xyz ) )', 'dFdy( surf_pos.xyz )')
         .replace('vec3 vGrad = sign( fDet )', 'if ( !( abs( fDet ) > 1e-12 ) ) return surf_norm;\n vec3 vGrad = sign( fDet )'))
+      .replace('#include <lights_fragment_begin>', lights)
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
         vec3 bn = inverseTransformDirection(normal, viewMatrix);
         float band = smoothstep(uSunY-3.5, uSunY+1., bp.y) * uSunAmt;
@@ -75,6 +89,6 @@ export function backgroundMaterial(
         }
         #include <opaque_fragment>`)
   }
-  m.customProgramCacheKey = () => `background-pbr-v37-${seed}-${macro}-${metal}-${!!opts.bump}`
+  m.customProgramCacheKey = () => `background-pbr-v37-lights2-${seed}-${macro}-${metal}-${!!opts.bump}`
   return m
 }
