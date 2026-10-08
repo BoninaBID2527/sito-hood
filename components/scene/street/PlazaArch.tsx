@@ -16,22 +16,23 @@ import { buildPlazaArch, type PlazaKey } from './plazaArch'
 export function PlazaArch() {
   const kit = useMemo(() => {
     const built = buildPlazaArch()
+    const surface = (params: Parameters<typeof streetMat>[0]) => streetMat({ ...params, background: true })
     const wallMat = (k: 'dark' | 'red' | 'weathered', tint: string, seed: number) =>
-      streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: 1.4, seed, vertexColors: true, background: true })
+      surface({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: 1.4, seed, vertexColors: true })
     const wallMats = { rl: wallMat('dark', '#e8dcd2', 21.3), rr: wallMat('red', '#d6bcae', 23.1), end: wallMat('weathered', '#e0cdb8', 25.7) }
-    const stone = streetMat({ map: A.sidewalk, color: '#6f6b63', roughness: 0.94, aoBase: 0.45, macro: 1.0, seed: 5.5, vertexColors: true })
+    const stone = surface({ map: A.sidewalk, color: '#6f6b63', roughness: 0.94, aoBase: 0.45, macro: 1.0, seed: 5.5, vertexColors: true })
     const mats: Record<Exclude<PlazaKey, 'rl' | 'rr' | 'end'>, THREE.Material> = {
       stone,
-      steel: streetMat({ color: '#2a2b2e', roughness: 0.6, metalness: 0.7, aoBase: 0.6, vertexColors: true }),
-      roof: streetMat({ color: '#2c2a27', roughness: 0.85, metalness: 0.2, aoBase: 0.6, vertexColors: true }),
-      wood: streetMat({ color: '#5a4630', roughness: 0.95, aoBase: 0.5, vertexColors: true }),
-      cap: streetMat({ color: '#9a8a3a', roughness: 0.8, aoBase: 0.5, vertexColors: true }),
-      rubber: streetMat({ color: '#121212', roughness: 0.96, aoBase: 0.6, vertexColors: true }),
-      crate: streetMat({ color: '#7a6246', roughness: 0.97, aoBase: 0.5, macro: 1.0, seed: 3.3, vertexColors: true }),
+      steel: surface({ color: '#2a2b2e', roughness: 0.6, metalness: 0.7, aoBase: 0.6, vertexColors: true }),
+      roof: surface({ color: '#2c2a27', roughness: 0.85, metalness: 0.2, aoBase: 0.6, vertexColors: true }),
+      wood: surface({ color: '#5a4630', roughness: 0.95, aoBase: 0.5, vertexColors: true }),
+      cap: surface({ color: '#9a8a3a', roughness: 0.8, aoBase: 0.5, vertexColors: true }),
+      rubber: surface({ color: '#121212', roughness: 0.96, aoBase: 0.6, vertexColors: true }),
+      crate: surface({ color: '#7a6246', roughness: 0.97, aoBase: 0.5, macro: 1.0, seed: 3.3, vertexColors: true }),
       glow: new THREE.MeshStandardMaterial({ color: '#2a1e12', emissive: new THREE.Color('#ffbb70'), emissiveIntensity: 1.6, roughness: 0.4 }),
       seam: new THREE.MeshStandardMaterial({ color: '#080707', roughness: 0.82, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }),
       patch: new THREE.MeshStandardMaterial({ color: '#1a1918', roughness: 0.78, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 }),
-      iron: streetMat({ color: '#18191b', roughness: 0.5, metalness: 0.65, aoBase: 0.6, vertexColors: true }),
+      iron: surface({ color: '#18191b', roughness: 0.5, metalness: 0.65, aoBase: 0.6, vertexColors: true }),
     }
     const meshes: { geo: THREE.BufferGeometry; mat: THREE.Material }[] = []
     for (const k of ['rl', 'rr', 'end'] as const) {
@@ -46,11 +47,32 @@ export function PlazaArch() {
     const doorMeshes = built.doors.map((d) => {
       const tex = d.kind === 'shutter' ? A.shutters[d.variant] : A.doors[d.variant]
       const key = `${d.kind}${d.variant}`
-      if (!doorMats.has(key)) doorMats.set(key, streetMat({ map: tex, roughness: 0.55, metalness: 0.55, color: '#ffffff', aoBase: 0.55 }))
+      if (!doorMats.has(key)) doorMats.set(key, surface({ map: tex, roughness: 0.55, metalness: 0.55, color: '#ffffff', aoBase: 0.55 }))
       const geo = new THREE.PlaneGeometry(d.w, d.h)
       doorGeos.push(geo)
       return { geo, mat: doorMats.get(key)!, pos: [d.x, d.y, d.z] as [number, number, number], ry: d.ry ?? 0 }
     })
+    // Static broad practical irradiance from the installed lamps, kept separate
+    // from surface colour. One scalar per vertex; no extra point lights/passes.
+    const bakePractical = (geo: THREE.BufferGeometry, offset = [0, 0, 0], ry = 0) => {
+      const p = geo.attributes.position, n = geo.attributes.normal, values = new Float32Array(p.count)
+      const c = Math.cos(ry), s = Math.sin(ry)
+      for (let i = 0; i < p.count; i++) {
+        const x = p.getX(i)*c+p.getZ(i)*s+offset[0], y = p.getY(i)+offset[1], z = -p.getX(i)*s+p.getZ(i)*c+offset[2]
+        const nx = n.getX(i)*c+n.getZ(i)*s, ny = n.getY(i), nz = -n.getX(i)*s+n.getZ(i)*c
+        let irradiance = 0
+        for (const lamp of built.lamps) {
+          const dx = lamp.p[0]-x, dy = lamp.p[1]-y, dz = lamp.p[2]-z, d2 = dx*dx+dy*dy+dz*dz
+          if (d2 > 36) continue
+          const facing = Math.max(0, (dx*nx+dy*ny+dz*nz)/Math.sqrt(d2+.1))
+          irradiance += .55*Math.max(.08,facing)*Math.exp(-d2/6.25)
+        }
+        values[i] = Math.min(1.5, irradiance)
+      }
+      geo.setAttribute('backgroundBounce', new THREE.BufferAttribute(values, 1))
+    }
+    meshes.filter(m => m.mat.userData.background).forEach(m => bakePractical(m.geo))
+    doorMeshes.forEach(d => bakePractical(d.geo, d.pos, d.ry))
     // light spill: soft additive halos around the practical lamps and the bridge's lit glazing — what a real lamp does to the air and the wall around it
     // Same camera-facing practical halos, one instanced draw instead of one per lamp.
     const halo = new THREE.MeshBasicMaterial({ map: A.glow, color: '#ffb36a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.55, fog: false })

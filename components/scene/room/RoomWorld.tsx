@@ -155,34 +155,39 @@ function roomIrradiance(m: THREE.MeshStandardMaterial, strength = 1) {
   m.onBeforeCompile = (sh, renderer) => {
     prior(sh, renderer)
     sh.uniforms.uRoomBounce = { value: strength }
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 roomBake; varying vec3 vRoomPosition; varying vec3 vRoomBake;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvRoomPosition = position; vRoomBake = roomBake;')
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vRoomPosition; varying vec3 vRoomBake; uniform float uRoomBounce;')
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute vec3 roomBake; varying vec3 vRoomPosition; varying vec3 vRoomBake; varying vec3 vRoomSources; varying vec2 vRoomReturn;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+        vRoomPosition = position; vRoomBake = roomBake;
+        // Broad irradiance fields are interpolated across constructed surfaces.
+        // Evaluate once per vertex, not five exponentials per covered pixel.
+        vec3 deskD = (position-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7);
+        vec3 screenD = (position-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7);
+        vec3 doorD = (position-vec3(0.,1.,-1.4))*vec3(.45,.5,.5);
+        vec2 ceilingD = (position.xz-vec2(.2,-3.6))*vec2(.34,.25);
+        vec3 returnD = (position-vec3(.1,.35,-7.8))*vec3(.55,.65,.65);
+        vRoomSources = exp(-vec3(dot(deskD,deskD),dot(screenD,screenD),dot(doorD,doorD)));
+        vRoomReturn = exp(-vec2(dot(ceilingD,ceilingD),dot(returnD,returnD)));
+      `)
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vRoomPosition; varying vec3 vRoomBake; varying vec3 vRoomSources; varying vec2 vRoomReturn; uniform float uRoomBounce;')
       .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor = clamp(roughnessFactor + .045*sin(vRoomPosition.x*2.1 + vRoomPosition.z*.8), .18, 1.);')
       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
-        vec3 rp = vRoomPosition;
         vec3 wn = inverseTransformDirection(normal, viewMatrix);
         vec3 rn = vec3(-wn.z, wn.y, wn.x);
-        float deskPool = exp(-dot((rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7), (rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7)));
-        float screenPool = exp(-dot((rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7), (rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7)));
-        float doorwayPool = exp(-dot((rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5), (rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5)));
         // The utility fixture lights the floor and desk; their broad return lights
         // downward-facing clouds/ceiling. Keep this local, rather than lifting
         // every shadow with a global ambient source. Contact remains baked.
-        float ceilingReturn = exp(-dot((rp.xz-vec2(.2,-3.6))*vec2(.34,.25), (rp.xz-vec2(.2,-3.6))*vec2(.34,.25)));
-        float deskReturn = exp(-dot((rp-vec3(.1,.35,-7.8))*vec3(.55,.65,.65), (rp-vec3(.1,.35,-7.8))*vec3(.55,.65,.65)));
         vec3 irradianceRoom = vec3(.11,.12,.14)*(.4+.6*max(rn.y,0.));
-        irradianceRoom += vec3(.24,.23,.20)*ceilingReturn*(.18+.82*max(-rn.y,0.));
-        irradianceRoom += vec3(.15,.115,.085)*deskReturn;
-        irradianceRoom += vec3(.33,.19,.095)*deskPool;
-        irradianceRoom += vec3(.11,.15,.21)*screenPool*(.35+.65*max(-rn.z,0.));
-        irradianceRoom += vec3(.23,.16,.105)*doorwayPool;
+        irradianceRoom += vec3(.24,.23,.20)*vRoomReturn.x*(.18+.82*max(-rn.y,0.));
+        irradianceRoom += vec3(.15,.115,.085)*vRoomReturn.y;
+        irradianceRoom += vec3(.33,.19,.095)*vRoomSources.x;
+        irradianceRoom += vec3(.11,.15,.21)*vRoomSources.y*(.35+.65*max(-rn.z,0.));
+        irradianceRoom += vec3(.23,.16,.105)*vRoomSources.z;
         reflectedLight.indirectDiffuse += (irradianceRoom + .6*vRoomBake) * uRoomBounce * material.diffuseColor * (1.0 / 3.14159265);
       `)
   }
   const oldKey = m.customProgramCacheKey.bind(m)
   const key = oldKey()
-  m.customProgramCacheKey = () => key + '/room-irradiance-v37-floor-return'
+  m.customProgramCacheKey = () => key + '/room-irradiance-v37-vertex-fields'
   return m
 }
 

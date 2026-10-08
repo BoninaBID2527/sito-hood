@@ -115,7 +115,9 @@ export function buildShell(env: Env): ShellGeo {
 /** the floor: one plane, world-metre UVs (boards run along z) */
 export function buildFloor(level: number) {
   const { x0, x1, zf, zb } = L
-  const g = new THREE.PlaneGeometry(x1 - x0, zf - zb, 1, 1)
+  // 0.4 m irradiance sampling on the floor, matching the wall light grids.
+  // A single quad cannot interpolate the local monitor/desk return accurately.
+  const g = new THREE.PlaneGeometry(x1 - x0, zf - zb, 16, 19)
   g.rotateX(-Math.PI / 2)
   g.translate((x0 + x1) / 2, 0, (zf + zb) / 2)
   const uv = g.attributes.uv, pos = g.attributes.position

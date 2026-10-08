@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { backgroundMaterial } from './backgroundMaterial'
 
 /**
  * 256² tileable smooth value noise (32-cell lattice, smoothstep-interpolated at bake time). R and G are independent fields.
@@ -105,6 +106,7 @@ export interface StreetOpts {
 }
 
 export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}) {
+  if (opts.background) return backgroundMaterial(m, streetU, opts)
   const ao = (opts.aoBase ?? 0.5).toFixed(2)
   const macro = (opts.macro ?? 1).toFixed(2)
   const seed = (opts.seed ?? 0).toFixed(1)
@@ -113,7 +115,6 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const wet = !!opts.wet
   const decal = !!opts.decal
   const atlas = !!opts.atlas
-  const background = !!opts.background
   const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
   const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
@@ -178,7 +179,7 @@ uniform vec3 uSkyTop;
 uniform vec3 uSkyHor;
 ${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
-${background ? GLSL_UTIL.replace(/float vn3_\(vec3 p\)\{[\s\S]*?\n\}/, 'float vn3_(vec3 p){ return textureLod(uNz, (p.xy + p.z * vec2(.3173,.5411)) * (1.0 / 32.0), 0.0).g; }') : GLSL_UTIL}`,
+${GLSL_UTIL}`,
       )
       .replace(
         '#include <map_fragment>',
@@ -209,7 +210,7 @@ ${
   // ── macro variation: warm/cool brick lots, soot, damp, drips ──
   float nL_ = vn3_(vWPos * vec3(0.16, 0.12, 0.16) + ${seed});
   float nM_ = vn3_(vWPos * vec3(0.62, 0.5, 0.62) + 17.0);
-  float nS_ = ${background ? 'nM_' : 'vn3_(vWPos * 3.1 + 5.0)'};
+  float nS_ = vn3_(vWPos * 3.1 + 5.0);
   vec3 lotTint_ = mix(vec3(0.80, 0.88, 1.02), vec3(1.14, 1.0, 0.86), smoothstep(0.25, 0.75, nL_));
   diffuseColor.rgb *= mix(vec3(1.0), lotTint_, mac_);
   diffuseColor.rgb *= 1.0 + (nM_ - 0.5) * 0.55 * mac_;
@@ -226,12 +227,12 @@ ${
   float brickRough_ = 1.0;
   float asphaltPolish_ = 0.0, asphaltCrack_ = 0.0;
   float rustM_ = 0.0;
-  float grime_ = smoothstep(0.45, 0.85, ${background ? 'nM_' : 'vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)'}) * smoothstep(1.5, 12.0, h_);
+  float grime_ = smoothstep(0.45, 0.85, vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)) * smoothstep(1.5, 12.0, h_);
   diffuseColor.rgb *= 1.0 - 0.28 * grime_ * mac_;
   // micro-surface (V3.4): fine aggregate / pitting that lives below the texture's resolution. Fades out with distance, so it never
   // shimmers and costs nothing where it cannot be seen (uMicro = 0 on the mobile tier).
   float microR_ = 0.0;
-  if (${background ? 'false' : 'uMicro > 0.5'}) {
+  if (uMicro > 0.5) {
     float fdm_ = 1.0 - smoothstep(5.0, 15.0, length(vViewPosition));
     if (fdm_ > 0.01) {
       float mi_ = (vn3_(vWPos * 34.0 + 11.0) * 0.6 + vn3_(vWPos * 97.0 + 23.0) * 0.4) - 0.5;
@@ -479,7 +480,7 @@ ${
   #include <opaque_fragment>`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}${background ? 'bg' : ''}13irradiance-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}13irradiance-v37`
   return m
 }
 
