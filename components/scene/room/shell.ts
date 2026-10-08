@@ -9,7 +9,7 @@ import { type Bake, type Occluder, bakeLights, fbm3, occlusionAt, ticks } from '
  * separate irradiance attribute for installed practical lights, plus the trim that makes the junctions read as built (baseboard, dado rail, crown, door casing).
  */
 
-export const PAINT = { upper: '#686d68', lower: '#323a3c', ceiling: '#202226' }
+export const PAINT = { upper: '#686d68', lower: '#323a3c', ceiling: '#363936' }
 export const DADO = 0.96
 const OPEN_W = 0.75 // half width of the airlock opening in the front wall
 const OPEN_H = 2.5

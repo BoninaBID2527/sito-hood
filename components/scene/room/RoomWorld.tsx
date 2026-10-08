@@ -166,7 +166,14 @@ function roomIrradiance(m: THREE.MeshStandardMaterial, strength = 1) {
         float deskPool = exp(-dot((rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7), (rp-vec3(-.8,1.,-8.15))*vec3(.65,.8,.7)));
         float screenPool = exp(-dot((rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7), (rp-vec3(.4,1.15,-8.05))*vec3(.8,1.,.7)));
         float doorwayPool = exp(-dot((rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5), (rp-vec3(0.,1.,-1.4))*vec3(.45,.5,.5)));
+        // The utility fixture lights the floor and desk; their broad return lights
+        // downward-facing clouds/ceiling. Keep this local, rather than lifting
+        // every shadow with a global ambient source. Contact remains baked.
+        float ceilingReturn = exp(-dot((rp.xz-vec2(.2,-3.6))*vec2(.34,.25), (rp.xz-vec2(.2,-3.6))*vec2(.34,.25)));
+        float deskReturn = exp(-dot((rp-vec3(.1,.35,-7.8))*vec3(.55,.65,.65), (rp-vec3(.1,.35,-7.8))*vec3(.55,.65,.65)));
         vec3 irradianceRoom = vec3(.11,.12,.14)*(.4+.6*max(rn.y,0.));
+        irradianceRoom += vec3(.24,.23,.20)*ceilingReturn*(.18+.82*max(-rn.y,0.));
+        irradianceRoom += vec3(.15,.115,.085)*deskReturn;
         irradianceRoom += vec3(.33,.19,.095)*deskPool;
         irradianceRoom += vec3(.11,.15,.21)*screenPool*(.35+.65*max(-rn.z,0.));
         irradianceRoom += vec3(.23,.16,.105)*doorwayPool;
@@ -175,7 +182,7 @@ function roomIrradiance(m: THREE.MeshStandardMaterial, strength = 1) {
   }
   const oldKey = m.customProgramCacheKey.bind(m)
   const key = oldKey()
-  m.customProgramCacheKey = () => key + '/room-irradiance-v37'
+  m.customProgramCacheKey = () => key + '/room-irradiance-v37-floor-return'
   return m
 }
 

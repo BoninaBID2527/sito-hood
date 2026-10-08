@@ -79,6 +79,9 @@ vec3 bumpN_(vec3 sx, vec3 sy, vec3 surf_norm, vec2 dHdxy, float faceDirection){
 
 export interface StreetOpts {
   aoBase?: number
+  /** Mid/background architecture: projected baked noise, no invisible micrograin.
+   * Keeps PBR, masonry relief, practical bounce and narrative deformation. */
+  background?: boolean
   /** brick-like tiling surface: per-cell bond offsets (breaks the 2.4 m repeat), patched masonry, painted-over panels */
   brick?: boolean
   /** height texture sampled with the same (offset) uv → screen-space bump */
@@ -110,6 +113,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const wet = !!opts.wet
   const decal = !!opts.decal
   const atlas = !!opts.atlas
+  const background = !!opts.background
   const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
   const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
@@ -174,7 +178,7 @@ uniform vec3 uSkyTop;
 uniform vec3 uSkyHor;
 ${wet ? 'uniform sampler2D uWetTex;\nuniform vec4 uWetBox;' : ''}
 ${bump ? 'uniform sampler2D uBumpTex;' : ''}
-${GLSL_UTIL}`,
+${background ? GLSL_UTIL.replace(/float vn3_\(vec3 p\)\{[\s\S]*?\n\}/, 'float vn3_(vec3 p){ return textureLod(uNz, (p.xy + p.z * vec2(.3173,.5411)) * (1.0 / 32.0), 0.0).g; }') : GLSL_UTIL}`,
       )
       .replace(
         '#include <map_fragment>',
@@ -205,7 +209,7 @@ ${
   // ── macro variation: warm/cool brick lots, soot, damp, drips ──
   float nL_ = vn3_(vWPos * vec3(0.16, 0.12, 0.16) + ${seed});
   float nM_ = vn3_(vWPos * vec3(0.62, 0.5, 0.62) + 17.0);
-  float nS_ = vn3_(vWPos * 3.1 + 5.0);
+  float nS_ = ${background ? 'nM_' : 'vn3_(vWPos * 3.1 + 5.0)'};
   vec3 lotTint_ = mix(vec3(0.80, 0.88, 1.02), vec3(1.14, 1.0, 0.86), smoothstep(0.25, 0.75, nL_));
   diffuseColor.rgb *= mix(vec3(1.0), lotTint_, mac_);
   diffuseColor.rgb *= 1.0 + (nM_ - 0.5) * 0.55 * mac_;
@@ -222,12 +226,12 @@ ${
   float brickRough_ = 1.0;
   float asphaltPolish_ = 0.0, asphaltCrack_ = 0.0;
   float rustM_ = 0.0;
-  float grime_ = smoothstep(0.45, 0.85, vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)) * smoothstep(1.5, 12.0, h_);
+  float grime_ = smoothstep(0.45, 0.85, ${background ? 'nM_' : 'vn3_(vWPos * vec3(0.9, 0.25, 0.9) + 31.0)'}) * smoothstep(1.5, 12.0, h_);
   diffuseColor.rgb *= 1.0 - 0.28 * grime_ * mac_;
   // micro-surface (V3.4): fine aggregate / pitting that lives below the texture's resolution. Fades out with distance, so it never
   // shimmers and costs nothing where it cannot be seen (uMicro = 0 on the mobile tier).
   float microR_ = 0.0;
-  if (uMicro > 0.5) {
+  if (${background ? 'false' : 'uMicro > 0.5'}) {
     float fdm_ = 1.0 - smoothstep(5.0, 15.0, length(vViewPosition));
     if (fdm_ > 0.01) {
       float mi_ = (vn3_(vWPos * 34.0 + 11.0) * 0.6 + vn3_(vWPos * 97.0 + 23.0) * 0.4) - 0.5;
@@ -258,9 +262,11 @@ ${
     vec3 bt_ = mix(vec3(0.88, 0.85, 0.87), vec3(1.10, 1.0, 0.92), b1_) * (0.88 + 0.24 * b2_);
     float bb_ = h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + floor(vMapUv) * 5.0 + ${seed} * 3.3);
     vec3 batch_ = mix(vec3(0.86, 0.84, 0.9), vec3(1.1, 1.0, 0.88), bb_) * (0.9 + 0.2 * h21_(floor(vec2(col2_, row2_) / vec2(5.0, 4.0)) + 17.0));
-    diffuseColor.rgb *= mix(vec3(1.0), bt_ * batch_, 0.72 * mac_ * (1.0 - pt_));
-    diffuseColor.rgb *= mix(1.0, 0.5, step(0.94, b3_) * mac_);
-    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.25, 1.18, 1.05), step(b3_, 0.04) * mac_ * 0.7);
+    // Restrained unit scatter: large neighbouring kiln lots carry the colour,
+    // rather than isolated black/white bricks repeating as a checkerboard.
+    diffuseColor.rgb *= mix(vec3(1.0), mix(vec3(1.0), bt_, .42) * batch_, 0.64 * mac_ * (1.0 - pt_));
+    diffuseColor.rgb *= mix(1.0, 0.78, step(0.985, b3_) * mac_);
+    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.12, 1.08, 1.03), step(b3_, 0.018) * mac_ * 0.5);
     brickRough_ = 0.82 + 0.3 * b2_;
     // efflorescence / salt bloom low on the wall, pale mineral stains
     float salt_ = smoothstep(0.55, 0.82, vn3_(vWPos * vec3(1.6, 0.7, 1.6) + 9.0)) * (1.0 - smoothstep(0.3, 2.6, h_));
@@ -466,13 +472,13 @@ ${
   #include <opaque_fragment>`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}11filtered-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}${background ? 'bg' : ''}12kiln-v37`
   return m
 }
 
 export function streetMat(params: THREE.MeshStandardMaterialParameters & StreetOpts) {
-  const { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas, ...rest } = params
-  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas })
+  const { aoBase, background, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas, ...rest } = params
+  return patchStreet(new THREE.MeshStandardMaterial(rest), { aoBase, background, brick, bump, bumpAmt, bumpBlur, macro, seed, wet, wetBox, flutter, decal, atlas })
 }
 
 /** Gentle sway for cables / hanging objects. Amplitude fades toward the fixed ends (uv.x 0..1). */
