@@ -87,14 +87,28 @@ if (touch) {
   ok(await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch tap selects workstation')
   const input = await ctx.newCDPSession(page)
   const swipe = async (from, to) => {
-    await input.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: w * from, y: h * 0.2 }] })
-    await input.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: w * to, y: h * 0.2 }] })
-    await input.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+    await hd(() => {
+      window.__swipeTrace = []
+      window.__swipeListener = (e) => window.__swipeTrace.push({ type: e.type, pointerType: e.pointerType, trusted: e.isTrusted, x: e.clientX, y: e.clientY, handledAt: performance.now(), timestamp: e.timeStamp })
+      for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.addEventListener(type, window.__swipeListener, true)
+    })
+    // Queue an actual quick native gesture. Awaiting each CDP acknowledgment
+    // can insert a whole slow GL frame between events, turning it into a hold.
+    await Promise.all([
+      input.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: w * from, y: h * 0.2 }] }),
+      input.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: w * to, y: h * 0.2 }] }),
+      input.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }),
+    ])
+    console.log('native swipe trace', JSON.stringify(await hd(() => {
+      for (const type of ['pointerdown', 'pointermove', 'pointerup', 'pointercancel']) window.removeEventListener(type, window.__swipeListener, true)
+      return window.__swipeTrace
+    })))
   }
   await swipe(0.72, 0.28)
   ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch swipe left selects next station')
+  const beforeRight = await hd(() => window.__hd.room.uT)
   await swipe(0.28, 0.72)
-  ok(await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch swipe right selects previous station')
+  ok(beforeRight === 2 && await until(() => window.__hd.room.uT === 1 && Math.abs(window.__hd.room.u - 1) < 0.06), 'touch swipe right selects previous station')
   await input.detach()
   await page.tap('button[aria-label="WHO IS HOODDINO?"]')
   ok(await until(() => window.__hd.room.uT === 2 && Math.abs(window.__hd.room.u - 2) < 0.06), 'touch tap selects biography')

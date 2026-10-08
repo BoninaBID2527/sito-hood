@@ -1,0 +1,226 @@
+{
+  "buildId": "V_ujN1cRSCwGyuAwb9K6v",
+  "viewport": "960x540",
+  "quality": "high",
+  "noPost": true,
+  "noFog": true,
+  "resumedCaptures": 0,
+  "recaptured": [],
+  "captures": [
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 1,
+      "name": "street-opening",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.231710759354735,
+          1.218305901013514,
+          17.489915997117713
+        ],
+        "quaternion": [
+          0.017688481559257223,
+          0.010022840528260713,
+          -0.012300339868220326,
+          0.9997176411002255
+        ],
+        "fov": 47
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 194,
+      "triangles": 127522,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 27,
+      "name": "plaza-far-ahead",
+      "inspectionCamera": {
+        "pos": [
+          2.8,
+          2.7,
+          -111
+        ],
+        "look": [
+          0,
+          5.5,
+          -146
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          2.8,
+          2.7,
+          -111
+        ],
+        "quaternion": [
+          0.03974623107003986,
+          0.0398728123851245,
+          -0.0015873135916262952,
+          0.9984126783969591
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 105,
+      "triangles": 115922,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            3,
+            0.02,
+            -6
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 35,
+      "name": "roof-wide",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          601.8882826005378,
+          1.8545308251249273,
+          -4.993277226195448
+        ],
+        "quaternion": [
+          0.01370193055809534,
+          -0.05450306471098479,
+          -0.00021036462619676056,
+          0.9984195655048107
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "roof",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 135,
+      "triangles": 16002,
+      "textures": 83,
+      "geometries": 219,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null
+    },
+    {
+      "reflections": [],
+      "n": 41,
+      "name": "room-04-workstation-wide",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1194.507895058579,
+          1.2869281873820035,
+          -67.31788547103294
+        ],
+        "quaternion": [
+          -0.02677317929961978,
+          0.7065755772017029,
+          0.02713034035775103,
+          0.7066102852381525
+        ],
+        "fov": 48.00995094181297
+      },
+      "roomStation": 0.9819076618000282,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 117,
+      "geometries": 272,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": 0
+    },
+    {
+      "reflections": [],
+      "n": 59,
+      "name": "dualism-wide",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -598.1305521019073,
+          -0.0335558687429558,
+          9.5
+        ],
+        "quaternion": [
+          0.006893400163978058,
+          0.08788206411125278,
+          -0.0006081739483715514,
+          0.9961068486694454
+        ],
+        "fov": 52.00124720545842
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "dualism",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 48,
+      "triangles": 27128,
+      "textures": 123,
+      "geometries": 295,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "time": "2026-10-07T17:08:00Z",
+    "stage": "performance-V36",
+    "status": "interrupted",
+    "exitCode": null,
+    "reason": "Execution environment restart after baseline performance stage started at 17:06:08; active verifier and production server became defunct; no completed sample was recorded. Resumed with foreground sessions."
+  },
+  {
+    "time": "2026-10-07T17:19:00Z",
+    "stage": "publication",
+    "status": "blocked",
+    "httpStatus": 403,
+    "reason": "Git push denied; connector branch creation also returned Resource not accessible by integration. User asked to restore repository write access; local verification continues."
+  },
+  {
+    "time": "2026-10-07T17:31:00Z",
+    "stage": "performance-V36",
+    "status": "interrupted",
+    "exitCode": null,
+    "reason": "Full execution container replacement: all servers/browser processes and /tmp files lost. Workspace, two completed inspection stages and builds survive. Baseline probe had started at 17:29:16, with no sample yet recorded."
+  },
+  {
+    "time": "2026-10-07T17:52:00Z",
+    "stage": "verification restart",
+    "status": "temporarily blocked",
+    "reason": "Automatic approval review refused a new local verifier process because the account usage limit was reached. The user resumed after the limit reset; foreground verifier started successfully at20:08. Not a safety or GitHub-permission rejection.",
+    "resolvedAt": "2026-10-07T20:08:00Z"
+  },
+  {
+    "time": "2026-10-07T20:34:00Z",
+    "stage": "connector repository inspection",
+    "status": "transient transport disconnect",
+    "reason": "Exec-server transport disconnected temporarily. Browser, servers and verifier remained active and their original sessions were resumed; no completed measurements were rerun."
+  },
+  {
+    "time": "2026-10-07T21:22:00Z",
+    "stage": "photographic-final",
+    "status": "interrupted",
+    "exitCode": null,
+    "reason": "Environment revision46 restart terminated all active Node/Chromium/server processes. Workspace and unchanged production builds survived. Captures1\u201336 persisted with1536 masonry and no console errors. Resuming only missing checkpoints against same build/config."
+  },
+  {
+    "observedAt": "2026-10-08T00:07:09.212593+00:00",
+    "stage": "ROOM-DOM-video",
+    "status": "interrupted",
+    "exitCode": null,
+    "revision": "56",
+    "reason": "Environment restart killed all active servers/browser/verifier/finisher. Existing production/export builds and all completed results survive. Restored required foreground processes with unchanged two-core/8GiB limits; no completed performance or photographic sweep rerun."
+  }
+]

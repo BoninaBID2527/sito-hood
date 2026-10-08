@@ -1,0 +1,802 @@
+{
+  "sourceCommit": "54b5daf9daeb8e016fb72a234e747da1b8dfe30b",
+  "key": {
+    "A": "Plausibly photographic",
+    "B": "Close but detectable CG",
+    "C": "Clearly CG"
+  },
+  "reviewed": [
+    {
+      "n": 1,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "silhouette",
+          "reason": "Scooter and small street props have simplified forms"
+        },
+        {
+          "category": "tiling",
+          "reason": "Near masonry retains regular repeating relief"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Large drifting particle sprites remain conspicuous"
+        },
+        {
+          "category": "reflection",
+          "reason": "Opening puddle still contains a clipped white vertical reflection"
+        }
+      ],
+      "resolved": "Previous disappearance verdict was incorrect; fresh normal and no-post captures still show the clipped stripe"
+    },
+    {
+      "n": 2,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated masonry relief remains visible"
+        },
+        {
+          "category": "normal response",
+          "reason": "Brick-edge shading is too uniform"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particle sprites remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Repeated distant window/fire-escape bays"
+        },
+        {
+          "category": "roughness",
+          "reason": "Facade paint and masonry still have a simplified response"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Visible drifting sprites"
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "normal response",
+          "reason": "Close brick bevels appear embossed and regular"
+        },
+        {
+          "category": "reflection",
+          "reason": "Hero lit pane is too uniformly luminous"
+        },
+        {
+          "category": "construction",
+          "reason": "Frame edges remain unnaturally sharp"
+        }
+      ]
+    },
+    {
+      "n": 5,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Door face and nearby bin retain simplified hardware/forms"
+        },
+        {
+          "category": "normal response",
+          "reason": "Masonry relief is too regular at close range"
+        },
+        {
+          "category": "contact",
+          "reason": "Door/bin/ground contacts are weak in the dark"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "normal response",
+          "reason": "Aggregate detail remains soft at the low road camera"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Thin bright particle streaks remain visible"
+        },
+        {
+          "category": "tiling",
+          "reason": "Near facade courses remain regular"
+        }
+      ]
+    },
+    {
+      "n": 7,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "normal response",
+          "reason": "Low-camera asphalt relief appears coarse"
+        },
+        {
+          "category": "reflection",
+          "reason": "Small broken bright reflected features remain at grazing angles"
+        },
+        {
+          "category": "construction",
+          "reason": "Dumpster and manhole forms remain simplified"
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "atmosphere",
+          "reason": "Narrative spectral particles are visibly synthetic"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Distant towers remain block-like"
+        },
+        {
+          "category": "tiling",
+          "reason": "Facade courses remain regular"
+        }
+      ]
+    },
+    {
+      "n": 9,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and particle sprites dominate the entrance"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams remain theatrical"
+        },
+        {
+          "category": "roughness",
+          "reason": "Broad ground patches remain uniform"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Panel and title supports remain simplified"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Pink haze and sprites remain conspicuous"
+        },
+        {
+          "category": "normal response",
+          "reason": "Ground cracks and patches retain a simplified response"
+        }
+      ]
+    },
+    {
+      "n": 11,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed-panel supports retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 12,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed-panel supports retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 13,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed-panel supports retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 14,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Artwork backing and rear hardware remain visually simple"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 15,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Artwork backing and rear hardware remain visually simple"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 16,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Artwork backing and rear hardware remain visually simple"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 17,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed-panel supports retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 18,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Printed-panel supports retain simple forms"
+        },
+        {
+          "category": "direct light",
+          "reason": "Installation beams and front shading remain visibly rendered"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Spectral haze and sprites remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 19,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated window/facade bays remain apparent"
+        },
+        {
+          "category": "reflection",
+          "reason": "Lit panes remain too uniform"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particle sprites and light cones remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 20,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated window/facade bays remain apparent"
+        },
+        {
+          "category": "reflection",
+          "reason": "Lit panes remain too uniform"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particle sprites and light cones remain conspicuous"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 21,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "normal response",
+          "reason": "Close brick bevels remain embossed and regular"
+        },
+        {
+          "category": "albedo",
+          "reason": "Door weathering remains a simple planar pattern"
+        },
+        {
+          "category": "roughness",
+          "reason": "Service-door and cabinet response remains simplified"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 22,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated facade courses remain visible"
+        },
+        {
+          "category": "reflection",
+          "reason": "Windows retain simplified environmental response"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Visible drifting sprites remain"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 23,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Bridge windows and practical halos remain too uniform"
+        },
+        {
+          "category": "tiling",
+          "reason": "Passage facade bays repeat"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particle sprites remain visible"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 24,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated facade courses remain visible"
+        },
+        {
+          "category": "reflection",
+          "reason": "Windows retain simplified environmental response"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Visible drifting sprites remain"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 25,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "normal response",
+          "reason": "Close brick bevels remain embossed and regular"
+        },
+        {
+          "category": "albedo",
+          "reason": "Door weathering remains a simple planar pattern"
+        },
+        {
+          "category": "roughness",
+          "reason": "Service-door and cabinet response remains simplified"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 26,
+      "grade": "B",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated facade courses remain visible"
+        },
+        {
+          "category": "reflection",
+          "reason": "Windows retain simplified environmental response"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Visible drifting sprites remain"
+        }
+      ],
+      "environment": "Constructed architecture visible; no empty void observed"
+    },
+    {
+      "n": 28,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Installation spot beams and coloured floor illumination retain a theatrical appearance"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and floating world typography visibly identify an authored CG environment"
+        },
+        {
+          "category": "construction",
+          "reason": "Card front and support hardware remain visibly simplified at hero distance"
+        }
+      ],
+      "constructedBackground": "Visible plaza architecture continues behind the installation; no empty void observed"
+    },
+    {
+      "n": 29,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Installation spot beams and coloured floor illumination retain a theatrical appearance"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and floating world typography visibly identify an authored CG environment"
+        },
+        {
+          "category": "construction",
+          "reason": "Card front and support hardware remain visibly simplified at hero distance"
+        }
+      ],
+      "constructedBackground": "Visible plaza architecture continues behind the installation; no empty void observed"
+    },
+    {
+      "n": 30,
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Installation spot beams and coloured floor illumination retain a theatrical appearance"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and floating world typography visibly identify an authored CG environment"
+        },
+        {
+          "category": "construction",
+          "reason": "Card front and support hardware remain visibly simplified at hero distance"
+        }
+      ],
+      "constructedBackground": "Visible plaza architecture continues behind the installation; no empty void observed"
+    }
+  ],
+  "plazaRotation": {
+    "angles": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "directions": [
+      "inward",
+      "outward"
+    ],
+    "complete": true,
+    "emptyVoidObserved": false,
+    "finalCoverageVerdict": "Pending remaining actual track poses and unobscured far-ahead re-capture"
+  },
+  "status": "Superseded for final verification: checkpoint 1 still contains clipped white water; implementation correction required",
+  "noPostReviewed": [
+    {
+      "n": 1,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "reflectionHealth": "Production capture: zero non-finite values; reflection contains the scene; clipped white stripe absent",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Near masonry relief remains regular and conspicuous"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Scooter and small props retain simplified forms"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "World particle sprites remain conspicuous even with post disabled"
+        }
+      ]
+    },
+    {
+      "n": 6,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "roughness",
+          "reason": "Filtered wet ground now retains road response, but broad variation remains visibly procedural"
+        },
+        {
+          "category": "tiling",
+          "reason": "Road and masonry detail retain repeated patterns"
+        }
+      ]
+    },
+    {
+      "n": 10,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Installation fronts and support details remain simplified"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative particles and coloured beams remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 19,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Plaza-facing return masonry has regular repeated relief"
+        },
+        {
+          "category": "construction",
+          "reason": "Recessed return openings and service infrastructure are constructed; no empty void observed"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Bridge windows have uniform luminous orange fill"
+        },
+        {
+          "category": "tiling",
+          "reason": "Passage masonry retains repeated relief"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Large drifting sprites and haze remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Workstation equipment still has simplified close-range forms"
+        },
+        {
+          "category": "roughness",
+          "reason": "Material response remains too uniform to resemble a photographed studio"
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "indirect light",
+          "reason": "Ceiling and suspended absorber undersides remain too dark to reveal convincing material structure"
+        },
+        {
+          "category": "construction",
+          "reason": "Mounting and utility routes are visible but still recognizably CG"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Floor reflection and pillar response remain visibly synthetic"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles and iridescent luminous structures identify a rendered narrative environment"
+        }
+      ]
+    }
+  ],
+  "noFogReviewed": [
+    {
+      "n": 1,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "configuration": "Post and global scene fog disabled; world particles/volumetric meshes remain",
+      "remaining": [
+        {
+          "category": "tiling",
+          "reason": "Repeated brick-edge relief remains visible across the near facade"
+        },
+        {
+          "category": "silhouette",
+          "reason": "Scooter and small props retain simplified forms"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Particles and local atmospheric geometry remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 27,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "constructedBackground": "Unobscured service passage, bridge, terminal facade and utility hardware visible; no empty void observed",
+      "remaining": [
+        {
+          "category": "direct light",
+          "reason": "Uniform glowing bridge windows and localized lamp halos remain synthetic"
+        },
+        {
+          "category": "tiling",
+          "reason": "Passage masonry repeats at close viewing distance"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "World sprites and local light volumes remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 35,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Skyline facades have regular rectangular window grids and simplified building surfaces"
+        },
+        {
+          "category": "reflection",
+          "reason": "Bright fixture base and wet reflection still read as stylized rendering"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Large world sprites remain conspicuous"
+        }
+      ]
+    },
+    {
+      "n": 41,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "construction",
+          "reason": "Generic speakers, keyboard and display supports retain simplified edges and shapes"
+        },
+        {
+          "category": "roughness",
+          "reason": "Equipment and printed surface response remains too uniform for photographed-studio plausibility"
+        },
+        {
+          "category": "albedo",
+          "reason": "Physical artist footage is authentic but differs from the requested studio source"
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "sourceCommit": "fcf0bdd2db084d33aaa3c4a8beb3a96ad3a1212b",
+      "grade": "C",
+      "remaining": [
+        {
+          "category": "reflection",
+          "reason": "Floor and pillar reflection response remains visibly synthetic"
+        },
+        {
+          "category": "atmosphere",
+          "reason": "Narrative luminous structures and world particles remain conspicuous"
+        }
+      ]
+    }
+  ]
+}

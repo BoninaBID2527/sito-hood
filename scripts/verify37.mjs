@@ -2,7 +2,7 @@
 // exit code; failed attempts remain recorded. Success requires every required
 // stage to have a passing latest attempt.
 import {spawn} from 'node:child_process'
-import {mkdirSync,writeFileSync,createWriteStream,readFileSync,existsSync} from 'node:fs'
+import {mkdirSync,writeFileSync,createWriteStream,readFileSync,existsSync,copyFileSync} from 'node:fs'
 const out=process.argv[2]||'qa/v37';mkdirSync(`${out}/logs`,{recursive:true})
 const root=process.cwd(),base=process.env.BASELINE_DIR
 const stages=[
@@ -35,6 +35,14 @@ stages.sort((a,b)=>(priority.includes(a[0])?priority.indexOf(a[0]):99)-(priority
 const results=process.env.RESUME === '1' && existsSync(`${out}/results.json`) ? JSON.parse(readFileSync(`${out}/results.json`, 'utf8')) : []
 for(const [name,args,overrides,cwd=root] of stages){
  if (results.findLast(r => r.name === name)?.exitCode === 0) { console.log(`SKIP ${name}: latest attempt passed`); continue }
+ const previous = results.filter(r => r.name === name)
+ if (previous.length && existsSync(`${out}/logs/${name}.log`)) {
+   const stem=`${out}/logs/${name}-attempt${previous.length}-${previous.at(-1).started.replace(/[^a-zA-Z0-9_-]/g,'-')}`
+   let archive=`${stem}.log`,copy=0
+   while(existsSync(archive))archive=`${stem}-copy${++copy}.log`
+   copyFileSync(`${out}/logs/${name}.log`,archive)
+   previous.at(-1).archivedLog=archive
+ }
  const started=new Date().toISOString();console.log(`START ${name} ${started}`)
  const stream=createWriteStream(`${out}/logs/${name}.log`)
  const code=await new Promise(resolve=>{const p=spawn(process.execPath,args,{cwd,env:{...process.env,...overrides},stdio:['ignore','pipe','pipe']});p.stdout.pipe(stream,{end:false});p.stderr.pipe(stream,{end:false});p.on('error',e=>{stream.write(String(e));resolve(-1)});p.on('close',resolve)})

@@ -1,0 +1,76 @@
+{
+  "sourceCommit": "3882a72535e7824e83d2dc99ef48461ea92584de",
+  "viewport": "820x1180",
+  "scale": 0.45,
+  "input": "Native CDP events in Chromium touch emulation; not an iPad/iPhone device test",
+  "gestures": [
+    {
+      "name": "left: workstation1 to biography2",
+      "handlerSpanMs": 4.400000002235174,
+      "eventSpanMs": 0.10000000149011612,
+      "trace": [
+        {
+          "type": "pointerdown",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 670252.299999997,
+          "timestamp": 668026.5999999978
+        },
+        {
+          "type": "pointermove",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 670254.8999999985,
+          "timestamp": 668026.5999999978
+        },
+        {
+          "type": "pointerup",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 670256.6999999993,
+          "timestamp": 668026.6999999993
+        }
+      ]
+    },
+    {
+      "name": "right: biography2 to workstation1",
+      "handlerSpanMs": 1.5,
+      "eventSpanMs": 0.19999999925494194,
+      "trace": [
+        {
+          "type": "pointerdown",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 229.60000610351562,
+          "y": 236,
+          "handledAt": 694946.1999999993,
+          "timestamp": 693182.5999999978
+        },
+        {
+          "type": "pointermove",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 694947.1999999993,
+          "timestamp": 693182.799999997
+        },
+        {
+          "type": "pointerup",
+          "pointerType": "touch",
+          "trusted": true,
+          "x": 590.4000244140625,
+          "y": 236,
+          "handledAt": 694947.6999999993,
+          "timestamp": 693182.799999997
+        }
+      ]
+    }
+  ]
+}

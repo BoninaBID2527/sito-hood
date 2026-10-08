@@ -1,0 +1,151 @@
+{
+  "artistDataAndPublicAssetsUnchanged": true,
+  "V35PresentInMain": true,
+  "V36PresentInMain": true,
+  "performanceFoundationFilesUnchanged": true,
+  "baselineMain": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+  "inheritedV37": "f9b5c301762e0b2844fa1f34856df050d5e0a9b9",
+  "implementationCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "branch": "codex/hooddino-v3-7-completion",
+  "video": {
+    "asset": "public/room/hooddino-studio-arrangiamento.mp4",
+    "bytes": 4860666,
+    "width": 512,
+    "height": 854,
+    "durationSeconds": 56.066667,
+    "codec": "h264/aac",
+    "content": "Outdoor guitar/rap footage; differs from intended studio/arrangement recording",
+    "retained": true,
+    "testTranscode": "Complete same-source VP9/Opus WebM, 56.066 s",
+    "nativeH264AndSafariVerified": false,
+    "sha256": "02def5f45a5b97d770fd995f47193e4ec21865b941366719bebf6d43208d7949",
+    "staticExportByteIdentical": true,
+    "realMP4ServedWithoutWebMRoute": {
+      "root": {
+        "status": 200,
+        "mime": "video/mp4",
+        "bytes": 4860666
+      },
+      "sitoHood": {
+        "status": 200,
+        "mime": "video/mp4",
+        "bytes": 4860666
+      }
+    }
+  },
+  "hardware": {
+    "environment": "Linux cloud, CPU quota 2 cores",
+    "browser": "Chromium 151.0.7922.173",
+    "renderer": "SwiftShader software GL",
+    "realDevicesTested": [],
+    "touch": "Chromium emulation only"
+  },
+  "remoteMainChecked": {
+    "commit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+    "method": "Authenticated Git ls-remote recheck",
+    "time": "2026-10-08T10:35:52.546490+00:00"
+  },
+  "publication": {
+    "gitPush": {
+      "status": "blocked",
+      "httpStatus": 403,
+      "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527"
+    },
+    "connectorCreateBranch": {
+      "status": "blocked",
+      "httpStatus": 403,
+      "message": "Resource not accessible by integration",
+      "recheckedAt": "2026-10-07T20:34:00Z"
+    },
+    "pullRequestCreated": false,
+    "merged": false,
+    "repositoryActorPermissions": {
+      "admin": true,
+      "push": true
+    },
+    "gitDryRun": {
+      "checkedAt": "2026-10-08T07:57:26.520278+00:00",
+      "status": "blocked",
+      "httpStatus": 403,
+      "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527",
+      "mutation": false
+    },
+    "previousLocalToolingCommit": "752696d"
+  },
+  "remoteMainHistory": [
+    {
+      "commit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+      "method": "Authenticated Git ls-remote",
+      "time": "2026-10-07T16:53:10.473499+00:00"
+    },
+    {
+      "commit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+      "method": "Authenticated Git ls-remote recheck",
+      "time": "2026-10-07T23:56:15.169821+00:00"
+    },
+    {
+      "commit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+      "method": "Authenticated Git ls-remote recheck",
+      "time": "2026-10-08T07:39:03.088857+00:00"
+    }
+  ],
+  "implementationHistory": [
+    "3882a72535e7824e83d2dc99ef48461ea92584de",
+    "d9f4b08",
+    "5bd7f6a",
+    "f2b0e6c",
+    "ebe7baa0f4dcbceac6454fce1de2b76823b78720",
+    "17d831b355989ca1b18617eeb7272b0f219aae88",
+    "d7dde27cbf7e05fa0014fd4c68a29f996ca27692"
+  ],
+  "currentVerification": "All 19 required stages have a passing latest attempt for implementation 4a455df and the explicitly named V3.6 comparison stages; all 135 frames inspected; nine-view and focused three-view software-cost comparisons completed. Photographic and real-device budget acceptance are not established.",
+  "performanceFoundationCheckedFiles": [
+    "lib/runtime.ts",
+    "lib/quality.ts",
+    "lib/adaptive.ts",
+    "components/scene/PerfGovernor.tsx",
+    "components/ui/PerfHud.tsx",
+    "effects/SkyDome.tsx",
+    "effects/Atmosphere.tsx"
+  ],
+  "currentBuildId": "V_ujN1cRSCwGyuAwb9K6v",
+  "currentExportBuildId": "3TV0AybWJg2nTnDAqBypA",
+  "performanceFoundationFileResults": {
+    "lib/runtime.ts": true,
+    "lib/quality.ts": true,
+    "lib/adaptive.ts": true,
+    "components/scene/PerfGovernor.tsx": true,
+    "components/ui/PerfHud.tsx": true,
+    "effects/SkyDome.tsx": true,
+    "effects/Atmosphere.tsx": true
+  },
+  "foundationAndContentRecheckedAt": "2026-10-08T10:39:39.030243+00:00",
+  "postFoundationInspection": {
+    "file": "effects/PostFX.tsx",
+    "change": "Five-line debug-only override of narrative-effect uniforms",
+    "renderScaleAllocationMsaaAndDepthResolveUnchanged": true,
+    "method": "Actual diff against d03c029 inspected"
+  },
+  "verificationResults": {
+    "performance-V36": 0,
+    "performance-V37": 0,
+    "post-disabled": 0,
+    "base-render-no-fog": 0,
+    "photographic-final": 0,
+    "threshold-recapture": 0,
+    "adaptive-simulation": 0,
+    "e2e": 0,
+    "ROOM-desktop": 0,
+    "photographic-baseline": 0,
+    "secrets": 0,
+    "easter-eggs": 0,
+    "tracks": 0,
+    "reduced-motion": 0,
+    "ROOM-touch": 0,
+    "ROOM-reduced": 0,
+    "ROOM-DOM-video": 0,
+    "static-smoke": 0,
+    "static-ROOM": 0
+  },
+  "nativeGestureProofCommit": "4a455df52441e2d0b53a748b41f25637586b1062"
+}

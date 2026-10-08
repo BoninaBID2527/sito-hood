@@ -16,6 +16,10 @@ const settle = () => page.waitForFunction(() => { const r = window.__hd.rt; retu
 const jump = async (p) => { await page.evaluate((p) => window.__hd.jump(p), p); await settle(); await page.waitForTimeout(2500) }
 const screen = (x, y, z) => page.evaluate(([x, y, z]) => { const c = window.__camera; c.updateMatrixWorld(); const v = new c.position.constructor(x, y, z).project(c); return { sx: (v.x * 0.5 + 0.5) * innerWidth, sy: (-v.y * 0.5 + 0.5) * innerHeight, behind: v.z > 1 } }, [x, y, z])
 const state = (fn, arg) => page.evaluate(fn, arg)
+const simWait = async (seconds) => {
+  const start = await state(() => window.__hd.rt.time)
+  await page.waitForFunction(([start, seconds]) => window.__hd.rt.time - start >= seconds, [start, seconds], { timeout: 120000, polling: 250 })
+}
 
 // 1. lamp
 await jump(0.05)
@@ -55,7 +59,18 @@ const trail = [
 for (const [i, p, x, y, z, name] of trail) {
   await jump(p)
   s = await screen(x, y, z)
-  await page.mouse.move(5, 5); await page.mouse.move(s.sx, s.sy, { steps: 4 }); await page.waitForTimeout(1400)
+  await page.mouse.move(5, 5)
+  // Pointer motion also moves the camera. Reproject after it settles and allow
+  // actual simulation dwell; 1400 ms of software-GL wall time can be one frame.
+  for (let aim = 0; aim < 3; aim++) {
+    s = await screen(x, y, z)
+    await page.mouse.move(s.sx, s.sy, { steps: 4 })
+    await simWait(0.8)
+    const after = await screen(x, y, z)
+    const found = await state((i) => window.__hd.store.getState().nums[i], i)
+    console.log('hover aim', JSON.stringify({ name, aim, projected: s, after, found }))
+    if (found) break
+  }
   check(`number ${name}`, (await state((i) => window.__hd.store.getState().nums[i], i)) === true, JSON.stringify(s))
 }
 check('numbers persist in localStorage', (await state(() => JSON.parse(localStorage.getItem('hd:nums') || '[]').filter(Boolean).length)) >= 3)
@@ -81,10 +96,34 @@ check('HOODDINO wordmark ×7 triggers the surprise', await state(() => window.__
 
 // 6b. grazing-angle glyph: invisible up close, readable from afar
 await jump(0.15)
-s = await screen(-2.95, 1.2, -33.4)
-await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
+// Aim at the actual centre: the legacy point was 5 cm behind this plane,
+// which approaches its edge when projected at a grazing angle.
+const glyphCentre = await state(() => {
+  const matches=[]
+  window.__scene.traverse(o=>{
+    const u=o.material?.uniforms
+    if(o.isMesh&&u?.uVis&&u?.uHover&&o.geometry?.parameters?.width===.9&&o.geometry?.parameters?.height===.9){
+      const v=new window.__camera.position.constructor();o.getWorldPosition(v);matches.push(v.toArray())
+    }
+  })
+  if(matches.length!==1)throw new Error('Expected exactly one grazing glyph')
+  return matches[0]
+})
+const pointerSettled=()=>page.waitForFunction(()=>{const r=window.__hd.rt;return Math.abs(r.px-r.rx)<.002&&Math.abs(r.py-r.ry)<.002},null,{timeout:180000,polling:250})
+let glyphAimStable=false
+for(let aim=0;aim<3;aim++){
+  s=await screen(...glyphCentre)
+  await page.mouse.move(s.sx,s.sy,{steps:2})
+  await pointerSettled();await simWait(.15)
+  const after=await screen(...glyphCentre),shift=Math.hypot(after.sx-s.sx,after.sy-s.sy)
+  const cursor=await state(()=>window.__hd.store.getState().cursor.kind)
+  console.log('glyph aim',JSON.stringify({aim,centre:glyphCentre,point:s,after,shift,cursor}))
+  if(shift<.4&&cursor==='portal'){glyphAimStable=true;break}
+}
+if(!glyphAimStable)throw new Error('Glyph pointer/camera did not settle within 0.4 CSS px')
 check('grazing glyph: PORTAL cursor from far down the wall', (await state(() => window.__hd.store.getState().cursor.kind)) === 'portal', JSON.stringify(s))
-await page.mouse.click(s.sx, s.sy); await page.waitForTimeout(1000)
+// Click exactly the point that established hover, without a last-moment move.
+await page.mouse.click(s.sx,s.sy,{delay:50});await simWait(.2)
 check('grazing glyph: click registers the egg', await state(() => window.__hd.store.getState().eggs.includes('symbol')))
 await page.mouse.move(5, 5)
 

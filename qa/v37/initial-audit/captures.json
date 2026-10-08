@@ -1,0 +1,152 @@
+[
+  {
+    "stage": "V36",
+    "checkpoint": 1,
+    "file": "01-street-opening.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 10,
+    "file": "10-plaza-front.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 15,
+    "file": "15-plaza-in-180.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 19,
+    "file": "19-plaza-out-000.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 23,
+    "file": "23-plaza-out-180.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 27,
+    "file": "27-plaza-far-ahead.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 28,
+    "file": "28-track-01.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 40,
+    "file": "40-room-03-entry.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 41,
+    "file": "41-room-04-workstation-wide.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 43,
+    "file": "43-room-06-workstation-close.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 52,
+    "file": "52-room-15-side-wall.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 54,
+    "file": "54-room-17-ceiling.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 55,
+    "file": "55-room-18-floor.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 56,
+    "file": "56-room-19-dark-corner.png"
+  },
+  {
+    "stage": "V36",
+    "checkpoint": 58,
+    "file": "58-dualism-entry.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 1,
+    "file": "01-street-opening.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 10,
+    "file": "10-plaza-front.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 15,
+    "file": "15-plaza-in-180.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 19,
+    "file": "19-plaza-out-000.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 23,
+    "file": "23-plaza-out-180.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 27,
+    "file": "27-plaza-far-ahead.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 28,
+    "file": "28-track-01.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 40,
+    "file": "40-room-03-entry.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 41,
+    "file": "41-room-04-workstation-wide.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 43,
+    "file": "43-room-06-workstation-close.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 52,
+    "file": "52-room-15-side-wall.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 54,
+    "file": "54-room-17-ceiling.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 55,
+    "file": "55-room-18-floor.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 56,
+    "file": "56-room-19-dark-corner.png"
+  },
+  {
+    "stage": "inherited-V37",
+    "checkpoint": 58,
+    "file": "58-dualism-entry.png"
+  }
+]

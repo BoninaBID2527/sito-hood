@@ -1,0 +1,9 @@
+capable tablet (12 ms @ full)      settled@0.0s  final 16.7 ms (60 fps)  scale 1.00 tier balanced  adaptations 1  hitch>50ms 0  p95 17 p99 17  jank>20ms after 8s 0.0%
+borderline (17 ms @ full)          settled@0.0s  final 16.7 ms (60 fps)  scale 0.90 tier balanced  adaptations 4  hitch>50ms 0  p95 17 p99 17  jank>20ms after 8s 1.5%
+too heavy (28 ms @ full)           settled@2.5s  final 16.7 ms (60 fps)  scale 0.75 tier balanced  adaptations 4  hitch>50ms 0  p95 17 p99 17  jank>20ms after 8s 1.0%
+very heavy (45 ms @ full)          settled@3.5s  final 16.7 ms (60 fps)  scale 0.56 tier balanced  adaptations 6  hitch>50ms 39  p95 17 p99 17  jank>20ms after 8s 1.8%
+hopeless (120 ms @ full)           settled@5.2s  final 33.3 ms (30 fps)  scale 0.56 tier mobile  adaptations 3  hitch>50ms 76  p95 33 p99 33  jank>20ms after 8s 100.0%
+desperate (1500 ms @ full, <1 fps) settled@4.8s  final 241.7 ms (4 fps)  scale 0.56 tier mobile  adaptations 3  hitch>50ms 351  p95 250 p99 250  jank>20ms after 8s 100.0%
+cpu-bound (30 ms main thread)      settled@6.5s  final 33.3 ms (30 fps)  scale 0.56 tier mobile  adaptations 3  hitch>50ms 0  p95 33 p99 33  jank>20ms after 8s 100.0%
+desktop capable (8 ms), scale0 1   settled@0.0s  final 16.7 ms (60 fps)  scale 1.00 tier high  adaptations 0  hitch>50ms 0  p95 17 p99 17  jank>20ms after 8s 0.0%
+adaptive simulation OK

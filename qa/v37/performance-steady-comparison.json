@@ -1,0 +1,94 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "baselineSourceCommit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+  "method": {
+    "viewport": "640x360",
+    "tier": "balanced",
+    "scale": 0.6,
+    "warmFrames": 40,
+    "sampleFrames": 20,
+    "distinctCriterion": "window.__hd.rt.time advanced; this is not a GPU completion timestamp",
+    "selection": [
+      "plaza-front",
+      "plaza-rear",
+      "rooftop"
+    ],
+    "serial": true
+  },
+  "rows": [
+    {
+      "name": "plaza-front",
+      "baselineMs": 707.3999999985099,
+      "finalMs": 755.2000000029802,
+      "changePct": 6.757138818853692,
+      "baselineRangeMs": [
+        301.5,
+        1090.7000000029802
+      ],
+      "finalRangeMs": [
+        683.3000000044703,
+        1611.7999999970198
+      ],
+      "calls": [
+        136,
+        159
+      ],
+      "triangles": [
+        97210,
+        122850
+      ]
+    },
+    {
+      "name": "plaza-rear",
+      "baselineMs": 454.30000000447035,
+      "finalMs": 596.5,
+      "changePct": 31.30090248605115,
+      "baselineRangeMs": [
+        390,
+        1023.7999999970198
+      ],
+      "finalRangeMs": [
+        148.30000000447035,
+        1203.5999999940395
+      ],
+      "calls": [
+        84,
+        104
+      ],
+      "triangles": [
+        86396,
+        111886
+      ]
+    },
+    {
+      "name": "rooftop",
+      "baselineMs": 730.6000000014901,
+      "finalMs": 508.20000000298023,
+      "changePct": -30.440733643314577,
+      "baselineRangeMs": [
+        5.800000004470348,
+        1434.1999999955297
+      ],
+      "finalRangeMs": [
+        265.79999999701977,
+        731.8999999985099
+      ],
+      "calls": [
+        69,
+        69
+      ],
+      "triangles": [
+        8004,
+        8004
+      ]
+    }
+  ],
+  "hardwareFPSClaimed": false,
+  "orchestration": {
+    "captureClientPID": 13599,
+    "coordinatorPID": 13015,
+    "coordinatorPausedUntilPairedProbeExit": true,
+    "captureClientExitedBeforeFirstProbe": "2026-10-08T10:23:40.547Z",
+    "outerCaptureFinishTimestampIncludesPausedCoordinator": true
+  }
+}

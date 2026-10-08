@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "recordedAt": "2026-10-08T09:15:49.337723+00:00",
+  "production": {
+    "command": "npm run build",
+    "exitCode": 0,
+    "execSession": 95673,
+    "log": "logs/build.log"
+  },
+  "staticExport": {
+    "command": "STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/sito-hood npm run build",
+    "cwd": "/workspace/hood-static-v37",
+    "exitCode": 0,
+    "execSession": 74058,
+    "log": "logs/static-build.log"
+  },
+  "typecheck": {
+    "command": "npm run typecheck",
+    "exitCode": 0,
+    "execSession": 56093,
+    "log": "logs/typecheck.log"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "baselineSourceCommit": "d03c0297c9df1be1b171cf199d151f25674fff5f",
+  "normal": {
+    "A": 0,
+    "B": 3,
+    "C": 58
+  },
+  "baseline": {
+    "A": 0,
+    "B": 2,
+    "C": 59
+  },
+  "noPost": {
+    "A": 0,
+    "B": 1,
+    "C": 7
+  },
+  "noFog": {
+    "A": 0,
+    "B": 0,
+    "C": 5
+  },
+  "manuallyReviewedFrames": 135
+}

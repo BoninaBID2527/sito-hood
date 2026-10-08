@@ -1,0 +1,19 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "checkedAt": "2026-10-08T10:46:38.478Z",
+  "matchedImageFiles": 122,
+  "selectorFrames": 61,
+  "selectedFrame": 57,
+  "sliderPercent": 62,
+  "pageErrors": [],
+  "localRequests": [
+    "http://localhost:3003/images/v36/27-plaza-far-ahead.webp",
+    "http://localhost:3003/images/v37/27-plaza-far-ahead.webp",
+    "http://localhost:3003/favicon.ico",
+    "http://localhost:3003/images/v36/57-room-20-exit-view.webp",
+    "http://localhost:3003/images/v37/57-room-20-exit-view.webp"
+  ],
+  "externalResources": [],
+  "input": "Native End, four PageDown and two ArrowRight presses on the focused range",
+  "navigation": "Local HTTP preview; managed browser disallows file navigation"
+}

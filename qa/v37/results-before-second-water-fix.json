@@ -1,0 +1,70 @@
+[
+  {
+    "name": "photographic-final",
+    "command": [
+      "node",
+      "scripts/qa37.mjs",
+      "shots-final-v37",
+      "960x540",
+      "high"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.75"
+    },
+    "started": "2026-10-07T14:56:03.984Z",
+    "finished": "2026-10-07T15:21:44.209Z",
+    "exitCode": 1
+  },
+  {
+    "name": "adaptive-simulation",
+    "command": [
+      "node",
+      "scripts/adaptive-sim.mjs"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {},
+    "started": "2026-10-07T15:21:44.222Z",
+    "finished": "2026-10-07T15:21:45.972Z",
+    "exitCode": 0
+  },
+  {
+    "name": "e2e",
+    "command": [
+      "node",
+      "scripts/e2e.mjs",
+      "shots-e2e-final",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-07T15:21:45.977Z",
+    "finished": "2026-10-07T15:28:10.609Z",
+    "exitCode": 0
+  },
+  {
+    "name": "ROOM-desktop",
+    "command": [
+      "node",
+      "scripts/room-check.mjs",
+      "balanced",
+      "960x540"
+    ],
+    "cwd": "/workspace/sito-hood",
+    "overrides": {
+      "EXTRA": "&scale=0.45"
+    },
+    "started": "2026-10-07T15:28:10.615Z",
+    "finished": "2026-10-07T15:41:54.475Z",
+    "exitCode": 0
+  },
+  {
+    "name": "post-disabled",
+    "sourceCommit": "54b5daf9daeb8e016fb72a234e747da1b8dfe30b",
+    "exitCode": 143,
+    "reason": "Stopped after no-post opening capture exposed persistent clipped white water; product correction required",
+    "log": "logs/post-disabled-before-second-water-fix.log"
+  }
+]

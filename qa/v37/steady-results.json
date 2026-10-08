@@ -1,0 +1,42 @@
+[
+  {
+    "label": "V36",
+    "cwd": "/workspace/hood-v36",
+    "args": [
+      "scripts/census37.mjs",
+      "3001",
+      "/workspace/sito-hood/qa/v37/performance-steady-v36.json",
+      "balanced",
+      "640x360"
+    ],
+    "started": "2026-10-08T10:23:40.547Z",
+    "ended": "2026-10-08T10:28:29.278Z",
+    "exit": 0,
+    "settings": {
+      "warmFrames": 40,
+      "sampleFrames": 20,
+      "distinct": true,
+      "selection": "plaza-front,plaza-rear,rooftop"
+    }
+  },
+  {
+    "label": "V37",
+    "cwd": "/workspace/sito-hood",
+    "args": [
+      "scripts/census37.mjs",
+      "3000",
+      "/workspace/sito-hood/qa/v37/performance-steady-v37.json",
+      "balanced",
+      "640x360"
+    ],
+    "started": "2026-10-08T10:28:29.315Z",
+    "ended": "2026-10-08T10:33:24.651Z",
+    "exit": 0,
+    "settings": {
+      "warmFrames": 40,
+      "sampleFrames": 20,
+      "distinct": true,
+      "selection": "plaza-front,plaza-rear,rooftop"
+    }
+  }
+]

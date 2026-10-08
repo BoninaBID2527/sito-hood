@@ -1,0 +1,78 @@
+{
+  "samples": [
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 42.77750000001467,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 43.04910000000869,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 43.37199999999973,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 43.65279999999673,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 43.964799999996714,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 44.23349999999968,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 44.549400000005626,
+      "target": [
+        384,
+        238
+      ]
+    },
+    {
+      "nonfinite": 0,
+      "nonzero": 274176,
+      "time": 44.829099999993694,
+      "target": [
+        384,
+        238
+      ]
+    }
+  ],
+  "status": "Temporary live shader probe on source 54b5daf; final production verification pending",
+  "changes": "Reject non-finite outgoing radiance before HDR target write"
+}

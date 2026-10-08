@@ -1,0 +1,70 @@
+{
+  "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "fixture": "scripts/eggs.mjs",
+  "log": "logs/easter-eggs.log",
+  "nativeClickRegistered": true,
+  "settlementLimitCssPixels": 0.4,
+  "aims": [
+    {
+      "aim": 0,
+      "centre": [
+        -2.9,
+        1.2,
+        -33.4
+      ],
+      "point": {
+        "sx": 572.1813077926383,
+        "sy": 489.7997258297304,
+        "behind": false
+      },
+      "after": {
+        "sx": 557.4674084832056,
+        "sy": 472.28378836288186,
+        "behind": false
+      },
+      "shift": 22.875902129329717,
+      "cursor": "portal"
+    },
+    {
+      "aim": 1,
+      "centre": [
+        -2.9,
+        1.2,
+        -33.4
+      ],
+      "point": {
+        "sx": 557.4674084832056,
+        "sy": 472.28378836288186,
+        "behind": false
+      },
+      "after": {
+        "sx": 557.8660775992528,
+        "sy": 472.8248295901188,
+        "behind": false
+      },
+      "shift": 0.6720585343999659,
+      "cursor": "portal"
+    },
+    {
+      "aim": 2,
+      "centre": [
+        -2.9,
+        1.2,
+        -33.4
+      ],
+      "point": {
+        "sx": 557.8660775992528,
+        "sy": 472.8248295901188,
+        "behind": false
+      },
+      "after": {
+        "sx": 557.8582863830372,
+        "sy": 472.78536334729756,
+        "behind": false
+      },
+      "shift": 0.04022794268342279,
+      "cursor": "portal"
+    }
+  ],
+  "productGlyphAndEventHandlingChanged": false
+}
