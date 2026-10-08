@@ -87,6 +87,7 @@ export interface StreetOpts {
   brick?: boolean
   /** height texture sampled with the same (offset) uv → screen-space bump */
   bump?: THREE.Texture
+  /** Full height-map range in metres; view-position derivatives use world units. */
   bumpAmt?: number
   /** widen the height-sample footprint (suppresses glitter on fine-grain textures like asphalt) */
   bumpBlur?: number
@@ -117,7 +118,7 @@ export function patchStreet(m: THREE.MeshStandardMaterial, opts: StreetOpts = {}
   const atlas = !!opts.atlas
   const metal = (m.metalness ?? 0) > 0.25
   const flut = (opts.flutter ?? 0).toFixed(3)
-  const bumpAmt = (opts.bumpAmt ?? 1.2).toFixed(2)
+  const bumpAmt = (opts.bumpAmt ?? .008).toFixed(5)
   const bblur = (opts.bumpBlur ?? 1).toFixed(2)
   m.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, streetU)

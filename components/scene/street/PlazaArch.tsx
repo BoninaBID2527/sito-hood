@@ -18,7 +18,7 @@ export function PlazaArch() {
     const built = buildPlazaArch()
     const surface = (params: Parameters<typeof streetMat>[0]) => streetMat({ ...params, background: true })
     const wallMat = (k: 'dark' | 'red' | 'weathered', tint: string, seed: number) =>
-      surface({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: 1.4, seed, vertexColors: true })
+      surface({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: true, bump: A.brick[k].bump, bumpAmt: .008, seed, vertexColors: true })
     const wallMats = { rl: wallMat('dark', '#e8dcd2', 21.3), rr: wallMat('red', '#d6bcae', 23.1), end: wallMat('weathered', '#e0cdb8', 25.7) }
     const stone = surface({ map: A.sidewalk, color: '#6f6b63', roughness: 0.94, aoBase: 0.45, macro: 1.0, seed: 5.5, vertexColors: true })
     const mats: Record<Exclude<PlazaKey, 'rl' | 'rr' | 'end'>, THREE.Material> = {

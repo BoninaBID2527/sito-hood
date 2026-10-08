@@ -176,7 +176,7 @@ export function* brickGen(variant: BrickVariant, seed: number, W: number, detail
     const plasterHeight = makeCanvas(W, H)
     plasterHeight.ctx.drawImage(p.canvas, 0, 0)
     plasterHeight.ctx.globalCompositeOperation = 'source-in'
-    plasterHeight.ctx.fillStyle = '#d0d0d0'
+    plasterHeight.ctx.fillStyle = '#f0f0f0'
     plasterHeight.ctx.fillRect(0, 0, W, H)
     bump.ctx.drawImage(plasterHeight.canvas, 0, 0)
   }

@@ -55,7 +55,7 @@ export function Walls() {
     const mats: Record<string, THREE.MeshStandardMaterial> = {}
     const kinds: BrickKind[] = ['red', 'dark', 'weathered', 'plaster', 'concrete']
     const wallMat = (k: BrickKind, tint: string, seed: number) =>
-      streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: k !== 'concrete' && k !== 'plaster', bump: A.brick[k].bump, bumpAmt: k === 'concrete' ? 0.4 : k === 'plaster' ? .8 : 1.4, seed, vertexColors: true })
+      streetMat({ map: A.brick[k].map, roughness: 0.92, color: tint, side: THREE.FrontSide, aoBase: 0.4, brick: k !== 'concrete' && k !== 'plaster', bump: A.brick[k].bump, bumpAmt: k === 'concrete' ? .01 : k === 'plaster' ? .012 : .008, seed, vertexColors: true })
     for (const k of kinds) mats[k] = wallMat(k, '#ffffff', kinds.indexOf(k) * 3.7)
     const tintMat = (k: BrickKind, tint: string) => {
       const key = `${k}-${tint}`
