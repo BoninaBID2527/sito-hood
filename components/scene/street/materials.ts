@@ -405,6 +405,7 @@ ${
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
+  vec3 streetIrradiance_ = vec3(0.);
   // the sunlit band follows the REAL sun shadow where a shadow map exists: facades, cornices, fire escapes and roof structures
   // cut their own shapes into the light; surfaces turned away from the sun keep only the sky-glow share of the band.
   // Only sampled up in the band itself (walls never pay for the shadow lookup below it).
@@ -439,7 +440,9 @@ ${
     ? `    ind_ += warm_ * smoothstep(1.0, 3.6, abs(vWPos.x)) * step(13.5, uWetBox.y) * uSunAmt * max(nw_.y, 0.0) * 0.07;`
     : ''
 }
-    totalEmissiveRadiance += diffuseColor.rgb * ind_;
+    // Existing values are calibrated as outgoing diffuse radiance. Convert
+    // to irradiance here, then let the PBR diffuse term apply its BRDF below.
+    streetIrradiance_ = ind_ * 3.14159265;
   }
 ${
   metal
@@ -459,6 +462,10 @@ ${
     : ''
 }`,
       )
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  // Bounce is reflected diffuse light, not self-emission. In particular bare
+  // metal cannot acquire diffuse coloured glow from the environment fill.
+  reflectedLight.indirectDiffuse += streetIrradiance_ * material.diffuseColor * (1.0 / 3.14159265);`)
       .replace(
         '#include <opaque_fragment>',
         `// Preserve valid illumination when a degenerate lighting term is undefined.
@@ -472,7 +479,7 @@ ${
   #include <opaque_fragment>`,
       )
   }
-  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}${background ? 'bg' : ''}12kiln-v37`
+  m.customProgramCacheKey = () => `street2-${ao}-${macro}-${seed}-${brick ? 'b' : ''}${bump ? 'n' + bumpAmt + 'b' + bblur : ''}${wet ? 'w' : ''}${flut}${decal ? 'd' : ''}${atlas ? 'a' : ''}${metal ? 'm' : ''}${background ? 'bg' : ''}13irradiance-v37`
   return m
 }
 
