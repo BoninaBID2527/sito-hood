@@ -12,12 +12,12 @@ import { RX } from '@/lib/roomTextures'
 import { vid, videoTexture, videoMode } from '@/lib/roomVideo'
 import { focusVideo, openLink, roomScene } from '@/lib/roomActions'
 import { doorLeafTexture } from '@/lib/roomDoor'
-import { makeCanvas, toTexture } from '@/lib/paint'
 import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { buildRoomGeometry, type RoomGeo } from './build'
 import { PLACE, RED_LAMP } from './furniture'
 import { Vestibule } from './Vestibule'
+import { ExteriorReturn } from './ExteriorReturn'
 import type { RoomLinkId } from '@/data/room'
 
 /**
@@ -192,13 +192,6 @@ const VIDEO_ASPECT = 512 / 854 // the supplied clip and its poster
 function makeKit(level: number, geo: RoomGeo) {
   const probe = level >= 1 ? RX.probe : null
   const std = (o: THREE.MeshStandardMaterialParameters) => roomIrradiance(new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0, ...o }))
-  const apertureTex = (() => {
-    const { canvas, ctx } = makeCanvas(4, 128)
-    const g = ctx.createLinearGradient(0, 0, 0, 128)
-    g.addColorStop(0, '#5a6f96'); g.addColorStop(0.5, '#a8a6a0'); g.addColorStop(1, '#e8b27a')
-    ctx.fillStyle = g; ctx.fillRect(0, 0, 4, 128)
-    return toTexture(canvas, { mipmaps: false, aniso: 1 })
-  })()
   const leafTex = doorLeafTexture()
   const bake = new THREE.CanvasTexture(geo.floorBake)
   bake.flipY = false
@@ -221,14 +214,13 @@ function makeKit(level: number, geo: RoomGeo) {
     phone: new THREE.MeshBasicMaterial({ map: RX.phone, toneMapped: false, color: new THREE.Color(0.7, 0.7, 0.75) }),
     keys: std({ map: RX.keys, roughness: 0.5 }),
     cover: std({ map: A.covers.alterco, roughness: 0.32, emissive: '#ffffff', emissiveMap: A.covers.alterco, emissiveIntensity: 0.14, envMap: probe, envMapIntensity: 0.4 }),
-    aperture: new THREE.MeshBasicMaterial({ map: apertureTex, fog: false, toneMapped: false, side: THREE.DoubleSide, color: new THREE.Color(1.3, 1.3, 1.4) }),
     leaf: std({ map: leafTex, roughness: 0.55 }),
     shadow: new THREE.MeshBasicMaterial({ map: RX.blob, color: '#000', transparent: true, opacity: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }),
   }
   const crt = level >= 1
     ? new THREE.ShaderMaterial({ vertexShader: crtVert, fragmentShader: crtFrag, uniforms: { uMap: { value: RX.signal }, uTime: { value: 0 }, uInst: { value: 0.35 }, uBright: { value: 1.25 } }, toneMapped: false })
     : new THREE.MeshBasicMaterial({ map: RX.signal, toneMapped: false, color: new THREE.Color(1.1, 1.1, 1.1) })
-  const disposables: { dispose(): void }[] = [apertureTex, leafTex, bake, crt, ...Object.values(mats)]
+  const disposables: { dispose(): void }[] = [leafTex, bake, crt, ...Object.values(mats)]
   return { mats, crt, disposables }
 }
 
@@ -317,9 +309,7 @@ function RoomSurfaces({ geo, kit }: { geo: RoomGeo; kit: RoomKit }) {
 function Aperture({ kit }: { kit: RoomKit }) {
   return (
     <group>
-      <mesh material={kit.mats.aperture} position={[0, DOOR.h / 2, 0.03]}>
-        <planeGeometry args={[DOOR.w, DOOR.h]} />
-      </mesh>
+      <ExteriorReturn />
       <group position={[-DOOR.w / 2, 0, 0.02]} rotation={[0, 1.72, 0]}>
         <mesh material={kit.mats.leaf} position={[DOOR.w / 2, DOOR.h / 2, 0]}>
           <boxGeometry args={[DOOR.w - 0.02, DOOR.h - 0.02, 0.07]} />

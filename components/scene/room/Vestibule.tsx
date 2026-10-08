@@ -16,7 +16,19 @@ import { fbm3 } from './bake'
 export function Vestibule({ lit = 1 }: { lit?: number }) {
   const { geo, mat, hardware, hardwareMat, grain } = useMemo(() => {
     const w = 1.5, h = 2.5, d = DOOR.depth
-    const g = new THREE.BoxGeometry(w, h, d, 8, 14, 7).toNonIndexed()
+    const box = new THREE.BoxGeometry(w, h, d, 8, 14, 7).toNonIndexed()
+    // A passage has four faces, not six. The old end caps occluded both
+    // the studio and the outside view even though an open leaf was rendered.
+    const g = new THREE.BufferGeometry()
+    for (const name of ['position', 'normal', 'uv']) {
+      const source = box.getAttribute(name), values: number[] = []
+      for (let i = 0; i < source.count; i++) {
+        if (Math.abs(box.attributes.normal.getZ(i)) > .5) continue
+        for (let j = 0; j < source.itemSize; j++) values.push(source.array[i * source.itemSize + j])
+      }
+      g.setAttribute(name, new THREE.Float32BufferAttribute(values, source.itemSize))
+    }
+    box.dispose()
     g.translate(0, h / 2, -d / 2)
     const pos = g.attributes.position, nor = g.attributes.normal
     const col = new Float32Array(pos.count * 3)
