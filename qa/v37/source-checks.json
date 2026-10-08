@@ -47,30 +47,42 @@
   },
   "publication": {
     "gitPush": {
-      "status": "blocked",
-      "httpStatus": 403,
-      "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527"
+      "status": "published",
+      "exitCode": 0,
+      "publishedCodeAndEvidenceCommit": "95e7e02be5098517677feaea25d3e3142dfbfb17"
     },
-    "connectorCreateBranch": {
-      "status": "blocked",
-      "httpStatus": 403,
-      "message": "Resource not accessible by integration",
-      "recheckedAt": "2026-10-07T20:34:00Z"
-    },
-    "pullRequestCreated": false,
+    "pullRequestCreated": true,
+    "pullRequestUrl": "https://github.com/BoninaBID2527/sito-hood/pull/7",
+    "pullRequestNumber": 7,
+    "draft": true,
+    "base": "main",
     "merged": false,
+    "writeAccessRestored": true,
+    "checkedAt": "2026-10-08T13:36:08.927779+00:00",
+    "earlierBlockedAttempts": {
+      "gitPush": {
+        "status": "blocked",
+        "httpStatus": 403,
+        "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527"
+      },
+      "connectorCreateBranch": {
+        "status": "blocked",
+        "httpStatus": 403,
+        "message": "Resource not accessible by integration",
+        "recheckedAt": "2026-10-07T20:34:00Z"
+      },
+      "gitDryRun": {
+        "checkedAt": "2026-10-08T07:57:26.520278+00:00",
+        "status": "blocked",
+        "httpStatus": 403,
+        "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527",
+        "mutation": false
+      }
+    },
     "repositoryActorPermissions": {
       "admin": true,
       "push": true
-    },
-    "gitDryRun": {
-      "checkedAt": "2026-10-08T07:57:26.520278+00:00",
-      "status": "blocked",
-      "httpStatus": 403,
-      "message": "Permission to BoninaBID2527/sito-hood.git denied to BoninaBID2527",
-      "mutation": false
-    },
-    "previousLocalToolingCommit": "752696d"
+    }
   },
   "remoteMainHistory": [
     {

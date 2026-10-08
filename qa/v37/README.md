@@ -158,3 +158,7 @@ The first full current-source Easter-egg attempt passed 20 checks and failed the
 All 135 frames were actually inspected; see [FRAME-REVIEW.md](FRAME-REVIEW.md) for strict grades and matched evidence. Street filmed: NO. ROOM photographed studio: NO. Sampled reachable 360° plaza constructed: YES. Camera-visible empty plaza background observed: NO.
 
 The final grazing-glyph retest preserves the actual centre and all three projections in [glyph-retest-proof.json](glyph-retest-proof.json). Observed drift fell from 22.88 to 0.67 to 0.040 CSS pixels before the native click registered the egg; the complete suite then passed 21 checks.
+
+## GitHub publication
+
+Authenticated writing now succeeds after reconnecting GitHub. The branch is published and [draft PR #7](https://github.com/BoninaBID2527/sito-hood/pull/7) targets main. Earlier 403 responses are historical. No merge or deployment is performed, and photographic acceptance remains unmet.

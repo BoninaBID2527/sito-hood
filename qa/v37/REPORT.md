@@ -274,7 +274,7 @@ Current final normal grades are A 0, B 3, C 58: wet asphalt, the close monitor p
 
 ## Publication status
 
-No merge or deployment is performed. Both the authenticated Git push and GitHub integration branch creation returned HTTP403; the integration reports “Resource not accessible by integration”. The account's reported repository role does not establish that this connection can write. A new pull request cannot be claimed until the final branch is actually pushed and its URL returned. Local implementation and review artifacts remain available for handoff.
+The branch is now published on GitHub after the connection was reauthorized. New [draft PR #7](https://github.com/BoninaBID2527/sito-hood/pull/7) targets `main`. No merge or deployment is performed. Earlier authenticated Git pushes and integration branch creation returned HTTP 403; those failures remain recorded as history. Native Git push and PR creation now succeed. Photographic acceptance remains unmet, so the PR is explicitly a draft with the remaining limitations in its description.
 
 The focused cost check ran after the complete capture page closed and before the remaining functional stages, with the coordinator paused at that boundary. No software-GL workloads overlapped. Exact commands and timestamps are retained in `steady-results.json`.
 
