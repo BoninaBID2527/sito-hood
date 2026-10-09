@@ -1,0 +1,193 @@
+{
+  "sourceCommit": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "port": "3000",
+  "tier": "balanced",
+  "vp": "640x360",
+  "settings": {
+    "warmFrames": 40,
+    "sampleFrames": 20,
+    "distinct": true
+  },
+  "movingProtocol": "40 steady warmup frames; drive progress incrementally through 20 measured runtime frames; retain chronological per-frame progress and cost",
+  "rows": [
+    {
+      "name": "opening-street",
+      "frameSamples": [
+        {
+          "intervalMs": 1399.9000000059605,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1397.8999999910593,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1340.5,
+          "progress": 0,
+          "calls": 305,
+          "triangles": 216416
+        },
+        {
+          "intervalMs": 1703.9000000059605,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1381.0999999940395,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1705.5,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1707.5,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1398,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1389.5,
+          "progress": 0,
+          "calls": 305,
+          "triangles": 216416
+        },
+        {
+          "intervalMs": 1387.800000011921,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1393.3999999910593,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1895.9000000059605,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 15372.5,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 7810.79999999702,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 3684.5999999940395,
+          "progress": 0,
+          "calls": 305,
+          "triangles": 216416
+        },
+        {
+          "intervalMs": 4301,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 2377.800000011921,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 2064.5,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1481.3999999910593,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        },
+        {
+          "intervalMs": 1434.2000000029802,
+          "progress": 0,
+          "calls": 194,
+          "triangles": 127472
+        }
+      ],
+      "medianMs": 1703.9000000059605,
+      "samplesMs": [
+        1399.9000000059605,
+        1397.8999999910593,
+        1340.5,
+        1703.9000000059605,
+        1381.0999999940395,
+        1705.5,
+        1707.5,
+        1398,
+        1389.5,
+        1387.800000011921,
+        1393.3999999910593,
+        1895.9000000059605,
+        15372.5,
+        7810.79999999702,
+        3684.5999999940395,
+        4301,
+        2377.800000011921,
+        2064.5,
+        1481.3999999910593,
+        1434.2000000029802
+      ],
+      "calls": 194,
+      "triangles": 127472,
+      "textures": 74,
+      "geometries": 152,
+      "scale": 0.6,
+      "tier": "balanced",
+      "world": "alley",
+      "masonryWidth": 1280,
+      "buffer": [
+        640,
+        360
+      ],
+      "progressStart": 0,
+      "progressEnd": 0,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

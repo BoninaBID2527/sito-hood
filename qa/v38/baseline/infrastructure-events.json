@@ -1,0 +1,9 @@
+[
+  {
+    "at": "2026-10-09T00:03:40.799457+00:00",
+    "event": "Environment147 to148 replacement killed Next and Chromium during census; all 19 captures/reviews, build and backlog preserved.",
+    "discardedTiming": "performance-environment-interrupted.json; opening row includes intervals15.4s/7.8s and is not accepted as baseline.",
+    "resume": "Restart same production build yNPi2rx1AkSckb7VkOFgI and complete census from a fresh browser.",
+    "hardwareRechecked": "Chromium151.0.7922.173, 2CPU, 8GiB; unchanged."
+  }
+]

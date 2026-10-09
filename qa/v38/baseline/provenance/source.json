@@ -1,0 +1,26 @@
+{
+  "baselineSourceCommit": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "historicalVisualCodeCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+  "branch": "work/hooddino-v3-8-01-baseline",
+  "productChangedSinceHistoricalVisualCode": [],
+  "qaScriptsChangedAfterVisualCodeCommit": [
+    "scripts/census37.mjs",
+    "scripts/eggs.mjs",
+    "scripts/review37.mjs",
+    "scripts/room-check.mjs",
+    "scripts/verify37.mjs"
+  ],
+  "productionBuildId": "yNPi2rx1AkSckb7VkOFgI",
+  "historicProductionBuildId": "V_ujN1cRSCwGyuAwb9K6v",
+  "node": "v24.19.0",
+  "chromium": "Chromium 151.0.7922.173 built on Debian GNU/Linux 13 (trixie)",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "cpuQuota": "200000 100000",
+  "memoryLimit": "8589934592",
+  "video": {
+    "path": "public/room/hooddino-studio-arrangiamento.mp4",
+    "sha256": "02def5f45a5b97d770fd995f47193e4ec21865b941366719bebf6d43208d7949",
+    "bytes": 4860666,
+    "content": "Outdoor guitar/rap footage per historical source inspection; intended studio arrangement source missing; unchanged bytes."
+  }
+}
