@@ -1,0 +1,538 @@
+{
+  "baselineSourceCommit": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "costLegend": "Qualitative effort/cost hypotheses, not measured GPU or time estimates. Fresh measurements are in performance.json.",
+  "items": [
+    {
+      "id": "B01",
+      "task": "11",
+      "priority": "P1",
+      "area": "ROOM / tazza",
+      "cause": "Tazza separata presente nel gruppo deskObjects e sovrapposta all’ingombro del controller: coordinate x=-0.3, z=-7.98; controller x=0, z=-7.92, corpo 1.0×0.3 m. La tazza parte dal piano del desk, non dal corpo del controller. Segnalazione del proprietario, corroborata dall’ingombro nel codice; catturare anche un close mirato prima della correzione. Nuovo frame 41: tazza visibile sopra la zona del controller. La base parte da y=0.77, dentro il corpo del controller che arriva a y=0.81; l’ingombro x/z ricade nel corpo. Il close 43 riguarda il monitor e non sostituisce il close dedicato alla tazza richiesto alla task 11.",
+      "checkpoints": [
+        41,
+        43,
+        46
+      ],
+      "acceptance": "Corpo e manico rimossi alla costruzione del batch; nessuna ombra residua; pianola e tutti i tasti intatti in close/front/side e dopo uscita/rientro.",
+      "likelyCost": "Basso: rimozione di geometria; draw e risorse non devono aumentare.",
+      "scope": [
+        "components/scene/room/furniture.ts:deskObjects",
+        "components/scene/room/furniture.ts:keyboard"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/41-room-04-workstation-wide.png",
+        "images/43-room-06-workstation-close.png",
+        "images/46-room-09-speaker.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B02",
+      "task": "11",
+      "priority": "P1",
+      "area": "Graffiti e insegne / percorso completo",
+      "cause": "Il proprietario segnala graffiti sotto strutture e insegne attraversate da oggetti. LAYOUT e Signs usano placement separati dall’architettura. La causa e i singoli ID richiedono un audit mirato: i frame HERO non bastano a certificare tutti i casi. Nelle nuove catture 01/02 il lettering è parzialmente coperto da tubi e nel frame 35 un’antenna si proietta davanti al billboard: candidati da controllare anche lateralmente per distinguere occlusione da compenetrazione. Il nuovo frame 56 mostra il tubo rosso davanti a parte del titolo WHO IS nello studio: correggere la leggibilità rispettando il contenuto autentico e il montaggio fisico.",
+      "checkpoints": [
+        1,
+        2,
+        4,
+        8,
+        10,
+        23,
+        27,
+        35,
+        37,
+        56
+      ],
+      "acceptance": "Inventario ID/coordinate con prima/dopo; graffiti su supporti continui, insegne con staffe e distanze corrette; nessuna compenetrazione impropria nelle viste front/side/radenti. Contenuto, picking ed Easter egg conservati.",
+      "likelyCost": "Basso se riposizionamento; medio se serve clipping condiviso. Nessuna cancellazione indiscriminata o depthTest disattivato.",
+      "scope": [
+        "components/scene/street/StreetGraffiti.tsx:LAYOUT",
+        "components/scene/street/Decals.tsx:Signs",
+        "components/scene/street/atlasDecals.ts",
+        "components/scene/room/build.ts"
+      ],
+      "status": "Candidati osservati; audit geometrico mirato nella task11",
+      "newBaselineImages": [
+        "images/01-street-opening.png",
+        "images/02-street-hero-facade.png",
+        "images/04-street-window.png",
+        "images/08-street-deep-alley.png",
+        "images/10-plaza-front.png",
+        "images/23-plaza-out-180.png",
+        "images/27-plaza-far-ahead.png",
+        "images/35-roof-wide.png",
+        "images/37-skyline.png",
+        "images/56-room-19-dark-corner.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B03",
+      "task": "02",
+      "priority": "P1",
+      "area": "PLAZA / costo retro",
+      "cause": "Il confronto storico controllato V3.6→V3.7 misura +31.3% sul retro e +6.8% sul fronte. Sono dati storici: la baseline operativa è la nuova misura e3456eb, senza presumere una regressione ulteriore.",
+      "checkpoints": [
+        10,
+        23,
+        27
+      ],
+      "acceptance": "Confronto seriale sulla main iniziale, con stessi tier/scale/texture/camera e campioni grezzi. Riduzione del costo spiegata per pass/superfici; nessun vuoto nelle 16 direzioni e sette pose, nessuna perdita HERO.",
+      "likelyCost": "Medio: richiede profiling, batching/LOD/culling o riduzione del lavoro shader lontano.",
+      "scope": [
+        "components/scene/street/backgroundMaterial.ts",
+        "components/scene/street/PlazaArch.tsx",
+        "components/scene/street/plazaArch.ts",
+        "components/scene/street/DistCull.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/10-plaza-front.png",
+        "images/23-plaza-out-180.png",
+        "images/27-plaza-far-ahead.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B04",
+      "task": "03",
+      "priority": "P1",
+      "area": "ROOM / workstation",
+      "cause": "Speaker, controlli, supporti e bordi restano semplici nei close-up; i materiali degli apparecchi reagiscono troppo uniformemente.",
+      "checkpoints": [
+        41,
+        43,
+        46,
+        48
+      ],
+      "acceptance": "Supporti e contatti leggibili, coni/griglie e controlli plausibili nei close; separazione di legno, plastica, metallo, gomma e tessuto. Rimozione tazza preservata. Gradi assegnati dopo nuova ispezione; B è progresso, A resta il target HERO.",
+      "likelyCost": "Medio: geometria mirata e mappe condivise; misurare ROOM, senza moltiplicare dettagli nascosti.",
+      "scope": [
+        "components/scene/room/furniture.ts",
+        "components/scene/room/batch.ts",
+        "lib/roomSurfaces.ts"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/41-room-04-workstation-wide.png",
+        "images/43-room-06-workstation-close.png",
+        "images/46-room-09-speaker.png",
+        "images/48-room-11-desk-floor.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B05",
+      "task": "03",
+      "priority": "P1",
+      "area": "ROOM / schermo e materiali vicini",
+      "cause": "Vetro del monitor, cornice e legno/fabric vicini hanno riflessi deboli o uniformi; grana e usura restano regolari.",
+      "checkpoints": [
+        43,
+        46
+      ],
+      "acceptance": "Vetro con riflesso sobrio e black level; materiali distinguibili anche senza post; nessuna perdita delle immagini autentiche o double gamma.",
+      "likelyCost": "Medio: risposta materiale e filtering; nessun nuovo reflection target obbligatorio.",
+      "scope": [
+        "components/scene/room/RoomWorld.tsx",
+        "lib/roomSurfaces.ts",
+        "components/scene/room/furniture.ts"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/43-room-06-workstation-close.png",
+        "images/46-room-09-speaker.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B06",
+      "task": "04",
+      "priority": "P1",
+      "area": "ROOM / luce sotto desk e assorbitori",
+      "cause": "Sotto il desk e gli assorbitori si perde informazione; il fill per vertice resta spazialmente ampio e non restituisce un bounce convincente.",
+      "checkpoints": [
+        41,
+        48,
+        54,
+        56,
+        57
+      ],
+      "acceptance": "Cablaggi, supporti e fabric underside leggibili senza ambient uniforme; fonti motivate da fixture/monitor/porta, contact preservato; sweep completo della stanza.",
+      "likelyCost": "Medio: concentrare campionamento nei punti visibili; evitare GI brute-force e campi al fragment su tutta la stanza.",
+      "scope": [
+        "components/scene/room/RoomWorld.tsx",
+        "components/scene/room/bake.ts",
+        "components/scene/room/shell.ts",
+        "components/scene/room/Vestibule.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/41-room-04-workstation-wide.png",
+        "images/48-room-11-desk-floor.png",
+        "images/54-room-17-ceiling.png",
+        "images/56-room-19-dark-corner.png",
+        "images/57-room-20-exit-view.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B07",
+      "task": "04",
+      "priority": "P2",
+      "area": "ROOM / foto e bio integrate",
+      "cause": "Il dossier storico mostra stampe/bio ancora grafiche e materiali di parete/fabric uniformi. Questi frame non sono ricatturati nella selezione HERO di task 01.",
+      "checkpoints": [
+        50,
+        51,
+        52,
+        53
+      ],
+      "acceptance": "Carta/frame/vetro/montaggio e luce credibili; biografia, foto autentiche e link invariati; readability conservata nei tier bassi.",
+      "likelyCost": "Basso–medio: presentazione fisica e light/material pass, senza nuovi contenuti artista.",
+      "scope": [
+        "components/scene/room/build.ts",
+        "components/scene/room/RoomWorld.tsx"
+      ],
+      "status": "Aperto, evidenza storica V3.7",
+      "newBaselineImages": [],
+      "historicOnlyCheckpoints": [
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "id": "B08",
+      "task": "05",
+      "priority": "P1",
+      "area": "STREET / muratura e plaster",
+      "cause": "Peeling, corsi dei mattoni e weathering ripetono motivi regolari nelle viste vicine e lungo il vicolo.",
+      "checkpoints": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "acceptance": "Scala fisica V3.7 mantenuta; macro/meso/micro distinti e usura legata a costruzione/drenaggio; motivi ripetuti meno rilevabili con e senza post. Registrare fonte/licenza di eventuali mappe PBR.",
+      "likelyCost": "Medio: variazione economica o mappe con mip/compressione; misurare texture payload e costo opening/deep street.",
+      "scope": [
+        "components/scene/street/materials.ts",
+        "lib/textures.ts",
+        "components/scene/street/Facades.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/01-street-opening.png",
+        "images/02-street-hero-facade.png",
+        "images/04-street-window.png",
+        "images/08-street-deep-alley.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B09",
+      "task": "05",
+      "priority": "P1",
+      "area": "STREET / vetro e props HERO",
+      "cause": "Finestre/interiori appaiono piatti; scooter e piccoli fittings hanno silhouette semplici.",
+      "checkpoints": [
+        1,
+        2,
+        4
+      ],
+      "acceptance": "Fresnel, riflesso e profondità interna economica credibili; props visibili sostenuti e proporzionati; non ripetere la stessa finestra né aggiungere clutter casuale.",
+      "likelyCost": "Medio: geometry/silhouette limitata ai HERO e interior approximation; mantenere fondazione performance.",
+      "scope": [
+        "components/scene/street/facadeBuild.ts",
+        "components/scene/street/Props.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/01-street-opening.png",
+        "images/02-street-hero-facade.png",
+        "images/04-street-window.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B10",
+      "task": "05",
+      "priority": "P1",
+      "area": "ASPHALT / variazione e wetness",
+      "cause": "Pool luminosi molto ampi e variazione di aggregate/repairs ancora uniforme, pur con riflessi corretti.",
+      "checkpoints": [
+        6,
+        8
+      ],
+      "acceptance": "Dry/damp/wet/water distinguibili, drenaggio e patches plausibili; niente asfalto a specchio, stripe bianche o non-finite radiance; F0 acqua, mip e horizon fix preservati.",
+      "likelyCost": "Medio: materiali e maschere; riusare targets/cadenza, non aumentare indiscriminatamente refresh.",
+      "scope": [
+        "components/scene/street/Ground.tsx",
+        "components/scene/street/groundBuild.ts"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/06-street-wet-asphalt.png",
+        "images/08-street-deep-alley.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B11",
+      "task": "06",
+      "priority": "P1",
+      "area": "PLAZA / track integration",
+      "cause": "Card, lettering e supporti hanno costruzione semplice e roughness uniforme; beam e pool luminosi hanno forme teatrali.",
+      "checkpoints": [
+        10
+      ],
+      "acceptance": "Sette brani e artwork invariati; supporti/fissaggi/cavi credibili e materiali distinti; luce motivata e contatto anche sul retro. Nessuna perdita della logica camera/interazione.",
+      "likelyCost": "Medio: pochi HERO dettagli, shared materials; verificare front/rear e sette pose prima di chiudere.",
+      "scope": [
+        "components/scene/TrackObjects.tsx",
+        "components/scene/TrackCard3D.tsx",
+        "components/scene/street/Lamps.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/10-plaza-front.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B12",
+      "task": "06",
+      "priority": "P1",
+      "area": "PLAZA / rear e distant passage",
+      "cause": "Passaggio e città esistono, ma edificio terminale, bays e roofline sono regolari; lower walls ricevono fill ampio e pratiche producono grandi highlight.",
+      "checkpoints": [
+        23,
+        27
+      ],
+      "acceptance": "Migliore profondità e distinzione materiale/luce senza cancellare gli strati costruiti; rotazione inward/outward completa e niente fondali vuoti. Ottimizzazioni task 02 mantenute.",
+      "likelyCost": "Medio: MIDGROUND/BACKGROUND hierarchy; evitare dettaglio massimo in lontananza.",
+      "scope": [
+        "components/scene/street/PlazaArch.tsx",
+        "components/scene/street/plazaArch.ts",
+        "components/scene/street/backgroundMaterial.ts"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/23-plaza-out-180.png",
+        "images/27-plaza-far-ahead.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B13",
+      "task": "07",
+      "priority": "P2",
+      "area": "ROOF / SKYLINE",
+      "cause": "Tetto e città mostrano gloss uniforme, griglie ripetute e sagome ugualmente nette. Le misure storiche rooftop sono discordanti: nessun verdetto stabile di costo.",
+      "checkpoints": [
+        35,
+        37
+      ],
+      "acceptance": "Coating/seams/wetness plausibili e skyline near/mid/far con profondità coerente; confronti di costo spiegati, senza reclamare un miglioramento da un solo campione.",
+      "likelyCost": "Medio: variazione condivisa e atmospheric integration; real geometry solo sui rooftop HERO.",
+      "scope": [
+        "components/scene/RooftopEnvironment.tsx"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/35-roof-wide.png",
+        "images/37-skyline.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B14",
+      "task": "08",
+      "priority": "P2",
+      "area": "DUALISMO",
+      "cause": "Specchio/ossidiana troppo puliti e regolari, installazione luminosa e particles ancora palesemente sintetici.",
+      "checkpoints": [
+        59
+      ],
+      "acceptance": "Roughness/Fresnel/iridescenza dipendenti da angolo e luce; reflection/contact più sofisticati mantenendo identità, artwork e leggibilità. Nessuna crescita gratuita della geometria.",
+      "likelyCost": "Medio: shader/material pass mirato; preservare efficienza V3.6/V3.7.",
+      "scope": [
+        "components/scene/DualismoWorld.tsx",
+        "components/scene/DualismoShaders.ts"
+      ],
+      "status": "Da implementare",
+      "newBaselineImages": [
+        "images/59-dualism-wide.png"
+      ],
+      "historicOnlyCheckpoints": []
+    },
+    {
+      "id": "B15",
+      "task": "09",
+      "priority": "P1 / input esterno",
+      "area": "ROOM / video autentico",
+      "cause": "L’asset MP4 invariato è ripresa all’aperto chitarra/rap, non la registrazione studio/arrangiamento desiderata; hash documentato. Non è un bug del player.",
+      "checkpoints": [
+        44,
+        45
+      ],
+      "acceptance": "Ricevere fonte autentica corretta; nessuna sostituzione inventata; explicit PLAY, lazy loading, proporzioni, decode una sola volta e release conservati. Test decode su Safari solo se davvero eseguito.",
+      "likelyCost": "Dipende dal payload autentico; transcode/distribuzione pianificati dopo ricezione.",
+      "scope": [
+        "public/room/hooddino-studio-arrangiamento.mp4"
+      ],
+      "status": "BLOCCATO: manca fonte autentica prevista",
+      "newBaselineImages": [],
+      "historicOnlyCheckpoints": [
+        44,
+        45
+      ]
+    },
+    {
+      "id": "B16",
+      "task": "10",
+      "priority": "Gate finale",
+      "area": "Tutti / device e regressione",
+      "cause": "19 fasi V3.7 passate sono prove storiche, non un gate V3.8. SwiftShader e touch emulato non verificano Safari/iPad/iPhone o FPS hardware.",
+      "checkpoints": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ],
+      "acceptance": "Regressione completa sulla main integrata; 61 frame più no-post/no-fog, gradi sinceri, 360° e ROOM sweep; matrice real device con NON VERIFICATO dove mancano dispositivi.",
+      "likelyCost": "Alto costo di verifica; eseguire il gate completo una volta integrati i lavori, ripetendolo solo per cambiamenti/errori pertinenti.",
+      "scope": [
+        "scripts/verify37.mjs",
+        "qa/v37/TESTS.md"
+      ],
+      "status": "Aperto; device reali non disponibili nella baseline",
+      "newBaselineImages": [
+        "images/01-street-opening.png",
+        "images/02-street-hero-facade.png",
+        "images/04-street-window.png",
+        "images/06-street-wet-asphalt.png",
+        "images/08-street-deep-alley.png",
+        "images/10-plaza-front.png",
+        "images/23-plaza-out-180.png",
+        "images/27-plaza-far-ahead.png",
+        "images/35-roof-wide.png",
+        "images/37-skyline.png",
+        "images/41-room-04-workstation-wide.png",
+        "images/43-room-06-workstation-close.png",
+        "images/46-room-09-speaker.png",
+        "images/48-room-11-desk-floor.png",
+        "images/54-room-17-ceiling.png",
+        "images/55-room-18-floor.png",
+        "images/56-room-19-dark-corner.png",
+        "images/57-room-20-exit-view.png",
+        "images/59-dualism-wide.png"
+      ],
+      "historicOnlyCheckpoints": [
+        3,
+        5,
+        7,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        36,
+        38,
+        39,
+        40,
+        42,
+        44,
+        45,
+        47,
+        49,
+        50,
+        51,
+        52,
+        53,
+        58,
+        60,
+        61
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Target page, context or browser has been closed
+    at /workspace/sito-hood/qa/v38/baseline/public-smoke.mjs:16:14 {
+  log: []
+}
+
+Node.js v24.19.0

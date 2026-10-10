@@ -1,0 +1,14 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: Target page, context or browser has been closed
+    at sample (/workspace/sito-hood/scripts/census37.mjs:22:25)
+    at Object.onShot (/workspace/sito-hood/scripts/census37.mjs:50:161)
+    at shot (/workspace/sito-hood/scripts/qa36-lib.mjs:72:108)
+    at async runCheckpoint (/workspace/sito-hood/scripts/qa36-lib.mjs:108:3)
+    at async file:///workspace/sito-hood/scripts/census37.mjs:50:82 {
+  log: []
+}
+
+Node.js v24.19.0

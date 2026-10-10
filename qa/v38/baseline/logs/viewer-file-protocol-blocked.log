@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///workspace/sito-hood/qa/v38/baseline/compare.html
+Call log:
+[2m  - navigating to "file:///workspace/sito-hood/qa/v38/baseline/compare.html", waiting until "load"[22m
+
+    at /workspace/sito-hood/[eval1]:6:10 {
+  log: [
+    '  - navigating to "file:///workspace/sito-hood/qa/v38/baseline/compare.html", waiting until "load"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.19.0

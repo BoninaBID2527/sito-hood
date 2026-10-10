@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-10-09T00:04:43.368Z",
+  "url": "https://boninabid2527.github.io/sito-hood/",
+  "status": 200,
+  "browser": "151.0.7922.173",
+  "canvas": 1,
+  "selectedAssets": [
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/space-mono-latin-400-normal.37_1qewfwlumh.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/space-mono-latin-700-normal.3dmnla43cklex.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/anton-latin-ext-400-normal.0xrcw5a_y4ddv.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/reenie-beanie-latin-400-normal.237k1b6q6_ni9.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/anton-latin-400-normal.2c_xnsc2yf3c2.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/permanent-marker-latin-400-normal.3mb8si3fxj6ni.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/rock-salt-latin-400-normal.1wl9dd5-40wxa.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/nanum-pen-script-latin-400-normal.43vobrmwroy7p.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/saira-stencil-one-latin-400-normal.2glthwnm8e2o4.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/titan-one-latin-400-normal.1yrp5uwjuvjqk.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/bungee-latin-400-normal.35r54sju92ntn.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/_next/static/media/playfair-display-latin-900-italic.151y7qkbuu5ao.woff2",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/covers/alterco.webp",
+      "status": 200
+    },
+    {
+      "url": "https://boninabid2527.github.io/sito-hood/covers/dualismo.webp",
+      "status": 200
+    }
+  ],
+  "video": {
+    "status": 200,
+    "mime": "video/mp4",
+    "bytes": 4860666,
+    "sha256": "02def5f45a5b97d770fd995f47193e4ec21865b941366719bebf6d43208d7949"
+  },
+  "errors": [],
+  "failed": [],
+  "limits": "Opening-scene smoke only; no native-video decode, iOS or device performance claim."
+}

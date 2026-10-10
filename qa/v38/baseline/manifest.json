@@ -1,0 +1,252 @@
+{
+  "sourceCommit": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "freshCaptures": [
+    {
+      "checkpoint": 1,
+      "path": "images/01-street-opening.png",
+      "bytes": 706756,
+      "sha256": "d121feca412a30bf8fe6795135b31a47547d89ebc8602337031ea7e884f2bf6e",
+      "capturedAt": "2026-10-08T23:44:53.541448+00:00"
+    },
+    {
+      "checkpoint": 2,
+      "path": "images/02-street-hero-facade.png",
+      "bytes": 705768,
+      "sha256": "22bacaa7cdb8b5e4ad629d5135bd934c8cbdac6755326ea83bb5541cb9bdd105",
+      "capturedAt": "2026-10-08T23:45:23.948170+00:00"
+    },
+    {
+      "checkpoint": 4,
+      "path": "images/04-street-window.png",
+      "bytes": 695192,
+      "sha256": "b36d6f2ec6ec47a49ad17a6d3144686d83a6752a6263b312b55baa3cc136b7f3",
+      "capturedAt": "2026-10-08T23:45:56.610795+00:00"
+    },
+    {
+      "checkpoint": 6,
+      "path": "images/06-street-wet-asphalt.png",
+      "bytes": 679091,
+      "sha256": "5280d956adba74b65c8b681babd1cfca74e4139c0b1714a4733b76cb8cfbad17",
+      "capturedAt": "2026-10-08T23:46:21.321754+00:00"
+    },
+    {
+      "checkpoint": 8,
+      "path": "images/08-street-deep-alley.png",
+      "bytes": 712529,
+      "sha256": "b3fe34b6dc3925443b3081c96ae58d40748151045f4ccc8fb51f725cae54b2e5",
+      "capturedAt": "2026-10-08T23:46:53.536391+00:00"
+    },
+    {
+      "checkpoint": 10,
+      "path": "images/10-plaza-front.png",
+      "bytes": 733738,
+      "sha256": "ef132384fc503f6d9edf425d16ee96d9e948c0d3c59dfc0cc70ea22cc3d150d6",
+      "capturedAt": "2026-10-08T23:47:18.827322+00:00"
+    },
+    {
+      "checkpoint": 23,
+      "path": "images/23-plaza-out-180.png",
+      "bytes": 637804,
+      "sha256": "0b12ecab770f9f7a4e24046a2d021aeba134d93683f68c9a601662800c54e2dd",
+      "capturedAt": "2026-10-08T23:48:17.516840+00:00"
+    },
+    {
+      "checkpoint": 27,
+      "path": "images/27-plaza-far-ahead.png",
+      "bytes": 628131,
+      "sha256": "e0d9afdef9216aaafdfe8159a58de62d0ffe005b70534e007a0462e012d5bbb8",
+      "capturedAt": "2026-10-08T23:48:30.160305+00:00"
+    },
+    {
+      "checkpoint": 35,
+      "path": "images/35-roof-wide.png",
+      "bytes": 740350,
+      "sha256": "20f732d0de7eba694773e55765b89aba008e765dd89ac2bc82c1d2a879e46f89",
+      "capturedAt": "2026-10-08T23:48:49.263497+00:00"
+    },
+    {
+      "checkpoint": 37,
+      "path": "images/37-skyline.png",
+      "bytes": 743979,
+      "sha256": "62965cadedd2fba56286ef2f5778cac2dd5530e5d34ef332521d6a91d13d74e8",
+      "capturedAt": "2026-10-08T23:49:01.466980+00:00"
+    },
+    {
+      "checkpoint": 41,
+      "path": "images/41-room-04-workstation-wide.png",
+      "bytes": 634183,
+      "sha256": "e217cf79688b5b06e358590ea4d9dba60701724d6f2fa713054a182932bb6e5e",
+      "capturedAt": "2026-10-08T23:51:07.045681+00:00"
+    },
+    {
+      "checkpoint": 43,
+      "path": "images/43-room-06-workstation-close.png",
+      "bytes": 643112,
+      "sha256": "5fb60b852ca9ff036b60ae0754ec39ac9337ed7f8e87d69501d970293f9e1164",
+      "capturedAt": "2026-10-08T23:51:14.641362+00:00"
+    },
+    {
+      "checkpoint": 46,
+      "path": "images/46-room-09-speaker.png",
+      "bytes": 666772,
+      "sha256": "fd058ca9eacbf3604dd971da5a899b2097d41f33b25a79c97d2541fb8c0ff1d1",
+      "capturedAt": "2026-10-08T23:51:22.753021+00:00"
+    },
+    {
+      "checkpoint": 48,
+      "path": "images/48-room-11-desk-floor.png",
+      "bytes": 585050,
+      "sha256": "fa333f8ffadc80507d72c5045e8af581c2a475d05ebf567f9d640f08a428bdae",
+      "capturedAt": "2026-10-08T23:51:29.240748+00:00"
+    },
+    {
+      "checkpoint": 54,
+      "path": "images/54-room-17-ceiling.png",
+      "bytes": 569300,
+      "sha256": "3e7652e7b97b637ce131839b68de7b82a8a88b94d4f967d8cb1eca881e2ac662",
+      "capturedAt": "2026-10-08T23:51:34.832513+00:00"
+    },
+    {
+      "checkpoint": 55,
+      "path": "images/55-room-18-floor.png",
+      "bytes": 628078,
+      "sha256": "212303f005997e3cd03008c68b2dc6bae3d7223294188a571ae6f92ac065a975",
+      "capturedAt": "2026-10-08T23:51:40.176288+00:00"
+    },
+    {
+      "checkpoint": 56,
+      "path": "images/56-room-19-dark-corner.png",
+      "bytes": 678269,
+      "sha256": "ce7f9af8f3fcffef7b321a9ef5dd48684a8a549f0829c98292cf40c8df795ed1",
+      "capturedAt": "2026-10-08T23:51:46.940004+00:00"
+    },
+    {
+      "checkpoint": 57,
+      "path": "images/57-room-20-exit-view.png",
+      "bytes": 628117,
+      "sha256": "b871a18af3e9524d9638fd3f5fde64cef7568a50a69e19a850367fc92447d95b",
+      "capturedAt": "2026-10-08T23:52:18.030693+00:00"
+    },
+    {
+      "checkpoint": 59,
+      "path": "images/59-dualism-wide.png",
+      "bytes": 704226,
+      "sha256": "ec6db271b824bc083abebeb6a8c1805518ca02269d1eb8f1586f1bc648011151",
+      "capturedAt": "2026-10-08T23:54:15.425741+00:00"
+    }
+  ],
+  "captureConfig": {
+    "viewport": "960x540",
+    "quality": "high",
+    "scale": 0.75,
+    "DSF": 1,
+    "post": "normal narrative",
+    "fog": "normal",
+    "UI": "hidden",
+    "selection": [
+      1,
+      2,
+      4,
+      6,
+      8,
+      10,
+      23,
+      27,
+      35,
+      37,
+      41,
+      43,
+      46,
+      48,
+      54,
+      55,
+      56,
+      57,
+      59
+    ],
+    "videoPlayback": false
+  },
+  "performanceConfig": {
+    "viewport": "640x360",
+    "quality": "balanced",
+    "scale": 0.6,
+    "warmFrames": 40,
+    "sampleFrames": 20,
+    "distinctRuntimeFrames": true,
+    "serial": true,
+    "reflectionReadback": "outside timed samples",
+    "hardware": "Linux Chromium151 SwiftShader, 2CPU/8GiB"
+  },
+  "historical": {
+    "sourceCommit": "4a455df52441e2d0b53a748b41f25637586b1062",
+    "normalFrames": 61,
+    "normalGrades": {
+      "A": 0,
+      "B": 3,
+      "C": 58
+    },
+    "allReviewedFrames": 135,
+    "functionalStagesPassed": 19,
+    "freshV38Gate": false
+  },
+  "publicURL": "https://boninabid2527.github.io/sito-hood/",
+  "scope": "Documentation, QA artifacts and read-only runner only; no application or public asset changes.",
+  "realDevice": "NOT VERIFIED: Safari/iPad/iPhone/native H264/GPU FPS",
+  "attempts": [
+    {
+      "stage": "build",
+      "exitCode": 0,
+      "log": "logs/build.log"
+    },
+    {
+      "stage": "capture",
+      "exitCode": 0,
+      "log": "logs/captures.log"
+    },
+    {
+      "stage": "performance",
+      "exitCode": 0,
+      "log": "logs/performance.log"
+    },
+    {
+      "stage": "public-smoke",
+      "exitCode": 0,
+      "log": "logs/public-smoke.log"
+    },
+    {
+      "stage": "performance-environment-replacement",
+      "status": "Interrupted by environment147 to148 replacement; timing samples discarded.",
+      "log": "logs/performance-environment-interrupted.log"
+    },
+    {
+      "stage": "performance-original-probe",
+      "status": "Interrupted to strengthen moving-sample measurement; no completed timing baseline retained.",
+      "log": "logs/performance-original-probe.log"
+    },
+    {
+      "stage": "viewer-file-protocol",
+      "status": "Browser file protocol blocked by administrator; repeated successfully through local HTTP preview.",
+      "log": "logs/viewer-file-protocol-blocked.log"
+    },
+    {
+      "stage": "viewer-http",
+      "exitCode": 0,
+      "log": "logs/viewer-validation.log"
+    },
+    {
+      "stage": "public-smoke-initial",
+      "status": "Interrupted: incorrect runtime guard, then debug hook absent on normal URL; QA runner corrected, product unchanged.",
+      "logs": [
+        "logs/public-smoke-invalid-guard.log",
+        "logs/public-smoke-debug-hook-guard.log"
+      ]
+    },
+    {
+      "stage": "public-smoke-proxy",
+      "exitCode": 1,
+      "reason": "Separate APIRequestContext did not inherit configured network path. Replaced with browser fetch.",
+      "log": "logs/public-smoke-api-proxy-failure.log"
+    }
+  ]
+}
