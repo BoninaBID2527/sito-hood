@@ -1,0 +1,344 @@
+{
+  "buildId": "7af_y4Q7_TII4cHtQPTwH",
+  "viewport": "800x450",
+  "quality": "balanced",
+  "noPost": false,
+  "noFog": false,
+  "resumedCaptures": 6,
+  "recaptured": [
+    45
+  ],
+  "captures": [
+    {
+      "reflections": [],
+      "n": 43,
+      "name": "room-06-workstation-close",
+      "inspectionCamera": {
+        "pos": [
+          1192.7,
+          1.22,
+          -67.4
+        ],
+        "look": [
+          1191.6,
+          1.05,
+          -67.3
+        ],
+        "fov": 40
+      },
+      "camera": {
+        "position": [
+          1192.7,
+          1.22,
+          -67.4
+        ],
+        "quaternion": [
+          -0.0514399066634977,
+          0.7362710003438007,
+          0.05632838604111311,
+          0.6723734549944644
+        ],
+        "fov": 40
+      },
+      "roomStation": 0.9832426152435637,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 14,
+      "triangles": 47802,
+      "textures": 113,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "0f23b5c148e062743745d267e297e5f6b032eeef212e4200dbee9b3b74d5649e",
+      "image": "43-room-06-workstation-close.webp",
+      "imageSha256": "cda8f5d1f3c2d872295a9d228a5b60f7a7ab722bd9c619cc9558ab7679dce9dd"
+    },
+    {
+      "reflections": [],
+      "n": 44,
+      "name": "room-07-monitor",
+      "inspectionCamera": {
+        "pos": [
+          1192.4,
+          1.22,
+          -67.5
+        ],
+        "look": [
+          1191.7,
+          1.22,
+          -67.5
+        ],
+        "fov": 36
+      },
+      "camera": {
+        "position": [
+          1192.4,
+          1.22,
+          -67.5
+        ],
+        "quaternion": [
+          0,
+          0.7071067811865475,
+          0,
+          0.7071067811865476
+        ],
+        "fov": 36
+      },
+      "roomStation": 0.9937063005725316,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 12,
+      "triangles": 47794,
+      "textures": 113,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "0b5583f824d90f5cd598addae6c13032678fe5b18841a458f36c1c9a3bc35716",
+      "image": "44-room-07-monitor.webp",
+      "imageSha256": "3fcd642ea8dd81fb1938d22ebe54ec8a587202544ebbda7f0b78550e8928cd76"
+    },
+    {
+      "reflections": [],
+      "n": 45,
+      "name": "room-08-video",
+      "inspectionCamera": {
+        "pos": [
+          1193,
+          1.27,
+          -67.5
+        ],
+        "look": [
+          1191.7,
+          1.27,
+          -67.5
+        ],
+        "fov": 42
+      },
+      "stateAtShot": true,
+      "camera": {
+        "position": [
+          1193,
+          1.27,
+          -67.5
+        ],
+        "quaternion": [
+          0,
+          0.7071067811865475,
+          0,
+          0.7071067811865476
+        ],
+        "fov": 42.0033864398234
+      },
+      "roomStation": 0.9997706348302376,
+      "roomFocusPush": 0.9948283319383198,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 15,
+      "triangles": 47804,
+      "textures": 114,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "playing",
+      "videoTime": 7.160654,
+      "rawPngSha256": "aafe6a957c5c2aacc356c623f72477206092ecfb97fdf24f8d450821c0b32e84",
+      "image": "45-room-08-video.webp",
+      "imageSha256": "127add0d030943292827fbc7467bae70c204e1142cc8f1f7fe18dec761e17e6d"
+    },
+    {
+      "reflections": [],
+      "n": 46,
+      "name": "room-09-speaker",
+      "inspectionCamera": {
+        "pos": [
+          1193.1,
+          1.25,
+          -66.4
+        ],
+        "look": [
+          1191.8,
+          1.05,
+          -65.5
+        ],
+        "fov": 40
+      },
+      "camera": {
+        "position": [
+          1193.1,
+          1.25,
+          -66.4
+        ],
+        "quaternion": [
+          -0.02917836582278527,
+          0.8840269991805063,
+          0.055688904954858204,
+          0.46318855075740983
+        ],
+        "fov": 40
+      },
+      "roomStation": 0.9999999827534936,
+      "roomFocusPush": 0.0004757309613208382,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 14,
+      "triangles": 47960,
+      "textures": 114,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "d76237d926933b0d475101b1713151a9e5f1c44ebd9c5330b04b3c12436cd233",
+      "image": "46-room-09-speaker.webp",
+      "imageSha256": "62053a47ff620e8b481f6483306a2d43e1303d67fe0498fa66144d1155542f83"
+    },
+    {
+      "reflections": [],
+      "n": 47,
+      "name": "room-10-acoustic",
+      "inspectionCamera": {
+        "pos": [
+          1194,
+          1.5,
+          -66
+        ],
+        "look": [
+          1191.4,
+          1.6,
+          -65
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          1194,
+          1.5,
+          -66
+        ],
+        "quaternion": [
+          0.010156650304113142,
+          0.8241788903436857,
+          -0.014788386196295085,
+          0.5660453186805452
+        ],
+        "fov": 50
+      },
+      "roomStation": 0.9999999941400001,
+      "roomFocusPush": 0.00015530834868271882,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 15,
+      "triangles": 47962,
+      "textures": 114,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "4c45eb4303a5d6a6376e1734ffdbe1b2df61e5a4b836be2843ddfdc04caa18d4",
+      "image": "47-room-10-acoustic.webp",
+      "imageSha256": "111d8d3a54689cb856362d81374c6cc3cc6cb1191c0c7bfcc08c06180f993cc1"
+    },
+    {
+      "reflections": [],
+      "n": 48,
+      "name": "room-11-desk-floor",
+      "inspectionCamera": {
+        "pos": [
+          1193.2,
+          0.55,
+          -68
+        ],
+        "look": [
+          1191.9,
+          0.2,
+          -67.5
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          1193.2,
+          0.55,
+          -68
+        ],
+        "quaternion": [
+          -0.06951215647157444,
+          0.8180743951856544,
+          0.10121177597525803,
+          0.5618527569107687
+        ],
+        "fov": 50
+      },
+      "roomStation": 0.9999999970658741,
+      "roomFocusPush": 7.579652802141079e-05,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 14,
+      "triangles": 47802,
+      "textures": 114,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "4d56ed38a31c6906d39426470801f150bb4d4a26780e324509acad51638f1a54",
+      "image": "48-room-11-desk-floor.webp",
+      "imageSha256": "0103f8d46e62eb1ec3cab7634bec69c4da23d0e8a97a42547b520c71a2cac3cf"
+    },
+    {
+      "reflections": [],
+      "n": 49,
+      "name": "room-12-cables",
+      "inspectionCamera": {
+        "pos": [
+          1192.1,
+          0.6,
+          -67.6
+        ],
+        "look": [
+          1191.5,
+          0.5,
+          -67.2
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          1192.1,
+          0.6,
+          -67.6
+        ],
+        "quaternion": [
+          -0.03248440580582579,
+          0.8795827938726659,
+          0.06069766746584992,
+          0.47073842552611195
+        ],
+        "fov": 50
+      },
+      "roomStation": 0.9999999987686765,
+      "roomFocusPush": 3.08017802037049e-05,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 12,
+      "triangles": 47794,
+      "textures": 114,
+      "geometries": 227,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "f14886cfda6a9cabc635185837e8c7b3f1a66aebabe784af255a66718baa2228",
+      "image": "49-room-12-cables.webp",
+      "imageSha256": "fc5d2d9435fabeb724bf95d5d66a10b38a7cc5a40f106e2557803b7cb9ecba40"
+    }
+  ],
+  "errors": []
+}

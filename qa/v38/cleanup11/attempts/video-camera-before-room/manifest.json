@@ -1,0 +1,47 @@
+{
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "viewport": "800x450",
+  "quality": "balanced",
+  "noPost": false,
+  "noFog": false,
+  "resumedCaptures": 0,
+  "recaptured": [],
+  "captures": [
+    {
+      "reflections": [],
+      "n": 45,
+      "name": "room-08-video",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1192.950455438295,
+          1.2718358428909193,
+          -67.51515743858987
+        ],
+        "quaternion": [
+          -0.015055683211254502,
+          0.7105781616219942,
+          0.015265268212792251,
+          0.7032915286105335
+        ],
+        "fov": 42.00923310212337
+      },
+      "roomStation": 0.9999666071893223,
+      "roomFocusPush": 0.9963021362835169,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 15,
+      "triangles": 48096,
+      "textures": 113,
+      "geometries": 225,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "image": "45-room-08-video.webp",
+      "rawPngSha256": "f39891598688b229868356810653b17aa68ebc2e06c9e749d7f3377e1d921d51",
+      "imageSha256": "5eba402926be9ff7fa405c08c451d094249dd54a129fd6cfba11eb11c6fd9ffe"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,305 @@
+{
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "viewport": "960x540",
+  "quality": "high",
+  "noPost": false,
+  "noFog": false,
+  "resumedCaptures": 0,
+  "recaptured": [],
+  "captures": [
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 1,
+      "name": "street-opening",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.2317191762192758,
+          1.2182593335988163,
+          17.489913935266692
+        ],
+        "quaternion": [
+          0.017687214290935564,
+          0.010021463929301871,
+          -0.012298416475553528,
+          0.9997177009854
+        ],
+        "fov": 47
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 194,
+      "triangles": 127522,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "0e4ad8e882306fd850b1796ac05a6875372aca353c8a61e82ad6111046f03af1",
+      "image": "01-street-opening.webp",
+      "imageSha256": "42215cbde14a45ae65ebbc6eaf968f4aca27051ff10b1c3f3a98ad499bf8237f"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 2,
+      "name": "street-hero-facade",
+      "inspectionCamera": {
+        "pos": [
+          0.3,
+          1.7,
+          9
+        ],
+        "look": [
+          -3,
+          4.2,
+          3.5
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0.3,
+          1.7,
+          9
+        ],
+        "quaternion": [
+          0.17805629883787802,
+          0.2623379481974133,
+          -0.0493187396361586,
+          0.9471232323728673
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 190,
+      "triangles": 129536,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "9714f1de5a9505121f4df8e4dd6cd6f03eead900c4bd8a5878170794bf8cfa48",
+      "image": "02-street-hero-facade.webp",
+      "imageSha256": "2d50862e41da72724d2f54c1b872d7a287d230a006ba515d83f9a910ff5f30fc"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 3,
+      "name": "street-medium-facade",
+      "inspectionCamera": {
+        "pos": [
+          0.7,
+          1.7,
+          3.2
+        ],
+        "look": [
+          -3,
+          5.6,
+          -7
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0.7,
+          1.7,
+          3.2
+        ],
+        "quaternion": [
+          0.16908127196989992,
+          0.17054516998246927,
+          -0.029719260561443663,
+          0.9702796679392867
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 194,
+      "triangles": 128748,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "8e4cc374c7dce849a3742dfe18117bc30a6c6da9bbd2e5d8c050f2a9fe5c2ca3",
+      "image": "03-street-medium-facade.webp",
+      "imageSha256": "fbac9f0d9bc5d6b4c44f418f10a54027ff46e3f8a094349330ed2e71a0e276f7"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 4,
+      "name": "street-window",
+      "inspectionCamera": {
+        "pos": [
+          -0.9,
+          2.3,
+          1.4
+        ],
+        "look": [
+          -2.9,
+          5.3,
+          -1.3
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          -0.9,
+          2.3,
+          1.4
+        ],
+        "quaternion": [
+          0.33845434931672336,
+          0.29282163767169056,
+          -0.1117000082314068,
+          0.887258276997722
+        ],
+        "fov": 42
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 104,
+      "triangles": 114082,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "3406750a489688f7964a7c22ef5fcf21070eff3ee5de2084e7e57915d0052b47",
+      "image": "04-street-window.webp",
+      "imageSha256": "8b799091f835269bbb6e46d760efd7e2777d694172fd503a7c8069b626d79b9d"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "n": 5,
+      "name": "street-doorway",
+      "inspectionCamera": {
+        "pos": [
+          -0.1,
+          1.5,
+          -0.3
+        ],
+        "look": [
+          -2.9,
+          1.2,
+          -2.65
+        ],
+        "fov": 45
+      },
+      "camera": {
+        "position": [
+          -0.1,
+          1.5,
+          -0.3
+        ],
+        "quaternion": [
+          -0.037097157170714656,
+          0.42221465666053115,
+          0.01729622288092828,
+          0.9055713253548472
+        ],
+        "fov": 45
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "high",
+      "scale": 0.75,
+      "calls": 99,
+      "triangles": 103562,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1536,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "291946accff7547198d239539228db4cd0d671d3b8a337e7169ba9bc289f1233",
+      "image": "05-street-doorway.webp",
+      "imageSha256": "dde60f65d09dfa4b736d663cb697b740af3654d739d344024e0f5276e7a95a94"
+    }
+  ],
+  "errors": []
+}

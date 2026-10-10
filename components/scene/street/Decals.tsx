@@ -70,11 +70,23 @@ export function Decals() {
 function Signs() {
   const built = useMemo(() => {
     const plane = new THREE.PlaneGeometry(1, 1)
-    const mk = (tex: THREE.Texture, glow = 0.6) =>
-      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.2, side: THREE.DoubleSide, emissive: new THREE.Color('#ffffff'), emissiveMap: tex, emissiveIntensity: glow })
+    const mk = (tex: THREE.Texture, glow = 0.6, blade = false) => {
+      const mat = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.55, metalness: 0.2, side: THREE.DoubleSide, emissive: new THREE.Color('#ffffff'), emissiveMap: tex, emissiveIntensity: glow })
+      if (blade) {
+        // A printed blade has readable faces in both approach directions. Reuse
+        // the existing plane/map; only the back-face sampling needs reversing.
+        mat.onBeforeCompile = (shader) => {
+          shader.fragmentShader = shader.fragmentShader
+            .replace('#include <map_fragment>', THREE.ShaderChunk.map_fragment.replace('vMapUv', '(gl_FrontFacing ? vMapUv : vec2(1.0 - vMapUv.x, vMapUv.y))'))
+            .replace('#include <emissivemap_fragment>', THREE.ShaderChunk.emissivemap_fragment.replace('vEmissiveMapUv', '(gl_FrontFacing ? vEmissiveMapUv : vec2(1.0 - vEmissiveMapUv.x, vEmissiveMapUv.y))'))
+        }
+        mat.customProgramCacheKey = () => 'hooddino-blade-readable-faces-v1'
+      }
+      return mat
+    }
     return {
       plane,
-      alterco: mk(A.signs.alterco, 0.9),
+      alterco: mk(A.signs.alterco, 0.9, true),
       tracks: mk(A.signs.tracks, 0.5),
       roof: mk(A.signs.roof, 0.7),
       oneWay: mk(A.signs.oneWay, 0.2),
@@ -99,16 +111,17 @@ function Signs() {
       <DistCull at={[bladeX, 5, -31]} r={58}>
       <group position={[bladeX - 1.05, 5.0, -31]}>
         <mesh geometry={built.plane} material={built.alterco} scale={[1.7, 0.85, 1]} />
-        <mesh geometry={built.barGeo} material={built.bar} position={[0.9, 0.5, 0]} scale={[1, 1, 1.0]} rotation={[0, Math.PI / 2, 0]} />
-        <mesh geometry={built.barGeo} material={built.bar} position={[0.55, 0, 0]} scale={[1, 1, 2.0]} rotation={[0, Math.PI / 2, 0]} />
+        {/* Two short brackets connect the rear edge (x=.85) to the wall (x=1.05), behind the printed face. */}
+        <mesh geometry={built.barGeo} material={built.bar} position={[0.94, 0.3, -0.06]} scale={[1, 1, 0.22]} rotation={[0, Math.PI / 2, 0]} />
+        <mesh geometry={built.barGeo} material={built.bar} position={[0.94, -0.3, -0.06]} scale={[1, 1, 0.22]} rotation={[0, Math.PI / 2, 0]} />
       </group>
       </DistCull>
       {/* TRACKS → at the mouth of the plaza */}
-      <mesh geometry={built.plane} material={built.tracks} position={[wallX(-1, -67) + 0.09, 3.1, -67]} rotation={[0, Math.PI / 2, 0]} scale={[2.2, 1.1, 1]} />
+      <mesh geometry={built.plane} material={built.tracks} position={[wallX(-1, -69.4) + 0.006, 1.5, -69.4]} rotation={[0, Math.PI / 2, 0]} scale={[2.2, 1.1, 1]} />
       {/* roof access (the way out — nav hint) */}
-      <mesh geometry={built.plane} material={built.roof} position={[wallX(1, -68) - 0.09, 4.6, -68]} rotation={[0, -Math.PI / 2, 0]} scale={[2.4, 0.9, 1]} />
-      <DistCull at={[wallX(-1, -10), 2.5, -10.5]} r={58}>
-        <mesh geometry={built.plane} material={built.oneWay} position={[wallX(-1, -10) + 0.08, 2.5, -10.5]} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 0.34, 1]} />
+      <mesh geometry={built.plane} material={built.roof} position={[wallX(1, -67.3) - 0.006, 1.4, -67.3]} rotation={[0, -Math.PI / 2, 0]} scale={[2.4, 0.9, 1]} />
+      <DistCull at={[wallX(-1, -9.8), 2.0, -9.8]} r={58}>
+        <mesh geometry={built.plane} material={built.oneWay} position={[wallX(-1, -9.8) + 0.006, 2.0, -9.8]} rotation={[0, Math.PI / 2, 0]} scale={[1.1, 0.34, 1]} />
       </DistCull>
     </group>
   )
@@ -194,10 +207,10 @@ function WorldTitles() {
 const LETTER_SPOTS: { side: -1 | 1; z: number; y: number; s: number }[] = [
   { side: -1, z: 5.5, y: 1.15, s: 0.55 },
   { side: 1, z: -8.8, y: 3.4, s: 0.6 },
-  { side: -1, z: -20.5, y: 2.1, s: 0.55 },
-  { side: 1, z: -33.5, y: 1.0, s: 0.5 },
+  { side: -1, z: -22.1, y: 2.1, s: 0.55 },
+  { side: 1, z: -32.8, y: 1.0, s: 0.5 },
   { side: -1, z: -45, y: 3.7, s: 0.6 },
-  { side: 1, z: -57.5, y: 1.9, s: 0.55 },
+  { side: 1, z: -56.2, y: 1.9, s: 0.55 },
   { side: 1, z: -91, y: 2.2, s: 0.7 },
 ]
 
@@ -227,8 +240,9 @@ function EasterEggs() {
     <group>
       {LETTER_SPOTS.map((l, i) => (
         <DistCull key={i} at={[wallX(l.side, l.z), l.y, l.z]} r={65}>
-        <group position={[wallX(l.side, l.z) - l.side * (0.09 + i * 0.001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
-          <mesh geometry={geo} material={letterMats[i]} scale={[l.s, l.s, 1]} renderOrder={4} />
+        {/* Paint and picking share one transform; the clue cannot remain as a detached hit area at its old position. */}
+        <group position={[wallX(l.side, l.z) - l.side * (0.004 + i * 0.0001), l.y, l.z]} rotation={[0, rotFor(l.side), (i % 2 ? 1 : -1) * 0.06]}>
+          <mesh name={`hooddino-letter-${i}`} geometry={geo} material={letterMats[i]} scale={[l.s, l.s, 1]} renderOrder={4} />
           {/* generous invisible hit area — the glyphs are small and far away */}
           <mesh
             geometry={geo}

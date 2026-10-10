@@ -1,0 +1,27 @@
+PASS  loader reaches 100% and shows ENTER 
+PASS  WebGL canvas mounted 
+PASS  no AudioContext exists before the user clicks ENTER 
+PASS  audio engine starts only after the explicit ENTER click 
+PASS  phase = entered 
+PASS  pointer parallax shifts camera in X (real parallax) Δx=0.124
+PASS  scroll moves camera forward along −Z z(0.2)=-17.5 z(0.3)=-48.2
+PASS  orbit exposes a front track front=2
+PASS  hovering a card sets the TRACK cursor at 0.5,0.6
+PASS  clicking a card selects the track selected=2
+PASS  background darkens while focused focusDim=0.32
+PASS  Escape closes focus 
+PASS  horizontal swipe/drag adds orbit momentum Δdrag=-2.03
+orbit-zone frame stats (last pass) { calls: 138, tris: 74692 }
+PASS  lamp toggles off 
+PASS  all 7 hidden letters found → ALTERCO 
+PASS  rooftop world active after the liquid cut 
+PASS  final CTA present 
+PASS  DUALISMO world entered 
+PASS  return to ALTERCO works 
+PASS  no GPU geometry/texture growth across world switches {"g":260,"t":90} → {"g":260,"t":90}
+PASS  resize keeps canvas filling viewport 
+renderer.info { geometries: 258, textures: 90, programs: 137 }
+PASS  GPU resources bounded {"geometries":258,"textures":90,"programs":137}
+no console errors/warnings
+
+22 passed, 0 failed

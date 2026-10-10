@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "pairedViews": 77,
+  "galleryImages": 29,
+  "standalone": true,
+  "servedOnLoopback": true,
+  "externalNetworkBlocked": true,
+  "selectPreviousNext": true,
+  "slider": true,
+  "errors": []
+}

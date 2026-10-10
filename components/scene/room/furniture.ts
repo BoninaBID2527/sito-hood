@@ -143,7 +143,7 @@ export function keyboard(c: Ctx) {
   }
 }
 
-/* ───────────────────────── audio interface, lamp, mug, papers, phone, headphones ───────────────────────── */
+/* ───────────────────────── audio interface, lamp, papers, phone, headphones ───────────────────────── */
 export function deskObjects(c: Ctx) {
   const T = PLACE.deskTop
   // audio interface: satin box, three metal knobs, LEDs
@@ -167,11 +167,7 @@ export function deskObjects(c: Ctx) {
   sh.translate(0, -0.065, 0)
   c.satin.geo(sh, '#26282c', head[0], head[1], head[2], { rx: -0.45, rz: 0.4, ao: 0 })
   c.glow.geo(new THREE.SphereGeometry(0.026, 10, 8), '#ffd19a', head[0] + 0.02, head[1] - 0.04, head[2] + 0.025, { i: 1.45, ao: 0 })
-  // mug (lathe, handle) and a pencil
-  c.matte.group(-0.3, T, -7.98, 0.4, () => {
-    c.satin.lathe([[0, 0], [0.036, 0], [0.038, 0.004], [0.04, 0.09], [0.037, 0.092], [0.035, 0.086], [0.0, 0.008]], 0, 0, 0, '#d8d2c4', { n: 16, ao: 0 })
-    c.satin.tube([new THREE.Vector3(0.04, 0.075, 0), new THREE.Vector3(0.062, 0.07, 0), new THREE.Vector3(0.066, 0.045, 0), new THREE.Vector3(0.04, 0.025, 0)], 0.005, '#d8d2c4', { ao: 0, steps: 10 })
-  })
+  // Keep the controller clear: the former mug intersected its body/keybed.
   // a few sheets, one half over the other
   c.matte.box(0.21, 0.002, 0.297, 0.98, T + 0.001, -8.1, '#e5dfd0', { ry: 0.38, ao: 0 })
   c.matte.box(0.21, 0.002, 0.297, 1.0, T + 0.003, -8.08, '#ece6d8', { ry: 0.31, ao: 0 })

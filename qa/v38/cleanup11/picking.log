@@ -1,0 +1,15 @@
+PASS mouse visible letter 0
+PASS mouse visible letter 1
+PASS mouse visible letter 2
+PASS mouse visible letter 3
+PASS mouse visible letter 4
+PASS mouse visible letter 5
+PASS mouse visible letter 6
+PASS touch visible letter 0
+PASS touch visible letter 1
+PASS touch visible letter 2
+PASS touch visible letter 3
+PASS touch visible letter 4
+PASS touch visible letter 5
+PASS touch visible letter 6
+14 passed, 0 failed; no console errors

@@ -1,0 +1,188 @@
+{
+  "sourceSha": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "buildId": "7af_y4Q7_TII4cHtQPTwH",
+  "stages": [
+    {
+      "name": "after",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/after",
+        "800x450",
+        "balanced"
+      ],
+      "override": {
+        "FULL_PLAZA": "1",
+        "PRIORITY": "156-157,124-131,140-146"
+      },
+      "started": "2026-10-10T01:43:42.110Z",
+      "ended": "2026-10-10T02:10:29.070Z",
+      "exit": 0
+    },
+    {
+      "name": "before-oneway",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/before-oneway",
+        "800x450",
+        "balanced",
+        "156-157"
+      ],
+      "override": {
+        "PORT": "3001",
+        "BUILD_DIR": "/workspace/hood-cleanup11-before/.next"
+      },
+      "started": "2026-10-10T02:10:29.077Z",
+      "ended": "2026-10-10T02:13:26.809Z",
+      "exit": 0
+    },
+    {
+      "name": "before-room",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/before-room",
+        "800x450",
+        "balanced",
+        "43-49"
+      ],
+      "override": {
+        "EXTRA_ROOM": "1",
+        "PORT": "3001",
+        "BUILD_DIR": "/workspace/hood-cleanup11-before/.next",
+        "WEBM": "/workspace/scratch/hood-room-test.webm"
+      },
+      "started": "2026-10-10T02:13:26.820Z",
+      "ended": "2026-10-10T02:19:27.376Z",
+      "exit": 0
+    },
+    {
+      "name": "after-room",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/after-room",
+        "800x450",
+        "balanced",
+        "43-49"
+      ],
+      "override": {
+        "EXTRA_ROOM": "1",
+        "WEBM": "/workspace/scratch/hood-room-test.webm"
+      },
+      "started": "2026-10-10T02:19:27.379Z",
+      "ended": "2026-10-10T02:24:51.394Z",
+      "exit": 0
+    },
+    {
+      "name": "no-post",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/no-post",
+        "800x450",
+        "balanced",
+        "140,143,145,147,153"
+      ],
+      "override": {
+        "NOPOST": "1"
+      },
+      "started": "2026-10-10T02:24:51.398Z",
+      "ended": "2026-10-10T02:29:21.379Z",
+      "exit": 0
+    },
+    {
+      "name": "after-high",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/after-high",
+        "960x540",
+        "high",
+        "1-5"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.75"
+      },
+      "started": "2026-10-10T02:29:21.379Z",
+      "ended": "2026-10-10T02:36:09.903Z",
+      "exit": 0
+    },
+    {
+      "name": "picking",
+      "args": [
+        "qa/v38/cleanup11/picking.mjs"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.4"
+      },
+      "started": "2026-10-10T02:36:09.906Z",
+      "ended": "2026-10-10T02:38:51.391Z",
+      "exit": 0
+    },
+    {
+      "name": "e2e",
+      "args": [
+        "scripts/e2e.mjs",
+        "qa/v38/cleanup11/e2e",
+        "800x450"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.4"
+      },
+      "started": "2026-10-10T02:38:51.399Z",
+      "ended": "2026-10-10T02:42:23.245Z",
+      "exit": 0
+    },
+    {
+      "name": "ROOM-desktop",
+      "args": [
+        "scripts/room-check.mjs",
+        "balanced",
+        "800x450"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.5",
+        "WEBM": "/workspace/scratch/hood-room-test.webm"
+      },
+      "started": "2026-10-10T02:42:23.264Z",
+      "ended": "2026-10-10T02:50:57.695Z",
+      "exit": 0
+    },
+    {
+      "name": "eggs",
+      "args": [
+        "scripts/eggs.mjs"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.4",
+        "SHOT": "/workspace/sito-hood/qa/v38/cleanup11/eggs-roof.png"
+      },
+      "started": "2026-10-10T13:13:39.868Z",
+      "ended": "2026-10-10T13:27:46.373Z",
+      "exit": 0
+    },
+    {
+      "name": "secrets",
+      "args": [
+        "scripts/secrets.mjs"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.4",
+        "SHOT": "/workspace/sito-hood/qa/v38/cleanup11/secrets-roof.png"
+      },
+      "started": "2026-10-10T13:27:46.377Z",
+      "ended": "2026-10-10T13:48:11.829Z",
+      "exit": 0
+    },
+    {
+      "name": "tracks",
+      "args": [
+        "scripts/tracks-check.mjs",
+        "http://localhost:3000/",
+        "balanced"
+      ],
+      "override": {
+        "EXTRA": "&scale=0.4"
+      },
+      "started": "2026-10-10T13:48:11.864Z",
+      "ended": "2026-10-10T14:02:58.473Z",
+      "exit": 0
+    }
+  ]
+}

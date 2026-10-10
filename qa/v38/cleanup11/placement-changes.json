@@ -1,0 +1,1166 @@
+[
+  {
+    "index": 2,
+    "id": "blk_hood2",
+    "side": 1,
+    "before": {
+      "z": -87.0,
+      "y": 3.1,
+      "w": 8.6
+    },
+    "after": {
+      "z": -86.8,
+      "y": 2.2,
+      "w": 5.16
+    },
+    "conflicts": [
+      "first course",
+      "pier",
+      "plaza hardware",
+      "window/reveal"
+    ]
+  },
+  {
+    "index": 3,
+    "id": "blk_alterco2",
+    "side": -1,
+    "before": {
+      "z": -103.0,
+      "y": 3.0,
+      "w": 8.2
+    },
+    "after": {
+      "z": -92.8,
+      "y": 2.2,
+      "w": 4.92
+    },
+    "conflicts": [
+      "doors",
+      "first course",
+      "pier",
+      "plaza hardware",
+      "window/reveal"
+    ]
+  },
+  {
+    "index": 0,
+    "id": "blk_hood",
+    "side": -1,
+    "before": {
+      "z": 9.5,
+      "y": 2.55,
+      "w": 6.6
+    },
+    "after": {
+      "z": 7.7,
+      "y": 2.3,
+      "w": 1.98
+    },
+    "conflicts": [
+      "conduit",
+      "drainpipe",
+      "gas-run",
+      "hardware",
+      "pier",
+      "segment step"
+    ]
+  },
+  {
+    "index": 1,
+    "id": "blk_alterco",
+    "side": 1,
+    "before": {
+      "z": -17.0,
+      "y": 2.05,
+      "w": 6.0
+    },
+    "after": {
+      "z": -17.0,
+      "y": 0.9,
+      "w": 4.2
+    },
+    "conflicts": [
+      "gas-run",
+      "ladder"
+    ]
+  },
+  {
+    "index": 7,
+    "id": "wild_vert",
+    "side": 1,
+    "before": {
+      "z": -108.0,
+      "y": 3.1,
+      "w": 5.2
+    },
+    "after": {
+      "z": -106.4,
+      "y": 2.4,
+      "w": 3.705
+    },
+    "conflicts": [
+      "first course",
+      "pier",
+      "plaza hardware",
+      "window/reveal"
+    ]
+  },
+  {
+    "index": 4,
+    "id": "blk_dino",
+    "side": -1,
+    "before": {
+      "z": -90.0,
+      "y": 2.8,
+      "w": 5.0
+    },
+    "after": {
+      "z": -83.6,
+      "y": 2.2,
+      "w": 3.5
+    },
+    "conflicts": [
+      "first course",
+      "pier",
+      "plaza hardware",
+      "window/reveal"
+    ]
+  },
+  {
+    "index": 5,
+    "id": "wild_kold",
+    "side": -1,
+    "before": {
+      "z": -29.0,
+      "y": 2.55,
+      "w": 3.5
+    },
+    "after": {
+      "z": -29.2,
+      "y": 1.4,
+      "w": 3.5
+    },
+    "conflicts": [
+      "conduit",
+      "gas-run",
+      "pier"
+    ]
+  },
+  {
+    "index": 6,
+    "id": "wild_skrt",
+    "side": 1,
+    "before": {
+      "z": -63.0,
+      "y": 2.5,
+      "w": 3.4
+    },
+    "after": {
+      "z": -64.6,
+      "y": 1.1,
+      "w": 2.55
+    },
+    "conflicts": [
+      "conduit",
+      "gas-run",
+      "hardware",
+      "pier"
+    ]
+  },
+  {
+    "index": 10,
+    "id": "thr_raw",
+    "side": -1,
+    "before": {
+      "z": -37.0,
+      "y": 1.5,
+      "w": 2.5
+    },
+    "after": {
+      "z": -32.4,
+      "y": 1.3,
+      "w": 2.5
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 9,
+    "id": "thr_moss",
+    "side": -1,
+    "before": {
+      "z": -17.0,
+      "y": 1.5,
+      "w": 2.4
+    },
+    "after": {
+      "z": -11.8,
+      "y": 1.4,
+      "w": 2.4
+    },
+    "conflicts": [
+      "ladder",
+      "shutters"
+    ]
+  },
+  {
+    "index": 25,
+    "id": "st_hood_row",
+    "side": -1,
+    "before": {
+      "z": -6.0,
+      "y": 0.58,
+      "w": 2.4
+    },
+    "after": {
+      "z": -4.6,
+      "y": 0.6,
+      "w": 2.28
+    },
+    "conflicts": [
+      "drainpipe",
+      "segment step"
+    ]
+  },
+  {
+    "index": 8,
+    "id": "thr_nyx",
+    "side": 1,
+    "before": {
+      "z": -4.5,
+      "y": 1.55,
+      "w": 2.2
+    },
+    "after": {
+      "z": -3.3,
+      "y": 1.5,
+      "w": 2.2
+    },
+    "conflicts": [
+      "pier"
+    ]
+  },
+  {
+    "index": 15,
+    "id": "hand_echo",
+    "side": -1,
+    "before": {
+      "z": -23.5,
+      "y": 1.35,
+      "w": 1.5
+    },
+    "after": {
+      "z": -23.1,
+      "y": 1.4,
+      "w": 1.5
+    },
+    "conflicts": [
+      "segment step"
+    ]
+  },
+  {
+    "index": 18,
+    "id": "hand_oka",
+    "side": -1,
+    "before": {
+      "z": -56.0,
+      "y": 1.95,
+      "w": 1.5
+    },
+    "after": {
+      "z": -55.6,
+      "y": 1.6,
+      "w": 1.5
+    },
+    "conflicts": [
+      "hardware",
+      "pier"
+    ]
+  },
+  {
+    "index": 41,
+    "id": "note_roof",
+    "side": 1,
+    "before": {
+      "z": -62.0,
+      "y": 1.85,
+      "w": 1.5
+    },
+    "after": {
+      "z": -61.8,
+      "y": 1.9,
+      "w": 1.425
+    },
+    "conflicts": [
+      "pier"
+    ]
+  },
+  {
+    "index": 39,
+    "id": "note_water",
+    "side": 1,
+    "before": {
+      "z": -40.6,
+      "y": 0.55,
+      "w": 1.45
+    },
+    "after": {
+      "z": -43.0,
+      "y": 0.6,
+      "w": 1.45
+    },
+    "conflicts": [
+      "doors"
+    ]
+  },
+  {
+    "index": 19,
+    "id": "hand_skrt",
+    "side": 1,
+    "before": {
+      "z": 13.0,
+      "y": 1.25,
+      "w": 1.4
+    },
+    "after": {
+      "z": 13.6,
+      "y": 1.2,
+      "w": 1.4
+    },
+    "conflicts": [
+      "hardware"
+    ]
+  },
+  {
+    "index": 34,
+    "id": "note_far",
+    "side": -1,
+    "before": {
+      "z": -12.6,
+      "y": 1.25,
+      "w": 1.4
+    },
+    "after": {
+      "z": -15.4,
+      "y": 1.2,
+      "w": 1.4
+    },
+    "conflicts": [
+      "doors"
+    ]
+  },
+  {
+    "index": 13,
+    "id": "hand_nyx",
+    "side": -1,
+    "before": {
+      "z": 2.8,
+      "y": 2.5,
+      "w": 1.3
+    },
+    "after": {
+      "z": 4.2,
+      "y": 2.2,
+      "w": 1.3
+    },
+    "conflicts": [
+      "gas-run",
+      "pier"
+    ]
+  },
+  {
+    "index": 16,
+    "id": "hand_alt",
+    "side": -1,
+    "before": {
+      "z": -40.0,
+      "y": 2.2,
+      "w": 1.3
+    },
+    "after": {
+      "z": -41.2,
+      "y": 0.9,
+      "w": 1.3
+    },
+    "conflicts": [
+      "gas-run",
+      "hardware",
+      "shutters"
+    ]
+  },
+  {
+    "index": 35,
+    "id": "note_back",
+    "side": 1,
+    "before": {
+      "z": -5.6,
+      "y": 0.75,
+      "w": 1.3
+    },
+    "after": {
+      "z": -6.0,
+      "y": 1.2,
+      "w": 1.3
+    },
+    "conflicts": [
+      "pier"
+    ]
+  },
+  {
+    "index": 20,
+    "id": "hand_raw",
+    "side": 1,
+    "before": {
+      "z": -10.0,
+      "y": 1.6,
+      "w": 1.25
+    },
+    "after": {
+      "z": -9.2,
+      "y": 1.6,
+      "w": 1.25
+    },
+    "conflicts": [
+      "drainpipe",
+      "segment step"
+    ]
+  },
+  {
+    "index": 21,
+    "id": "hand_jade",
+    "side": 1,
+    "before": {
+      "z": -24.0,
+      "y": 2.65,
+      "w": 1.2
+    },
+    "after": {
+      "z": -26.0,
+      "y": 1.8,
+      "w": 1.2
+    },
+    "conflicts": [
+      "gas-run",
+      "hardware",
+      "pier"
+    ]
+  },
+  {
+    "index": 23,
+    "id": "hand_zed",
+    "side": 1,
+    "before": {
+      "z": -50.0,
+      "y": 2.9,
+      "w": 1.2
+    },
+    "after": {
+      "z": -49.8,
+      "y": 2.2,
+      "w": 1.2
+    },
+    "conflicts": [
+      "gas-run",
+      "ladder"
+    ]
+  },
+  {
+    "index": 12,
+    "id": "hand_kold",
+    "side": -1,
+    "before": {
+      "z": 14.0,
+      "y": 1.55,
+      "w": 1.1
+    },
+    "after": {
+      "z": 12.8,
+      "y": 0.9,
+      "w": 1.1
+    },
+    "conflicts": [
+      "hardware"
+    ]
+  },
+  {
+    "index": 66,
+    "id": "tp_4",
+    "side": -1,
+    "before": {
+      "z": -71.0,
+      "y": 1.9,
+      "w": 1.0
+    },
+    "after": {
+      "z": -71.8,
+      "y": 1.8,
+      "w": 1.0
+    },
+    "conflicts": [
+      "TRACKS sign",
+      "gas-run",
+      "hardware"
+    ]
+  },
+  {
+    "index": 67,
+    "id": "tp_7",
+    "side": 1,
+    "before": {
+      "z": -71.0,
+      "y": 2.0,
+      "w": 1.0
+    },
+    "after": {
+      "z": -70.0,
+      "y": 1.8,
+      "w": 1.0
+    },
+    "conflicts": [
+      "gas-run",
+      "hardware"
+    ]
+  },
+  {
+    "index": 47,
+    "id": "tp_2",
+    "side": -1,
+    "before": {
+      "z": -8.6,
+      "y": 2.0,
+      "w": 0.98
+    },
+    "after": {
+      "z": -4.4,
+      "y": 1.8,
+      "w": 0.98
+    },
+    "conflicts": [
+      "doors",
+      "gas-run"
+    ]
+  },
+  {
+    "index": 48,
+    "id": "fl_1",
+    "side": -1,
+    "before": {
+      "z": -9.7,
+      "y": 1.6,
+      "w": 0.62
+    },
+    "after": {
+      "z": -5.5,
+      "y": 1.4,
+      "w": 0.62
+    },
+    "conflicts": []
+  },
+  {
+    "index": 69,
+    "id": "hand_hd",
+    "side": -1,
+    "before": {
+      "z": -9.1,
+      "y": 2.2,
+      "w": 0.8
+    },
+    "after": {
+      "z": -4.9,
+      "y": 2.0,
+      "w": 0.8
+    },
+    "conflicts": [
+      "doors"
+    ]
+  },
+  {
+    "index": 52,
+    "id": "tp_7",
+    "side": -1,
+    "before": {
+      "z": -19.2,
+      "y": 2.1,
+      "w": 0.96
+    },
+    "after": {
+      "z": -25.4,
+      "y": 1.9,
+      "w": 0.864
+    },
+    "conflicts": [
+      "gas-run",
+      "shutters"
+    ]
+  },
+  {
+    "index": 53,
+    "id": "tp_3",
+    "side": -1,
+    "before": {
+      "z": -19.9,
+      "y": 1.7,
+      "w": 0.9
+    },
+    "after": {
+      "z": -26.03,
+      "y": 1.54,
+      "w": 0.81
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 70,
+    "id": "hand_kold",
+    "side": -1,
+    "before": {
+      "z": -19.6,
+      "y": 1.9,
+      "w": 0.95
+    },
+    "after": {
+      "z": -25.76,
+      "y": 1.72,
+      "w": 0.855
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 44,
+    "id": "tp_1",
+    "side": 1,
+    "before": {
+      "z": 4.4,
+      "y": 1.95,
+      "w": 0.95
+    },
+    "after": {
+      "z": 11.6,
+      "y": 1.8,
+      "w": 0.95
+    },
+    "conflicts": [
+      "gas-run",
+      "shutters"
+    ]
+  },
+  {
+    "index": 45,
+    "id": "tp_4",
+    "side": 1,
+    "before": {
+      "z": 3.7,
+      "y": 1.7,
+      "w": 0.9
+    },
+    "after": {
+      "z": 10.9,
+      "y": 1.55,
+      "w": 0.9
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 46,
+    "id": "stk_hd",
+    "side": 1,
+    "before": {
+      "z": 2.4,
+      "y": 1.15,
+      "w": 0.2
+    },
+    "after": {
+      "z": 9.6,
+      "y": 1.0,
+      "w": 0.2
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 68,
+    "id": "hand_echo",
+    "side": 1,
+    "before": {
+      "z": 4.0,
+      "y": 1.5,
+      "w": 0.9
+    },
+    "after": {
+      "z": 11.2,
+      "y": 1.35,
+      "w": 0.9
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 49,
+    "id": "tp_5",
+    "side": 1,
+    "before": {
+      "z": -21.6,
+      "y": 2.0,
+      "w": 0.95
+    },
+    "after": {
+      "z": -19.0,
+      "y": 2.0,
+      "w": 0.712
+    },
+    "conflicts": [
+      "gas-run",
+      "shutters"
+    ]
+  },
+  {
+    "index": 50,
+    "id": "fr_mono",
+    "side": 1,
+    "before": {
+      "z": -22.4,
+      "y": 1.5,
+      "w": 0.8
+    },
+    "after": {
+      "z": -19.6,
+      "y": 1.625,
+      "w": 0.6
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 51,
+    "id": "stk_alt",
+    "side": 1,
+    "before": {
+      "z": -22.9,
+      "y": 0.95,
+      "w": 0.22
+    },
+    "after": {
+      "z": -19.975,
+      "y": 1.212,
+      "w": 0.165
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 57,
+    "id": "tp_hood",
+    "side": -1,
+    "before": {
+      "z": -44.2,
+      "y": 2.2,
+      "w": 0.95
+    },
+    "after": {
+      "z": -48.8,
+      "y": 1.8,
+      "w": 0.95
+    },
+    "conflicts": [
+      "gas-run",
+      "shutters"
+    ]
+  },
+  {
+    "index": 58,
+    "id": "fr_anton",
+    "side": -1,
+    "before": {
+      "z": -44.9,
+      "y": 1.45,
+      "w": 0.7
+    },
+    "after": {
+      "z": -49.5,
+      "y": 1.05,
+      "w": 0.7
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 72,
+    "id": "note_ear",
+    "side": -1,
+    "before": {
+      "z": -44.5,
+      "y": 1.2,
+      "w": 0.7
+    },
+    "after": {
+      "z": -49.1,
+      "y": 0.8,
+      "w": 0.7
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 14,
+    "id": "hand_ink",
+    "side": -1,
+    "before": {
+      "z": -1.6,
+      "y": 0.9,
+      "w": 0.95
+    },
+    "after": {
+      "z": -1.2,
+      "y": 0.9,
+      "w": 0.95
+    },
+    "conflicts": [
+      "doors"
+    ]
+  },
+  {
+    "index": 24,
+    "id": "hand_hd",
+    "side": 1,
+    "before": {
+      "z": -1.2,
+      "y": 2.1,
+      "w": 0.95
+    },
+    "after": {
+      "z": -0.4,
+      "y": 2.1,
+      "w": 0.95
+    },
+    "conflicts": [
+      "hardware"
+    ]
+  },
+  {
+    "index": 62,
+    "id": "tp_3",
+    "side": -1,
+    "before": {
+      "z": -57.4,
+      "y": 2.1,
+      "w": 0.94
+    },
+    "after": {
+      "z": -60.6,
+      "y": 1.8,
+      "w": 0.94
+    },
+    "conflicts": [
+      "pier",
+      "segment step"
+    ]
+  },
+  {
+    "index": 63,
+    "id": "fr_xerox",
+    "side": -1,
+    "before": {
+      "z": -58.0,
+      "y": 1.5,
+      "w": 0.7
+    },
+    "after": {
+      "z": -61.2,
+      "y": 1.2,
+      "w": 0.7
+    },
+    "conflicts": [
+      "segment step"
+    ]
+  },
+  {
+    "index": 42,
+    "id": "tp_6",
+    "side": -1,
+    "before": {
+      "z": 15.6,
+      "y": 1.9,
+      "w": 0.92
+    },
+    "after": {
+      "z": 16.4,
+      "y": 1.8,
+      "w": 0.92
+    },
+    "conflicts": [
+      "gas-run",
+      "pier"
+    ]
+  },
+  {
+    "index": 43,
+    "id": "fr_serif",
+    "side": -1,
+    "before": {
+      "z": 15.1,
+      "y": 1.35,
+      "w": 0.7
+    },
+    "after": {
+      "z": 15.9,
+      "y": 1.25,
+      "w": 0.7
+    },
+    "conflicts": [
+      "hardware",
+      "pier"
+    ]
+  },
+  {
+    "index": 55,
+    "id": "fl_3",
+    "side": 1,
+    "before": {
+      "z": -39.2,
+      "y": 1.75,
+      "w": 0.62
+    },
+    "after": {
+      "z": -37.6,
+      "y": 1.7,
+      "w": 0.62
+    },
+    "conflicts": [
+      "doors",
+      "hardware"
+    ]
+  },
+  {
+    "index": 56,
+    "id": "tp_2",
+    "side": 1,
+    "before": {
+      "z": -39.9,
+      "y": 1.95,
+      "w": 0.9
+    },
+    "after": {
+      "z": -38.3,
+      "y": 1.9,
+      "w": 0.9
+    },
+    "conflicts": [
+      "doors",
+      "gas-run",
+      "hardware"
+    ]
+  },
+  {
+    "index": 71,
+    "id": "hand_nyx",
+    "side": 1,
+    "before": {
+      "z": -40.0,
+      "y": 2.1,
+      "w": 0.9
+    },
+    "after": {
+      "z": -38.4,
+      "y": 2.05,
+      "w": 0.9
+    },
+    "conflicts": [
+      "doors",
+      "hardware"
+    ]
+  },
+  {
+    "index": 59,
+    "id": "fl_2",
+    "side": 1,
+    "before": {
+      "z": -52.4,
+      "y": 1.8,
+      "w": 0.6
+    },
+    "after": {
+      "z": -47.8,
+      "y": 1.6,
+      "w": 0.6
+    },
+    "conflicts": [
+      "doors"
+    ]
+  },
+  {
+    "index": 60,
+    "id": "tp_5",
+    "side": 1,
+    "before": {
+      "z": -53.2,
+      "y": 2.0,
+      "w": 0.9
+    },
+    "after": {
+      "z": -48.6,
+      "y": 1.8,
+      "w": 0.9
+    },
+    "conflicts": [
+      "doors",
+      "gas-run"
+    ]
+  },
+  {
+    "index": 61,
+    "id": "stk_eye",
+    "side": 1,
+    "before": {
+      "z": -53.8,
+      "y": 1.0,
+      "w": 0.2
+    },
+    "after": {
+      "z": -49.2,
+      "y": 0.8,
+      "w": 0.2
+    },
+    "conflicts": []
+  },
+  {
+    "index": 38,
+    "id": "note_ear",
+    "side": -1,
+    "before": {
+      "z": -38.3,
+      "y": 0.55,
+      "w": 0.9
+    },
+    "after": {
+      "z": -35.7,
+      "y": 0.5,
+      "w": 0.9
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 30,
+    "id": "st_cross",
+    "side": 1,
+    "before": {
+      "z": -30.0,
+      "y": 1.0,
+      "w": 0.85
+    },
+    "after": {
+      "z": -30.6,
+      "y": 1.0,
+      "w": 0.85
+    },
+    "conflicts": [
+      "doors",
+      "hardware"
+    ]
+  },
+  {
+    "index": 31,
+    "id": "st_hd",
+    "side": 1,
+    "before": {
+      "z": -47.0,
+      "y": 1.3,
+      "w": 0.8
+    },
+    "after": {
+      "z": -46.0,
+      "y": 1.3,
+      "w": 0.8
+    },
+    "conflicts": [
+      "pier"
+    ]
+  },
+  {
+    "index": 32,
+    "id": "st_eye",
+    "side": -1,
+    "before": {
+      "z": -59.0,
+      "y": 1.15,
+      "w": 0.75
+    },
+    "after": {
+      "z": -62.0,
+      "y": 1.1,
+      "w": 0.75
+    },
+    "conflicts": [
+      "drainpipe",
+      "hardware"
+    ]
+  },
+  {
+    "index": 27,
+    "id": "st_barcode",
+    "side": 1,
+    "before": {
+      "z": 3.4,
+      "y": 0.95,
+      "w": 0.7
+    },
+    "after": {
+      "z": 5.0,
+      "y": 0.9,
+      "w": 0.7
+    },
+    "conflicts": [
+      "shutters"
+    ]
+  },
+  {
+    "index": 54,
+    "id": "fr_04",
+    "side": -1,
+    "before": {
+      "z": -24.6,
+      "y": 1.6,
+      "w": 0.5
+    },
+    "after": {
+      "z": -23.6,
+      "y": 2.2,
+      "w": 0.5
+    },
+    "conflicts": [
+      "drainpipe"
+    ]
+  },
+  {
+    "index": 64,
+    "id": "stk_seven",
+    "side": -1,
+    "before": {
+      "z": -2.2,
+      "y": 1.8,
+      "w": 0.2
+    },
+    "after": {
+      "z": -1.6,
+      "y": 1.8,
+      "w": 0.2
+    },
+    "conflicts": [
+      "doors"
+    ]
+  }
+]

@@ -1,0 +1,244 @@
+{
+  "method": "visible mesh world position; real mouse click/touch tap; no foundLetter action",
+  "results": [
+    {
+      "input": "mouse",
+      "index": 0,
+      "position": [
+        -2.946,
+        1.15,
+        5.5
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225.00000000000006,
+        "z": 0.9397790508213847
+      },
+      "image": "picking-mouse-0.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 1,
+      "position": [
+        3.2958999999999996,
+        3.4,
+        -8.8
+      ],
+      "before": false,
+      "screen": {
+        "x": 400.0000000000001,
+        "y": 225.0000000000001,
+        "z": 0.9450472741912971
+      },
+      "image": "picking-mouse-1.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 2,
+      "position": [
+        -3.3958,
+        2.1,
+        -22.1
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9464036611469052
+      },
+      "image": "picking-mouse-2.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 3,
+      "position": [
+        3.1957,
+        1,
+        -32.8
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9436240704432679
+      },
+      "image": "picking-mouse-3.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 4,
+      "position": [
+        -3.6956,
+        3.7,
+        -45
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225.0000000000001,
+        "z": 0.9501333654630137
+      },
+      "image": "picking-mouse-4.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 5,
+      "position": [
+        2.9955,
+        1.9,
+        -56.2
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9405771165307705
+      },
+      "image": "picking-mouse-5.png",
+      "found": true
+    },
+    {
+      "input": "mouse",
+      "index": 6,
+      "position": [
+        11.9954,
+        2.2,
+        -91
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9534153549252956
+      },
+      "image": "picking-mouse-6.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 0,
+      "position": [
+        -2.946,
+        1.15,
+        5.5
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225.00000000000006,
+        "z": 0.9397790508213847
+      },
+      "image": "picking-touch-0.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 1,
+      "position": [
+        3.2958999999999996,
+        3.4,
+        -8.8
+      ],
+      "before": false,
+      "screen": {
+        "x": 400.0000000000001,
+        "y": 225.0000000000001,
+        "z": 0.9450472741912971
+      },
+      "image": "picking-touch-1.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 2,
+      "position": [
+        -3.3958,
+        2.1,
+        -22.1
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9464036611469052
+      },
+      "image": "picking-touch-2.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 3,
+      "position": [
+        3.1957,
+        1,
+        -32.8
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9436240704432679
+      },
+      "image": "picking-touch-3.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 4,
+      "position": [
+        -3.6956,
+        3.7,
+        -45
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225.0000000000001,
+        "z": 0.9501333654630137
+      },
+      "image": "picking-touch-4.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 5,
+      "position": [
+        2.9955,
+        1.9,
+        -56.2
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9405771165307705
+      },
+      "image": "picking-touch-5.png",
+      "found": true
+    },
+    {
+      "input": "touch",
+      "index": 6,
+      "position": [
+        11.9954,
+        2.2,
+        -91
+      ],
+      "before": false,
+      "screen": {
+        "x": 400,
+        "y": 225,
+        "z": 0.9534153549252956
+      },
+      "image": "picking-touch-6.png",
+      "found": true
+    }
+  ],
+  "errors": []
+}

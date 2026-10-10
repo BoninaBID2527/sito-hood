@@ -1,0 +1,16 @@
+{
+  "keyboardSha256": "e93ce758be78c59c82e1e077137a370701df4c211ea68c9c5eb9d17ddf0533bd",
+  "performanceFoundationUnchanged": [
+    "lib/runtime.ts",
+    "lib/quality.ts",
+    "lib/adaptive.ts",
+    "components/scene/PerfGovernor.tsx",
+    "components/ui/PerfHud.tsx",
+    "effects/SkyDome.tsx",
+    "effects/Atmosphere.tsx",
+    "effects/PostFX.tsx"
+  ],
+  "artistDataAndPublicAssetsUnchanged": true,
+  "mugRemovedTriangleCount": 292,
+  "newGeometryOrMaterialCategories": 0
+}

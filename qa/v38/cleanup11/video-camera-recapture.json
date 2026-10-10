@@ -1,0 +1,31 @@
+{
+  "reason": "Checkpoint 45 inherited runner closes focus after screenshot. Original post-shot metadata recorded camera motion and videoTime=0. Repeat both actual playing-video images using the same fixed camera and metadata sampled before closeFocus; keep old attempts.",
+  "stages": [
+    {
+      "folder": "before-room",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/before-room",
+        "800x450",
+        "balanced",
+        "45"
+      ],
+      "started": "2026-10-10T14:03:00.212Z",
+      "ended": "2026-10-10T14:07:18.377Z",
+      "exit": 0
+    },
+    {
+      "folder": "after-room",
+      "args": [
+        "qa/v38/cleanup11/capture.mjs",
+        "qa/v38/cleanup11/after-room",
+        "800x450",
+        "balanced",
+        "45"
+      ],
+      "started": "2026-10-10T14:07:18.397Z",
+      "ended": "2026-10-10T14:11:45.819Z",
+      "exit": 0
+    }
+  ]
+}

@@ -23,6 +23,9 @@ import { alterco, pad } from '@/data/project'
 
 const R = WORLD.roofX
 const ROOF = { x0: -10, x1: 16, z0: 12, z1: -24 }
+// The first mast clears the official artwork from every authored roof camera.
+// Warning lights share these coordinates so relocation cannot leave a floating beacon.
+const ROOF_MASTS: [number, number, number][] = [[-6.8, -21, 11], [-8.5, -21, 9], [13.2, -21, 13]]
 
 function brickMat(kind: 'red' | 'dark' | 'weathered' | 'concrete' | 'plaster', tint = '#ffffff', tile = 2.4) {
   void tile
@@ -99,8 +102,7 @@ export function RooftopEnvironment() {
       metal.box(w, 0.05, 0.06, x, 0.31, z).box(0.06, 0.05, d, x - w / 4, 0.31, z).box(0.06, 0.05, d, x + w / 4, 0.31, z)
     }
     // antenna masts + dipoles
-    const masts: [number, number, number][] = [[6, -19, 11], [-8.5, -21, 9], [13.2, -21, 13]]
-    for (const [x, z, h] of masts) {
+    for (const [x, z, h] of ROOF_MASTS) {
       metal.cyl(0.04, 0.06, h, x, h / 2, z, 6)
       for (let y = 3; y < h - 1; y += 2.2) metal.box(1.6 - y * 0.05, 0.03, 0.03, x, y, z)
     }
@@ -188,12 +190,12 @@ export function RooftopEnvironment() {
     const G = A.graf
     const sprayMat = keep(atlasMaterial(G.sprayTex, { seed: 5 }))
     const roofPlacements: Placement[] = [
-      { cell: G.spr.roof_throw, pos: [-1.5, 0.56, ROOF.z1 + 0.012], ry: 0, w: 2.4, tint: 0.95, seed: 1 },
-      { cell: G.spr.roof_block, pos: [5.5, 0.56, ROOF.z1 + 0.012], ry: 0, w: 3.4, tint: 0.9, seed: 2 },
-      { cell: G.spr.roof_wild, pos: [12.2, 0.55, ROOF.z1 + 0.012], ry: 0, w: 1.55, tint: 0.92, seed: 3 },
-      { cell: G.spr.roof_hand, pos: [-6, 2.0, 4.02], ry: 0, w: 2.6, tint: 0.95, seed: 4 },
-      { cell: G.spr.hand_oka, pos: [ROOF.x1 - 0.012, 0.58, -8], ry: -Math.PI / 2, w: 1.6, tint: 0.9, seed: 5 },
-      { cell: G.spr.st_hood_row, pos: [-3.2, 0.5, 3.995], ry: 0, w: 2.2, rz: -0.01, tint: 0.85, seed: 6 },
+      { cell: G.spr.roof_throw, pos: [-1.5, 0.56, ROOF.z1 + 0.003], ry: 0, w: 2.4, tint: 0.95, seed: 1 },
+      { cell: G.spr.roof_block, pos: [5.5, 0.56, ROOF.z1 + 0.003], ry: 0, w: 3.4, tint: 0.9, seed: 2 },
+      { cell: G.spr.roof_wild, pos: [12.2, 0.55, ROOF.z1 + 0.003], ry: 0, w: 1.55, tint: 0.92, seed: 3 },
+      { cell: G.spr.roof_hand, pos: [-6, 2.0, 4.003], ry: 0, w: 2.6, tint: 0.95, seed: 4 },
+      { cell: G.spr.hand_oka, pos: [ROOF.x1 - 0.003, 0.58, -8], ry: -Math.PI / 2, w: 1.6, tint: 0.9, seed: 5 },
+      { cell: G.spr.st_hood_row, pos: [-7, 0.5, 4.003], ry: 0, w: 2.2, rz: -0.01, tint: 0.85, seed: 6 },
     ]
     const roofDecals = buildAtlasMesh(roofPlacements, sprayMat, { order: 2 })
     disposables.push({ dispose: () => { roofDecals.geo.dispose(); roofDecals.mesh.dispose() } })
@@ -343,7 +345,7 @@ function Festoon() {
 
 /** Seven aircraft-warning lights; once all seven tracks have been opened they turn white and chase. */
 function AntennaLights() {
-  const spots: [number, number, number][] = [[6, 11.1, -19], [-8.5, 9.1, -21], [13.2, 13.1, -21], [10, 6.55, -6], [-1.5, 4.3, -16.5], [14.5, 3.5, -19], [-6, 3.7, 2]]
+  const spots: [number, number, number][] = [...ROOF_MASTS.map(([x, z, h]): [number, number, number] => [x, h + 0.1, z]), [10, 6.55, -6], [-1.5, 4.3, -16.5], [14.5, 3.5, -19], [-6, 3.7, 2]]
   const mats = useMemo(() => spots.map(() => new THREE.SpriteMaterial({ map: A.glow, color: '#ff3a2a', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, opacity: 0 })), [])
   useWorldFrame('roof', () => {
     const done = useStore.getState().visited.length === 7

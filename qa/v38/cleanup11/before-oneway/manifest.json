@@ -1,0 +1,134 @@
+{
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "viewport": "800x450",
+  "quality": "balanced",
+  "noPost": false,
+  "noFog": false,
+  "resumedCaptures": 0,
+  "recaptured": [],
+  "captures": [
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 156,
+      "name": "one-way-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2.1,
+          -8.5
+        ],
+        "look": [
+          -3.4,
+          2.2,
+          -10.5
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0,
+          2.1,
+          -8.5
+        ],
+        "quaternion": [
+          0.011000314481667786,
+          0.4964376624089567,
+          -0.006291586463988822,
+          0.8679798709434462
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 92,
+      "triangles": 102930,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "e164c0e6511ebd55272e3c3893041fe9e1d9de3cb2bfc678021ca8229796b726",
+      "image": "156-one-way-front.webp",
+      "imageSha256": "2b8d944a7747d7e9deb56b5d0f02caa52765c3ad7ee9782810d11d0787c2e2ee"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 157,
+      "name": "one-way-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          2.1,
+          -7.5
+        ],
+        "look": [
+          -3.4,
+          2.2,
+          -10.5
+        ],
+        "fov": 55
+      },
+      "camera": {
+        "position": [
+          -1,
+          2.1,
+          -7.5
+        ],
+        "quaternion": [
+          0.012277713270104382,
+          0.33097892205500207,
+          -0.0043067892673835945,
+          0.9435484420411981
+        ],
+        "fov": 55
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 161,
+      "triangles": 124906,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "3aa4a24b87ef0690dcfd235169ba6dba4a0a2a5e5ad7b5e37943e67ee931b4f7",
+      "image": "157-one-way-grazing.webp",
+      "imageSha256": "0d8b3981fcfb8a7564567ebb7a59c5543912c0bc6c19ee7a3a259a167cd5d7fa"
+    }
+  ],
+  "errors": []
+}

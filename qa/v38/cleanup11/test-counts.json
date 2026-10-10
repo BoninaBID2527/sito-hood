@@ -1,0 +1,12 @@
+{
+  "passed": {
+    "picking": 14,
+    "e2e": 22,
+    "ROOM-desktop": 56,
+    "eggs": 21,
+    "secrets": 18,
+    "tracks": 8
+  },
+  "totalPassed": 139,
+  "totalFailed": 0
+}
