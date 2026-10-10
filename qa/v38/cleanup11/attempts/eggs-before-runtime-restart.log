@@ -1,0 +1,6 @@
+PASS  lamp: cursor becomes LAMP on hover {"sx":533.7237201864461,"sy":294.52558911523647,"behind":false}
+PASS  lamp: click switches it off 
+PASS  lamp: click again switches it on 
+PASS  number 05 (fire-escape tag): resting the pointer on it registers it silently 
+PASS  puddle: the impossible puddle answers (no toast) 
+PASS  graffiti letters: hovering a hidden tag registers it 

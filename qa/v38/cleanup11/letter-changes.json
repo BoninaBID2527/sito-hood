@@ -1,0 +1,128 @@
+[
+  {
+    "index": 0,
+    "before": {
+      "side": -1.0,
+      "z": 5.5,
+      "y": 1.15,
+      "s": 0.55
+    },
+    "after": {
+      "side": -1.0,
+      "z": 5.5,
+      "y": 1.15,
+      "s": 0.55
+    },
+    "moved": false,
+    "beforeOffset": 0.09,
+    "afterOffset": 0.004
+  },
+  {
+    "index": 1,
+    "before": {
+      "side": 1.0,
+      "z": -8.8,
+      "y": 3.4,
+      "s": 0.6
+    },
+    "after": {
+      "side": 1.0,
+      "z": -8.8,
+      "y": 3.4,
+      "s": 0.6
+    },
+    "moved": false,
+    "beforeOffset": 0.091,
+    "afterOffset": 0.0041
+  },
+  {
+    "index": 2,
+    "before": {
+      "side": -1.0,
+      "z": -20.5,
+      "y": 2.1,
+      "s": 0.55
+    },
+    "after": {
+      "side": -1.0,
+      "z": -22.1,
+      "y": 2.1,
+      "s": 0.55
+    },
+    "moved": true,
+    "beforeOffset": 0.092,
+    "afterOffset": 0.0042
+  },
+  {
+    "index": 3,
+    "before": {
+      "side": 1.0,
+      "z": -33.5,
+      "y": 1.0,
+      "s": 0.5
+    },
+    "after": {
+      "side": 1.0,
+      "z": -32.8,
+      "y": 1.0,
+      "s": 0.5
+    },
+    "moved": true,
+    "beforeOffset": 0.093,
+    "afterOffset": 0.0043
+  },
+  {
+    "index": 4,
+    "before": {
+      "side": -1.0,
+      "z": -45.0,
+      "y": 3.7,
+      "s": 0.6
+    },
+    "after": {
+      "side": -1.0,
+      "z": -45.0,
+      "y": 3.7,
+      "s": 0.6
+    },
+    "moved": false,
+    "beforeOffset": 0.094,
+    "afterOffset": 0.0044
+  },
+  {
+    "index": 5,
+    "before": {
+      "side": 1.0,
+      "z": -57.5,
+      "y": 1.9,
+      "s": 0.55
+    },
+    "after": {
+      "side": 1.0,
+      "z": -56.2,
+      "y": 1.9,
+      "s": 0.55
+    },
+    "moved": true,
+    "beforeOffset": 0.095,
+    "afterOffset": 0.0045000000000000005
+  },
+  {
+    "index": 6,
+    "before": {
+      "side": 1.0,
+      "z": -91.0,
+      "y": 2.2,
+      "s": 0.7
+    },
+    "after": {
+      "side": 1.0,
+      "z": -91.0,
+      "y": 2.2,
+      "s": 0.7
+    },
+    "moved": false,
+    "beforeOffset": 0.096,
+    "afterOffset": 0.0046
+  }
+]

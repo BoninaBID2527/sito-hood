@@ -1,13 +1,16 @@
-// Behaviour checks for the track installation (camera rig, input feel). usage: node scripts/tracks-check.mjs [url] [quality]
+// Behaviour checks for the track installation (camera rig, input feel).
+// usage: node scripts/tracks-check.mjs [url] [quality] [viewport=800x450]
 import { chromium } from './browser.mjs'
 const url = process.argv[2] || 'http://localhost:3000/'
 const quality = process.argv[3] || 'balanced'
+const [width, height] = (process.argv[4] || '800x450').split('x').map(Number)
+if (!Number.isFinite(width) || !Number.isFinite(height) || width < 320 || height < 240) throw Error('Invalid QA viewport')
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-angle=swiftshader', '--use-gl=angle', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--no-sandbox'] })
 let pass = 0, fail = 0
 const check = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n} ${x}`) }
 const errors = []
 async function open(opts = {}) {
-  const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 }, reducedMotion: opts.reduced ? 'reduce' : 'no-preference' })
+  const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: opts.reduced ? 'reduce' : 'no-preference' })
   const page = await ctx.newPage()
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(e.message))
@@ -45,11 +48,11 @@ const settle = (page) => page.waitForFunction(() => { const r = window.__hd.rt; 
   // 3. vertical gesture does not drag the installation (page scroll keeps it); horizontal does
   await page.evaluate((p) => window.__hd.jump(p), P(3)); await settle(page)
   const d0 = await page.evaluate(() => window.__hd.rt.orbit.drag)
-  await page.evaluate(() => { const c = document.querySelector('canvas'); const mk = (t, x, y) => new PointerEvent(t, { pointerId: 9, pointerType: 'touch', clientX: x, clientY: y, bubbles: true, isPrimary: true }); c.dispatchEvent(mk('pointerdown', 600, 300)); for (let i = 1; i <= 8; i++) window.dispatchEvent(mk('pointermove', 604, 300 + i * 40)); window.dispatchEvent(mk('pointerup', 604, 620)) })
+  await page.evaluate(() => { const c = document.querySelector('canvas'); const mk = (t, x, y) => new PointerEvent(t, { pointerId: 9, pointerType: 'touch', clientX: x * innerWidth / 1280, clientY: y * innerHeight / 720, bubbles: true, isPrimary: true }); c.dispatchEvent(mk('pointerdown', 600, 300)); for (let i = 1; i <= 8; i++) window.dispatchEvent(mk('pointermove', 604, 300 + i * 40)); window.dispatchEvent(mk('pointerup', 604, 620)) })
   await page.waitForTimeout(600)
   const d1 = await page.evaluate(() => window.__hd.rt.orbit.drag)
   check('vertical gesture does not drag the installation (belongs to page scroll)', Math.abs(d1 - d0) < 0.02, `Δ=${(d1 - d0).toFixed(3)}`)
-  await page.evaluate(() => { const c = document.querySelector('canvas'); const mk = (t, x, y) => new PointerEvent(t, { pointerId: 10, pointerType: 'touch', clientX: x, clientY: y, bubbles: true, isPrimary: true }); c.dispatchEvent(mk('pointerdown', 900, 300)); for (let i = 1; i <= 8; i++) window.dispatchEvent(mk('pointermove', 900 - i * 40, 304)); window.dispatchEvent(mk('pointerup', 580, 304)) })
+  await page.evaluate(() => { const c = document.querySelector('canvas'); const mk = (t, x, y) => new PointerEvent(t, { pointerId: 10, pointerType: 'touch', clientX: x * innerWidth / 1280, clientY: y * innerHeight / 720, bubbles: true, isPrimary: true }); c.dispatchEvent(mk('pointerdown', 900, 300)); for (let i = 1; i <= 8; i++) window.dispatchEvent(mk('pointermove', 900 - i * 40, 304)); window.dispatchEvent(mk('pointerup', 580, 304)) })
   await simWait(page, 5)
   const u3 = await page.evaluate(() => window.__hd.rt.orbit.angle)
   check('horizontal swipe moves the camera on to the next track(s)', u3 > 3.4, `u=${u3.toFixed(2)}`)
@@ -76,6 +79,6 @@ const settle = (page) => page.waitForFunction(() => { const r = window.__hd.rt; 
   await ctx.close()
 }
 console.log(errors.length ? 'ERRORS:\n' + [...new Set(errors)].join('\n') : 'no console errors')
-console.log(`${pass} passed, ${fail} failed`)
+console.log(`${pass} passed, ${fail} failed [${quality} ${width}x${height}]`)
 await browser.close()
 process.exit(fail || errors.length ? 1 : 0)

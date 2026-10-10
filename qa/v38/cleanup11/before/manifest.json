@@ -1,0 +1,3110 @@
+{
+  "buildId": "yNPi2rx1AkSckb7VkOFgI",
+  "viewport": "800x450",
+  "quality": "balanced",
+  "noPost": false,
+  "noFog": false,
+  "resumedCaptures": 0,
+  "recaptured": [],
+  "captures": [
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 1,
+      "name": "street-opening",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.2317220958803599,
+          1.2280640695019558,
+          17.49038857347726
+        ],
+        "quaternion": [
+          0.018401814001201784,
+          0.010029827662108231,
+          -0.012303534107345693,
+          0.9997046558094062
+        ],
+        "fov": 47
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 194,
+      "triangles": 127472,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "a5c25685180661756cdbd761de3cb9d1bd157df19c17acf978ae6f65475c2ed2",
+      "image": "01-street-opening.webp",
+      "imageSha256": "c01da828f3679eaa994deefb2318da9ea3036e5ded12dc32f60d60e3d0250682"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 2,
+      "name": "street-hero-facade",
+      "inspectionCamera": {
+        "pos": [
+          0.3,
+          1.7,
+          9
+        ],
+        "look": [
+          -3,
+          4.2,
+          3.5
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0.3,
+          1.7,
+          9
+        ],
+        "quaternion": [
+          0.17805629883787802,
+          0.2623379481974133,
+          -0.0493187396361586,
+          0.9471232323728673
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 190,
+      "triangles": 129486,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "8fcc83d7d5ecd672c7fc3077acfc402dedefbde05385f1e23fb4e4341ee1b62c",
+      "image": "02-street-hero-facade.webp",
+      "imageSha256": "0b8bce7f739d006571261dbfec56395125f1801a52ad4847b69b73a493954c42"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 3,
+      "name": "street-medium-facade",
+      "inspectionCamera": {
+        "pos": [
+          0.7,
+          1.7,
+          3.2
+        ],
+        "look": [
+          -3,
+          5.6,
+          -7
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0.7,
+          1.7,
+          3.2
+        ],
+        "quaternion": [
+          0.16908127196989992,
+          0.17054516998246927,
+          -0.029719260561443663,
+          0.9702796679392867
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 194,
+      "triangles": 128698,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "78ed28bae3eff96748966128a410977c8313449ffb09f679b39563a22d11e5d2",
+      "image": "03-street-medium-facade.webp",
+      "imageSha256": "6f2c2a7809d66242c32cf26d3c1c834b5d29dee0ef8187ef60a6e3c6c8c19523"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 4,
+      "name": "street-window",
+      "inspectionCamera": {
+        "pos": [
+          -0.9,
+          2.3,
+          1.4
+        ],
+        "look": [
+          -2.9,
+          5.3,
+          -1.3
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          -0.9,
+          2.3,
+          1.4
+        ],
+        "quaternion": [
+          0.33845434931672336,
+          0.29282163767169056,
+          -0.1117000082314068,
+          0.887258276997722
+        ],
+        "fov": 42
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 104,
+      "triangles": 114032,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "6469de1f02d6c862dab964267b576c5a14fb957140245bdbd118f6305524cc7f",
+      "image": "04-street-window.webp",
+      "imageSha256": "88bd007de06d0118266fb810c7be77f3c278645cac66c5e50ed2746d02f5c6ef"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 5,
+      "name": "street-doorway",
+      "inspectionCamera": {
+        "pos": [
+          -0.1,
+          1.5,
+          -0.3
+        ],
+        "look": [
+          -2.9,
+          1.2,
+          -2.65
+        ],
+        "fov": 45
+      },
+      "camera": {
+        "position": [
+          -0.1,
+          1.5,
+          -0.3
+        ],
+        "quaternion": [
+          -0.037097157170714656,
+          0.42221465666053115,
+          0.01729622288092828,
+          0.9055713253548472
+        ],
+        "fov": 45
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 99,
+      "triangles": 103512,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "a7f2479736cec3bff3f44f40665628bc3e739d772b8d2cc57fba9fe85228b065",
+      "image": "05-street-doorway.webp",
+      "imageSha256": "0bfb73eeae711fd87354638004015428b3c5925f52bec5bf7055aceb5a13cb7b"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 6,
+      "name": "street-wet-asphalt",
+      "inspectionCamera": {
+        "pos": [
+          0.4,
+          1,
+          -3
+        ],
+        "look": [
+          0.3,
+          0,
+          -14
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          0.4,
+          1,
+          -3
+        ],
+        "quaternion": [
+          -0.04531209223061068,
+          0.004540645000813425,
+          0.00020595980031382712,
+          0.9989625390479976
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 186,
+      "triangles": 125680,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "aba7b2ed144b9a5ef41adfd96bdedcbdae6ca9461749d76f713dc010f4cb6399",
+      "image": "06-street-wet-asphalt.webp",
+      "imageSha256": "021a13484fab92b7da01525612e2d1735dea5bb2f970639c7fc1206447d8239f"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 7,
+      "name": "street-kerb-gutter",
+      "inspectionCamera": {
+        "pos": [
+          -1.2,
+          0.6,
+          -4
+        ],
+        "look": [
+          -2.6,
+          0.05,
+          -10
+        ],
+        "fov": 45
+      },
+      "camera": {
+        "position": [
+          -1.2,
+          0.6,
+          -4
+        ],
+        "quaternion": [
+          -0.044209702812240015,
+          0.1142518826610118,
+          0.005089443733629123,
+          0.9924545868946096
+        ],
+        "fov": 45
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 182,
+      "triangles": 125644,
+      "textures": 76,
+      "geometries": 154,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "302bb1837cb7a30b5e47bfda4f065e73dbd6e2ed064efe2ef353496898f96c71",
+      "image": "07-street-kerb-gutter.webp",
+      "imageSha256": "4217ea23150c7c78beddefca6aad1b6641e3a7848e698f3ecbeefbb494890f5f"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 8,
+      "name": "street-deep-alley",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          0.28291768152854246,
+          1.655957678624207,
+          -47.90431700118408
+        ],
+        "quaternion": [
+          0.006941290819418928,
+          0.009860495126651943,
+          -0.0007723295819613721,
+          0.9999269936473535
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 142,
+      "triangles": 107836,
+      "textures": 81,
+      "geometries": 170,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "5bcb394988d20d5f4e06dac85e08906a5540105edaaed77f7fe5f0132b89e6f4",
+      "image": "08-street-deep-alley.webp",
+      "imageSha256": "795f454aaa03748cbb6aeedc3b8e12d0133b730d3349de95139845bd070f0376"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            3,
+            0.02,
+            -6
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 35,
+      "name": "roof-wide",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          601.8863251106299,
+          1.8554002476725115,
+          -4.993077555683316
+        ],
+        "quaternion": [
+          0.014462321128729139,
+          -0.05450093011463757,
+          -0.00027561698319993077,
+          0.9984089412257323
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "roof",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 135,
+      "triangles": 16002,
+      "textures": 85,
+      "geometries": 207,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "c66aa5b427eea7dd72b55360a15a94ab5475785b086a4cff4e38a448c134935a",
+      "image": "35-roof-wide.webp",
+      "imageSha256": "68bd06a7245e1e3a07f43e94728860cb6c8f1a430df76a5922d2a1c7d377c3da"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            3,
+            0.02,
+            -6
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 36,
+      "name": "roof-hero",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          603.6861874067615,
+          2.055191216782818,
+          -13.00178067618653
+        ],
+        "quaternion": [
+          0.011728171926274336,
+          -0.005166856318589132,
+          -0.001027356361429544,
+          0.9999173456431073
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "roof",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 125,
+      "triangles": 15278,
+      "textures": 85,
+      "geometries": 207,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "f346055159c62b549ed9daeebd8434df5e7e97c77c0cfd932d28c27bde70728e",
+      "image": "36-roof-hero.webp",
+      "imageSha256": "78bdb05d2576d9cff1b8ca61c86c77b04bfaddd2caf11a8bea5c7959fc3dd8ab"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            3,
+            0.02,
+            -6
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 37,
+      "name": "skyline",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          604.4856858327884,
+          2.3057317986498957,
+          -17.5078881167436
+        ],
+        "quaternion": [
+          0.01240059525371193,
+          0.028508016665655327,
+          -0.001534211649127145,
+          0.9995154648217107
+        ],
+        "fov": 50
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "roof",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 125,
+      "triangles": 15234,
+      "textures": 85,
+      "geometries": 207,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": null,
+      "rawPngSha256": "ded96a8cd192c381214ab84bc850d473d5966e8bb2738502c712ccdcd09e0da5",
+      "image": "37-skyline.webp",
+      "imageSha256": "1084035d9943b14a5c4342602499706e992d967e007fc0ac112412ccdcc425a7"
+    },
+    {
+      "reflections": [],
+      "n": 41,
+      "name": "room-04-workstation-wide",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1194.5070913448171,
+          1.2906123330964832,
+          -67.31727131573895
+        ],
+        "quaternion": [
+          -0.027012666181973306,
+          0.7064639923978221,
+          0.027368707142392194,
+          0.7067035426403531
+        ],
+        "fov": 48.01435172456999
+      },
+      "roomStation": 0.9833864056050287,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 118,
+      "geometries": 264,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "7e3d989ca1936b99cacf079ba098cff34a8fe44ac24252b0ddf41e9a145b0569",
+      "image": "41-room-04-workstation-wide.webp",
+      "imageSha256": "b213621ffa6246c3515c6d488dc1a7fbe2862f3742cad13af6ff5e7fbf19f63c"
+    },
+    {
+      "reflections": [],
+      "n": 42,
+      "name": "room-05-workstation-medium",
+      "inspectionCamera": {
+        "pos": [
+          1193.7,
+          1.4,
+          -67.3
+        ],
+        "look": [
+          1191.6,
+          1.05,
+          -67.3
+        ],
+        "fov": 46
+      },
+      "camera": {
+        "position": [
+          1193.7,
+          1.4,
+          -67.3
+        ],
+        "quaternion": [
+          -0.058322543171261246,
+          0.7046974393014611,
+          0.05832254317126124,
+          0.704697439301461
+        ],
+        "fov": 46
+      },
+      "roomStation": 0.9927476808558233,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 15,
+      "triangles": 48096,
+      "textures": 118,
+      "geometries": 264,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "6d24aab405eac2dbccee470d500e1d50f2668150bd3ceacdd54ad8c87705d192",
+      "image": "42-room-05-workstation-medium.webp",
+      "imageSha256": "929e51ad518bd7ce93887191d7ac7d07b66b460e17dfddac9f999c77a8d249d0"
+    },
+    {
+      "reflections": [],
+      "n": 50,
+      "name": "room-13-bio",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1195.4483897145303,
+          1.39022139122607,
+          -66.79737254572619
+        ],
+        "quaternion": [
+          0.0015247001022512339,
+          0.0014040670514556496,
+          -3.177253277110017e-05,
+          0.9999978514356013
+        ],
+        "fov": 49.997804807797216
+      },
+      "roomStation": 1.9853037637064133,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 17,
+      "triangles": 48242,
+      "textures": 118,
+      "geometries": 264,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "663ce986025932866d2bfe142f35cefb0d2ac758e47a6b8ff00b7ce84dcfd9fc",
+      "image": "50-room-13-bio.webp",
+      "imageSha256": "0536306f4ed052bb27a8cb76513669daabb1340f3b4493ad88fe1784c06f68ed"
+    },
+    {
+      "reflections": [],
+      "n": 56,
+      "name": "room-19-dark-corner",
+      "inspectionCamera": {
+        "pos": [
+          1194.5,
+          1.5,
+          -65.5
+        ],
+        "look": [
+          1198.5,
+          0.8,
+          -70.1
+        ],
+        "fov": 55
+      },
+      "camera": {
+        "position": [
+          1194.5,
+          1.5,
+          -65.5
+        ],
+        "quaternion": [
+          -0.05351435521459949,
+          -0.3497094756632621,
+          -0.02001303449190459,
+          0.9351144180621523
+        ],
+        "fov": 55
+      },
+      "roomStation": 1.0171663313049963,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 23,
+      "triangles": 49206,
+      "textures": 118,
+      "geometries": 267,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "bc17eab51aa44e9783b93b688b7d7180b747e7e01216170ce028feefd0e52cdc",
+      "image": "56-room-19-dark-corner.webp",
+      "imageSha256": "b69fefd2a71e1f7f9863a9cd0653cc5e03f2a88fe88084613e7519e96fb8151c"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 100,
+      "name": "wall-0-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          18
+        ],
+        "look": [
+          -3.05,
+          2.2,
+          18
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          18
+        ],
+        "quaternion": [
+          0.02314654914716568,
+          0.706727838182831,
+          -0.02314654914716568,
+          0.706727838182831
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 77,
+      "triangles": 86440,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "5c9d48e958a69cca8dec34c45c4ce98c48c3b22f5393830b4b3917fd078d1953",
+      "image": "100-wall-0-left-front.webp",
+      "imageSha256": "ba5ac3323b51502182b013dc4d5f96d1543c743c8e5f5d6e38334c83d1072f1a"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 101,
+      "name": "wall-0-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          23
+        ],
+        "look": [
+          -3.05,
+          2,
+          16
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          23
+        ],
+        "quaternion": [
+          0.020343651009815455,
+          0.14193423466005567,
+          -0.0029176208038361735,
+          0.9896627184975192
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "f61e88bc3b2328e28b313a4dfea3a41aa9def19431fe99cdaf4c26ca5ce66eb9",
+      "image": "101-wall-0-left-grazing.webp",
+      "imageSha256": "7d5baad01bf94f22f71fd1bc638415f3d520c8df6a2d2d5eb2c6443316ee3510"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 102,
+      "name": "wall-0-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          18
+        ],
+        "look": [
+          3.05,
+          2.2,
+          18
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          18
+        ],
+        "quaternion": [
+          0.02314654914716568,
+          -0.706727838182831,
+          0.02314654914716568,
+          0.706727838182831
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 78,
+      "triangles": 89044,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "20def5fcfa0369fbbde7aa3231ff6e49ed3ce9cde3f26491a6c288aa8e62e23d",
+      "image": "102-wall-0-right-front.webp",
+      "imageSha256": "ebbc762d36d0b2341cc5c0382ed46ef52a3c5f2d9ea3b0a1db13e6324cdb9799"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 103,
+      "name": "wall-0-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          23
+        ],
+        "look": [
+          3.05,
+          2,
+          16
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          23
+        ],
+        "quaternion": [
+          0.020343651009815455,
+          -0.14193423466005567,
+          0.0029176208038361735,
+          0.9896627184975192
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "aca62a706f4fe1fa52fd7bc16d28112a208cbf5eb81cd8dedb634531a00722af",
+      "image": "103-wall-0-right-grazing.webp",
+      "imageSha256": "1d005026488dd20cbc0ad04094775fc48382382cbe5cb96beabf0784b3b86a20"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 104,
+      "name": "wall-1-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          3
+        ],
+        "look": [
+          -2.95,
+          2.2,
+          3
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          3
+        ],
+        "quaternion": [
+          0.023928528383101486,
+          0.7067017939197686,
+          -0.02392852838310148,
+          0.7067017939197686
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 87,
+      "triangles": 94200,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "1cca51a08af398ff5b8222ab5af932589ab78b295d4bc05656bb7be4552878bf",
+      "image": "104-wall-1-left-front.webp",
+      "imageSha256": "08443174d512b7b699733f47f6f7659b459b4684987ffe88f1ab0067288e3768"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 105,
+      "name": "wall-1-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          8
+        ],
+        "look": [
+          -2.95,
+          2,
+          1
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          8
+        ],
+        "quaternion": [
+          0.020439357731195654,
+          0.13539553416884365,
+          -0.0027937234596209126,
+          0.9905768405792156
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 188,
+      "triangles": 127888,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "f4f7fa41c93a428df920e0b0c2bc444c6cde2e63d62e983114ba12f70a020a73",
+      "image": "105-wall-1-left-grazing.webp",
+      "imageSha256": "7d4ebc7a3d64c424b79cff69769cc686fd736c6d44405c584f24600680c2a1ec"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 106,
+      "name": "wall-1-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          3
+        ],
+        "look": [
+          2.95,
+          2.2,
+          3
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          3
+        ],
+        "quaternion": [
+          0.023928528383101486,
+          -0.7067017939197686,
+          0.02392852838310148,
+          0.7067017939197686
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 86,
+      "triangles": 90818,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "8ef2be340777f043daf3886ddbebac6a970bd045eef9a2a0e6dd51ad0fd0067d",
+      "image": "106-wall-1-right-front.webp",
+      "imageSha256": "b1654756c2d5702b5146bc10ef541edb8d5148ea9baeea4e9c225a006d6f9b03"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 107,
+      "name": "wall-1-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          8
+        ],
+        "look": [
+          2.95,
+          2,
+          1
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          8
+        ],
+        "quaternion": [
+          0.020439357731195654,
+          -0.13539553416884365,
+          0.0027937234596209126,
+          0.9905768405792156
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 191,
+      "triangles": 128858,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "e182745722ec710818fec077b1b7de2bfe07ac2933a4d377190f3048b39b55a6",
+      "image": "107-wall-1-right-grazing.webp",
+      "imageSha256": "555f50e9ad014f18f01362a0bb7b12554dfd884c71549b1b84af29753d211033"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 108,
+      "name": "wall-2-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -15
+        ],
+        "look": [
+          -3.4,
+          2.2,
+          -15
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -15
+        ],
+        "quaternion": [
+          0.02077033235774089,
+          0.7068016647502672,
+          -0.02077033235774089,
+          0.7068016647502671
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 90,
+      "triangles": 95960,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "d893be3d117448a8a609bde0637296d8e5592707850b6dd7b378c6a9be727271",
+      "image": "108-wall-2-left-front.webp",
+      "imageSha256": "4646188efff130e2be640f764475547cb095ca0a7fbd5eb48c5a260eb2596272"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 109,
+      "name": "wall-2-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -10
+        ],
+        "look": [
+          -3.4,
+          2,
+          -17
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -10
+        ],
+        "quaternion": [
+          0.019982161384900145,
+          0.16436525097404264,
+          -0.0033303602308166905,
+          0.9861915058442557
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 178,
+      "triangles": 125224,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "239b8a04e84d9dea05d9a71a8e08c22136ec57aa08424017e2c9c44daf371b00",
+      "image": "109-wall-2-left-grazing.webp",
+      "imageSha256": "fa47885f22b4e3dd1bb9114a0d18716f524394c417d432c15bbe61dde5635db9"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 110,
+      "name": "wall-2-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -15
+        ],
+        "look": [
+          3.4,
+          2.2,
+          -15
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -15
+        ],
+        "quaternion": [
+          0.02077033235774089,
+          -0.7068016647502672,
+          0.02077033235774089,
+          0.7068016647502671
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 94,
+      "triangles": 96430,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "98b4168d4029eaf7bdf05f7fab3b411c7fdd039a062aa5e29aab4d8a6f61f508",
+      "image": "110-wall-2-right-front.webp",
+      "imageSha256": "13e7ab89a1526d0d56b4ade96380ea583d262fbd0cb77e6eec6baabe5718ce7e"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 111,
+      "name": "wall-2-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -10
+        ],
+        "look": [
+          3.4,
+          2,
+          -17
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -10
+        ],
+        "quaternion": [
+          0.019982161384900145,
+          -0.16436525097404264,
+          0.0033303602308166905,
+          0.9861915058442557
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 180,
+      "triangles": 124484,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "6816d891216392a627ddfc2cb659f762ce87a6c95b13018dfc2f0633a375e392",
+      "image": "111-wall-2-right-grazing.webp",
+      "imageSha256": "858da33d594f88ea29e3c52d515fcc771cbd6558586b2498a3883e9927f9bf7c"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 112,
+      "name": "wall-3-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -33
+        ],
+        "look": [
+          -3,
+          2.2,
+          -33
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -33
+        ],
+        "quaternion": [
+          0.023531054711758287,
+          0.7067151402539443,
+          -0.023531054711758287,
+          0.7067151402539443
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 96,
+      "triangles": 106730,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "e5e1fa736435522dd7840ff303a209f27f91494789e264e46a6120d12b49ca69",
+      "image": "112-wall-3-left-front.webp",
+      "imageSha256": "fd2a132f4064da37b910bc636ebb2e2a961fdecc34350ac328dc089458e6a308"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 113,
+      "name": "wall-3-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -28
+        ],
+        "look": [
+          -3,
+          2,
+          -35
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -28
+        ],
+        "quaternion": [
+          0.020391951677383682,
+          0.1386718049200475,
+          -0.002855993663282811,
+          0.9901243064015744
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 166,
+      "triangles": 118726,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "8da504bd1b0657a38ca00291209bb15ac83eaffbbe21ffe35dc7b3eeb336e246",
+      "image": "113-wall-3-left-grazing.webp",
+      "imageSha256": "623f559e3d2eb8f83e44c497c4f2d4bf56ce83bcaf97e0ed96642196af271d43"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 114,
+      "name": "wall-3-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -33
+        ],
+        "look": [
+          3,
+          2.2,
+          -33
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -33
+        ],
+        "quaternion": [
+          0.023531054711758287,
+          -0.7067151402539443,
+          0.023531054711758287,
+          0.7067151402539443
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 159,
+      "triangles": 172550,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "5ec7420a88006c0b14babae3d773758d43b79fbd317d26428c6081932ef61c2f",
+      "image": "114-wall-3-right-front.webp",
+      "imageSha256": "4d9b11b9ef42132d3c70f2076a5fd9afb73740aba257a2bc3050cb968da91321"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 115,
+      "name": "wall-3-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -28
+        ],
+        "look": [
+          3,
+          2,
+          -35
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -28
+        ],
+        "quaternion": [
+          0.020391951677383682,
+          -0.1386718049200475,
+          0.002855993663282811,
+          0.9901243064015744
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 167,
+      "triangles": 117870,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "caba6a2c949b6f6aeb39210241bf40ae3388088066989e1f78c1567c8476b5ba",
+      "image": "115-wall-3-right-grazing.webp",
+      "imageSha256": "a46569f7a58acf1edbf4b5d373892639aac3115acf3e82ac5bd0345812957142"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 116,
+      "name": "wall-4-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -50
+        ],
+        "look": [
+          -3.7,
+          2.2,
+          -50
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -50
+        ],
+        "quaternion": [
+          0.01909009378245476,
+          0.7068490421011951,
+          -0.01909009378245476,
+          0.706849042101195
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 96,
+      "triangles": 106880,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "469c42dfaf132fc015c84aceefdd407225323ee879c0df376af8a335e778a1f4",
+      "image": "116-wall-4-left-front.webp",
+      "imageSha256": "766c6ca35a6353c79123151d8b572d5304175463536bf03372cc92008f2582d2"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 117,
+      "name": "wall-4-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -45
+        ],
+        "look": [
+          -3.7,
+          2,
+          -52
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -45
+        ],
+        "quaternion": [
+          0.019643394979369126,
+          0.1829912476234553,
+          -0.0036570631730302,
+          0.9829114742517986
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 142,
+      "triangles": 110402,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "7268094db6bbf9db420518ebc22b9441c11bde446d68d654fa1a970112880d09",
+      "image": "117-wall-4-left-grazing.webp",
+      "imageSha256": "ed65f0ebe470f6f7c28eb58407a049b8522b17c7cd32deeef9efe88cbadc5ce2"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 118,
+      "name": "wall-4-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -50
+        ],
+        "look": [
+          3.7,
+          2.2,
+          -50
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -50
+        ],
+        "quaternion": [
+          0.01909009378245476,
+          -0.7068490421011951,
+          0.01909009378245476,
+          0.706849042101195
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 96,
+      "triangles": 104530,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "b19dfacffe22916d4a2cef05f9dbf48f7b532067ad51c044e91ceba10db76f8e",
+      "image": "118-wall-4-right-front.webp",
+      "imageSha256": "3e9d3c7c7a95feae5bd6c9d140616fbde18af44cdec7b16125d1a95806ec9003"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 119,
+      "name": "wall-4-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -45
+        ],
+        "look": [
+          3.7,
+          2,
+          -52
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -45
+        ],
+        "quaternion": [
+          0.019643394979369126,
+          -0.1829912476234553,
+          0.0036570631730302,
+          0.9829114742517986
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 231,
+      "triangles": 191932,
+      "textures": 119,
+      "geometries": 269,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "740c1f2d1c10556a58212cdb18f3f91bcc3642c5a9c489eb597531f39b20942e",
+      "image": "119-wall-4-right-grazing.webp",
+      "imageSha256": "0f212f2e2c73fc0d5a71d150965268528a8ec22fe952f831f496c186a41e13c7"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 120,
+      "name": "wall-5-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -67
+        ],
+        "look": [
+          -4.8,
+          2.2,
+          -67
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -67
+        ],
+        "quaternion": [
+          0.014721811264651406,
+          0.7069535121018128,
+          -0.014721811264651406,
+          0.7069535121018128
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 112,
+      "triangles": 98370,
+      "textures": 119,
+      "geometries": 272,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "84ed776668fded761589fc2639e1b0560834bc66be32a06f73c3d875cc954d71",
+      "image": "120-wall-5-left-front.webp",
+      "imageSha256": "ded0a0522e333bb07eadd94b0d8cc04cb1325a212515186c93e68b193043f972"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 121,
+      "name": "wall-5-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -62
+        ],
+        "look": [
+          -4.8,
+          2,
+          -69
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -62
+        ],
+        "quaternion": [
+          0.01824358696376452,
+          0.24607280167554244,
+          -0.004632541710761023,
+          0.9690685669071837
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 172,
+      "triangles": 111864,
+      "textures": 119,
+      "geometries": 272,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "91719d2126571ac6dcbef060a254aa57e03a7f9469da6ab9f6fe3dca6012bd52",
+      "image": "121-wall-5-left-grazing.webp",
+      "imageSha256": "f14a6909738041318693071cf463a035db709381f153e3c57b93b821c559d6aa"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 122,
+      "name": "wall-5-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -67
+        ],
+        "look": [
+          4.8,
+          2.2,
+          -67
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -67
+        ],
+        "quaternion": [
+          0.014721811264651406,
+          -0.7069535121018128,
+          0.014721811264651406,
+          0.7069535121018128
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 101,
+      "triangles": 98540,
+      "textures": 119,
+      "geometries": 272,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "a17204ff5510019abe52d581a608edb8e89fdd79f641212fc7f793398465f7a4",
+      "image": "122-wall-5-right-front.webp",
+      "imageSha256": "86effaba7eb985519558cb18ebc8ed7d50ae67239cb7c6710f33c729e288cc26"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 123,
+      "name": "wall-5-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -62
+        ],
+        "look": [
+          4.8,
+          2,
+          -69
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -62
+        ],
+        "quaternion": [
+          0.01824358696376452,
+          -0.24607280167554244,
+          0.004632541710761023,
+          0.9690685669071837
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 164,
+      "triangles": 111434,
+      "textures": 119,
+      "geometries": 272,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "d076b821019bfa202fddc1dd7a3a44cb61c3ecbf53205ce70e4be4d1647ae75a",
+      "image": "123-wall-5-right-grazing.webp",
+      "imageSha256": "e7f53a1c1847e15ac9f1b301638a3ecdb14f886490c1751b5a006da9fea70968"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 124,
+      "name": "wall-6-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -88
+        ],
+        "look": [
+          -12,
+          2.2,
+          -88
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -88
+        ],
+        "quaternion": [
+          0.005891942812011075,
+          0.7070822335555462,
+          -0.005891942812011075,
+          0.7070822335555462
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 107,
+      "triangles": 106986,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "8421133a94cfb5eeb8de9bd746f60d8f46af6e6b4645cc79ab6ed4bcd4f2605e",
+      "image": "124-wall-6-left-front.webp",
+      "imageSha256": "9ec17cd25540ed68aef600ea00e912e596d28dc695793143b0069b3d8762cb04"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 125,
+      "name": "wall-6-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -83
+        ],
+        "look": [
+          -12,
+          2,
+          -90
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -83
+        ],
+        "quaternion": [
+          0.010082888016269909,
+          0.48117732502864435,
+          -0.0055349599545656495,
+          0.8765478204101764
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 117,
+      "triangles": 83048,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "9a5bc35b3bd461020f87e3eb8d7104eeeaf76cc2aade746a8cdb56c4cae8bb08",
+      "image": "125-wall-6-left-grazing.webp",
+      "imageSha256": "a8ec1918c1bdf8da4199c0d9534c17492c3806f5b95483f311124a580bc588f1"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 126,
+      "name": "wall-6-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -88
+        ],
+        "look": [
+          12,
+          2.2,
+          -88
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -88
+        ],
+        "quaternion": [
+          0.005891942812011075,
+          -0.7070822335555462,
+          0.005891942812011075,
+          0.7070822335555462
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 168,
+      "triangles": 182738,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "7e6d9ef7cffe5a3a1cbac19090ebd35ed367d0787a1db189011cd0bc168348ef",
+      "image": "126-wall-6-right-front.webp",
+      "imageSha256": "687aa6eb7bc9c540fb68dceb305879edeff8eef19523fa1778377d66e19454b7"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 127,
+      "name": "wall-6-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -83
+        ],
+        "look": [
+          12,
+          2,
+          -90
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -83
+        ],
+        "quaternion": [
+          0.010082888016269909,
+          -0.48117732502864435,
+          0.0055349599545656495,
+          0.8765478204101764
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 164,
+      "triangles": 149822,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "630537dba980c7c33232142afc7caa5a774bc1eb87cacd8388f5defcc9890fcd",
+      "image": "127-wall-6-right-grazing.webp",
+      "imageSha256": "df1130abbe4aadade2992b3a5ae9c7040ac8be599e6ebe7bc2a0a1e48e8549d2"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 128,
+      "name": "wall-7-left-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -109
+        ],
+        "look": [
+          -12,
+          2.2,
+          -109
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -109
+        ],
+        "quaternion": [
+          0.005891942812011075,
+          0.7070822335555462,
+          -0.005891942812011075,
+          0.7070822335555462
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 121,
+      "triangles": 106886,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "7400f1a25a130804272d5ca92bf3176c0f539eb10a07c05cef4d56275bf81cf4",
+      "image": "128-wall-7-left-front.webp",
+      "imageSha256": "a3f03d62b61937f8c03af0ee19ad554b89d431a7f16025a9cc1322147fe68289"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 129,
+      "name": "wall-7-left-grazing",
+      "inspectionCamera": {
+        "pos": [
+          -1,
+          1.7,
+          -104
+        ],
+        "look": [
+          -12,
+          2,
+          -111
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          -1,
+          1.7,
+          -104
+        ],
+        "quaternion": [
+          0.010082888016269909,
+          0.48117732502864435,
+          -0.0055349599545656495,
+          0.8765478204101764
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 104,
+      "triangles": 81504,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "85a882a9582a5ae4bc32288aae30b50b4112d6338fe65a59c21918803bdbe877",
+      "image": "129-wall-7-left-grazing.webp",
+      "imageSha256": "91d07dec58f454c90f175617a619d7f2186ed3677564352f02c876ef9092f563"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 130,
+      "name": "wall-7-right-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2,
+          -109
+        ],
+        "look": [
+          12,
+          2.2,
+          -109
+        ],
+        "fov": 85
+      },
+      "camera": {
+        "position": [
+          0,
+          2,
+          -109
+        ],
+        "quaternion": [
+          0.005891942812011075,
+          -0.7070822335555462,
+          0.005891942812011075,
+          0.7070822335555462
+        ],
+        "fov": 85
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 110,
+      "triangles": 102864,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "9aefa3dc1ffe7ca42a2ab9948c9f3e07196231c2f05684c43e56530ef88feb28",
+      "image": "130-wall-7-right-front.webp",
+      "imageSha256": "e00ebf1416d1da0916f23d3d452f4c90ba88f96bf8b90e8d742cf7e46bfa9989"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 131,
+      "name": "wall-7-right-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1,
+          1.7,
+          -104
+        ],
+        "look": [
+          12,
+          2,
+          -111
+        ],
+        "fov": 65
+      },
+      "camera": {
+        "position": [
+          1,
+          1.7,
+          -104
+        ],
+        "quaternion": [
+          0.010082888016269909,
+          -0.48117732502864435,
+          0.0055349599545656495,
+          0.8765478204101764
+        ],
+        "fov": 65
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 100,
+      "triangles": 78350,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "3caf0544eef78c9fb731f640eddd62c74310cd66c216ff745af91ba6cb86d610",
+      "image": "131-wall-7-right-grazing.webp",
+      "imageSha256": "4d6368e837300d78d6311ee7f483c10d4c99675d409b263e19dc39ed5facb8d0"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 140,
+      "name": "alterco-blade-front",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          4.6,
+          -26
+        ],
+        "look": [
+          2.15,
+          5,
+          -31
+        ],
+        "fov": 45
+      },
+      "camera": {
+        "position": [
+          0,
+          4.6,
+          -26
+        ],
+        "quaternion": [
+          0.035919204231357284,
+          -0.20152100671425938,
+          0.007395273007373158,
+          0.9787974277435572
+        ],
+        "fov": 45
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 168,
+      "triangles": 119094,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "9a201b5c1bad1353338cbd69f80dd71c90aceabc8ecfec8a77c8c23dbf3b8fef",
+      "image": "140-alterco-blade-front.webp",
+      "imageSha256": "201fb9a9276a3342cfabe72851757261c947c1d27492ac611185374da52f6182"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 141,
+      "name": "alterco-blade-back",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          4.6,
+          -36
+        ],
+        "look": [
+          2.15,
+          5,
+          -31
+        ],
+        "fov": 45
+      },
+      "camera": {
+        "position": [
+          0,
+          4.6,
+          -36
+        ],
+        "quaternion": [
+          -0.007395273007373158,
+          0.9787974277435572,
+          -0.03591920423135729,
+          -0.20152100671425938
+        ],
+        "fov": 45
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 148,
+      "triangles": 108140,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "6fd87a57ec81a5ac546cfcf5550b6a268c1d30fa3af92b839568914d33dc9ac2",
+      "image": "141-alterco-blade-back.webp",
+      "imageSha256": "ee313197924f3523d9d501ff4617ecf48f9787449a1da4acd1e69b4fe0f49e0e"
+    },
+    {
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "n": 142,
+      "name": "tracks-and-roof-hints",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          3.8,
+          -63
+        ],
+        "look": [
+          -0.1,
+          3.8,
+          -68
+        ],
+        "fov": 75
+      },
+      "camera": {
+        "position": [
+          0,
+          3.8,
+          -63
+        ],
+        "quaternion": [
+          0,
+          0.009998500387383162,
+          0,
+          0.9999500137456891
+        ],
+        "fov": 75
+      },
+      "roomStation": -1,
+      "roomFocusPush": 0,
+      "world": "alley",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 156,
+      "triangles": 112160,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "5b3e4b699d0b1b4277f24d7299958f0d5df6478d7487e932054290bded106718",
+      "image": "142-tracks-and-roof-hints.webp",
+      "imageSha256": "251df1d2a968ae1d86481393e1b9bad91bf6b8a31af6030efea0242227990e23"
+    },
+    {
+      "reflections": [],
+      "n": 143,
+      "name": "keyboard-front",
+      "inspectionCamera": {
+        "pos": [
+          1192.8,
+          1.13,
+          -66.9
+        ],
+        "look": [
+          1192.03,
+          0.82,
+          -66.9
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          1192.8,
+          1.13,
+          -66.9
+        ],
+        "quaternion": [
+          -0.1344958011077422,
+          0.6941980117260396,
+          0.1344958011077422,
+          0.6941980117260397
+        ],
+        "fov": 42
+      },
+      "roomStation": 0.9824116985072716,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 14,
+      "triangles": 48094,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "a6238cfaaaa55dfe7e31f63e5d3226dd6b8df28c3474327584ad62952481d23a",
+      "image": "143-keyboard-front.webp",
+      "imageSha256": "70c557b064c8eadd1b6ada3d3e2139968d78c5c6fe798ebd1e29149ff6cb9266"
+    },
+    {
+      "reflections": [],
+      "n": 144,
+      "name": "keyboard-side",
+      "inspectionCamera": {
+        "pos": [
+          1192.35,
+          1.1,
+          -66.1
+        ],
+        "look": [
+          1192.02,
+          0.82,
+          -66.8
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          1192.35,
+          1.1,
+          -66.1
+        ],
+        "quaternion": [
+          -0.16853557140204167,
+          0.21520517362134606,
+          0.03773475517925076,
+          0.961175625299745
+        ],
+        "fov": 42
+      },
+      "roomStation": 0.9931637865229157,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 14,
+      "triangles": 48090,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "1cb432c742e3aa93a4c62cc144d26a3ed20f64c322aa6c1c33791c7b5d5b4be0",
+      "image": "144-keyboard-side.webp",
+      "imageSha256": "1bbf0ff0aade09449761fbd0b0be78f2917be293672a0d91a206a2a62dae719d"
+    },
+    {
+      "reflections": [],
+      "n": 145,
+      "name": "bio-headline-front",
+      "inspectionCamera": {
+        "pos": [
+          1195.55,
+          2.2,
+          -68.1
+        ],
+        "look": [
+          1195.55,
+          2.3,
+          -70.19
+        ],
+        "fov": 62
+      },
+      "camera": {
+        "position": [
+          1195.55,
+          2.2,
+          -68.1
+        ],
+        "quaternion": [
+          0.023902937088286787,
+          0,
+          0,
+          0.9997142839824553
+        ],
+        "fov": 62
+      },
+      "roomStation": 0.9969588552922971,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 18,
+      "triangles": 48314,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "2e5c6b3d869769559b31e581e6dbdc3ea4ab26a7ca2ab01b8f49660f41e01125",
+      "image": "145-bio-headline-front.webp",
+      "imageSha256": "ce4683e87d0653beac79fb406c8b933585535b9c46c923b22f13d3e1f96c17ad"
+    },
+    {
+      "reflections": [],
+      "n": 146,
+      "name": "bio-headline-grazing",
+      "inspectionCamera": {
+        "pos": [
+          1197.2,
+          1.6,
+          -68.5
+        ],
+        "look": [
+          1195.55,
+          2.3,
+          -70.19
+        ],
+        "fov": 55
+      },
+      "camera": {
+        "position": [
+          1197.2,
+          1.6,
+          -68.5
+        ],
+        "quaternion": [
+          0.13296259507232627,
+          0.3732378185801748,
+          -0.05414446468618773,
+          0.9165603395505344
+        ],
+        "fov": 55
+      },
+      "roomStation": 0.998953486677803,
+      "roomFocusPush": 0,
+      "world": "room",
+      "tier": "balanced",
+      "scale": 0.6,
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 120,
+      "geometries": 279,
+      "masonryWidth": 1280,
+      "video": "idle",
+      "videoTime": 0,
+      "rawPngSha256": "065051448639888f6a3e59fdfb3c5ee8ef37a1d3e52f26578ef11cf293fc7691",
+      "image": "146-bio-headline-grazing.webp",
+      "imageSha256": "b366b9724a6c18dfb8036c932bfe2222319ee9a669ee366d2bc20f9ef9c2b425"
+    }
+  ],
+  "errors": []
+}

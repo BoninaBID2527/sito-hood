@@ -1,0 +1,47 @@
+{
+  "sourceSha": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "baselineBuildId": "yNPi2rx1AkSckb7VkOFgI",
+  "branch": "work/hooddino-v3-8-11-graffiti-signage-studio-cleanup",
+  "implementationFiles": {
+    "components/scene/RooftopEnvironment.tsx": "a745ccadb6017a9afc8c3330e79ec98f3a136f6fd4cc64324f958a5be824eb71",
+    "components/scene/room/RoomWorld.tsx": "fa10737b5f6e99a2d70a699b7d0965d195b7b467e86dadb3d019a5c059d20f9f",
+    "components/scene/room/furniture.ts": "95fd09d553423d328239cf35de9f8daf05e2b41998eb79c689ab759dc6a69d0e",
+    "components/scene/street/Decals.tsx": "318c62c1767f2ce58ddc35bd82ca6fbf79d3861a49bcc190633b8d81b6ec0958",
+    "components/scene/street/StreetGraffiti.tsx": "b6a62fc6ed93818edaabccd66c6e2d64d2993ccf4020db012a85356eef3d6a91",
+    "scripts/eggs.mjs": "6ce9bc84425552580fd8a723d7a080d856b65cd0c95628576caf6923e0582973",
+    "scripts/tracks-check.mjs": "40afe00a5c16319348c40b1221c7e15a99ab6aba6bc71a92c4d0146f31528183"
+  },
+  "artistAssetsChanged": false,
+  "foundationChanged": false,
+  "hardware": {
+    "browser": "Chromium 151 / SwiftShader",
+    "os": "Linux",
+    "cpuQuota": "2 CPU",
+    "memoryLimit": "8 GiB",
+    "realDevicesTested": []
+  },
+  "captureConfig": {
+    "tier": "balanced",
+    "viewport": "800x450",
+    "deviceScaleFactor": 1,
+    "renderScale": 0.6,
+    "masonryWidth": 1280,
+    "post": "normal except separately identified no-post controls"
+  },
+  "baselineMain": "main remains e3456eb; PR8 baseline dossier remains open; no merge performed",
+  "exceptions": [
+    "High-quality capture attempt 1 interrupted before any image while startup waited; orphaned Chromium processes closed.",
+    "High-quality attempt 2 deliberately ended after 5 clean frames to run the complete inspection using the supported balanced tier; page close exception is infrastructure interruption, not an application regression.",
+    "Cloud environment restart interrupted the first AFTER sweep after checkpoint 42; matching build/config resumed without discarding its captures.",
+    "Front/back audit found mirrored lettering on the ALTERCO blade. The initial AFTER attempt was stopped during the wall sweep (last saved checkpoint 108) to correct back-face UV sampling; this partial attempt is retained separately, not counted as final evidence.",
+    "Final rotation inspection found four remaining mural overlaps with plaza vents/pipes/cabinets omitted by the initial footprint fixture. Partial second AFTER attempt retained; plaza fixture expanded by executing the actual side-wall installation block (246 bounds); four murals relocated/rescaled and audit rerun.",
+    "The full wall-sign footprint check found OneWay mounted over a real vent. Moved from L z -10.5/y 2.5 to the clear adjacent bay z -9.8/y 2.0; new front/grazing baseline pairs and all three wall-sign support checks added. Third partial AFTER attempt retained separately.",
+    "Paired-frame metadata validation detected 76 mm camera-axis drift at checkpoint 45. The inherited runner closes video focus after the screenshot, so subsequent metadata sampled the exit motion and videoTime=0. Preserve both old attempts and recapture the actual playing-video frame with a common fixed inspection camera; snapshot metadata before closeFocus. No product code or functional-test assertion changed.",
+    "Managed cloud runtime advanced from revision 158 to 161 during QA, terminating browser/server/orchestrator processes. All nine completed stages preserved; partial eggs log saved separately. Restart production servers/browser, rerun only eggs/secrets/tracks and the planned paired video recapture on the unchanged build.",
+    "Narrative station checkpoints 41/50 retain tiny lens interpolation residuals: 0.00452/0.00929 degrees. Paired evidence validator records their actual frustum-edge scale drift and requires less than 0.1 pixel; inspection cameras require identical requested FOV and the same optical residual bound. Position/quaternion guards and all functional assertions unchanged.",
+    "Track behaviour fixture accepts an explicit viewport (default 800x450) and scales its two existing synthetic gesture paths to the same viewport fractions. The software-GL motion suite retains balanced tier, scale=0.4, full 9/7/5/4-second simulation waits and every original assertion. No production rendering or motion code changed. Original 1280x720 remains available as a CLI argument.",
+    "Director.tsx keeps a 0.01-degree FOV projection-update deadband even with camOverride. The fixed video pose therefore retains a tiny actual lens residual (baseline 42.009233\u00b0 with requested 42\u00b0). Paired validator checks identical requested inspection FOV and actual frustum-edge drift below 0.1 pixel. Captured camera values are not normalized or relabelled; production Director remains unchanged.",
+    "Managed Chromium rejected file:// navigation with ERR_BLOCKED_BY_ADMINISTRATOR. Viewer validated through a local HTTP server serving only the QA dossier, with external requests blocked; no browser policy or security setting changed. Portable artifact has no external assets."
+  ],
+  "performanceNote": "No geometry/material/texture added. One dedicated blade shader variant reverses rear-face map and emission UV sampling."
+}

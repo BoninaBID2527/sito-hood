@@ -1,0 +1,29 @@
+{
+  "reviewedImages": [
+    "picking-mouse-0.png",
+    "picking-mouse-1.png",
+    "picking-mouse-2.png",
+    "picking-mouse-3.png",
+    "picking-mouse-4.png",
+    "picking-mouse-5.png",
+    "picking-mouse-6.png",
+    "picking-touch-0.png",
+    "picking-touch-1.png",
+    "picking-touch-2.png",
+    "picking-touch-3.png",
+    "picking-touch-4.png",
+    "picking-touch-5.png",
+    "picking-touch-6.png"
+  ],
+  "visibleGlyphs": true,
+  "movedIndices": [
+    2,
+    3,
+    5
+  ],
+  "inputs": [
+    "mouse",
+    "touch"
+  ],
+  "method": "Manual inspection of all 14 captured target views. All seven glyphs visible on their actual wall support; moved 2/3/5 clear of interfering structures. Original natural foreground occlusion preserved."
+}

@@ -47,7 +47,7 @@ check('puddle: the impossible puddle answers (no toast)', (await state(() => win
 
 // 4. hidden letter hover
 await jump(0.12)
-s = await screen(-3.31, 2.1, -20.5)
+s = await screen(-3.3958, 2.1, -22.1)
 await page.mouse.move(s.sx, s.sy); await page.waitForTimeout(1200)
 check('graffiti letters: hovering a hidden tag registers it', (await state(() => window.__hd.store.getState().letters.filter(Boolean).length)) >= 1)
 

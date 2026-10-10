@@ -1,0 +1,59 @@
+✓ exact biography is semantic text in the DOM
+✓ link in semantic DOM: https://open.spotify.com/artist/6ETJU37OTsdfeTeDMN7oKI
+✓ link in semantic DOM: https://www.instagram.com/hoodddddddd
+✓ link in semantic DOM: https://www.tiktok.com/@hooddddddddd
+✓ no room asset requested before approaching the door
+✓ no video request on initial load
+✓ entrance not offered far from the door
+✓ no ENTER chip far from the door
+✓ entrance offered at the door (roomNear)
+✓ room shell loaded on approach
+✓ low-cost photo tier fetched on approach
+✓ high-detail photos NOT fetched on approach
+✓ video still not requested on approach
+✓ ENTER chip visible
+✓ mode room-in after activating the chip
+✓ camera reaches the door (no page cut)
+✓ camera passes through the aperture
+✓ mode room (inside)
+✓ rt.world === room
+✓ high-detail tier loaded on entry
+✓ video still not requested inside the room (no autoplay)
+✓ no video source attached before PLAY
+✓ arrived at the entry station
+✓ street scroll position untouched
+✓ BACK TO STREET visible
+✓ no DUALISMO clue in the room UI
+✓ ArrowRight → station workstation
+✓ ArrowRight → station bio
+✓ ArrowRight → station live
+✓ ArrowRight → station exit
+✓ ArrowLeft → previous station
+✓ LIVE DATES chip links to Instagram
+✓ bio station reachable by the dot selector
+✓ focus label IN THE STUDIO / ARRANGIAMENTO / PLAY →
+✓ PLAY pushes the camera to the monitor
+✓ lights lowered (dim)
+✓ video requested only after PLAY
+✓ video is playing
+✓ audio on because the visitor pressed PLAY
+✓ playsinline set (iOS inline playback)
+✓ PAUSE pauses
+✓ PLAY resumes
+✓ SOUND toggles mute
+✓ CLOSE restores camera and lights
+✓ CLOSE pauses the video
+✓ Escape closes the video focus
+✓ still in the room after the first Escape
+✓ mode room-out
+✓ back in the street
+✓ rt.world === alley
+✓ same scroll progress as before entering
+✓ room rig fully reset
+✓ video released on exit (paused, src dropped, texture disposed)
+✓ room UI gone
+✓ door offered again after leaving
+no console errors/warnings
+✓ no console errors / hydration warnings
+
+room-check &scale=0.5 [balanced 800x450]: 56 passed, 0 failed

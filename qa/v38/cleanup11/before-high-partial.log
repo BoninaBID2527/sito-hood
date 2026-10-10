@@ -1,0 +1,31 @@
+navigation starting
+navigation ready
+ENTER ready
+entered
+ready for capture
+shot 1 street-opening
+shot 2 street-hero-facade
+shot 3 street-medium-facade
+shot 4 street-window
+shot 5 street-doorway
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.screenshot: Target page, context or browser has been closed
+Call log:
+[2m  - taking page screenshot[22m
+[2m  - waiting for fonts to load...[22m
+[2m  - fonts loaded[22m
+
+    at shot (/workspace/sito-hood/scripts/qa36-lib.mjs:72:131)
+    at async runCheckpoint (/workspace/sito-hood/scripts/qa36-lib.mjs:108:3)
+    at async file:///workspace/sito-hood/qa/v38/cleanup11/capture.mjs:63:5 {
+  log: [
+    '  - taking page screenshot',
+    '  - waiting for fonts to load...',
+    '  - fonts loaded'
+  ]
+}
+
+Node.js v24.19.0

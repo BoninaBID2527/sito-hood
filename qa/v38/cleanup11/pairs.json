@@ -1,0 +1,2004 @@
+[
+  {
+    "n": 1,
+    "name": "street-opening",
+    "before": "before/01-street-opening.webp",
+    "after": "after/01-street-opening.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.019702668426804553,
+    "cameraMaxAxisDeltaM": 0.019683752522463127,
+    "quaternionComponentDelta": 0.0008495681481134557,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 194,
+      "triangles": 127472,
+      "textures": 74,
+      "geometries": 152
+    },
+    "costAfter": {
+      "calls": 305,
+      "triangles": 216416,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 2,
+    "name": "street-hero-facade",
+    "before": "before/02-street-hero-facade.webp",
+    "after": "after/02-street-hero-facade.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 190,
+      "triangles": 129486,
+      "textures": 74,
+      "geometries": 152
+    },
+    "costAfter": {
+      "calls": 190,
+      "triangles": 129486,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 3,
+    "name": "street-medium-facade",
+    "before": "before/03-street-medium-facade.webp",
+    "after": "after/03-street-medium-facade.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 194,
+      "triangles": 128698,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 194,
+      "triangles": 128698,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 4,
+    "name": "street-window",
+    "before": "before/04-street-window.webp",
+    "after": "after/04-street-window.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 104,
+      "triangles": 114032,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 104,
+      "triangles": 114032,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 5,
+    "name": "street-doorway",
+    "before": "before/05-street-doorway.webp",
+    "after": "after/05-street-doorway.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 99,
+      "triangles": 103512,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 99,
+      "triangles": 103512,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 6,
+    "name": "street-wet-asphalt",
+    "before": "before/06-street-wet-asphalt.webp",
+    "after": "after/06-street-wet-asphalt.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 186,
+      "triangles": 125680,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 186,
+      "triangles": 125680,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 7,
+    "name": "street-kerb-gutter",
+    "before": "before/07-street-kerb-gutter.webp",
+    "after": "after/07-street-kerb-gutter.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 182,
+      "triangles": 125644,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 182,
+      "triangles": 125644,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 8,
+    "name": "street-deep-alley",
+    "before": "before/08-street-deep-alley.webp",
+    "after": "after/08-street-deep-alley.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0013313580915129053,
+    "cameraMaxAxisDeltaM": 0.0010782056202658374,
+    "quaternionComponentDelta": 0.0005613371387484635,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 142,
+      "triangles": 107836,
+      "textures": 81,
+      "geometries": 170
+    },
+    "costAfter": {
+      "calls": 143,
+      "triangles": 108680,
+      "textures": 117,
+      "geometries": 244
+    }
+  },
+  {
+    "n": 35,
+    "name": "roof-wide",
+    "before": "before/35-roof-wide.webp",
+    "after": "after/35-roof-wide.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.006416878418248255,
+    "cameraMaxAxisDeltaM": 0.005606730530871573,
+    "quaternionComponentDelta": 0.0006602867932685441,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 135,
+      "triangles": 16002,
+      "textures": 85,
+      "geometries": 207
+    },
+    "costAfter": {
+      "calls": 69,
+      "triangles": 8004,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 36,
+    "name": "roof-hero",
+    "before": "before/36-roof-hero.webp",
+    "after": "after/36-roof-hero.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.006821631312313822,
+    "cameraMaxAxisDeltaM": 0.006748078312625694,
+    "quaternionComponentDelta": 0.0006646095316515301,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 125,
+      "triangles": 15278,
+      "textures": 85,
+      "geometries": 207
+    },
+    "costAfter": {
+      "calls": 125,
+      "triangles": 15278,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 37,
+    "name": "skyline",
+    "before": "before/37-skyline.webp",
+    "after": "after/37-skyline.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.00756003070636488,
+    "cameraMaxAxisDeltaM": 0.007419925674639671,
+    "quaternionComponentDelta": 0.000655587567858636,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 125,
+      "triangles": 15234,
+      "textures": 85,
+      "geometries": 207
+    },
+    "costAfter": {
+      "calls": 125,
+      "triangles": 15234,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 41,
+    "name": "room-04-workstation-wide",
+    "before": "before/41-room-04-workstation-wide.webp",
+    "after": "after/41-room-04-workstation-wide.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.003225747438051237,
+    "cameraMaxAxisDeltaM": 0.0031753257834401527,
+    "quaternionComponentDelta": 0.00017165192249692443,
+    "cameraFovDeltaDegrees": 0.004520770800020557,
+    "frustumEdgeScaleDriftPixels": 0.0424636123120159,
+    "costBefore": {
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 118,
+      "geometries": 264
+    },
+    "costAfter": {
+      "calls": 16,
+      "triangles": 47806,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 42,
+    "name": "room-05-workstation-medium",
+    "before": "before/42-room-05-workstation-medium.webp",
+    "after": "after/42-room-05-workstation-medium.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 15,
+      "triangles": 48096,
+      "textures": 118,
+      "geometries": 264
+    },
+    "costAfter": {
+      "calls": 15,
+      "triangles": 47804,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 50,
+    "name": "room-13-bio",
+    "before": "before/50-room-13-bio.webp",
+    "after": "after/50-room-13-bio.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0063033780241987785,
+    "cameraMaxAxisDeltaM": 0.0052098127730459964,
+    "quaternionComponentDelta": 0.0016273357597402385,
+    "cameraFovDeltaDegrees": 0.009286055061842546,
+    "frustumEdgeScaleDriftPixels": 0.08464554263989399,
+    "costBefore": {
+      "calls": 17,
+      "triangles": 48242,
+      "textures": 118,
+      "geometries": 264
+    },
+    "costAfter": {
+      "calls": 17,
+      "triangles": 47950,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 56,
+    "name": "room-19-dark-corner",
+    "before": "before/56-room-19-dark-corner.webp",
+    "after": "after/56-room-19-dark-corner.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 23,
+      "triangles": 49206,
+      "textures": 118,
+      "geometries": 267
+    },
+    "costAfter": {
+      "calls": 23,
+      "triangles": 48914,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 100,
+    "name": "wall-0-left-front",
+    "before": "before/100-wall-0-left-front.webp",
+    "after": "after/100-wall-0-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 77,
+      "triangles": 86440,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 77,
+      "triangles": 86440,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 101,
+    "name": "wall-0-left-grazing",
+    "before": "before/101-wall-0-left-grazing.webp",
+    "after": "after/101-wall-0-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 102,
+    "name": "wall-0-right-front",
+    "before": "before/102-wall-0-right-front.webp",
+    "after": "after/102-wall-0-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 78,
+      "triangles": 89044,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 78,
+      "triangles": 89044,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 103,
+    "name": "wall-0-right-grazing",
+    "before": "before/103-wall-0-right-grazing.webp",
+    "after": "after/103-wall-0-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 189,
+      "triangles": 126946,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 104,
+    "name": "wall-1-left-front",
+    "before": "before/104-wall-1-left-front.webp",
+    "after": "after/104-wall-1-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 87,
+      "triangles": 94200,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 87,
+      "triangles": 94200,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 105,
+    "name": "wall-1-left-grazing",
+    "before": "before/105-wall-1-left-grazing.webp",
+    "after": "after/105-wall-1-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 188,
+      "triangles": 127888,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 189,
+      "triangles": 127890,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 106,
+    "name": "wall-1-right-front",
+    "before": "before/106-wall-1-right-front.webp",
+    "after": "after/106-wall-1-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 86,
+      "triangles": 90818,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 86,
+      "triangles": 90818,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 107,
+    "name": "wall-1-right-grazing",
+    "before": "before/107-wall-1-right-grazing.webp",
+    "after": "after/107-wall-1-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 191,
+      "triangles": 128858,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 192,
+      "triangles": 128860,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 108,
+    "name": "wall-2-left-front",
+    "before": "before/108-wall-2-left-front.webp",
+    "after": "after/108-wall-2-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 90,
+      "triangles": 95960,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 89,
+      "triangles": 95958,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 109,
+    "name": "wall-2-left-grazing",
+    "before": "before/109-wall-2-left-grazing.webp",
+    "after": "after/109-wall-2-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 178,
+      "triangles": 125224,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 177,
+      "triangles": 125222,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 110,
+    "name": "wall-2-right-front",
+    "before": "before/110-wall-2-right-front.webp",
+    "after": "after/110-wall-2-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 94,
+      "triangles": 96430,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 94,
+      "triangles": 96430,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 111,
+    "name": "wall-2-right-grazing",
+    "before": "before/111-wall-2-right-grazing.webp",
+    "after": "after/111-wall-2-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 180,
+      "triangles": 124484,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 180,
+      "triangles": 124484,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 112,
+    "name": "wall-3-left-front",
+    "before": "before/112-wall-3-left-front.webp",
+    "after": "after/112-wall-3-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 96,
+      "triangles": 106730,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 96,
+      "triangles": 106730,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 113,
+    "name": "wall-3-left-grazing",
+    "before": "before/113-wall-3-left-grazing.webp",
+    "after": "after/113-wall-3-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 166,
+      "triangles": 118726,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 165,
+      "triangles": 118724,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 114,
+    "name": "wall-3-right-front",
+    "before": "before/114-wall-3-right-front.webp",
+    "after": "after/114-wall-3-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 159,
+      "triangles": 172550,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 98,
+      "triangles": 104070,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 115,
+    "name": "wall-3-right-grazing",
+    "before": "before/115-wall-3-right-grazing.webp",
+    "after": "after/115-wall-3-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 167,
+      "triangles": 117870,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 167,
+      "triangles": 117870,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 116,
+    "name": "wall-4-left-front",
+    "before": "before/116-wall-4-left-front.webp",
+    "after": "after/116-wall-4-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 96,
+      "triangles": 106880,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 96,
+      "triangles": 106880,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 117,
+    "name": "wall-4-left-grazing",
+    "before": "before/117-wall-4-left-grazing.webp",
+    "after": "after/117-wall-4-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 142,
+      "triangles": 110402,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 142,
+      "triangles": 110402,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 118,
+    "name": "wall-4-right-front",
+    "before": "before/118-wall-4-right-front.webp",
+    "after": "after/118-wall-4-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 96,
+      "triangles": 104530,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 97,
+      "triangles": 104532,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 119,
+    "name": "wall-4-right-grazing",
+    "before": "before/119-wall-4-right-grazing.webp",
+    "after": "after/119-wall-4-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 231,
+      "triangles": 191932,
+      "textures": 119,
+      "geometries": 269
+    },
+    "costAfter": {
+      "calls": 140,
+      "triangles": 108758,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 120,
+    "name": "wall-5-left-front",
+    "before": "before/120-wall-5-left-front.webp",
+    "after": "after/120-wall-5-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 112,
+      "triangles": 98370,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 132,
+      "triangles": 139300,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 121,
+    "name": "wall-5-left-grazing",
+    "before": "before/121-wall-5-left-grazing.webp",
+    "after": "after/121-wall-5-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 172,
+      "triangles": 111864,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 176,
+      "triangles": 113916,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 122,
+    "name": "wall-5-right-front",
+    "before": "before/122-wall-5-right-front.webp",
+    "after": "after/122-wall-5-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 101,
+      "triangles": 98540,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 118,
+      "triangles": 138498,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 123,
+    "name": "wall-5-right-grazing",
+    "before": "before/123-wall-5-right-grazing.webp",
+    "after": "after/123-wall-5-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 164,
+      "triangles": 111434,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 167,
+      "triangles": 113074,
+      "textures": 125,
+      "geometries": 303
+    }
+  },
+  {
+    "n": 124,
+    "name": "wall-6-left-front",
+    "before": "before/124-wall-6-left-front.webp",
+    "after": "after/124-wall-6-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 107,
+      "triangles": 106986,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 130,
+      "triangles": 148900,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 125,
+    "name": "wall-6-left-grazing",
+    "before": "before/125-wall-6-left-grazing.webp",
+    "after": "after/125-wall-6-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 117,
+      "triangles": 83048,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 117,
+      "triangles": 83048,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 126,
+    "name": "wall-6-right-front",
+    "before": "before/126-wall-6-right-front.webp",
+    "after": "after/126-wall-6-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 168,
+      "triangles": 182738,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 127,
+      "triangles": 147548,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 127,
+    "name": "wall-6-right-grazing",
+    "before": "before/127-wall-6-right-grazing.webp",
+    "after": "after/127-wall-6-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 164,
+      "triangles": 149822,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 122,
+      "triangles": 122780,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 128,
+    "name": "wall-7-left-front",
+    "before": "before/128-wall-7-left-front.webp",
+    "after": "after/128-wall-7-left-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 121,
+      "triangles": 106886,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 121,
+      "triangles": 106886,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 129,
+    "name": "wall-7-left-grazing",
+    "before": "before/129-wall-7-left-grazing.webp",
+    "after": "after/129-wall-7-left-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 104,
+      "triangles": 81504,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 104,
+      "triangles": 81504,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 130,
+    "name": "wall-7-right-front",
+    "before": "before/130-wall-7-right-front.webp",
+    "after": "after/130-wall-7-right-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 110,
+      "triangles": 102864,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 133,
+      "triangles": 144778,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 131,
+    "name": "wall-7-right-grazing",
+    "before": "before/131-wall-7-right-grazing.webp",
+    "after": "after/131-wall-7-right-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 100,
+      "triangles": 78350,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 100,
+      "triangles": 78350,
+      "textures": 81,
+      "geometries": 186
+    }
+  },
+  {
+    "n": 140,
+    "name": "alterco-blade-front",
+    "before": "before/140-alterco-blade-front.webp",
+    "after": "after/140-alterco-blade-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 168,
+      "triangles": 119094,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 168,
+      "triangles": 119094,
+      "textures": 85,
+      "geometries": 196
+    }
+  },
+  {
+    "n": 141,
+    "name": "alterco-blade-back",
+    "before": "before/141-alterco-blade-back.webp",
+    "after": "after/141-alterco-blade-back.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 148,
+      "triangles": 108140,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 148,
+      "triangles": 108140,
+      "textures": 85,
+      "geometries": 196
+    }
+  },
+  {
+    "n": 142,
+    "name": "tracks-and-roof-hints",
+    "before": "before/142-tracks-and-roof-hints.webp",
+    "after": "after/142-tracks-and-roof-hints.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 156,
+      "triangles": 112160,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 155,
+      "triangles": 112136,
+      "textures": 85,
+      "geometries": 197
+    }
+  },
+  {
+    "n": 143,
+    "name": "keyboard-front",
+    "before": "before/143-keyboard-front.webp",
+    "after": "after/143-keyboard-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 14,
+      "triangles": 48094,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 14,
+      "triangles": 47802,
+      "textures": 115,
+      "geometries": 237
+    }
+  },
+  {
+    "n": 144,
+    "name": "keyboard-side",
+    "before": "before/144-keyboard-side.webp",
+    "after": "after/144-keyboard-side.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 14,
+      "triangles": 48090,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 14,
+      "triangles": 47798,
+      "textures": 115,
+      "geometries": 237
+    }
+  },
+  {
+    "n": 145,
+    "name": "bio-headline-front",
+    "before": "before/145-bio-headline-front.webp",
+    "after": "after/145-bio-headline-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 18,
+      "triangles": 48314,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 18,
+      "triangles": 48022,
+      "textures": 115,
+      "geometries": 238
+    }
+  },
+  {
+    "n": 146,
+    "name": "bio-headline-grazing",
+    "before": "before/146-bio-headline-grazing.webp",
+    "after": "after/146-bio-headline-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 120,
+      "geometries": 279
+    },
+    "costAfter": {
+      "calls": 16,
+      "triangles": 47806,
+      "textures": 115,
+      "geometries": 238
+    }
+  },
+  {
+    "n": 147,
+    "name": "roof-bulkhead-front",
+    "before": "before-extra/147-roof-bulkhead-front.webp",
+    "after": "after/147-roof-bulkhead-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 101,
+      "triangles": 10182,
+      "textures": 78,
+      "geometries": 192
+    },
+    "costAfter": {
+      "calls": 101,
+      "triangles": 10182,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 148,
+    "name": "roof-bulkhead-grazing",
+    "before": "before-extra/148-roof-bulkhead-grazing.webp",
+    "after": "after/148-roof-bulkhead-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 43,
+      "triangles": 6808,
+      "textures": 78,
+      "geometries": 192
+    },
+    "costAfter": {
+      "calls": 83,
+      "triangles": 13532,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 149,
+    "name": "roof-parapet",
+    "before": "before-extra/149-roof-parapet.webp",
+    "after": "after/149-roof-parapet.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 64,
+      "triangles": 7620,
+      "textures": 78,
+      "geometries": 192
+    },
+    "costAfter": {
+      "calls": 64,
+      "triangles": 7620,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 150,
+    "name": "room-right-tags",
+    "before": "before-extra/150-room-right-tags.webp",
+    "after": "after/150-room-right-tags.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 16,
+      "triangles": 48098,
+      "textures": 116,
+      "geometries": 265
+    },
+    "costAfter": {
+      "calls": 16,
+      "triangles": 47806,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 151,
+    "name": "room-left-tags",
+    "before": "before-extra/151-room-left-tags.webp",
+    "after": "after/151-room-left-tags.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 16,
+      "triangles": 48436,
+      "textures": 117,
+      "geometries": 267
+    },
+    "costAfter": {
+      "calls": 16,
+      "triangles": 48144,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 152,
+    "name": "room-front-paper",
+    "before": "before-extra/152-room-front-paper.webp",
+    "after": "after/152-room-front-paper.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 21,
+      "triangles": 49206,
+      "textures": 117,
+      "geometries": 270
+    },
+    "costAfter": {
+      "calls": 21,
+      "triangles": 48914,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 153,
+    "name": "letter-2-support",
+    "before": "before-extra/153-letter-2-support.webp",
+    "after": "after/153-letter-2-support.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 86,
+      "triangles": 94806,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 86,
+      "triangles": 94806,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 154,
+    "name": "letter-3-support",
+    "before": "before-extra/154-letter-3-support.webp",
+    "after": "after/154-letter-3-support.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 85,
+      "triangles": 89754,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 85,
+      "triangles": 89754,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 155,
+    "name": "letter-5-support",
+    "before": "before-extra/155-letter-5-support.webp",
+    "after": "after/155-letter-5-support.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 90,
+      "triangles": 98512,
+      "textures": 119,
+      "geometries": 272
+    },
+    "costAfter": {
+      "calls": 90,
+      "triangles": 98512,
+      "textures": 125,
+      "geometries": 306
+    }
+  },
+  {
+    "n": 156,
+    "name": "one-way-front",
+    "before": "before-oneway/156-one-way-front.webp",
+    "after": "after/156-one-way-front.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 92,
+      "triangles": 102930,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 92,
+      "triangles": 102930,
+      "textures": 76,
+      "geometries": 154
+    }
+  },
+  {
+    "n": 157,
+    "name": "one-way-grazing",
+    "before": "before-oneway/157-one-way-grazing.webp",
+    "after": "after/157-one-way-grazing.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 161,
+      "triangles": 124906,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 161,
+      "triangles": 124906,
+      "textures": 76,
+      "geometries": 154
+    }
+  },
+  {
+    "n": 43,
+    "name": "room-06-workstation-close",
+    "before": "before-room/43-room-06-workstation-close.webp",
+    "after": "after-room/43-room-06-workstation-close.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 14,
+      "triangles": 48094,
+      "textures": 112,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 14,
+      "triangles": 47802,
+      "textures": 113,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 44,
+    "name": "room-07-monitor",
+    "before": "before-room/44-room-07-monitor.webp",
+    "after": "after-room/44-room-07-monitor.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 12,
+      "triangles": 48086,
+      "textures": 112,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 12,
+      "triangles": 47794,
+      "textures": 113,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 45,
+    "name": "room-08-video",
+    "before": "before-room/45-room-08-video.webp",
+    "after": "after-room/45-room-08-video.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0,
+    "cameraFovDeltaDegrees": 0.0058466846900273595,
+    "frustumEdgeScaleDriftPixels": 0.060998076118146116,
+    "costBefore": {
+      "calls": 15,
+      "triangles": 48096,
+      "textures": 114,
+      "geometries": 227
+    },
+    "costAfter": {
+      "calls": 15,
+      "triangles": 47804,
+      "textures": 114,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 46,
+    "name": "room-09-speaker",
+    "before": "before-room/46-room-09-speaker.webp",
+    "after": "after-room/46-room-09-speaker.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 14,
+      "triangles": 48252,
+      "textures": 113,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 14,
+      "triangles": 47960,
+      "textures": 114,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 47,
+    "name": "room-10-acoustic",
+    "before": "before-room/47-room-10-acoustic.webp",
+    "after": "after-room/47-room-10-acoustic.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 15,
+      "triangles": 48254,
+      "textures": 113,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 15,
+      "triangles": 47962,
+      "textures": 114,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 48,
+    "name": "room-11-desk-floor",
+    "before": "before-room/48-room-11-desk-floor.webp",
+    "after": "after-room/48-room-11-desk-floor.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 14,
+      "triangles": 48094,
+      "textures": 113,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 14,
+      "triangles": 47802,
+      "textures": 114,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 49,
+    "name": "room-12-cables",
+    "before": "before-room/49-room-12-cables.webp",
+    "after": "after-room/49-room-12-cables.webp",
+    "viewport": "800x450",
+    "tier": "balanced",
+    "scale": 0.6,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 12,
+      "triangles": 48086,
+      "textures": 113,
+      "geometries": 225
+    },
+    "costAfter": {
+      "calls": 12,
+      "triangles": 47794,
+      "textures": 114,
+      "geometries": 227
+    }
+  },
+  {
+    "n": 1,
+    "name": "street-opening",
+    "before": "before-high-partial/01-street-opening.webp",
+    "after": "after-high/01-street-opening.webp",
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "cameraPositionDeltaM": 2.5042453447356637e-05,
+    "cameraMaxAxisDeltaM": 2.2491791005885275e-05,
+    "quaternionComponentDelta": 8.195489356981056e-07,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 194,
+      "triangles": 127522,
+      "textures": 74,
+      "geometries": 152
+    },
+    "costAfter": {
+      "calls": 194,
+      "triangles": 127522,
+      "textures": 74,
+      "geometries": 152
+    }
+  },
+  {
+    "n": 2,
+    "name": "street-hero-facade",
+    "before": "before-high-partial/02-street-hero-facade.webp",
+    "after": "after-high/02-street-hero-facade.webp",
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 190,
+      "triangles": 129536,
+      "textures": 74,
+      "geometries": 152
+    },
+    "costAfter": {
+      "calls": 190,
+      "triangles": 129536,
+      "textures": 74,
+      "geometries": 152
+    }
+  },
+  {
+    "n": 3,
+    "name": "street-medium-facade",
+    "before": "before-high-partial/03-street-medium-facade.webp",
+    "after": "after-high/03-street-medium-facade.webp",
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 194,
+      "triangles": 128748,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 194,
+      "triangles": 128748,
+      "textures": 76,
+      "geometries": 154
+    }
+  },
+  {
+    "n": 4,
+    "name": "street-window",
+    "before": "before-high-partial/04-street-window.webp",
+    "after": "after-high/04-street-window.webp",
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 104,
+      "triangles": 114082,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 104,
+      "triangles": 114082,
+      "textures": 76,
+      "geometries": 154
+    }
+  },
+  {
+    "n": 5,
+    "name": "street-doorway",
+    "before": "before-high-partial/05-street-doorway.webp",
+    "after": "after-high/05-street-doorway.webp",
+    "viewport": "960x540",
+    "tier": "high",
+    "scale": 0.75,
+    "cameraPositionDeltaM": 0.0,
+    "cameraMaxAxisDeltaM": 0.0,
+    "quaternionComponentDelta": 0.0,
+    "cameraFovDeltaDegrees": 0,
+    "frustumEdgeScaleDriftPixels": 0.0,
+    "costBefore": {
+      "calls": 99,
+      "triangles": 103562,
+      "textures": 76,
+      "geometries": 154
+    },
+    "costAfter": {
+      "calls": 99,
+      "triangles": 103562,
+      "textures": 76,
+      "geometries": 154
+    }
+  }
+]

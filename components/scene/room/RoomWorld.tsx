@@ -400,7 +400,8 @@ function Prints({ geoP, geoL, mats, kit, detail }: { geoP: THREE.BufferGeometry;
       {/* WHO IS HOODDINO? — right wall (faces −x): the framed portrait (recessed behind its mat), the exact biography, the painted headline and stencilled meta */}
       <mesh geometry={geoP} material={mats.portrait} position={[P.portrait.x - 0.0135, P.portrait.y, P.portrait.z]} rotation={[0, -Math.PI / 2, 0]} />
       {paraMat && <mesh material={paraMat} position={[3.17, 1.17, -3.45]} rotation={[0, -Math.PI / 2, 0.012]}><planeGeometry args={[1.8, 1.35]} /></mesh>}
-      {headMat && <mesh material={headMat} position={[3.19, 2.3, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.0, 0.833]} /></mesh>}
+      {/* Free wall above the biography, below the red pipe, clear of the portrait/hangers. Preserve the headline's aspect. */}
+      {headMat && <mesh material={headMat} position={[3.19, 2.17, -4.05]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[1.5, 0.625]} /></mesh>}
       {metaMat && <mesh material={metaMat} position={[3.19, 0.25, -4.45]} rotation={[0, -Math.PI / 2, 0]}><planeGeometry args={[2.6, 0.433]} /></mesh>}
       {/* LIVE — left wall (faces +x): the documentary print taped up, and the card that points to Instagram for dates */}
       <mesh geometry={geoL} material={mats.live} position={[P.live.x + 0.007, P.live.y, P.live.z]} rotation={[0, Math.PI / 2, 0]} />
@@ -439,15 +440,16 @@ function Paste() {
       ['fld_red', 'R', -5.45, 1.17, 1.5, 0.03],
       ['fld_blue', 'R', -3.45, 1.17, 2.25, -0.015],
       ['tape', 'R', -4.5, 1.85, 0.22, 0.2], ['tape', 'R', -2.45, 1.85, 0.22, -0.3], ['tape', 'R', -4.5, 0.5, 0.22, -0.2], ['tape', 'R', -2.45, 0.5, 0.22, 0.25],
-      ['hand_hd', 'R', -6.75, 0.95, 0.5, 0.1, true], ['st_eye', 'R', -2.0, 1.75, 0.3, 0, true], ['stk_a', 'R', -6.35, 1.62, 0.16, 0.2, true], ['stk_b', 'R', -2.0, 0.85, 0.16, -0.3, true],
-      ['st_alterco', 'R', -7.2, 0.3, 0.9, 0.02, true], ['blk_hd', 'R', -7.35, 1.95, 1.0, 0.02, true],
+      // These marks occupy bare plaster, above the side absorber and beside the switch conduit.
+      ['hand_hd', 'R', -6.75, 1.3, 0.5, 0.1, true], ['st_eye', 'R', -2.25, 1.75, 0.3, 0, true], ['stk_a', 'R', -6.35, 1.62, 0.16, 0.2, true], ['stk_b', 'R', -2.0, 0.85, 0.16, -0.3, true],
+      ['st_alterco', 'R', -7.5, 1.3, 0.9, 0.02, true], ['blk_hd', 'R', -7.35, 1.95, 1.0, 0.02, true],
       ['fld_dark', 'L', -3.2, 1.25, 1.5, 0.02],
       ['paper_a', 'L', -2.55, 1.55, 0.62, 0.05], ['paper_c', 'L', -3.95, 1.6, 0.5, -0.04, true],
       ['tape', 'L', -2.75, 1.82, 0.2, 0.5], ['tape', 'L', -3.62, 1.82, 0.2, -0.6], ['tape', 'L', -2.75, 0.7, 0.2, -0.5], ['tape', 'L', -3.62, 0.7, 0.2, 0.5],
       ['tape', 'L', -4.2, 1.17, 0.2, 0.4], ['tape', 'L', -4.95, 1.17, 0.2, -0.3],
-      ['blk_hd', 'L', -5.15, 2.15, 1.25, -0.02, true], ['hand_2005', 'L', -2.1, 0.55, 0.5, -0.07, true], ['stk_c', 'L', -1.95, 1.95, 0.16, 0.1, true], ['stk_d', 'L', -4.8, 0.3, 0.16, -0.2, true],
+      ['blk_hd', 'L', -5.15, 2.15, 1.25, -0.02, true], ['hand_2005', 'L', -2.1, 0.95, 0.5, -0.07, true], ['stk_c', 'L', -1.95, 1.2, 0.16, 0.1, true], ['stk_d', 'L', -4.8, 0.3, 0.16, -0.2, true],
       ['st_cross', 'B', 2.85, 1.4, 0.3, 0, true], ['fld_ochre', 'B', 2.4, 1.0, 1.1, 0.02, true], ['st_barcode', 'B', -2.95, 2.4, 0.26, 0.1, true],
-      ['paper_b', 'F', 1.0, 1.2, 0.5, 0.05, true], ['st_arrow', 'F', -1.5, 1.2, 0.4, 0.0], ['stk_a', 'F', -2.2, 0.8, 0.16, 0.2, true],
+      ['paper_b', 'F', 2.65, 1.2, 0.5, 0.05, true], ['st_arrow', 'F', -1.5, 1.2, 0.4, 0.0], ['stk_a', 'F', -2.2, 0.8, 0.16, 0.2, true],
     ]
     const cells = RX.cells!
     const parts: THREE.BufferGeometry[] = []

@@ -1,0 +1,16 @@
+{
+  "source": "e3456eb50a010dc66b85b5af5710e8f1cd2f6138",
+  "sha256": {
+    "components/scene/street/layout.ts": "db29a1bb30ed851113b84f2d2ee332910f3bc4306c385dde222ef5f36731ed52",
+    "components/scene/street/plazaLayout.ts": "032f1ae421093945c93d2b6b6ee85a7943ce5b4a38f6cb0ebb9ab5d0142b65b2",
+    "components/scene/street/Facades.tsx": "9c09716b265d16d55da56c151ff15a7b4420f30d3ee7d42ce8bde1f2cbf6a4b6",
+    "components/scene/street/FireEscapes.tsx": "b7ab7ee80abe11fadbbc6981f61bdef1191b57d0c2743eb0140abdeb5910cc50",
+    "components/scene/street/Props.tsx": "9962af9faa32c784a93109464e89ee88043a259930548fa88a47f35c71c53b75",
+    "components/scene/street/WallDetail.tsx": "2bc47768e9bc4230b5fb328d1c1fea54f26bc68db42a27ed890d4f9cc07076b9",
+    "lib/math.ts": "a122bfde2d6dd98cfb929febca1bc0a719caa0a1353cb01788324fe40db60681",
+    "lib/graffitiSheet.ts": "e9ae9d2ad802a4f6673b35ea2f16e4b8be615ddfa5a89195a78752c761e8a6c8",
+    "components/scene/street/plazaArch.ts": "ee812c8ba86663851e98003e73b85c3d6e1b7a599687cdd9cc3e358cb1beef44",
+    "lib/geo.ts": "67cca0630585a08bcce59597ebe3a99091e2183e0df78765842bf23854eee5e5"
+  },
+  "method": "Node native TypeScript stripping: execute actual layout/math/plazaLayout. Record authored low wall hardware with GeoBuilder instrumentation; reconstruct actual facade opening, pier and service bounds. Gas-run envelope is conservative over the deterministic 2.7\u20133.2 m route. Fixture must be regenerated if any source hash changes. Execute the actual plazaArch side-wall installation block with Three.js geometry recorders, including vents, meter risers, drainpipes, door frames, cable trays and base course. Generator: make-plaza-fixture.mjs."
+}

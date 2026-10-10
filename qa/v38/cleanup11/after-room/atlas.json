@@ -1,0 +1,231 @@
+{
+  "spr": {
+    "wild_kold": {
+      "aspect": 1.5909090909090908
+    },
+    "wild_vert": {
+      "aspect": 1.5909090909090908
+    },
+    "roof_wild": {
+      "aspect": 1.5909090909090908
+    },
+    "wild_skrt": {
+      "aspect": 1.5294117647058822
+    },
+    "thr_nyx": {
+      "aspect": 1.5972222222222223
+    },
+    "thr_raw": {
+      "aspect": 1.5972222222222223
+    },
+    "thr_jade": {
+      "aspect": 1.5972222222222223
+    },
+    "thr_moss": {
+      "aspect": 1.5972222222222223
+    },
+    "blk_hood": {
+      "aspect": 3.5714285714285716
+    },
+    "blk_hood2": {
+      "aspect": 3.5714285714285716
+    },
+    "blk_dino": {
+      "aspect": 1.8571428571428572
+    },
+    "blk_alterco": {
+      "aspect": 3.4074074074074074
+    },
+    "blk_alterco2": {
+      "aspect": 3.4074074074074074
+    },
+    "uv_tag": {
+      "aspect": 2
+    },
+    "roof_throw": {
+      "aspect": 2.5
+    },
+    "st_cross": {
+      "aspect": 1
+    },
+    "st_arrow": {
+      "aspect": 1
+    },
+    "st_barcode": {
+      "aspect": 1
+    },
+    "st_eye": {
+      "aspect": 1
+    },
+    "st_hd": {
+      "aspect": 1
+    },
+    "st_hour": {
+      "aspect": 1
+    },
+    "n01": {
+      "aspect": 1
+    },
+    "n06": {
+      "aspect": 1
+    },
+    "n07": {
+      "aspect": 1
+    },
+    "roof_block": {
+      "aspect": 4.090909090909091
+    },
+    "hand_kold": {
+      "aspect": 2
+    },
+    "hand_nyx": {
+      "aspect": 2
+    },
+    "hand_skrt": {
+      "aspect": 2
+    },
+    "hand_echo": {
+      "aspect": 2
+    },
+    "hand_hd": {
+      "aspect": 1.5294117647058822
+    },
+    "hand_jade": {
+      "aspect": 2
+    },
+    "hand_raw": {
+      "aspect": 2
+    },
+    "hand_vert": {
+      "aspect": 2
+    },
+    "hand_alt": {
+      "aspect": 1.6470588235294117
+    },
+    "hand_moss": {
+      "aspect": 2
+    },
+    "hand_oka": {
+      "aspect": 1.7647058823529411
+    },
+    "hand_zed": {
+      "aspect": 2
+    },
+    "hand_ink": {
+      "aspect": 1.5294117647058822
+    },
+    "n05": {
+      "aspect": 1.3647058823529412
+    },
+    "roof_hand": {
+      "aspect": 2
+    },
+    "n03": {
+      "aspect": 1.5466666666666666
+    },
+    "glyph": {
+      "aspect": 1
+    },
+    "st_hood_row": {
+      "aspect": 3.8333333333333335
+    },
+    "st_alterco_row": {
+      "aspect": 4.166666666666667
+    },
+    "note_water": {
+      "aspect": 3.2
+    },
+    "note_far": {
+      "aspect": 3.2
+    },
+    "note_sette": {
+      "aspect": 3.2
+    },
+    "note_roof": {
+      "aspect": 3.2
+    },
+    "note_other": {
+      "aspect": 3.2
+    },
+    "note_back": {
+      "aspect": 3.2
+    },
+    "note_hd": {
+      "aspect": 3.2
+    },
+    "note_ear": {
+      "aspect": 3.2
+    },
+    "st_coords": {
+      "aspect": 3.3333333333333335
+    }
+  },
+  "pap": {
+    "tp_1": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_2": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_3": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_4": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_5": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_6": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_7": {
+      "aspect": 0.6666666666666666
+    },
+    "tp_hood": {
+      "aspect": 0.6666666666666666
+    },
+    "fl_1": {
+      "aspect": 0.7142857142857143
+    },
+    "fl_2": {
+      "aspect": 0.7142857142857143
+    },
+    "fl_3": {
+      "aspect": 0.7142857142857143
+    },
+    "fr_04": {
+      "aspect": 1
+    },
+    "fr_serif": {
+      "aspect": 1.309090909090909
+    },
+    "fr_anton": {
+      "aspect": 1.309090909090909
+    },
+    "fr_mono": {
+      "aspect": 1.309090909090909
+    },
+    "fr_xerox": {
+      "aspect": 1.309090909090909
+    },
+    "stk_02": {
+      "aspect": 1
+    },
+    "stk_hd": {
+      "aspect": 1
+    },
+    "stk_alt": {
+      "aspect": 1
+    },
+    "stk_eye": {
+      "aspect": 1
+    },
+    "stk_seven": {
+      "aspect": 1
+    },
+    "stk_hd2": {
+      "aspect": 1
+    }
+  }
+}
