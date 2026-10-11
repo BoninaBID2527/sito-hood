@@ -1,0 +1,82 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "VCcZnZRV9Se1UpktIzG5y",
+  "tier": "mobile",
+  "viewport": [
+    640,
+    360
+  ],
+  "bootstrapViewport": [
+    320,
+    180
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "visual",
+  "softwareGL": true,
+  "started": "2026-10-10T20:54:39.920Z",
+  "rows": [
+    {
+      "n": 1,
+      "name": "street-opening",
+      "file": "01-street-opening.png",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.0827517674775153,
+          1.2851969157041343,
+          17.498299384210778
+        ],
+        "quaternion": [
+          0.022856351664209355,
+          0.015518330419743678,
+          -0.011560296592130152,
+          0.9995514634836405
+        ],
+        "fov": 47
+      },
+      "tier": "mobile",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0,
+      "calls": 201,
+      "triangles": 124670,
+      "textures": 71,
+      "geometries": 152,
+      "masonryWidth": 1024,
+      "reflections": []
+    },
+    {
+      "n": 10,
+      "name": "plaza-front",
+      "file": "10-plaza-front.png",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -4.954212573231288,
+          2.554288222771182,
+          -92.02388342761095
+        ],
+        "quaternion": [
+          -0.024086284781238764,
+          -0.23260944579423792,
+          -0.0066798488836095436,
+          0.9722489785191996
+        ],
+        "fov": 50
+      },
+      "tier": "mobile",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.42,
+      "calls": 126,
+      "triangles": 45868,
+      "textures": 73,
+      "geometries": 171,
+      "masonryWidth": 1024,
+      "reflections": []
+    }
+  ],
+  "errors": []
+}

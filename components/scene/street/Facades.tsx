@@ -14,6 +14,7 @@ import { PLAZA, SEGS, STREET_SKIP, allWindows, segAt, wallX, streetLevelItems, t
 import { wallWithOpenings, wallFaceZ, withWhite, type Hole } from './facadeBuild'
 import { FIRE_ESCAPES } from './FireEscapes'
 import { WINDOW_VARIANTS, type WindowVariant } from '@/lib/textures'
+import { windowSurroundBatches } from './windowBatches'
 
 const rotFor = (side: -1 | 1) => (side === -1 ? Math.PI / 2 : -Math.PI / 2)
 
@@ -358,12 +359,7 @@ vLCam = (inverse(imw_) * vec4(cameraPosition, 1.0)).xyz;`,
       meshes.push(im)
       mats.push(mat)
     }
-    const sIm = new THREE.InstancedMesh(surroundGeo, surround, surrounds.length)
-    sIm.castShadow = true
-    surrounds.forEach((m, i) => sIm.setMatrixAt(i, m))
-    sIm.instanceMatrix.needsUpdate = true
-    sIm.frustumCulled = false
-    meshes.push(sIm)
+    meshes.push(...windowSurroundBatches(surrounds, surroundGeo, surround))
     return { meshes, mats, geos: [plane, surroundGeo, ...geos], surround }
   }, [data])
 

@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "RoS3xkOOK-nRtwDPMdhdT",
+  "tier": "balanced",
+  "viewport": [
+    640,
+    360
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "diagnostic",
+  "softwareGL": true,
+  "rows": [],
+  "errors": []
+}

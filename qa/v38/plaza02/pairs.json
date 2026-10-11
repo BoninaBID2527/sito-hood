@@ -1,0 +1,292 @@
+[
+  {
+    "n": 1,
+    "name": "street-opening",
+    "tier": "balanced",
+    "before": "before-balanced/01-street-opening.webp",
+    "after": "after-balanced/01-street-opening.webp",
+    "cameraDistanceMetres": 1.0577723101816508e-05,
+    "cameraRotationDegrees": 8.286443939168445e-05,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 10,
+    "name": "plaza-front",
+    "tier": "balanced",
+    "before": "before-balanced/10-plaza-front.webp",
+    "after": "after-balanced/10-plaza-front.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 2.9575586669421963e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 11,
+    "name": "plaza-in-000",
+    "tier": "balanced",
+    "before": "before-balanced/11-plaza-in-000.webp",
+    "after": "after-balanced/11-plaza-in-000.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 12,
+    "name": "plaza-in-045",
+    "tier": "balanced",
+    "before": "before-balanced/12-plaza-in-045.webp",
+    "after": "after-balanced/12-plaza-in-045.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 13,
+    "name": "plaza-in-090",
+    "tier": "balanced",
+    "before": "before-balanced/13-plaza-in-090.webp",
+    "after": "after-balanced/13-plaza-in-090.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 14,
+    "name": "plaza-in-135",
+    "tier": "balanced",
+    "before": "before-balanced/14-plaza-in-135.webp",
+    "after": "after-balanced/14-plaza-in-135.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 15,
+    "name": "plaza-in-180",
+    "tier": "balanced",
+    "before": "before-balanced/15-plaza-in-180.webp",
+    "after": "after-balanced/15-plaza-in-180.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 16,
+    "name": "plaza-in-225",
+    "tier": "balanced",
+    "before": "before-balanced/16-plaza-in-225.webp",
+    "after": "after-balanced/16-plaza-in-225.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 17,
+    "name": "plaza-in-270",
+    "tier": "balanced",
+    "before": "before-balanced/17-plaza-in-270.webp",
+    "after": "after-balanced/17-plaza-in-270.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 18,
+    "name": "plaza-in-315",
+    "tier": "balanced",
+    "before": "before-balanced/18-plaza-in-315.webp",
+    "after": "after-balanced/18-plaza-in-315.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 19,
+    "name": "plaza-out-000",
+    "tier": "balanced",
+    "before": "before-balanced/19-plaza-out-000.webp",
+    "after": "after-balanced/19-plaza-out-000.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 20,
+    "name": "plaza-out-045",
+    "tier": "balanced",
+    "before": "before-balanced/20-plaza-out-045.webp",
+    "after": "after-balanced/20-plaza-out-045.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 21,
+    "name": "plaza-out-090",
+    "tier": "balanced",
+    "before": "before-balanced/21-plaza-out-090.webp",
+    "after": "after-balanced/21-plaza-out-090.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 22,
+    "name": "plaza-out-135",
+    "tier": "balanced",
+    "before": "before-balanced/22-plaza-out-135.webp",
+    "after": "after-balanced/22-plaza-out-135.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 23,
+    "name": "plaza-out-180",
+    "tier": "balanced",
+    "before": "before-balanced/23-plaza-out-180.webp",
+    "after": "after-balanced/23-plaza-out-180.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 24,
+    "name": "plaza-out-225",
+    "tier": "balanced",
+    "before": "before-balanced/24-plaza-out-225.webp",
+    "after": "after-balanced/24-plaza-out-225.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 25,
+    "name": "plaza-out-270",
+    "tier": "balanced",
+    "before": "before-balanced/25-plaza-out-270.webp",
+    "after": "after-balanced/25-plaza-out-270.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 26,
+    "name": "plaza-out-315",
+    "tier": "balanced",
+    "before": "before-balanced/26-plaza-out-315.webp",
+    "after": "after-balanced/26-plaza-out-315.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 1.7075472925031877e-06,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 27,
+    "name": "plaza-far-ahead",
+    "tier": "balanced",
+    "before": "before-balanced/27-plaza-far-ahead.webp",
+    "after": "after-balanced/27-plaza-far-ahead.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 28,
+    "name": "track-01",
+    "tier": "balanced",
+    "before": "before-balanced/28-track-01.webp",
+    "after": "after-balanced/28-track-01.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 29,
+    "name": "track-02",
+    "tier": "balanced",
+    "before": "before-balanced/29-track-02.webp",
+    "after": "after-balanced/29-track-02.webp",
+    "cameraDistanceMetres": 2.339889309056523e-06,
+    "cameraRotationDegrees": 1.3445240826417657e-05,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 30,
+    "name": "track-03",
+    "tier": "balanced",
+    "before": "before-balanced/30-track-03.webp",
+    "after": "after-balanced/30-track-03.webp",
+    "cameraDistanceMetres": 7.151282092504356e-06,
+    "cameraRotationDegrees": 3.482726785942526e-05,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 31,
+    "name": "track-04",
+    "tier": "balanced",
+    "before": "before-balanced/31-track-04.webp",
+    "after": "after-balanced/31-track-04.webp",
+    "cameraDistanceMetres": 0.00023461171039874655,
+    "cameraRotationDegrees": 0.0011180693177704638,
+    "lensEdgeDriftPixels": 0.0006577708021637818
+  },
+  {
+    "n": 32,
+    "name": "track-05",
+    "tier": "balanced",
+    "before": "before-balanced/32-track-05.webp",
+    "after": "after-balanced/32-track-05.webp",
+    "cameraDistanceMetres": 7.567696561321826e-06,
+    "cameraRotationDegrees": 3.6182278431638483e-05,
+    "lensEdgeDriftPixels": 2.5201678504060965e-05
+  },
+  {
+    "n": 33,
+    "name": "track-06",
+    "tier": "balanced",
+    "before": "before-balanced/33-track-06.webp",
+    "after": "after-balanced/33-track-06.webp",
+    "cameraDistanceMetres": 0.0018153905463952882,
+    "cameraRotationDegrees": 0.00939173503925048,
+    "lensEdgeDriftPixels": 2.5201678504060965e-05
+  },
+  {
+    "n": 34,
+    "name": "track-07",
+    "tier": "balanced",
+    "before": "before-balanced/34-track-07.webp",
+    "after": "after-balanced/34-track-07.webp",
+    "cameraDistanceMetres": 0.004727931357090612,
+    "cameraRotationDegrees": 0.02379439303649442,
+    "lensEdgeDriftPixels": 4.628764251890516e-06
+  },
+  {
+    "n": 91,
+    "name": "rear-shutter-close",
+    "tier": "balanced",
+    "before": "before-balanced/91-rear-shutter-close.webp",
+    "after": "after-balanced/91-rear-shutter-close.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 91,
+    "name": "rear-shutter-close",
+    "tier": "high",
+    "before": "before-high/91-rear-shutter-close.webp",
+    "after": "after-high/91-rear-shutter-close.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  },
+  {
+    "n": 92,
+    "name": "window-surround-close",
+    "tier": "balanced",
+    "before": "before-window/92-window-surround-close.webp",
+    "after": "after-window/92-window-surround-close.webp",
+    "cameraDistanceMetres": 0.0,
+    "cameraRotationDegrees": 0.0,
+    "lensEdgeDriftPixels": 0.0
+  }
+]

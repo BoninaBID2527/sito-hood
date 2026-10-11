@@ -1,0 +1,7 @@
+START diagnostic balanced 2026-10-10T20:17:22.595Z
+NAVIGATED
+ENTERED
+TEXTURES READY / MEASUREMENT VIEWPORT RESTORED
+REAR CAPTURED
+with-bump {"medianMs":535.7999999970198,"calls":104,"triangles":111886}
+without-background-bump-diagnostic {"medianMs":535.0999999940395,"calls":104,"triangles":111886}

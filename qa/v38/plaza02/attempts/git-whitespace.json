@@ -1,0 +1,10 @@
+{
+  "firstCheck": "git diff --cached --check reported blank lines at EOF in three captured command logs",
+  "files": [
+    "build-baseline.log",
+    "build-final.log",
+    "typecheck.log"
+  ],
+  "correction": "Normalize trailing blank lines only; command output and measured data retained",
+  "productFailure": false
+}

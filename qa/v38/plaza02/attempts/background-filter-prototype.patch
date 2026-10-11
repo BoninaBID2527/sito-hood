@@ -1,0 +1,55 @@
+diff --git a/components/scene/street/backgroundMaterial.ts b/components/scene/street/backgroundMaterial.ts
+index d78743e..64d3a89 100644
+--- a/components/scene/street/backgroundMaterial.ts
++++ b/components/scene/street/backgroundMaterial.ts
+@@ -62,12 +62,36 @@ export function backgroundMaterial(
+         diffuseColor.rgb *= .55 + .45*smoothstep(.015,.25,bp.y);`)
+       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+         roughnessFactor = clamp(roughnessFactor + (broad.g-.5)*.09 - damp*.07, .18, 1.);`)
+-      .replace('#include <bumpmap_pars_fragment>', THREE.ShaderChunk.bumpmap_pars_fragment
+-        // View-space derivatives retain metre scale; the supplied height
+-        // range is 8 mm. Degenerate/clipped derivatives keep geometric normal.
+-        .replace('normalize( dFdx( surf_pos.xyz ) )', 'dFdx( surf_pos.xyz )')
+-        .replace('normalize( dFdy( surf_pos.xyz ) )', 'dFdy( surf_pos.xyz )')
+-        .replace('vec3 vGrad = sign( fDet )', 'if ( !( abs( fDet ) > 1e-12 ) ) return surf_norm;\n vec3 vGrad = sign( fDet )'))
++      .replace('#include <bumpmap_pars_fragment>', `
++        #ifdef USE_BUMPMAP
++        uniform sampler2D bumpMap;
++        uniform float bumpScale;
++        vec3 backgroundBumpNormal(vec3 dx, vec3 dy, vec3 surfNormal, vec2 heightGradient, float faceDirection) {
++          vec3 r1 = cross(dy, surfNormal), r2 = cross(surfNormal, dx);
++          float determinant = dot(dx, r1) * faceDirection;
++          if (!(abs(determinant) > 1e-12)) return surfNormal;
++          vec3 gradient = sign(determinant) * (heightGradient.x * r1 + heightGradient.y * r2);
++          return normalize(abs(determinant) * surfNormal - gradient);
++        }
++        #endif`)
++      .replace('#include <normal_fragment_maps>', THREE.ShaderChunk.normal_fragment_maps.replace(
++        'normal = perturbNormalArb( - vViewPosition, normal, dHdxy_fwd(), faceDirection );', `
++        // Use the same projected-footprint fade as the street HERO material.
++        // Nearby masonry retains its 8 mm relief. Unresolved distant relief
++        // also skips three height fetches in the reflection camera's viewport.
++        // All derivatives are outside the varying branch; gradients select
++        // the correct mip even where neighbouring pixels take another branch.
++        vec2 backgroundDx = dFdx(vBumpMapUv), backgroundDy = dFdy(vBumpMapUv);
++        vec3 backgroundViewDx = dFdx(-vViewPosition), backgroundViewDy = dFdy(-vViewPosition);
++        float backgroundRelief = 1. - smoothstep(.0025, .011, max(length(backgroundDx), length(backgroundDy)));
++        if (backgroundRelief > 0.) {
++          float baseHeight = textureGrad(bumpMap, vBumpMapUv, backgroundDx, backgroundDy).r;
++          float heightX = textureGrad(bumpMap, vBumpMapUv + backgroundDx, backgroundDx, backgroundDy).r - baseHeight;
++          float heightY = textureGrad(bumpMap, vBumpMapUv + backgroundDy, backgroundDx, backgroundDy).r - baseHeight;
++          normal = backgroundBumpNormal(backgroundViewDx, backgroundViewDy, normal,
++            vec2(heightX, heightY) * bumpScale * backgroundRelief, faceDirection);
++        }`,
++      ))
+       .replace('#include <lights_fragment_begin>', lights)
+       .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+         vec3 bn = inverseTransformDirection(normal, viewMatrix);
+@@ -89,6 +113,6 @@ export function backgroundMaterial(
+         }
+         #include <opaque_fragment>`)
+   }
+-  m.customProgramCacheKey = () => `background-pbr-v37-lights2-${seed}-${macro}-${metal}-${!!opts.bump}`
++  m.customProgramCacheKey = () => `background-pbr-v38-footprint-lights2-${seed}-${macro}-${metal}-${!!opts.bump}`
+   return m
+ }

@@ -1,0 +1,22 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "branch": "work/hooddino-v3-8-02-plaza-performance",
+  "mainAtResume": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "v37Ancestor": true,
+  "mergedPrerequisites": [
+    {
+      "pr": 8,
+      "task": "01",
+      "merge": "c4b13fe4c1f064dd507afaf1b4cf673a19fa43fb"
+    },
+    {
+      "pr": 9,
+      "task": "11",
+      "merge": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5"
+    }
+  ],
+  "trackedProductDiffAtResume": [
+    "components/scene/street/Facades.tsx"
+  ],
+  "newProductHelper": "components/scene/street/windowBatches.ts"
+}

@@ -1,0 +1,15 @@
+{
+  "inspectedSuccessfulSets": {
+    "before-balanced": "all27",
+    "before-high": "one shutter close",
+    "after-balanced": "all27",
+    "after-mobile": "all27",
+    "after-high": "all20",
+    "after-ultra": "all20",
+    "before-window": "one actual surround close",
+    "after-window": "one actual surround close"
+  },
+  "inspectedDiagnostic": "rear-before-diagnostic.png",
+  "pending": [],
+  "gradesRecordedAfterFinalInspection": true
+}

@@ -1,0 +1,246 @@
+{
+  "afterAllTimingSamples": true,
+  "audits": [
+    {
+      "name": "plaza-front",
+      "camera": {
+        "position": [
+          -5.105921292178495,
+          2.6498678107562967,
+          -92.10584290689265
+        ],
+        "quaternion": [
+          -0.02274919315536511,
+          -0.23587104593997466,
+          -0.005523276377317384,
+          0.9715023506487372
+        ],
+        "fov": 50
+      },
+      "draws": [
+        {
+          "frame": 20.18830000000043,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.18830000000043,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.238300000000432,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.238300000000432,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.288300000000433,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.288300000000433,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.338300000000434,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.338300000000434,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.388300000000434,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.388300000000434,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.438300000000435,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.438300000000435,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.488300000000436,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.538300000000437,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 20.538300000000437,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        }
+      ]
+    },
+    {
+      "name": "plaza-rear",
+      "camera": {
+        "position": [
+          0,
+          2.2,
+          -111
+        ],
+        "quaternion": [
+          0.025780716278138594,
+          0,
+          0,
+          0.9996676220965577
+        ],
+        "fov": 60
+      },
+      "draws": [
+        {
+          "frame": 21.738300000000454,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.738300000000454,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.788300000000454,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.838300000000455,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.838300000000455,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.838300000000455,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.888300000000456,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.938300000000456,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.938300000000456,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 21.988300000000457,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 22.038300000000458,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 22.038300000000458,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 22.08830000000046,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        },
+        {
+          "frame": 22.08830000000046,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "global-surrounds",
+          "instances": 554
+        }
+      ]
+    }
+  ]
+}

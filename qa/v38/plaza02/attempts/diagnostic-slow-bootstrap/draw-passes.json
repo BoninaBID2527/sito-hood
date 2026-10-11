@@ -1,0 +1,792 @@
+[
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1324
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1220
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2064
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 48
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 778
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1126
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 320
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1092
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 5752
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 220
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 100
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 292
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 160
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 108
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 176
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 792
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1776
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 356
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 5708
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1080
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 6264
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2412
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 640
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 3296
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1416
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 960
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 72
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 10
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1324
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1220
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2064
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 48
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 778
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1126
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 320
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1092
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 5752
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 220
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 100
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 292
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 160
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 108
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 176
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 792
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 1776
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": true,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 356
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 5708
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1080
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 6264
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2412
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 640
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 3296
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 1416
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 960
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 72
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 24
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 10
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 12
+  },
+  {
+    "pass": "main",
+    "background": false,
+    "triangles": 2
+  }
+]

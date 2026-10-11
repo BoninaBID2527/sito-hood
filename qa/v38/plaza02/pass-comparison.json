@@ -1,0 +1,227 @@
+{
+  "timingUnaffected": true,
+  "method": "Render and shadow callbacks attached after the six cost samples. Totals sum actual instances in each runtime frame; secondary may include more than one reflected camera and is refreshed by the existing gate. These are draw submissions, not new geometry.",
+  "rows": [
+    {
+      "dataset": "recheck-before",
+      "view": "plaza-front",
+      "camera": {
+        "position": [
+          -5.105921292178495,
+          2.6498678107562967,
+          -92.10584290689265
+        ],
+        "quaternion": [
+          -0.02274919315536511,
+          -0.23587104593997466,
+          -0.005523276377317384,
+          0.9715023506487372
+        ],
+        "fov": 50
+      },
+      "passes": {
+        "main": {
+          "observedFrames": 8,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554.0,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        },
+        "secondary": {
+          "observedFrames": 3,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        },
+        "shadow": {
+          "observedFrames": 4,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554.0,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        }
+      }
+    },
+    {
+      "dataset": "recheck-before",
+      "view": "plaza-rear",
+      "camera": {
+        "position": [
+          0,
+          2.2,
+          -111
+        ],
+        "quaternion": [
+          0.025780716278138594,
+          0,
+          0,
+          0.9996676220965577
+        ],
+        "fov": 60
+      },
+      "passes": {
+        "shadow": {
+          "observedFrames": 4,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554.0,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        },
+        "main": {
+          "observedFrames": 8,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554.0,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        },
+        "secondary": {
+          "observedFrames": 2,
+          "instanceTotalsPerObservedFrame": [
+            554
+          ],
+          "medianInstancesPerObservedFrame": 554.0,
+          "drawnBatchNames": [
+            "global-surrounds"
+          ]
+        }
+      }
+    },
+    {
+      "dataset": "recheck-after",
+      "view": "plaza-front",
+      "camera": {
+        "position": [
+          -5.10606227171391,
+          2.649875400598742,
+          -92.1059982605965
+        ],
+        "quaternion": [
+          -0.022749043866522232,
+          -0.23588089675707985,
+          -0.0055234843867740194,
+          0.9714999612292653
+        ],
+        "fov": 50
+      },
+      "passes": {
+        "main": {
+          "observedFrames": 8,
+          "instanceTotalsPerObservedFrame": [
+            231
+          ],
+          "medianInstancesPerObservedFrame": 231.0,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-left-front",
+            "window-surrounds-plaza-left-rear",
+            "window-surrounds-plaza-right-front",
+            "window-surrounds-plaza-right-rear"
+          ]
+        },
+        "secondary": {
+          "observedFrames": 3,
+          "instanceTotalsPerObservedFrame": [
+            231
+          ],
+          "medianInstancesPerObservedFrame": 231,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-left-front",
+            "window-surrounds-plaza-left-rear",
+            "window-surrounds-plaza-right-front",
+            "window-surrounds-plaza-right-rear"
+          ]
+        },
+        "shadow": {
+          "observedFrames": 4,
+          "instanceTotalsPerObservedFrame": [
+            341
+          ],
+          "medianInstancesPerObservedFrame": 341.0,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-left-front",
+            "window-surrounds-plaza-left-rear",
+            "window-surrounds-plaza-right-front",
+            "window-surrounds-plaza-right-rear",
+            "window-surrounds-street-far"
+          ]
+        }
+      }
+    },
+    {
+      "dataset": "recheck-after",
+      "view": "plaza-rear",
+      "camera": {
+        "position": [
+          0,
+          2.2,
+          -111
+        ],
+        "quaternion": [
+          0.025780716278138594,
+          0,
+          0,
+          0.9996676220965577
+        ],
+        "fov": 60
+      },
+      "passes": {
+        "shadow": {
+          "observedFrames": 4,
+          "instanceTotalsPerObservedFrame": [
+            341
+          ],
+          "medianInstancesPerObservedFrame": 341.0,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-left-front",
+            "window-surrounds-plaza-left-rear",
+            "window-surrounds-plaza-right-front",
+            "window-surrounds-plaza-right-rear",
+            "window-surrounds-street-far"
+          ]
+        },
+        "main": {
+          "observedFrames": 8,
+          "instanceTotalsPerObservedFrame": [
+            132
+          ],
+          "medianInstancesPerObservedFrame": 132.0,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-left-rear",
+            "window-surrounds-plaza-right-rear"
+          ]
+        },
+        "secondary": {
+          "observedFrames": 2,
+          "instanceTotalsPerObservedFrame": [
+            108
+          ],
+          "medianInstancesPerObservedFrame": 108.0,
+          "drawnBatchNames": [
+            "window-surrounds-passage",
+            "window-surrounds-plaza-right-rear"
+          ]
+        }
+      }
+    }
+  ]
+}

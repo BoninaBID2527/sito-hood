@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "tier": "balanced",
+      "instances": 554,
+      "batches": 7,
+      "geometryAndMaterialShared": true,
+      "matricesAndTemplateUnchanged": true,
+      "maxDeformedVertexExcess": -0.1935499828596079
+    },
+    {
+      "tier": "mobile",
+      "instances": 554,
+      "batches": 7,
+      "geometryAndMaterialShared": true,
+      "matricesAndTemplateUnchanged": true,
+      "maxDeformedVertexExcess": -0.1935499828596079
+    },
+    {
+      "tier": "high",
+      "instances": 554,
+      "batches": 7,
+      "geometryAndMaterialShared": true,
+      "matricesAndTemplateUnchanged": true,
+      "maxDeformedVertexExcess": -0.1935499828596079
+    },
+    {
+      "tier": "ultra",
+      "instances": 554,
+      "batches": 7,
+      "geometryAndMaterialShared": true,
+      "matricesAndTemplateUnchanged": true,
+      "maxDeformedVertexExcess": -0.1935499828596079
+    }
+  ]
+}

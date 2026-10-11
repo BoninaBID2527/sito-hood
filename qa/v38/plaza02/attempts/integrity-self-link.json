@@ -1,0 +1,6 @@
+{
+  "check": "artifact integrity",
+  "firstAttempt": "AssertionError: TESTS.md link to integrity.json did not exist before generating the manifest",
+  "correction": "Generate the manifest before checking its self-referencing Markdown link; every link still required to exist",
+  "productFailure": false
+}

@@ -1,0 +1,157 @@
+[
+  {
+    "name": "baseline-cost",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3001",
+      "qa/v38/plaza02/baseline-cost",
+      "/workspace/hood-plaza02-before/.next",
+      "balanced",
+      "cost"
+    ],
+    "started": "2026-10-10T20:20:19.825Z",
+    "ended": "2026-10-10T20:27:05.617Z",
+    "exit": 0
+  },
+  {
+    "name": "baseline-visual",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3001",
+      "qa/v38/plaza02/before-balanced",
+      "/workspace/hood-plaza02-before/.next",
+      "balanced",
+      "visual"
+    ],
+    "started": "2026-10-10T20:27:05.620Z",
+    "ended": "2026-10-10T20:35:23.129Z",
+    "exit": 0
+  },
+  {
+    "name": "baseline-high-close",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3001",
+      "qa/v38/plaza02/before-high",
+      "/workspace/hood-plaza02-before/.next",
+      "high",
+      "visual"
+    ],
+    "started": "2026-10-10T20:35:23.169Z",
+    "ended": "2026-10-10T20:37:59.365Z",
+    "exit": 0
+  },
+  {
+    "name": "build-final",
+    "args": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "started": "2026-10-10T20:37:59.391Z",
+    "ended": "2026-10-10T20:38:07.297Z",
+    "exit": 0
+  },
+  {
+    "name": "typecheck",
+    "args": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "started": "2026-10-10T20:38:07.298Z",
+    "ended": "2026-10-10T20:38:09.277Z",
+    "exit": 0
+  },
+  {
+    "name": "candidate-cost",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/candidate-cost",
+      ".next",
+      "balanced",
+      "cost"
+    ],
+    "started": "2026-10-10T20:38:10.450Z",
+    "ended": "2026-10-10T20:44:58.702Z",
+    "exit": 0
+  },
+  {
+    "name": "candidate-balanced",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/after-balanced",
+      ".next",
+      "balanced",
+      "visual"
+    ],
+    "started": "2026-10-10T20:44:58.713Z",
+    "ended": "2026-10-10T20:54:38.802Z",
+    "exit": 0
+  },
+  {
+    "name": "candidate-mobile",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/after-mobile",
+      ".next",
+      "mobile",
+      "visual"
+    ],
+    "started": "2026-10-11T16:00:01.614Z",
+    "ended": "2026-10-11T16:04:03.903Z",
+    "exit": 0
+  },
+  {
+    "name": "candidate-high",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/after-high",
+      ".next",
+      "high",
+      "visual"
+    ],
+    "started": "2026-10-11T16:04:03.904Z",
+    "ended": "2026-10-11T16:09:18.294Z",
+    "exit": 0
+  },
+  {
+    "name": "candidate-ultra",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/after-ultra",
+      ".next",
+      "ultra",
+      "visual"
+    ],
+    "started": "2026-10-11T16:09:18.295Z",
+    "ended": "2026-10-11T16:16:07.622Z",
+    "exit": 0
+  },
+  {
+    "name": "tracks",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "scripts/tracks-check.mjs",
+      "http://127.0.0.1:3000/",
+      "balanced",
+      "640x360"
+    ],
+    "started": "2026-10-11T16:16:07.622Z",
+    "ended": "2026-10-11T16:29:01.212Z",
+    "exit": 0
+  }
+]

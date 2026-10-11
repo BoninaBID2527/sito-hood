@@ -1,0 +1,1481 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "RoS3xkOOK-nRtwDPMdhdT",
+  "tier": "balanced",
+  "viewport": [
+    640,
+    360
+  ],
+  "bootstrapViewport": [
+    320,
+    180
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "visual",
+  "softwareGL": true,
+  "started": "2026-10-10T20:27:07.493Z",
+  "rows": [
+    {
+      "n": 1,
+      "name": "street-opening",
+      "file": "01-street-opening.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.052407821752834,
+          1.3057712504350776,
+          17.5
+        ],
+        "quaternion": [
+          0.024000266937333106,
+          0.016558031484492485,
+          -0.010914789276435197,
+          0.9995152255745514
+        ],
+        "fov": 47
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0,
+      "calls": 195,
+      "triangles": 127474,
+      "textures": 74,
+      "geometries": 152,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "d170dc66299351416b6518d3ec29f355815dce1a43e92abde045e1195394e6b2",
+      "sha256": "1b7e0c6344aee4aa2013bcda7d46b13a8916efdebd7bfa88be00b4e8037b09b2"
+    },
+    {
+      "n": 10,
+      "name": "plaza-front",
+      "file": "10-plaza-front.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -5.108372730736951,
+          2.65,
+          -92.1085457200263
+        ],
+        "quaternion": [
+          -0.02274658070896945,
+          -0.23604235426981537,
+          -0.005526889560819601,
+          0.9714607833302359
+        ],
+        "fov": 50
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.42,
+      "calls": 226,
+      "triangles": 150856,
+      "textures": 77,
+      "geometries": 178,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "15610af3fbb464d0dab0a637ffc3ecdc4a4d746094e4582d4419afe8840c8ca0",
+      "sha256": "f0f94a26df3150f176e2becfa9be3d6709cce39df871eeb606ab2d5c736c29d9"
+    },
+    {
+      "n": 11,
+      "name": "plaza-in-000",
+      "file": "11-plaza-in-000.webp",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2.3,
+          -94
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          0,
+          2.3,
+          -94
+        ],
+        "quaternion": [
+          0.01874012127521211,
+          0,
+          0,
+          0.999824388507597
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 141,
+      "triangles": 82898,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "dadec67d321be99e21d08d793a93de547f2415ebb1764a5c8a86470f8a9238c4",
+      "sha256": "e5b8366be31c6ca44bc79831d84816481ff06a7b9ae21847d61611270b059e25"
+    },
+    {
+      "n": 12,
+      "name": "plaza-in-045",
+      "file": "12-plaza-in-045.webp",
+      "inspectionCamera": {
+        "pos": [
+          -5.65685424949238,
+          2.3,
+          -96.34314575050762
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          -5.65685424949238,
+          2.3,
+          -96.34314575050762
+        ],
+        "quaternion": [
+          0.017313614482947777,
+          -0.3826162287564141,
+          0.007171533932536208,
+          0.9237172886477819
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 221,
+      "triangles": 149590,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "a5679d853dabca61a4996826838635be447e8d198825762cab6586462160c64a",
+      "sha256": "91e4bf74aaa2a75895ef44cbb371b11dedfc9bfcf02e89af17cd1540d84cfbc1"
+    },
+    {
+      "n": 13,
+      "name": "plaza-in-090",
+      "file": "13-plaza-in-090.webp",
+      "inspectionCamera": {
+        "pos": [
+          -8,
+          2.3,
+          -102
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          -8,
+          2.3,
+          -102
+        ],
+        "quaternion": [
+          0.013251266833960773,
+          -0.7069826051094151,
+          0.013251266833960773,
+          0.7069826051094151
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 142,
+      "triangles": 93650,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "7727b7b436976e08ee65920498dce05feea1e81f5a140792edf3d65cf2f49f99",
+      "sha256": "4bdacc738fb5717ac12e95d4baf2efef6848a5d4fd16837de6c2d0f5d504634b"
+    },
+    {
+      "n": 14,
+      "name": "plaza-in-135",
+      "file": "14-plaza-in-135.webp",
+      "inspectionCamera": {
+        "pos": [
+          -5.656854249492381,
+          2.3,
+          -107.65685424949238
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          -5.656854249492381,
+          2.3,
+          -107.65685424949238
+        ],
+        "quaternion": [
+          -0.007171533932536208,
+          0.923717288647782,
+          -0.017313614482947774,
+          -0.3826162287564141
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 253,
+      "triangles": 170008,
+      "textures": 84,
+      "geometries": 194,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "0f4cce59c4eee334bc956ae7b2e91d72116deb21cfe709be8b3c3a31519b4d14",
+      "sha256": "08986756a7a584b2b0c1e28f8dfc3dc463fd1f217ff4e15848ba4775b97609ee"
+    },
+    {
+      "n": 15,
+      "name": "plaza-in-180",
+      "file": "15-plaza-in-180.webp",
+      "inspectionCamera": {
+        "pos": [
+          -9.797174393178826e-16,
+          2.3,
+          -110
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          -9.797174393178826e-16,
+          2.3,
+          -110
+        ],
+        "quaternion": [
+          -1.1475014767660862e-18,
+          0.999824388507597,
+          -0.01874012127521211,
+          -6.122158685476442e-17
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 246,
+      "triangles": 169312,
+      "textures": 84,
+      "geometries": 194,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "a9c53067aafc6a87477ff42a04781fc3994312ebaa790bbd6a185fa25f310d4e",
+      "sha256": "6bd0b869ebe9ed8e3e05acbe7d9afaedad45057e188a3b4d0e8d97aed3a8768b"
+    },
+    {
+      "n": 16,
+      "name": "plaza-in-225",
+      "file": "16-plaza-in-225.webp",
+      "inspectionCamera": {
+        "pos": [
+          5.65685424949238,
+          2.3,
+          -107.65685424949238
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          5.65685424949238,
+          2.3,
+          -107.65685424949238
+        ],
+        "quaternion": [
+          0.007171533932536208,
+          0.9237172886477819,
+          -0.017313614482947777,
+          0.3826162287564141
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 243,
+      "triangles": 169462,
+      "textures": 84,
+      "geometries": 194,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "aae6814535e3e3d68f2f1a8746603decf3dcb660c8d15370421c3828eff4a50c",
+      "sha256": "e7b58d3591513d8e6639dc3d32e4bab0af9f2ecfcb833af3aa87a43da81d8b18"
+    },
+    {
+      "n": 17,
+      "name": "plaza-in-270",
+      "file": "17-plaza-in-270.webp",
+      "inspectionCamera": {
+        "pos": [
+          8,
+          2.3,
+          -102
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          8,
+          2.3,
+          -102
+        ],
+        "quaternion": [
+          0.013251266833960773,
+          0.7069826051094151,
+          -0.013251266833960773,
+          0.7069826051094151
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 145,
+      "triangles": 94284,
+      "textures": 84,
+      "geometries": 194,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "d20693d7a3f25ced0007df33b8b5c1c11c7e76e8958c2dfe81df077a715ef5c7",
+      "sha256": "5b7e537fd4dd84ebe8022f495269e375292e63d8fb53946729a978ce8d587c2b"
+    },
+    {
+      "n": 18,
+      "name": "plaza-in-315",
+      "file": "18-plaza-in-315.webp",
+      "inspectionCamera": {
+        "pos": [
+          5.6568542494923815,
+          2.3,
+          -96.34314575050762
+        ],
+        "look": [
+          0,
+          2.6,
+          -102
+        ],
+        "fov": 56
+      },
+      "camera": {
+        "position": [
+          5.6568542494923815,
+          2.3,
+          -96.34314575050762
+        ],
+        "quaternion": [
+          0.017313614482947774,
+          0.38261622875641416,
+          -0.007171533932536207,
+          0.9237172886477819
+        ],
+        "fov": 56
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 138,
+      "triangles": 82726,
+      "textures": 84,
+      "geometries": 194,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "08760bd3220d2d8ac1e2c214a6189849326c2a7fa373412628f6d2bd74434463",
+      "sha256": "8a8a8fd2f6ce8813ce2d0f5808307d060fedabc2cc58200f241c26a26c3cbb0a"
+    },
+    {
+      "n": 19,
+      "name": "plaza-out-000",
+      "file": "19-plaza-out-000.webp",
+      "inspectionCamera": {
+        "pos": [
+          0,
+          2.2,
+          -93
+        ],
+        "look": [
+          0,
+          3.8,
+          -62
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          0,
+          2.2,
+          -93
+        ],
+        "quaternion": [
+          0,
+          0.9996676220965577,
+          -0.025780716278138594,
+          0
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 181,
+      "triangles": 124500,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "5339753013af2787c203488a57bd5964509ef6f80c72cc2407414635e12a6b2d",
+      "sha256": "bbbe47c2b21e53c907e63bdb9ef2bb95e1200d215e7ef42a5a7acaa824146e1c"
+    },
+    {
+      "n": 20,
+      "name": "plaza-out-045",
+      "file": "20-plaza-out-045.webp",
+      "inspectionCamera": {
+        "pos": [
+          -6.363961030678928,
+          2.2,
+          -95.63603896932108
+        ],
+        "look": [
+          -28.2842712474619,
+          3.8,
+          -73.7157287525381
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          -6.363961030678928,
+          2.2,
+          -95.63603896932108
+        ],
+        "quaternion": [
+          0.009865852994148615,
+          0.9235724553692374,
+          -0.023818276102852802,
+          0.38255623684815815
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 148,
+      "triangles": 157862,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "bf494e1882777ce30d2da5573919dbd3dbd141a75ffe74bcba21f488a86b78b9",
+      "sha256": "a52fae94c7517fbb27f0725d957b20e0bd8c9099425a16bc09efff55a11eb004"
+    },
+    {
+      "n": 21,
+      "name": "plaza-out-090",
+      "file": "21-plaza-out-090.webp",
+      "inspectionCamera": {
+        "pos": [
+          -9,
+          2.2,
+          -102
+        ],
+        "look": [
+          -40,
+          3.8,
+          -102
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          -9,
+          2.2,
+          -102
+        ],
+        "quaternion": [
+          0.01822971930411821,
+          0.7068717545171068,
+          -0.01822971930411821,
+          0.7068717545171069
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 73,
+      "triangles": 71106,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "3a379b1eb41e58792ceaa1c46649f4634fa008b36714cb52c5f8ea6481e66e79",
+      "sha256": "1bdd2b7c03d586682253fa5762d1b55a99cc4aebdde559ee62568419cfe27da4"
+    },
+    {
+      "n": 22,
+      "name": "plaza-out-135",
+      "file": "22-plaza-out-135.webp",
+      "inspectionCamera": {
+        "pos": [
+          -6.3639610306789285,
+          2.2,
+          -108.36396103067892
+        ],
+        "look": [
+          -28.284271247461902,
+          3.8,
+          -130.2842712474619
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          -6.3639610306789285,
+          2.2,
+          -108.36396103067892
+        ],
+        "quaternion": [
+          0.0238182761028528,
+          0.3825562368481581,
+          -0.009865852994148615,
+          0.9235724553692374
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 102,
+      "triangles": 111882,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "471cb3c2de0b6d1dcf16065fd71f3f1e9b62edc56e3a3fffaff08da88d27f116",
+      "sha256": "58a83e09c1244fd8d61580eba9f0554424075f56485378d379267848a98a6fbd"
+    },
+    {
+      "n": 23,
+      "name": "plaza-out-180",
+      "file": "23-plaza-out-180.webp",
+      "inspectionCamera": {
+        "pos": [
+          -1.102182119232618e-15,
+          2.2,
+          -111
+        ],
+        "look": [
+          -4.898587196589413e-15,
+          3.8,
+          -142
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          -1.102182119232618e-15,
+          2.2,
+          -111
+        ],
+        "quaternion": [
+          0.025780716278138594,
+          6.121198768058977e-17,
+          -1.578613583487425e-18,
+          0.9996676220965577
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 104,
+      "triangles": 111886,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "a15a39757f52e145e97df0a6ba64983d930a0655ac8a21c0f1eb15d6c203475c",
+      "sha256": "cf89c31f1e56b9f4b35029bf10038c82c112df570418f1bf7aa8c9762b11fad0"
+    },
+    {
+      "n": 24,
+      "name": "plaza-out-225",
+      "file": "24-plaza-out-225.webp",
+      "inspectionCamera": {
+        "pos": [
+          6.363961030678928,
+          2.2,
+          -108.36396103067892
+        ],
+        "look": [
+          28.2842712474619,
+          3.8,
+          -130.2842712474619
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          6.363961030678928,
+          2.2,
+          -108.36396103067892
+        ],
+        "quaternion": [
+          0.0238182761028528,
+          -0.3825562368481581,
+          0.009865852994148615,
+          0.9235724553692374
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 80,
+      "triangles": 70116,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "e9cf31b689f2864da19414b9cee62879efa91edda13e048aaed3c096de47d70d",
+      "sha256": "5f0afdf19208d50f691ace440c280eaa8f3c6808ba3a687268601e9a29747a96"
+    },
+    {
+      "n": 25,
+      "name": "plaza-out-270",
+      "file": "25-plaza-out-270.webp",
+      "inspectionCamera": {
+        "pos": [
+          9,
+          2.2,
+          -102
+        ],
+        "look": [
+          40,
+          3.8,
+          -102.00000000000001
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          9,
+          2.2,
+          -102
+        ],
+        "quaternion": [
+          0.018229719304118215,
+          -0.7068717545171067,
+          0.018229719304118208,
+          0.706871754517107
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 74,
+      "triangles": 72226,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "11cab7f46009a92eda87b3e27ad34146186d043e5a1215759da1b947a56ea359",
+      "sha256": "1ca7777f77fd44c9d5c4962c973c1a013c89f74a2e4d9f162209f0591def6b25"
+    },
+    {
+      "n": 26,
+      "name": "plaza-out-315",
+      "file": "26-plaza-out-315.webp",
+      "inspectionCamera": {
+        "pos": [
+          6.363961030678929,
+          2.2,
+          -95.63603896932108
+        ],
+        "look": [
+          28.28427124746191,
+          3.8,
+          -73.7157287525381
+        ],
+        "fov": 60
+      },
+      "camera": {
+        "position": [
+          6.363961030678929,
+          2.2,
+          -95.63603896932108
+        ],
+        "quaternion": [
+          -0.009865852994148617,
+          0.9235724553692374,
+          -0.0238182761028528,
+          -0.3825562368481582
+        ],
+        "fov": 60
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 127,
+      "triangles": 118308,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "2ec9448b565673916a084b2ada13e7079d54fd9c4dcc29c91374f8d5c4259c32",
+      "sha256": "45fd2d945ae84f4a2b1f2202e62aa9c5ae58016dbbda187aa3dfcfa59ca25710"
+    },
+    {
+      "n": 27,
+      "name": "plaza-far-ahead",
+      "file": "27-plaza-far-ahead.webp",
+      "inspectionCamera": {
+        "pos": [
+          2.8,
+          2.7,
+          -111
+        ],
+        "look": [
+          0,
+          5.5,
+          -146
+        ],
+        "fov": 50
+      },
+      "camera": {
+        "position": [
+          2.8,
+          2.7,
+          -111
+        ],
+        "quaternion": [
+          0.03974623107003986,
+          0.0398728123851245,
+          -0.0015873135916262952,
+          0.9984126783969591
+        ],
+        "fov": 50
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 82,
+      "triangles": 73958,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "e0522d37372b27105fe7e90c58a533782d8b8b92abc001b32a01b7f5ae9f7c47",
+      "sha256": "c045cf13f09b8856fa1f6bf521266c74c4266194d8a76b4e85189f69e0084a74"
+    },
+    {
+      "n": 28,
+      "name": "track-01",
+      "file": "28-track-01.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -5.111465094388585,
+          2.6501675406225402,
+          -92.11195811081036
+        ],
+        "quaternion": [
+          -0.02274763448470588,
+          -0.23627461459816623,
+          -0.005532906109095455,
+          0.9714042611455986
+        ],
+        "fov": 50
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.41,
+      "calls": 226,
+      "triangles": 150856,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "b52b31f56f6b5d3d4d9ccf5b615ef644303624e4120cf94df362304bfb4255af",
+      "sha256": "14fc07e27a64c6e267c471df55cf8b0fcdb96bd4e32f025dd6b19a8be8dac2f7"
+    },
+    {
+      "n": 29,
+      "name": "track-02",
+      "file": "29-track-02.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -10.113408634024143,
+          3.6500082048047338,
+          -102.53507488844726
+        ],
+        "quaternion": [
+          -0.007614528889586429,
+          -0.7255020542506397,
+          -0.008028058567899976,
+          0.6881310474782559
+        ],
+        "fov": 50
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.44083333333333335,
+      "calls": 168,
+      "triangles": 135902,
+      "textures": 85,
+      "geometries": 196,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "51c3d6adfb6991163e0ad81048d521c5fdbedfc03982e022a839cbff8887bc8f",
+      "sha256": "627cc7a2384ea5315e5b58bf79f483c963fc6ee6392449567162713c78607183"
+    },
+    {
+      "n": 30,
+      "name": "track-03",
+      "file": "30-track-03.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          -4.4569713916957125,
+          2.899472253251738,
+          -111.96433263027892
+        ],
+        "quaternion": [
+          0.005531905577164997,
+          0.9776276844251149,
+          0.025917620867733637,
+          -0.20866668539762112
+        ],
+        "fov": 50
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.4716666666666667,
+      "calls": 244,
+      "triangles": 166550,
+      "textures": 86,
+      "geometries": 201,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "65629fe1ed96050e727ab4f0b1af719efef3a3de427854139bb926b00e30c977",
+      "sha256": "f1f8100e644f20c5e73bc3ca85099daea2f2e25bbbfcf1bdd422206124e67d2a"
+    },
+    {
+      "n": 31,
+      "name": "track-04",
+      "file": "31-track-04.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          2.494606622401838,
+          4.000020266195277,
+          -115.2007911256441
+        ],
+        "quaternion": [
+          0.003968691999561774,
+          0.9947429804978608,
+          -0.04238897315656405,
+          0.09313338385765456
+        ],
+        "fov": 53.99653349061136
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.5025,
+      "calls": 235,
+      "triangles": 166240,
+      "textures": 87,
+      "geometries": 207,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "cce5706941242f4f12511001d6794e09bb0189db0faaa82a1b6ae1889861c0b0",
+      "sha256": "465b583ebcbe0382816068420cb7cbf4d81cb665888d730355af8a9b585573fa"
+    },
+    {
+      "n": 32,
+      "name": "track-05",
+      "file": "32-track-05.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          8.997368889560013,
+          2.5002128443073017,
+          -107.50481447070567
+        ],
+        "quaternion": [
+          -0.013515896308615475,
+          0.8719795111248207,
+          0.02411317072720484,
+          0.4887612993302294
+        ],
+        "fov": 50.00426578821735
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.5333333333333333,
+      "calls": 272,
+      "triangles": 199040,
+      "textures": 88,
+      "geometries": 211,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "24664349c82e33c2f666a5d69e3a46bbbecce04b17c9d413131550a532f617c5",
+      "sha256": "bc0713b041d56e3467932697a304c803acdc112876571229b26899e5442c99f3"
+    },
+    {
+      "n": 33,
+      "name": "track-06",
+      "file": "33-track-06.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          7.465074112939485,
+          3.3500087241255683,
+          -94.94991743711428
+        ],
+        "quaternion": [
+          -0.01611443356742699,
+          0.39577665172623727,
+          0.006946048255623169,
+          0.9181791325187041
+        ],
+        "fov": 50.00426578821735
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.5641666666666667,
+      "calls": 222,
+      "triangles": 150418,
+      "textures": 89,
+      "geometries": 218,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "a6e4e4bb86cb99173994d134c99937ab1c0d54dbd98d429556e96d84cf93547e",
+      "sha256": "b9d05ea11eec7e5b9fea7c772c9a72f879d900abc9cf21930546588a6620df6c"
+    },
+    {
+      "n": 34,
+      "name": "track-07",
+      "file": "34-track-07.webp",
+      "inspectionCamera": null,
+      "camera": {
+        "position": [
+          1.3949886412584696,
+          2.8003581410185516,
+          -90.08446566611258
+        ],
+        "quaternion": [
+          -0.013934535668400859,
+          0.0582933756851313,
+          0.0008137543279706554,
+          0.998201907867758
+        ],
+        "fov": 48.684952116983474
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.595,
+      "calls": 155,
+      "triangles": 122824,
+      "textures": 89,
+      "geometries": 218,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "2e49fadf935c159aa5646cbf4ed4340f13cdf631990b7c1e3f28df1628359e91",
+      "sha256": "3f4544a52724dabe2fb300eb7b51f5e042a006ac619e4966f050e0b68a91ed92"
+    },
+    {
+      "n": 91,
+      "name": "rear-shutter-close",
+      "file": "91-rear-shutter-close.webp",
+      "inspectionCamera": {
+        "pos": [
+          -5.6,
+          2,
+          -116.5
+        ],
+        "look": [
+          -5.6,
+          2,
+          -118
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          -5.6,
+          2,
+          -116.5
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fov": 42
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 72,
+      "triangles": 51422,
+      "textures": 89,
+      "geometries": 218,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalFixtureName": "rear-masonry-close",
+      "originalPNG_SHA256": "32e2807728e31aae667d2eb50892c1fbe7b0b93ba2eca1f752ae6b41ef53df8a",
+      "sha256": "2aaa75d111410286b8644bdc82da40e69a03fcfdb66ca31237d7233d9e351c6e"
+    }
+  ],
+  "errors": []
+}
