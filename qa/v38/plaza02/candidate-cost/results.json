@@ -1,0 +1,1342 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "VCcZnZRV9Se1UpktIzG5y",
+  "tier": "balanced",
+  "viewport": [
+    640,
+    360
+  ],
+  "bootstrapViewport": [
+    320,
+    180
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "cost",
+  "softwareGL": true,
+  "started": "2026-10-10T20:38:11.685Z",
+  "rows": [
+    {
+      "name": "opening-control",
+      "frames": [
+        {
+          "intervalMs": 2418.2999999970198,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 30.5
+        },
+        {
+          "intervalMs": 1218.7000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.799999997019768
+        },
+        {
+          "intervalMs": 1365,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.399999991059303
+        },
+        {
+          "intervalMs": 1532.699999988079,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.5
+        },
+        {
+          "intervalMs": 1316.2000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 8.399999991059303
+        },
+        {
+          "intervalMs": 1360.1000000089407,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.0999999940395355
+        },
+        {
+          "intervalMs": 1330,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 15.400000005960464
+        },
+        {
+          "intervalMs": 1320.699999988079,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 8.400000005960464
+        },
+        {
+          "intervalMs": 1366.7000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 8.299999997019768
+        },
+        {
+          "intervalMs": 1578.7999999970198,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 8.099999994039536
+        },
+        {
+          "intervalMs": 1314.800000011921,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.200000002980232
+        },
+        {
+          "intervalMs": 1445.199999988079,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.9000000059604645
+        },
+        {
+          "intervalMs": 1397.4000000059605,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 15.299999997019768
+        },
+        {
+          "intervalMs": 1596.4000000059605,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 15.799999997019768
+        },
+        {
+          "intervalMs": 1668.3999999910593,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 11.5
+        },
+        {
+          "intervalMs": 1607.5,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.100000008940697
+        },
+        {
+          "intervalMs": 1286.2000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.200000002980232
+        },
+        {
+          "intervalMs": 1293.4000000059605,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 9.099999994039536
+        },
+        {
+          "intervalMs": 1301.8999999910593,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 11.399999991059303
+        },
+        {
+          "intervalMs": 1311.9000000059605,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.899999991059303
+        },
+        {
+          "intervalMs": 1366.8999999910593,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 25.799999997019768
+        },
+        {
+          "intervalMs": 1523.800000011921,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.5
+        },
+        {
+          "intervalMs": 1309.199999988079,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.399999991059303
+        },
+        {
+          "intervalMs": 1396.7000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.200000002980232
+        }
+      ],
+      "medianMs": 1366.7000000029802,
+      "medianCpuMs": 8.099999994039536,
+      "calls": 201,
+      "triangles": 127474,
+      "textures": 74,
+      "geometries": 152,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "plaza-front",
+      "frames": [
+        {
+          "intervalMs": 618.4000000059605,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 8.700000002980232
+        },
+        {
+          "intervalMs": 1379.5,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 8.799999997019768
+        },
+        {
+          "intervalMs": 103.19999998807907,
+          "progress": 0.42,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 12.699999988079071
+        },
+        {
+          "intervalMs": 529.4000000059605,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 7.300000011920929
+        },
+        {
+          "intervalMs": 638.0999999940395,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 6.300000011920929
+        },
+        {
+          "intervalMs": 756.8000000119209,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4
+        },
+        {
+          "intervalMs": 645,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 5.700000002980232
+        },
+        {
+          "intervalMs": 1112.699999988079,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4.299999997019768
+        },
+        {
+          "intervalMs": 142.5,
+          "progress": 0.42,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 8.400000005960464
+        },
+        {
+          "intervalMs": 665.1000000089407,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 7.5
+        },
+        {
+          "intervalMs": 608.2000000029802,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 6
+        },
+        {
+          "intervalMs": 789.5,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 6.399999991059303
+        },
+        {
+          "intervalMs": 600.1999999880791,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 4.199999988079071
+        },
+        {
+          "intervalMs": 636.5,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4.299999997019768
+        },
+        {
+          "intervalMs": 645.8000000119209,
+          "progress": 0.42,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 9.5
+        },
+        {
+          "intervalMs": 617.6999999880791,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 8.5
+        },
+        {
+          "intervalMs": 622.8000000119209,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 6.100000008940697
+        },
+        {
+          "intervalMs": 784.2999999970198,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 3.7999999970197678
+        },
+        {
+          "intervalMs": 613.0999999940395,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 8.200000002980232
+        },
+        {
+          "intervalMs": 617.6000000089407,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 6.300000011920929
+        },
+        {
+          "intervalMs": 602.5999999940395,
+          "progress": 0.42,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 15.799999997019768
+        },
+        {
+          "intervalMs": 651.0999999940395,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 9
+        },
+        {
+          "intervalMs": 586.8000000119209,
+          "progress": 0.42,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 5
+        },
+        {
+          "intervalMs": 764.7999999970198,
+          "progress": 0.42,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 5.799999997019768
+        }
+      ],
+      "medianMs": 636.5,
+      "medianCpuMs": 6.399999991059303,
+      "calls": 168,
+      "triangles": 97122,
+      "textures": 77,
+      "geometries": 178,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "plaza-rear",
+      "frames": [
+        {
+          "intervalMs": 444.5,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 5.0999999940395355
+        },
+        {
+          "intervalMs": 552.7000000029802,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 3.6000000089406967
+        },
+        {
+          "intervalMs": 593.5,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 31.900000005960464
+        },
+        {
+          "intervalMs": 520.2000000029802,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 4.5
+        },
+        {
+          "intervalMs": 503.90000000596046,
+          "progress": 0.45,
+          "calls": 170,
+          "triangles": 126008,
+          "reflectionPasses": 59,
+          "cpuMs": 12.400000005960464
+        },
+        {
+          "intervalMs": 829.2999999970198,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 4.200000002980232
+        },
+        {
+          "intervalMs": 8.799999997019768,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 3.0999999940395355
+        },
+        {
+          "intervalMs": 779,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 7.800000011920929
+        },
+        {
+          "intervalMs": 287.40000000596046,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 6.300000011920929
+        },
+        {
+          "intervalMs": 498.09999999403954,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 4.299999997019768
+        },
+        {
+          "intervalMs": 485.29999999701977,
+          "progress": 0.45,
+          "calls": 170,
+          "triangles": 126008,
+          "reflectionPasses": 59,
+          "cpuMs": 49
+        },
+        {
+          "intervalMs": 492.79999999701977,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 3.8999999910593033
+        },
+        {
+          "intervalMs": 836.9000000059605,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 7.600000008940697
+        },
+        {
+          "intervalMs": 285.70000000298023,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 2.8999999910593033
+        },
+        {
+          "intervalMs": 850.7000000029802,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 8.5
+        },
+        {
+          "intervalMs": 277.5,
+          "progress": 0.45,
+          "calls": 142,
+          "triangles": 94318,
+          "reflectionPasses": 59,
+          "cpuMs": 4.600000008940697
+        },
+        {
+          "intervalMs": 354.09999999403954,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 5.9000000059604645
+        },
+        {
+          "intervalMs": 990,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 39.70000000298023
+        },
+        {
+          "intervalMs": 366.09999999403954,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 5.799999997019768
+        },
+        {
+          "intervalMs": 589.4000000059605,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 6
+        },
+        {
+          "intervalMs": 768.7000000029802,
+          "progress": 0.45,
+          "calls": 170,
+          "triangles": 126008,
+          "reflectionPasses": 59,
+          "cpuMs": 6.600000008940697
+        },
+        {
+          "intervalMs": 622.0999999940395,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 3.8999999910593033
+        },
+        {
+          "intervalMs": 497.90000000596046,
+          "progress": 0.45,
+          "calls": 111,
+          "triangles": 81406,
+          "reflectionPasses": 0,
+          "cpuMs": 9.600000008940697
+        },
+        {
+          "intervalMs": 617,
+          "progress": 0.45,
+          "calls": 83,
+          "triangles": 49716,
+          "reflectionPasses": 0,
+          "cpuMs": 2.7999999970197678
+        }
+      ],
+      "medianMs": 520.2000000029802,
+      "medianCpuMs": 5.9000000059604645,
+      "calls": 111,
+      "triangles": 81406,
+      "textures": 79,
+      "geometries": 182,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "tracks-idle",
+      "frames": [
+        {
+          "intervalMs": 714.8000000119209,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 6.899999991059303
+        },
+        {
+          "intervalMs": 675.6999999880791,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 5.5999999940395355
+        },
+        {
+          "intervalMs": 684.3000000119209,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 44
+        },
+        {
+          "intervalMs": 1134.5,
+          "progress": 0.41,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 23.099999994039536
+        },
+        {
+          "intervalMs": 195.59999999403954,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 15.200000002980232
+        },
+        {
+          "intervalMs": 504.5,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 6.9000000059604645
+        },
+        {
+          "intervalMs": 916.2000000029802,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 12.900000005960464
+        },
+        {
+          "intervalMs": 668.8999999910593,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 4.899999991059303
+        },
+        {
+          "intervalMs": 621.4000000059605,
+          "progress": 0.41,
+          "calls": 234,
+          "triangles": 119848,
+          "reflectionPasses": 91,
+          "cpuMs": 6.299999997019768
+        },
+        {
+          "intervalMs": 604.5,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 7.600000008940697
+        },
+        {
+          "intervalMs": 655,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 7
+        },
+        {
+          "intervalMs": 744.9000000059605,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 5.700000002980232
+        },
+        {
+          "intervalMs": 652.7999999970198,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4.799999997019768
+        },
+        {
+          "intervalMs": 662.3999999910593,
+          "progress": 0.41,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 18.900000005960464
+        },
+        {
+          "intervalMs": 579.6000000089407,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 7.899999991059303
+        },
+        {
+          "intervalMs": 601.0999999940395,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 4.200000002980232
+        },
+        {
+          "intervalMs": 798.6000000089407,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4.100000008940697
+        },
+        {
+          "intervalMs": 648.5,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 40.3999999910593
+        },
+        {
+          "intervalMs": 623.7999999970198,
+          "progress": 0.41,
+          "calls": 234,
+          "triangles": 119848,
+          "reflectionPasses": 91,
+          "cpuMs": 8.700000002980232
+        },
+        {
+          "intervalMs": 798.2000000029802,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 11.400000005960464
+        },
+        {
+          "intervalMs": 814.6999999880791,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 6.5999999940395355
+        },
+        {
+          "intervalMs": 788.8000000119209,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 10.799999997019768
+        },
+        {
+          "intervalMs": 597.8999999910593,
+          "progress": 0.41,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 5.200000002980232
+        },
+        {
+          "intervalMs": 607.5,
+          "progress": 0.41,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 18.19999998807907
+        }
+      ],
+      "medianMs": 662.3999999910593,
+      "medianCpuMs": 7.600000008940697,
+      "calls": 168,
+      "triangles": 97122,
+      "textures": 79,
+      "geometries": 182,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "tracks-moving",
+      "frames": [
+        {
+          "intervalMs": 681.2999999970198,
+          "progress": 0.41,
+          "calls": 168,
+          "triangles": 97122,
+          "reflectionPasses": 0,
+          "cpuMs": 4.899999991059303
+        },
+        {
+          "intervalMs": 788.7000000029802,
+          "progress": 0.4102551749870429,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 4.899999991059303
+        },
+        {
+          "intervalMs": 696.0999999940395,
+          "progress": 0.4110828442522292,
+          "calls": 259,
+          "triangles": 149822,
+          "reflectionPasses": 91,
+          "cpuMs": 22.5
+        },
+        {
+          "intervalMs": 744.1000000089407,
+          "progress": 0.4126486933968156,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 10.699999988079071
+        },
+        {
+          "intervalMs": 661,
+          "progress": 0.41502342305619927,
+          "calls": 258,
+          "triangles": 147422,
+          "reflectionPasses": 90,
+          "cpuMs": 8
+        },
+        {
+          "intervalMs": 870,
+          "progress": 0.41821503169571417,
+          "calls": 143,
+          "triangles": 67148,
+          "reflectionPasses": 0,
+          "cpuMs": 33
+        },
+        {
+          "intervalMs": 614.7000000029802,
+          "progress": 0.4221845079706434,
+          "calls": 257,
+          "triangles": 146302,
+          "reflectionPasses": 90,
+          "cpuMs": 7.5
+        },
+        {
+          "intervalMs": 807.3999999910593,
+          "progress": 0.4268553530887155,
+          "calls": 142,
+          "triangles": 66028,
+          "reflectionPasses": 0,
+          "cpuMs": 7.4000000059604645
+        },
+        {
+          "intervalMs": 606.7999999970198,
+          "progress": 0.432143208235624,
+          "calls": 259,
+          "triangles": 147034,
+          "reflectionPasses": 92,
+          "cpuMs": 10.799999997019768
+        },
+        {
+          "intervalMs": 792.4000000059605,
+          "progress": 0.4379659006696038,
+          "calls": 141,
+          "triangles": 66026,
+          "reflectionPasses": 0,
+          "cpuMs": 7.300000011920929
+        },
+        {
+          "intervalMs": 608.2999999970198,
+          "progress": 0.44424120522644844,
+          "calls": 244,
+          "triangles": 144216,
+          "reflectionPasses": 82,
+          "cpuMs": 8
+        },
+        {
+          "intervalMs": 816.7000000029802,
+          "progress": 0.4508821982412077,
+          "calls": 140,
+          "triangles": 67278,
+          "reflectionPasses": 0,
+          "cpuMs": 11.200000002980232
+        },
+        {
+          "intervalMs": 617.9000000059605,
+          "progress": 0.45781592297388374,
+          "calls": 251,
+          "triangles": 150498,
+          "reflectionPasses": 82,
+          "cpuMs": 22.5
+        },
+        {
+          "intervalMs": 1167,
+          "progress": 0.4649851461208364,
+          "calls": 141,
+          "triangles": 68080,
+          "reflectionPasses": 0,
+          "cpuMs": 6.800000011920929
+        },
+        {
+          "intervalMs": 702.5,
+          "progress": 0.4723400112563184,
+          "calls": 250,
+          "triangles": 148990,
+          "reflectionPasses": 82,
+          "cpuMs": 10.400000005960464
+        },
+        {
+          "intervalMs": 778.7999999970198,
+          "progress": 0.4798290298410787,
+          "calls": 142,
+          "triangles": 72396,
+          "reflectionPasses": 0,
+          "cpuMs": 7
+        },
+        {
+          "intervalMs": 899.5999999940395,
+          "progress": 0.48741475148628877,
+          "calls": 268,
+          "triangles": 174280,
+          "reflectionPasses": 85,
+          "cpuMs": 48.70000000298023
+        },
+        {
+          "intervalMs": 1054.1000000089407,
+          "progress": 0.4950735743159128,
+          "calls": 158,
+          "triangles": 92706,
+          "reflectionPasses": 0,
+          "cpuMs": 10.799999997019768
+        },
+        {
+          "intervalMs": 677.6999999880791,
+          "progress": 0.5027862378190808,
+          "calls": 278,
+          "triangles": 198574,
+          "reflectionPasses": 90,
+          "cpuMs": 11.799999997019768
+        },
+        {
+          "intervalMs": 886.4000000059605,
+          "progress": 0.5105282254825063,
+          "calls": 165,
+          "triangles": 102174,
+          "reflectionPasses": 0,
+          "cpuMs": 7.5999999940395355
+        },
+        {
+          "intervalMs": 727.2000000029802,
+          "progress": 0.5182852495802893,
+          "calls": 310,
+          "triangles": 226364,
+          "reflectionPasses": 100,
+          "cpuMs": 23.099999994039536
+        },
+        {
+          "intervalMs": 858.0999999940395,
+          "progress": 0.5260531473704113,
+          "calls": 194,
+          "triangles": 124252,
+          "reflectionPasses": 0,
+          "cpuMs": 9.600000008940697
+        },
+        {
+          "intervalMs": 3292.4000000059605,
+          "progress": 0.5338286310743983,
+          "calls": 382,
+          "triangles": 245842,
+          "reflectionPasses": 124,
+          "cpuMs": 2662
+        },
+        {
+          "intervalMs": 12.399999991059303,
+          "progress": 0.5416000448046464,
+          "calls": 227,
+          "triangles": 127748,
+          "reflectionPasses": 0,
+          "cpuMs": 10.100000008940697
+        }
+      ],
+      "medianMs": 778.7999999970198,
+      "medianCpuMs": 10.400000005960464,
+      "calls": 227,
+      "triangles": 127748,
+      "textures": 85,
+      "geometries": 196,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    },
+    {
+      "name": "opening-control-repeat",
+      "frames": [
+        {
+          "intervalMs": 1381.9000000059605,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 8.899999991059303
+        },
+        {
+          "intervalMs": 1587.5,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.799999997019768
+        },
+        {
+          "intervalMs": 1322,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7
+        },
+        {
+          "intervalMs": 1899.0999999940395,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 198.79999999701977
+        },
+        {
+          "intervalMs": 1457.1000000089407,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 10.600000008940697
+        },
+        {
+          "intervalMs": 1548.5,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.300000011920929
+        },
+        {
+          "intervalMs": 1590.2999999970198,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.9000000059604645
+        },
+        {
+          "intervalMs": 1362,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.299999997019768
+        },
+        {
+          "intervalMs": 2645.0999999940395,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 27.5
+        },
+        {
+          "intervalMs": 92.20000000298023,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.4000000059604645
+        },
+        {
+          "intervalMs": 1374.7999999970198,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.9000000059604645
+        },
+        {
+          "intervalMs": 1803.1000000089407,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 10.400000005960464
+        },
+        {
+          "intervalMs": 1608.5999999940395,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 7.100000008940697
+        },
+        {
+          "intervalMs": 1327.7000000029802,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 14.599999994039536
+        },
+        {
+          "intervalMs": 1291.0999999940395,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.399999991059303
+        },
+        {
+          "intervalMs": 1471.4000000059605,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 10.299999997019768
+        },
+        {
+          "intervalMs": 1699.2000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.600000008940697
+        },
+        {
+          "intervalMs": 1299,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 5.5
+        },
+        {
+          "intervalMs": 1304.199999988079,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 15.599999994039536
+        },
+        {
+          "intervalMs": 2185.1000000089407,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 12.700000002980232
+        },
+        {
+          "intervalMs": 2515.8999999910593,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 65.90000000596046
+        },
+        {
+          "intervalMs": 1020.7000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.5
+        },
+        {
+          "intervalMs": 1604.7000000029802,
+          "progress": 0,
+          "calls": 201,
+          "triangles": 127474,
+          "reflectionPasses": 0,
+          "cpuMs": 6.5999999940395355
+        },
+        {
+          "intervalMs": 2311.2999999970198,
+          "progress": 0,
+          "calls": 317,
+          "triangles": 216416,
+          "reflectionPasses": 116,
+          "cpuMs": 27.600000008940697
+        }
+      ],
+      "medianMs": 1548.5,
+      "medianCpuMs": 7.9000000059604645,
+      "calls": 201,
+      "triangles": 127474,
+      "textures": 85,
+      "geometries": 199,
+      "scale": 0.6,
+      "tier": "balanced",
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

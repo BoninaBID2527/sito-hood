@@ -1,0 +1,32 @@
+[
+  {
+    "name": "before-window",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3001",
+      "qa/v38/plaza02/before-window",
+      "/workspace/hood-plaza02-before/.next",
+      "balanced",
+      "visual"
+    ],
+    "started": "2026-10-11T16:29:01.213Z",
+    "ended": "2026-10-11T16:30:58.669Z",
+    "exit": 0
+  },
+  {
+    "name": "after-window",
+    "args": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/after-window",
+      "/workspace/sito-hood/.next",
+      "balanced",
+      "visual"
+    ],
+    "started": "2026-10-11T16:30:58.669Z",
+    "ended": "2026-10-11T16:32:42.475Z",
+    "exit": 0
+  }
+]

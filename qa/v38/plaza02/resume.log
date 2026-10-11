@@ -1,0 +1,17 @@
+START candidate-mobile 2026-10-11T16:00:01.613Z
+END candidate-mobile 0
+START candidate-high 2026-10-11T16:04:03.904Z
+END candidate-high 0
+START candidate-ultra 2026-10-11T16:09:18.295Z
+END candidate-ultra 0
+START tracks 2026-10-11T16:16:07.622Z
+END tracks 0
+START before-window 2026-10-11T16:29:01.213Z
+END before-window 0
+START after-window 2026-10-11T16:30:58.669Z
+END after-window 0
+START recheck-before 2026-10-11T16:32:42.475Z
+END recheck-before 0
+START recheck-after 2026-10-11T16:40:27.524Z
+END recheck-after 0
+ALL RESUMED STAGES COMPLETE

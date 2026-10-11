@@ -1,0 +1,81 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "RoS3xkOOK-nRtwDPMdhdT",
+  "tier": "high",
+  "viewport": [
+    640,
+    360
+  ],
+  "bootstrapViewport": [
+    320,
+    180
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "visual",
+  "softwareGL": true,
+  "started": "2026-10-10T20:35:24.340Z",
+  "rows": [
+    {
+      "n": 91,
+      "name": "rear-shutter-close",
+      "file": "91-rear-shutter-close.webp",
+      "inspectionCamera": {
+        "pos": [
+          -5.6,
+          2,
+          -116.5
+        ],
+        "look": [
+          -5.6,
+          2,
+          -118
+        ],
+        "fov": 42
+      },
+      "camera": {
+        "position": [
+          -5.6,
+          2,
+          -116.5
+        ],
+        "quaternion": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fov": 42
+      },
+      "tier": "high",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 124,
+      "triangles": 117252,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1536,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            768,
+            476
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 1096704
+        }
+      ],
+      "originalFixtureName": "rear-masonry-close",
+      "originalPNG_SHA256": "e5f68f3efba40a7c75967458ef02b11a3282b675aaa00fcc722d560fe88c5b45",
+      "sha256": "b823878ce6158ea0c56e7de94c998a5d7517a1d80709d74b86cdd3d655fef4bc"
+    }
+  ],
+  "errors": []
+}

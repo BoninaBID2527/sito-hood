@@ -1,0 +1,960 @@
+{
+  "afterAllTimingSamples": true,
+  "audits": [
+    {
+      "name": "plaza-front",
+      "camera": {
+        "position": [
+          -5.10606227171391,
+          2.649875400598742,
+          -92.1059982605965
+        ],
+        "quaternion": [
+          -0.022749043866522232,
+          -0.23588089675707985,
+          -0.0055234843867740194,
+          0.9714999612292653
+        ],
+        "fov": 50
+      },
+      "draws": [
+        {
+          "frame": 20.122100000001637,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.122100000001637,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.172100000001638,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.22210000000164,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.27210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.32210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.32210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.32210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.32210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.32210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.37210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.42210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.42210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.42210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.42210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.42210000000164,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 20.472100000001642,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        }
+      ]
+    },
+    {
+      "name": "plaza-rear",
+      "camera": {
+        "position": [
+          0,
+          2.2,
+          -111
+        ],
+        "quaternion": [
+          0.025780716278138594,
+          0,
+          0,
+          0.9996676220965577
+        ],
+        "fov": 60
+      },
+      "draws": [
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.67210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.72210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.72210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.72210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.77210000000166,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.82210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.82210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.82210000000166,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.872100000001662,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.922100000001663,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.922100000001663,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.922100000001663,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-street-far",
+          "instances": 110
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-front",
+          "instances": 50
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-front",
+          "instances": 49
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "shadow",
+          "cameraType": "OrthographicCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 21.972100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 22.022100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        },
+        {
+          "frame": 22.022100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-left-rear",
+          "instances": 24
+        },
+        {
+          "frame": 22.022100000001664,
+          "pass": "main",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 22.022100000001664,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-passage",
+          "instances": 87
+        },
+        {
+          "frame": 22.022100000001664,
+          "pass": "secondary",
+          "cameraType": "PerspectiveCamera",
+          "name": "window-surrounds-plaza-right-rear",
+          "instances": 21
+        }
+      ]
+    }
+  ]
+}

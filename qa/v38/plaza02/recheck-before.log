@@ -1,0 +1,10 @@
+START cost balanced 2026-10-11T16:32:43.276Z
+NAVIGATED
+ENTERED
+TEXTURES READY / MEASUREMENT VIEWPORT RESTORED
+opening-control {"medianMs":1396.3000000002794,"calls":195,"triangles":127474}
+plaza-front {"medianMs":678.3999999999069,"calls":159,"triangles":122850}
+plaza-rear {"medianMs":532.1000000000931,"calls":104,"triangles":111886}
+tracks-idle {"medianMs":674.6999999997206,"calls":159,"triangles":122850}
+tracks-moving {"medianMs":777,"calls":216,"triangles":150856}
+opening-control-repeat {"medianMs":1378.5999999996275,"calls":195,"triangles":127474}

@@ -1,0 +1,96 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "branch": "work/hooddino-v3-8-02-plaza-performance",
+  "unchanged": [
+    {
+      "file": "lib/runtime.ts",
+      "baseline": "8322d82e2213b2cf11aee10445f04851bd94c9eea95ddcae0ed9f0c426c11c1f",
+      "candidate": "8322d82e2213b2cf11aee10445f04851bd94c9eea95ddcae0ed9f0c426c11c1f"
+    },
+    {
+      "file": "lib/quality.ts",
+      "baseline": "ca625ee69c2e3449f84487bd7ac40dd8ccf6bc6dbd9f852144ea01ca0deb2f10",
+      "candidate": "ca625ee69c2e3449f84487bd7ac40dd8ccf6bc6dbd9f852144ea01ca0deb2f10"
+    },
+    {
+      "file": "lib/adaptive.ts",
+      "baseline": "78499088e6a93015dcea831d89e42ea7ca168c9903118b94022dd7ac66b3f383",
+      "candidate": "78499088e6a93015dcea831d89e42ea7ca168c9903118b94022dd7ac66b3f383"
+    },
+    {
+      "file": "components/scene/PerfGovernor.tsx",
+      "baseline": "d2965e4010681fbafa1b0d9f6aff931083641a78e8e15c5531057db34587ec50",
+      "candidate": "d2965e4010681fbafa1b0d9f6aff931083641a78e8e15c5531057db34587ec50"
+    },
+    {
+      "file": "components/ui/PerfHud.tsx",
+      "baseline": "45ab4a421e160e2fad11c1bfbc74629223ef3b19af5342cfdfbc5a6c3b40cd19",
+      "candidate": "45ab4a421e160e2fad11c1bfbc74629223ef3b19af5342cfdfbc5a6c3b40cd19"
+    },
+    {
+      "file": "effects/SkyDome.tsx",
+      "baseline": "0609b03cd450d9b763f1a00076c17c0dc94eff3874fe5a16c93da477c70336e4",
+      "candidate": "0609b03cd450d9b763f1a00076c17c0dc94eff3874fe5a16c93da477c70336e4"
+    },
+    {
+      "file": "effects/Atmosphere.tsx",
+      "baseline": "d82ac169cc762ebe1341729daac07c7c5cd2046e7e8ef7c1be0293ab3a56bb8e",
+      "candidate": "d82ac169cc762ebe1341729daac07c7c5cd2046e7e8ef7c1be0293ab3a56bb8e"
+    },
+    {
+      "file": "effects/PostFX.tsx",
+      "baseline": "f175a69ddcf24e634573e7abda17f46bcf3d45251e488f216860ab6da6f67b6c",
+      "candidate": "f175a69ddcf24e634573e7abda17f46bcf3d45251e488f216860ab6da6f67b6c"
+    },
+    {
+      "file": "components/scene/street/PlazaArch.tsx",
+      "baseline": "9480d7f8bdb5e39b4710b1bc1b06b728508f9785b0ed1a101216cc0515453cec",
+      "candidate": "9480d7f8bdb5e39b4710b1bc1b06b728508f9785b0ed1a101216cc0515453cec"
+    },
+    {
+      "file": "components/scene/street/plazaArch.ts",
+      "baseline": "ee812c8ba86663851e98003e73b85c3d6e1b7a599687cdd9cc3e358cb1beef44",
+      "candidate": "ee812c8ba86663851e98003e73b85c3d6e1b7a599687cdd9cc3e358cb1beef44"
+    },
+    {
+      "file": "components/scene/street/plazaLayout.ts",
+      "baseline": "032f1ae421093945c93d2b6b6ee85a7943ce5b4a38f6cb0ebb9ab5d0142b65b2",
+      "candidate": "032f1ae421093945c93d2b6b6ee85a7943ce5b4a38f6cb0ebb9ab5d0142b65b2"
+    },
+    {
+      "file": "components/scene/street/DistCull.tsx",
+      "baseline": "451b708f08ccda2265241a53435af59da631774f4ceb6638ee72285bc24e9d0b",
+      "candidate": "451b708f08ccda2265241a53435af59da631774f4ceb6638ee72285bc24e9d0b"
+    },
+    {
+      "file": "components/scene/street/StreetGraffiti.tsx",
+      "baseline": "b6a62fc6ed93818edaabccd66c6e2d64d2993ccf4020db012a85356eef3d6a91",
+      "candidate": "b6a62fc6ed93818edaabccd66c6e2d64d2993ccf4020db012a85356eef3d6a91"
+    },
+    {
+      "file": "components/scene/street/Decals.tsx",
+      "baseline": "318c62c1767f2ce58ddc35bd82ca6fbf79d3861a49bcc190633b8d81b6ec0958",
+      "candidate": "318c62c1767f2ce58ddc35bd82ca6fbf79d3861a49bcc190633b8d81b6ec0958"
+    },
+    {
+      "file": "components/scene/room/furniture.ts",
+      "baseline": "95fd09d553423d328239cf35de9f8daf05e2b41998eb79c689ab759dc6a69d0e",
+      "candidate": "95fd09d553423d328239cf35de9f8daf05e2b41998eb79c689ab759dc6a69d0e"
+    },
+    {
+      "file": "components/scene/street/backgroundMaterial.ts",
+      "baseline": "60ef15534054557f29fe6f875525ca54d8ee2b5091d32acc3f017b97ba949b3e",
+      "candidate": "60ef15534054557f29fe6f875525ca54d8ee2b5091d32acc3f017b97ba949b3e"
+    }
+  ],
+  "productFilesChanged": [
+    "components/scene/street/Facades.tsx",
+    "components/scene/street/windowBatches.ts"
+  ],
+  "bootstrapProtocol": "Normal 640x360 entrance; 320x180 only while procedural textures upgrade; restore 640x360 before warmup20/sample24. Same protocol before/after. No runtime/quality code changed.",
+  "implementationFiles": {
+    "components/scene/street/Facades.tsx": "a1f06ce8c1f24bed86e06321f22bb7687587df712a70aa9c753fc96015dc4143",
+    "components/scene/street/windowBatches.ts": "ef45f175b2083dd8327ee37767d04a64643c5b67dbd38519ab7fbd0fc12e5662"
+  },
+  "diagnosticFinding": "Background bump removal changed rear median 535.8 to 535.1 ms (<0.2%). Prototype not retained. Global window surrounds have frustumCulled=false; candidate partitions only these existing instances into physical facade zones."
+}

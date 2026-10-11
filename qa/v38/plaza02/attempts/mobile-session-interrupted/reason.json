@@ -1,0 +1,6 @@
+{
+  "reason": "Execution environment restarted before this stage completed; no surviving browser/server/runner processes at resume",
+  "resumedUTC": "2026-10-11",
+  "completedCaptures": 2,
+  "productFailure": false
+}

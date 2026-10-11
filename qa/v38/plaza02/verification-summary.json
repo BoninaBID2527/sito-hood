@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "completedStages": 17,
+  "runtimeTimingSamples": 768,
+  "finiteReadbacks": 125,
+  "functionalAssertions": 8,
+  "reviewedSuccessfulFrames": 125,
+  "pairedViews": 29,
+  "fullRegressionRerun": false,
+  "staticExportRerun": false,
+  "realDeviceTests": false
+}

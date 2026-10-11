@@ -1,0 +1,1511 @@
+{
+  "grading": "A plausibilmente fotografico; B vicino ma CG riconoscibile; C chiaramente CG",
+  "reviewMethod": "Actual captured images inspected in contact sheets and close details; no grade inferred from test pass",
+  "inspectedSets": [
+    "before-balanced",
+    "before-high",
+    "after-balanced",
+    "after-mobile",
+    "after-high",
+    "after-ultra",
+    "before-window",
+    "after-window"
+  ],
+  "recordedUTC": "2026-10-11T16:55:32.583083+00:00",
+  "frames": [
+    {
+      "path": "before-balanced/01-street-opening.webp",
+      "name": "street-opening",
+      "n": 1,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura e finestre troppo regolari",
+        "Risposta del suolo e delle luci ancora sintetica",
+        "Particelle visibili come effetto grafico"
+      ]
+    },
+    {
+      "path": "before-balanced/10-plaza-front.webp",
+      "name": "plaza-front",
+      "n": 10,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/11-plaza-in-000.webp",
+      "name": "plaza-in-000",
+      "n": 11,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/12-plaza-in-045.webp",
+      "name": "plaza-in-045",
+      "n": 12,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/13-plaza-in-090.webp",
+      "name": "plaza-in-090",
+      "n": 13,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/14-plaza-in-135.webp",
+      "name": "plaza-in-135",
+      "n": 14,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/15-plaza-in-180.webp",
+      "name": "plaza-in-180",
+      "n": 15,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/16-plaza-in-225.webp",
+      "name": "plaza-in-225",
+      "n": 16,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/17-plaza-in-270.webp",
+      "name": "plaza-in-270",
+      "n": 17,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/18-plaza-in-315.webp",
+      "name": "plaza-in-315",
+      "n": 18,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/19-plaza-out-000.webp",
+      "name": "plaza-out-000",
+      "n": 19,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/20-plaza-out-045.webp",
+      "name": "plaza-out-045",
+      "n": 20,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/21-plaza-out-090.webp",
+      "name": "plaza-out-090",
+      "n": 21,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "before-balanced/22-plaza-out-135.webp",
+      "name": "plaza-out-135",
+      "n": 22,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/23-plaza-out-180.webp",
+      "name": "plaza-out-180",
+      "n": 23,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "before-balanced/24-plaza-out-225.webp",
+      "name": "plaza-out-225",
+      "n": 24,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/25-plaza-out-270.webp",
+      "name": "plaza-out-270",
+      "n": 25,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "before-balanced/26-plaza-out-315.webp",
+      "name": "plaza-out-315",
+      "n": 26,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/27-plaza-far-ahead.webp",
+      "name": "plaza-far-ahead",
+      "n": 27,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "before-balanced/28-track-01.webp",
+      "name": "track-01",
+      "n": 28,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/29-track-02.webp",
+      "name": "track-02",
+      "n": 29,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/30-track-03.webp",
+      "name": "track-03",
+      "n": 30,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/31-track-04.webp",
+      "name": "track-04",
+      "n": 31,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/32-track-05.webp",
+      "name": "track-05",
+      "n": 32,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/33-track-06.webp",
+      "name": "track-06",
+      "n": 33,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/34-track-07.webp",
+      "name": "track-07",
+      "n": 34,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "before-balanced/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "before-high/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "after-balanced/01-street-opening.webp",
+      "name": "street-opening",
+      "n": 1,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura e finestre troppo regolari",
+        "Risposta del suolo e delle luci ancora sintetica",
+        "Particelle visibili come effetto grafico"
+      ]
+    },
+    {
+      "path": "after-balanced/10-plaza-front.webp",
+      "name": "plaza-front",
+      "n": 10,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/11-plaza-in-000.webp",
+      "name": "plaza-in-000",
+      "n": 11,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/12-plaza-in-045.webp",
+      "name": "plaza-in-045",
+      "n": 12,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/13-plaza-in-090.webp",
+      "name": "plaza-in-090",
+      "n": 13,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/14-plaza-in-135.webp",
+      "name": "plaza-in-135",
+      "n": 14,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/15-plaza-in-180.webp",
+      "name": "plaza-in-180",
+      "n": 15,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/16-plaza-in-225.webp",
+      "name": "plaza-in-225",
+      "n": 16,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/17-plaza-in-270.webp",
+      "name": "plaza-in-270",
+      "n": 17,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/18-plaza-in-315.webp",
+      "name": "plaza-in-315",
+      "n": 18,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/19-plaza-out-000.webp",
+      "name": "plaza-out-000",
+      "n": 19,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/20-plaza-out-045.webp",
+      "name": "plaza-out-045",
+      "n": 20,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/21-plaza-out-090.webp",
+      "name": "plaza-out-090",
+      "n": 21,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-balanced/22-plaza-out-135.webp",
+      "name": "plaza-out-135",
+      "n": 22,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/23-plaza-out-180.webp",
+      "name": "plaza-out-180",
+      "n": 23,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-balanced/24-plaza-out-225.webp",
+      "name": "plaza-out-225",
+      "n": 24,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/25-plaza-out-270.webp",
+      "name": "plaza-out-270",
+      "n": 25,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-balanced/26-plaza-out-315.webp",
+      "name": "plaza-out-315",
+      "n": 26,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/27-plaza-far-ahead.webp",
+      "name": "plaza-far-ahead",
+      "n": 27,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-balanced/28-track-01.webp",
+      "name": "track-01",
+      "n": 28,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/29-track-02.webp",
+      "name": "track-02",
+      "n": 29,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/30-track-03.webp",
+      "name": "track-03",
+      "n": 30,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/31-track-04.webp",
+      "name": "track-04",
+      "n": 31,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/32-track-05.webp",
+      "name": "track-05",
+      "n": 32,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/33-track-06.webp",
+      "name": "track-06",
+      "n": 33,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/34-track-07.webp",
+      "name": "track-07",
+      "n": 34,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-balanced/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "after-mobile/01-street-opening.webp",
+      "name": "street-opening",
+      "n": 1,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Muratura e finestre troppo regolari",
+        "Risposta del suolo e delle luci ancora sintetica",
+        "Particelle visibili come effetto grafico"
+      ]
+    },
+    {
+      "path": "after-mobile/10-plaza-front.webp",
+      "name": "plaza-front",
+      "n": 10,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/11-plaza-in-000.webp",
+      "name": "plaza-in-000",
+      "n": 11,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/12-plaza-in-045.webp",
+      "name": "plaza-in-045",
+      "n": 12,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/13-plaza-in-090.webp",
+      "name": "plaza-in-090",
+      "n": 13,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/14-plaza-in-135.webp",
+      "name": "plaza-in-135",
+      "n": 14,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/15-plaza-in-180.webp",
+      "name": "plaza-in-180",
+      "n": 15,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/16-plaza-in-225.webp",
+      "name": "plaza-in-225",
+      "n": 16,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/17-plaza-in-270.webp",
+      "name": "plaza-in-270",
+      "n": 17,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/18-plaza-in-315.webp",
+      "name": "plaza-in-315",
+      "n": 18,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/19-plaza-out-000.webp",
+      "name": "plaza-out-000",
+      "n": 19,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/20-plaza-out-045.webp",
+      "name": "plaza-out-045",
+      "n": 20,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/21-plaza-out-090.webp",
+      "name": "plaza-out-090",
+      "n": 21,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-mobile/22-plaza-out-135.webp",
+      "name": "plaza-out-135",
+      "n": 22,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/23-plaza-out-180.webp",
+      "name": "plaza-out-180",
+      "n": 23,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-mobile/24-plaza-out-225.webp",
+      "name": "plaza-out-225",
+      "n": 24,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/25-plaza-out-270.webp",
+      "name": "plaza-out-270",
+      "n": 25,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-mobile/26-plaza-out-315.webp",
+      "name": "plaza-out-315",
+      "n": 26,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/27-plaza-far-ahead.webp",
+      "name": "plaza-far-ahead",
+      "n": 27,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-mobile/28-track-01.webp",
+      "name": "track-01",
+      "n": 28,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/29-track-02.webp",
+      "name": "track-02",
+      "n": 29,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/30-track-03.webp",
+      "name": "track-03",
+      "n": 30,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/31-track-04.webp",
+      "name": "track-04",
+      "n": 31,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/32-track-05.webp",
+      "name": "track-05",
+      "n": 32,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/33-track-06.webp",
+      "name": "track-06",
+      "n": 33,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/34-track-07.webp",
+      "name": "track-07",
+      "n": 34,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Chiazze di suolo bagnato piatte nel tier mobile",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-mobile/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "mobile",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "after-high/01-street-opening.webp",
+      "name": "street-opening",
+      "n": 1,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Muratura e finestre troppo regolari",
+        "Risposta del suolo e delle luci ancora sintetica",
+        "Particelle visibili come effetto grafico"
+      ]
+    },
+    {
+      "path": "after-high/10-plaza-front.webp",
+      "name": "plaza-front",
+      "n": 10,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/11-plaza-in-000.webp",
+      "name": "plaza-in-000",
+      "n": 11,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/12-plaza-in-045.webp",
+      "name": "plaza-in-045",
+      "n": 12,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/13-plaza-in-090.webp",
+      "name": "plaza-in-090",
+      "n": 13,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/14-plaza-in-135.webp",
+      "name": "plaza-in-135",
+      "n": 14,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/15-plaza-in-180.webp",
+      "name": "plaza-in-180",
+      "n": 15,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/16-plaza-in-225.webp",
+      "name": "plaza-in-225",
+      "n": 16,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/17-plaza-in-270.webp",
+      "name": "plaza-in-270",
+      "n": 17,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/18-plaza-in-315.webp",
+      "name": "plaza-in-315",
+      "n": 18,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/19-plaza-out-000.webp",
+      "name": "plaza-out-000",
+      "n": 19,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/20-plaza-out-045.webp",
+      "name": "plaza-out-045",
+      "n": 20,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/21-plaza-out-090.webp",
+      "name": "plaza-out-090",
+      "n": 21,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-high/22-plaza-out-135.webp",
+      "name": "plaza-out-135",
+      "n": 22,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/23-plaza-out-180.webp",
+      "name": "plaza-out-180",
+      "n": 23,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-high/24-plaza-out-225.webp",
+      "name": "plaza-out-225",
+      "n": 24,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/25-plaza-out-270.webp",
+      "name": "plaza-out-270",
+      "n": 25,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-high/26-plaza-out-315.webp",
+      "name": "plaza-out-315",
+      "n": 26,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-high/27-plaza-far-ahead.webp",
+      "name": "plaza-far-ahead",
+      "n": 27,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-high/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "high",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "after-ultra/01-street-opening.webp",
+      "name": "street-opening",
+      "n": 1,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Muratura e finestre troppo regolari",
+        "Risposta del suolo e delle luci ancora sintetica",
+        "Particelle visibili come effetto grafico"
+      ]
+    },
+    {
+      "path": "after-ultra/10-plaza-front.webp",
+      "name": "plaza-front",
+      "n": 10,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/11-plaza-in-000.webp",
+      "name": "plaza-in-000",
+      "n": 11,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/12-plaza-in-045.webp",
+      "name": "plaza-in-045",
+      "n": 12,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/13-plaza-in-090.webp",
+      "name": "plaza-in-090",
+      "n": 13,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/14-plaza-in-135.webp",
+      "name": "plaza-in-135",
+      "n": 14,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia palesemente grafici",
+        "Contaminazione/glitch sulla trave",
+        "Luci sul suolo ancora teatrali"
+      ]
+    },
+    {
+      "path": "after-ultra/15-plaza-in-180.webp",
+      "name": "plaza-in-180",
+      "n": 15,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/16-plaza-in-225.webp",
+      "name": "plaza-in-225",
+      "n": 16,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/17-plaza-in-270.webp",
+      "name": "plaza-in-270",
+      "n": 17,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/18-plaza-in-315.webp",
+      "name": "plaza-in-315",
+      "n": 18,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Pannelli e tipografia dell’installazione palesemente grafici",
+        "Luci sul suolo e fasci ancora teatrali",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/19-plaza-out-000.webp",
+      "name": "plaza-out-000",
+      "n": 19,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/20-plaza-out-045.webp",
+      "name": "plaza-out-045",
+      "n": 20,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/21-plaza-out-090.webp",
+      "name": "plaza-out-090",
+      "n": 21,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-ultra/22-plaza-out-135.webp",
+      "name": "plaza-out-135",
+      "n": 22,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/23-plaza-out-180.webp",
+      "name": "plaza-out-180",
+      "n": 23,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Sorgente sul ponte come barra luminosa piatta",
+        "Aloni ampi dei lampioni",
+        "Facciate e profondità ancora regolari"
+      ]
+    },
+    {
+      "path": "after-ultra/24-plaza-out-225.webp",
+      "name": "plaza-out-225",
+      "n": 24,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Aloni ampi dei lampioni",
+        "Facciate posteriori semplificate",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/25-plaza-out-270.webp",
+      "name": "plaza-out-270",
+      "n": 25,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Muratura con reticolo regolare",
+        "Porta e intonaco con risposta poco differenziata",
+        "Dettaglio di superficie uniforme"
+      ]
+    },
+    {
+      "path": "after-ultra/26-plaza-out-315.webp",
+      "name": "plaza-out-315",
+      "n": 26,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Moduli della muratura e delle finestre regolari",
+        "Illuminazione con aloni riconoscibili",
+        "Particelle sintetiche"
+      ]
+    },
+    {
+      "path": "after-ultra/27-plaza-far-ahead.webp",
+      "name": "plaza-far-ahead",
+      "n": 27,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Glitch/RGB ALTERCO evidente",
+        "Barra luminosa del ponte piatta",
+        "Aloni ampi dei lampioni"
+      ]
+    },
+    {
+      "path": "after-ultra/91-rear-shutter-close.webp",
+      "name": "rear-shutter-close",
+      "n": 91,
+      "tier": "ultra",
+      "grade": "C",
+      "causes": [
+        "Serranda con risposta materiale uniforme",
+        "Dettaglio scuro poco differenziato e grana sintetica"
+      ]
+    },
+    {
+      "path": "before-window/92-window-surround-close.webp",
+      "name": "window-surround-close",
+      "n": 92,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Superfici della facciata poco differenziate",
+        "Vano scuro quasi uniforme",
+        "Infisso con risposta materiale uniforme"
+      ]
+    },
+    {
+      "path": "after-window/92-window-surround-close.webp",
+      "name": "window-surround-close",
+      "n": 92,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Superfici della facciata poco differenziate",
+        "Vano scuro quasi uniforme",
+        "Infisso con risposta materiale uniforme"
+      ]
+    },
+    {
+      "path": "baseline-diagnostic/rear-before-diagnostic.png",
+      "name": "retro diagnostico baseline",
+      "n": 90,
+      "tier": "balanced",
+      "grade": "C",
+      "causes": [
+        "Barra luminosa del ponte piatta",
+        "Aloni ampi dei lampioni",
+        "Architettura posteriore ancora regolare"
+      ]
+    }
+  ]
+}

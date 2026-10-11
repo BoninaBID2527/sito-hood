@@ -1,0 +1,146 @@
+[
+  {
+    "name": "opening-control",
+    "baselineMedianMs": 1390.1000000089407,
+    "candidateMedianMs": 1366.7000000029802,
+    "changePercent": -1.6833321347967778,
+    "calls": [
+      195,
+      201
+    ],
+    "triangles": [
+      127474,
+      127474
+    ],
+    "textures": [
+      74,
+      74
+    ],
+    "geometries": [
+      152,
+      152
+    ],
+    "baselineCpuMs": 9.399999991059303,
+    "candidateCpuMs": 8.099999994039536
+  },
+  {
+    "name": "plaza-front",
+    "baselineMedianMs": 672.5999999940395,
+    "candidateMedianMs": 636.5,
+    "changePercent": -5.3672316375794615,
+    "calls": [
+      159,
+      168
+    ],
+    "triangles": [
+      122850,
+      97122
+    ],
+    "textures": [
+      77,
+      77
+    ],
+    "geometries": [
+      178,
+      178
+    ],
+    "baselineCpuMs": 7.200000002980232,
+    "candidateCpuMs": 6.399999991059303
+  },
+  {
+    "name": "plaza-rear",
+    "baselineMedianMs": 571,
+    "candidateMedianMs": 520.2000000029802,
+    "changePercent": -8.896672503856351,
+    "calls": [
+      104,
+      111
+    ],
+    "triangles": [
+      111886,
+      81406
+    ],
+    "textures": [
+      79,
+      79
+    ],
+    "geometries": [
+      182,
+      182
+    ],
+    "baselineCpuMs": 6.299999997019768,
+    "candidateCpuMs": 5.9000000059604645
+  },
+  {
+    "name": "tracks-idle",
+    "baselineMedianMs": 689.6000000089407,
+    "candidateMedianMs": 662.3999999910593,
+    "changePercent": -3.944315547785493,
+    "calls": [
+      159,
+      168
+    ],
+    "triangles": [
+      122850,
+      97122
+    ],
+    "textures": [
+      79,
+      79
+    ],
+    "geometries": [
+      182,
+      182
+    ],
+    "baselineCpuMs": 10.099999994039536,
+    "candidateCpuMs": 7.600000008940697
+  },
+  {
+    "name": "tracks-moving",
+    "baselineMedianMs": 792.9000000059605,
+    "candidateMedianMs": 778.7999999970198,
+    "changePercent": -1.7782822561274725,
+    "calls": [
+      221,
+      227
+    ],
+    "triangles": [
+      127748,
+      127748
+    ],
+    "textures": [
+      85,
+      85
+    ],
+    "geometries": [
+      196,
+      196
+    ],
+    "baselineCpuMs": 11.700000002980232,
+    "candidateCpuMs": 10.400000005960464
+  },
+  {
+    "name": "opening-control-repeat",
+    "baselineMedianMs": 1384.5,
+    "candidateMedianMs": 1548.5,
+    "changePercent": 11.845431563741426,
+    "calls": [
+      195,
+      201
+    ],
+    "triangles": [
+      127474,
+      127474
+    ],
+    "textures": [
+      85,
+      85
+    ],
+    "geometries": [
+      199,
+      199
+    ],
+    "baselineCpuMs": 7.799999997019768,
+    "candidateCpuMs": 7.9000000059604645
+  }
+]

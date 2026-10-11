@@ -1,0 +1,54 @@
+{
+  "rows": [
+    {
+      "dataset": "front-before",
+      "medianMs": 676.7999999998137,
+      "medianCpuMs": 9.100000000093132,
+      "calls": 159,
+      "triangles": 122850,
+      "textures": 77,
+      "geometries": 178,
+      "camera": {
+        "position": [
+          -5.108372730736951,
+          2.65,
+          -92.1085457200263
+        ],
+        "quaternion": [
+          -0.022746580708969583,
+          -0.23604235426981637,
+          -0.005526889560819659,
+          0.9714607833302357
+        ],
+        "fov": 50
+      }
+    },
+    {
+      "dataset": "front-after",
+      "medianMs": 644.6000000000931,
+      "medianCpuMs": 7.100000000093132,
+      "calls": 168,
+      "triangles": 97122,
+      "textures": 77,
+      "geometries": 178,
+      "camera": {
+        "position": [
+          -5.108372730736951,
+          2.65,
+          -92.1085457200263
+        ],
+        "quaternion": [
+          -0.022746580708969583,
+          -0.23604235426981637,
+          -0.005526889560819659,
+          0.9714607833302357
+        ],
+        "fov": 50
+      }
+    }
+  ],
+  "changePercent": -4.757683215090047,
+  "cameraHeld": true,
+  "sampleFrames": 72,
+  "hardwareFPS": false
+}

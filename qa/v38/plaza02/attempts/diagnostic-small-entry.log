@@ -1,0 +1,26 @@
+START diagnostic balanced 2026-10-10T20:16:05.873Z
+NAVIGATED
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Element is outside of the viewport
+Call log:
+[2m  - waiting for getByRole('button', { name: 'ENTER WITHOUT SOUND', exact: true })[22m
+[2m    - locator resolved to <button data-cursor="link" data-cursor-label="ENTER" class="ld-silent hit label">ENTER WITHOUT SOUND</button>[22m
+[2m  - attempting click action[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+
+    at /workspace/sito-hood/qa/v38/plaza02/probe.mjs:43:73 {
+  log: [
+    "  - waiting for getByRole('button', { name: 'ENTER WITHOUT SOUND', exact: true })",
+    '    - locator resolved to <button data-cursor="link" data-cursor-label="ENTER" class="ld-silent hit label">ENTER WITHOUT SOUND</button>',
+    '  - attempting click action',
+    '    - scrolling into view if needed',
+    '    - done scrolling'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.19.0

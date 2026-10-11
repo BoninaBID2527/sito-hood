@@ -1,0 +1,15 @@
+START baseline-cost 2026-10-10T20:20:19.825Z
+END baseline-cost 0
+START baseline-visual 2026-10-10T20:27:05.620Z
+END baseline-visual 0
+START baseline-high-close 2026-10-10T20:35:23.169Z
+END baseline-high-close 0
+START build-final 2026-10-10T20:37:59.391Z
+END build-final 0
+START typecheck 2026-10-10T20:38:07.298Z
+END typecheck 0
+START candidate-cost 2026-10-10T20:38:10.450Z
+END candidate-cost 0
+START candidate-balanced 2026-10-10T20:44:58.713Z
+END candidate-balanced 0
+START candidate-mobile 2026-10-10T20:54:38.809Z

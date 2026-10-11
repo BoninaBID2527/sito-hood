@@ -1,0 +1,80 @@
+{
+  "sourceCommit": "b250daf48b2e4a22d9d29038c50e632b9e5db8c5",
+  "buildId": "RoS3xkOOK-nRtwDPMdhdT",
+  "tier": "balanced",
+  "viewport": [
+    640,
+    360
+  ],
+  "bootstrapViewport": [
+    320,
+    180
+  ],
+  "scale": 0.6,
+  "warmFrames": 20,
+  "sampleFrames": 24,
+  "mode": "visual",
+  "softwareGL": true,
+  "started": "2026-10-11T16:29:02.935Z",
+  "rows": [
+    {
+      "n": 92,
+      "name": "window-surround-close",
+      "file": "92-window-surround-close.webp",
+      "inspectionCamera": {
+        "pos": [
+          -7,
+          2.5,
+          -112.5
+        ],
+        "look": [
+          -8.2,
+          6.2,
+          -118
+        ],
+        "fov": 28
+      },
+      "camera": {
+        "position": [
+          -7,
+          2.5,
+          -112.5
+        ],
+        "quaternion": [
+          0.2850024509256895,
+          0.10270250076063786,
+          -0.03072971904386786,
+          0.9525132459296018
+        ],
+        "fov": 28
+      },
+      "tier": "balanced",
+      "scale": 0.6,
+      "world": "alley",
+      "progress": 0.45,
+      "calls": 100,
+      "triangles": 111724,
+      "textures": 79,
+      "geometries": 182,
+      "masonryWidth": 1280,
+      "reflections": [
+        {
+          "position": [
+            0,
+            0.02,
+            -51
+          ],
+          "size": [
+            384,
+            238
+          ],
+          "nonfinite": 0,
+          "nonzeroRGB": 274176
+        }
+      ],
+      "originalPNG_SHA256": "c00d6badf12a5cf9585010e58197a3ea7d8d232b682a65914131a77839884c45",
+      "sha256": "c60bcf55a042d6a97d00f72bcc50816ebb209c3c913e435827e34b8df855fb3d"
+    }
+  ],
+  "errors": []
+}

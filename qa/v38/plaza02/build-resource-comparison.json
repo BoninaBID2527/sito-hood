@@ -1,0 +1,14 @@
+{
+  "baseline": {
+    "buildId": "RoS3xkOOK-nRtwDPMdhdT",
+    "files": 21,
+    "rawJavaScriptBytes": 2561774
+  },
+  "candidate": {
+    "buildId": "VCcZnZRV9Se1UpktIzG5y",
+    "files": 21,
+    "rawJavaScriptBytes": 2562264
+  },
+  "rawByteDelta": 490,
+  "interpretation": "Aggregate production-build JavaScript files on disk, not transfer sizes or measured startup latency; no new assets, libraries, textures or geometries."
+}

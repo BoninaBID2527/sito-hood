@@ -1,0 +1,50 @@
+[
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": true,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": true,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": true,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": false,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": false,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": false,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": false,
+    "finiteFallback": true
+  },
+  {
+    "footprintFilter": false,
+    "explicitGradient": false,
+    "bump": false,
+    "finiteFallback": true
+  }
+]

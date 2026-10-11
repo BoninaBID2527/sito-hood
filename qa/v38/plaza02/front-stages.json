@@ -1,0 +1,30 @@
+[
+  {
+    "name": "front-before",
+    "args": [
+      "qa/v38/plaza02/probe.mjs",
+      "3001",
+      "qa/v38/plaza02/front-before",
+      "/workspace/hood-plaza02-before/.next",
+      "balanced",
+      "front-targeted"
+    ],
+    "started": "2026-10-11T16:48:11.228Z",
+    "ended": "2026-10-11T16:50:59.377Z",
+    "exit": 0
+  },
+  {
+    "name": "front-after",
+    "args": [
+      "qa/v38/plaza02/probe.mjs",
+      "3000",
+      "qa/v38/plaza02/front-after",
+      "/workspace/sito-hood/.next",
+      "balanced",
+      "front-targeted"
+    ],
+    "started": "2026-10-11T16:50:59.377Z",
+    "ended": "2026-10-11T16:53:36.997Z",
+    "exit": 0
+  }
+]

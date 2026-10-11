@@ -1,0 +1,18 @@
+START diagnostic balanced 2026-10-10T20:13:32.425Z
+NAVIGATED
+ENTERED
+TEXTURES READY
+REAR CAPTURED
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.evaluate: Target page, context or browser has been closed
+    at sample (/workspace/sito-hood/qa/v38/plaza02/probe.mjs:21:24)
+    at Object.onShot (/workspace/sito-hood/qa/v38/plaza02/probe.mjs:70:10)
+    at async runCheckpoint (/workspace/sito-hood/scripts/qa37-lib.mjs:77:5)
+    at async file:///workspace/sito-hood/qa/v38/plaza02/probe.mjs:55:3 {
+  log: []
+}
+
+Node.js v24.19.0
